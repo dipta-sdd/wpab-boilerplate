@@ -2,7 +2,6 @@
 
 namespace WpabBoilerplate\Core;
 
-use WpabBoilerplate\Core\Common;
 use WpabBoilerplate\Data\DbManager;
 
 /**

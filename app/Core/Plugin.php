@@ -156,22 +156,28 @@ class Plugin
 	 * @access   private
 	 * @return void
 	 */
+	/**
+	 * Register all of the hooks related to the admin area functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @return void
+	 */
 	private function define_admin_hooks()
 	{
-		$plugin_admin = Admin::get_instance();
-
-		$this->loader->add_filter('all_plugins', $this, 'change_plugin_display_name');
-		$this->loader->add_action('admin_menu', $plugin_admin, 'add_admin_menu');
-		$this->loader->add_filter('admin_body_class', $plugin_admin, 'add_has_sticky_header');
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_resources');
-
-		/*Register Settings*/
-		$plugin_settings = \WpabBoilerplate\Core\Settings::get_instance();
-		$this->loader->add_action('rest_api_init', $plugin_settings, 'register');
-		$this->loader->add_action('admin_init', $plugin_settings, 'register');
-
-		$plugin_basename = plugin_basename(WPAB_BOILERPLATE_PATH . 'wpab-boilerplate.php');
-		$this->loader->add_filter('plugin_action_links_' . $plugin_basename, $plugin_admin, 'add_plugin_action_links', 10, 4);
+		// Initialize Core classes from config
+		$core_classes = include WPAB_BOILERPLATE_PATH . 'config/core.php';
+		if (is_array($core_classes)) {
+			foreach ($core_classes as $class) {
+				if (class_exists($class) && method_exists($class, 'get_instance')) {
+					$instance = $class::get_instance();
+					if (method_exists($instance, 'run')) {
+						$instance->run($this);
+					}
+				}
+			}
+		}
 	}
 
 	/**

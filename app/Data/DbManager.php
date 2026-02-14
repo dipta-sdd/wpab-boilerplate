@@ -62,7 +62,6 @@ class DbManager
     public function create_tables()
     {
         $this->create_example_table();
-        $this->create_logs_table();
     }
 
     /**
@@ -90,32 +89,6 @@ class DbManager
             date_modified datetime NOT NULL,
             PRIMARY KEY  (id),
             KEY status (status)
-        ) $charset_collate;";
-
-        dbDelta($sql);
-    }
-
-    /**
-     * Create the logs table.
-     *
-     * @since 1.0.0
-     * @access private
-     */
-    private function create_logs_table()
-    {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'wpab_boilerplate_logs';
-        $charset_collate = $wpdb->get_charset_collate();
-
-        $sql = "CREATE TABLE $table_name (
-            log_id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            user_id bigint(20) UNSIGNED DEFAULT 0 NOT NULL,
-            log_type varchar(20) NOT NULL,
-            extra_data json DEFAULT NULL,
-            timestamp datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY  (log_id),
-            KEY log_type (log_type),
-            KEY timestamp (timestamp)
         ) $charset_collate;";
 
         dbDelta($sql);

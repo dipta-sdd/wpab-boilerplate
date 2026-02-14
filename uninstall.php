@@ -45,7 +45,6 @@ function wpab_boilerplate_drop_custom_tables()
 
 	$tables = array(
 		$wpdb->prefix . 'wpab_boilerplate_items',
-		$wpdb->prefix . 'wpab_boilerplate_logs',
 	);
 
 	foreach ($tables as $table) {

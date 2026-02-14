@@ -256,4 +256,17 @@ class Settings
 
 		return $sanitized_output;
 	}
+	/**
+	 * Register the hooks for settings.
+	 *
+	 * @since    1.0.0
+	 * @param    \WpabBoilerplate\Core\Plugin $plugin The Plugin instance.
+	 * @return   void
+	 */
+	public function run($plugin)
+	{
+		$loader = $plugin->get_loader();
+		$loader->add_action('rest_api_init', $this, 'register');
+		$loader->add_action('admin_init', $this, 'register');
+	}
 }

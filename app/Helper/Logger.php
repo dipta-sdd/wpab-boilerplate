@@ -65,26 +65,10 @@ class Logger
 	 */
 	public function log($log_type, $message, $context = array())
 	{
-		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'wpab_boilerplate_logs';
-
-		$user_id = isset($context['user_id']) ? absint($context['user_id']) : get_current_user_id();
-
-		// Prepare the flexible JSON data column
-		$extra_data = isset($context['extra_data']) && is_array($context['extra_data']) ? $context['extra_data'] : array();
-		$extra_data['message'] = sanitize_text_field($message);
-
-		// phpcs:ignore
-		$wpdb->insert(
-			$table_name,
-			array(
-				'user_id'    => $user_id,
-				'log_type'   => sanitize_key($log_type),
-				'extra_data' => wp_json_encode($extra_data),
-				'timestamp'  => current_time('mysql'),
-			),
-			array('%d', '%s', '%s', '%s')
-		);
+		$level = $log_type;
+		if (!empty($context)) {
+			$message .= ' ' . json_encode($context);
+		}
+		wpab_boilerplate_log($message, $level);
 	}
 }

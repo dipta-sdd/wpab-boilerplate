@@ -291,4 +291,22 @@ class Admin
 		$actions[] = '<a href="' . esc_url(menu_page_url($this->menu_info['menu_slug'], false)) . '">' . esc_html__('Settings', 'wpab-boilerplate') . '</a>';
 		return $actions;
 	}
+	/**
+	 * Register the hooks for the admin area.
+	 *
+	 * @since    1.0.0
+	 * @param    \WpabBoilerplate\Core\Plugin $plugin The Plugin instance.
+	 * @return   void
+	 */
+	public function run($plugin)
+	{
+		$loader = $plugin->get_loader();
+		$loader->add_filter('all_plugins', $plugin, 'change_plugin_display_name');
+		$loader->add_action('admin_menu', $this, 'add_admin_menu');
+		$loader->add_filter('admin_body_class', $this, 'add_has_sticky_header');
+		$loader->add_action('admin_enqueue_scripts', $this, 'enqueue_resources');
+
+		$plugin_basename = plugin_basename(WPAB_BOILERPLATE_PATH . 'wpab-boilerplate.php');
+		$loader->add_filter('plugin_action_links_' . $plugin_basename, $this, 'add_plugin_action_links', 10, 4);
+	}
 }
