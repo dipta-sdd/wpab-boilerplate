@@ -8,7 +8,6 @@ if (!defined('ABSPATH')) {
 }
 
 use WpabBoilerplate\Admin\Admin;
-use WpabBoilerplate\Api\SampleController;
 use WpabBoilerplate\Helper\Loader;
 
 /**
@@ -84,8 +83,20 @@ class Plugin
 	 */
 	private function define_core_hooks()
 	{
-		// Initialize API controllers
-		SampleController::get_instance()->run();
+		// Initialize API controllers from config
+		$api_controllers = include WPAB_BOILERPLATE_PATH . 'config/api.php';
+		error_log('API Controllers: ' . print_r($api_controllers, true));
+		if (is_array($api_controllers)) {
+			foreach ($api_controllers as $controller) {
+				if (class_exists($controller) && method_exists($controller, 'get_instance')) {
+					error_log('Registering controller: ' . $controller);
+					add_action('rest_api_init', function () use ($controller) {
+						error_log('Registering controller: ' . $controller);
+						$controller::get_instance()->register_routes();
+					});
+				}
+			}
+		}
 
 		// Register your custom hook-based components here.
 		// Example:
@@ -155,8 +166,9 @@ class Plugin
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_resources');
 
 		/*Register Settings*/
-		$this->loader->add_action('rest_api_init', $plugin_admin, 'register_settings');
-		$this->loader->add_action('admin_init', $plugin_admin, 'register_settings');
+		$plugin_settings = \WpabBoilerplate\Core\Settings::get_instance();
+		$this->loader->add_action('rest_api_init', $plugin_settings, 'register');
+		$this->loader->add_action('admin_init', $plugin_settings, 'register');
 
 		$plugin_basename = plugin_basename(WPAB_BOILERPLATE_PATH . 'wpab-boilerplate.php');
 		$this->loader->add_filter('plugin_action_links_' . $plugin_basename, $plugin_admin, 'add_plugin_action_links', 10, 4);

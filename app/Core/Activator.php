@@ -31,9 +31,8 @@ class Activator
 	public static function activate()
 	{
 		// Set up the default options if they don't exist.
-		if (!get_option(WPAB_BOILERPLATE_OPTION_NAME)) {
-			Common::get_instance()->update_settings(Common::get_instance()->get_default_settings());
-		}
+		/* Default Settings */
+		Settings::get_instance()->update_settings(Settings::get_instance()->get_default_settings());
 
 		// Create custom database tables.
 		self::create_custom_tables();

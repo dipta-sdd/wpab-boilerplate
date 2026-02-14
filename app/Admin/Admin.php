@@ -2,7 +2,7 @@
 
 namespace WpabBoilerplate\Admin;
 
-use WpabBoilerplate\Core\Common;
+use WpabBoilerplate\Core\Settings;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -92,51 +92,60 @@ class Admin
 	public function add_admin_menu()
 	{
 		$plugin_data = $this->get_plugin_data();
-		$this->menu_info = array(
-			'page_title' => $plugin_data['plugin_name'],
-			'menu_title' => $plugin_data['menu_label'],
-			'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME,
-			'icon_url'   => $plugin_data['menu_icon'],
-			'position'   => $plugin_data['position'],
-			'docs_uri'   => $plugin_data['docs_uri'],
-		);
 
-		add_menu_page(
-			$this->menu_info['page_title'],
-			$this->menu_info['menu_title'],
-			'manage_wpab_boilerplate',
-			$this->menu_info['menu_slug'],
-			array($this, 'add_setting_root_div'),
-			$this->menu_info['icon_url'],
-			$this->menu_info['position'],
-		);
-
-		add_submenu_page(
-			$this->menu_info['menu_slug'],
-			$this->menu_info['page_title'],
-			esc_html__('Dashboard', 'wpab-boilerplate'),
-			'manage_wpab_boilerplate',
-			WPAB_BOILERPLATE_TEXT_DOMAIN,
-			array($this, 'add_setting_root_div')
-		);
-
-		$submenu_pages = array(
+		// Define menu items
+		$menu_items = array(
 			array(
-				'menu_title' => 'Settings',
-				'menu_slug'  => '#/settings',
-			),
+				'page_title' => $plugin_data['plugin_name'],
+				'menu_title' => $plugin_data['menu_label'],
+				'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME,
+				'icon_url'   => $plugin_data['menu_icon'],
+				'position'   => $plugin_data['position'],
+				'callback'   => array($this, 'add_setting_root_div'),
+				'submenu'    => array(
+					array(
+						'menu_title' => esc_html__('Dashboard', 'wpab-boilerplate'),
+						'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME, // Same as parent slug makes it the first item
+						'callback'   => array($this, 'add_setting_root_div')
+					),
+					array(
+						'menu_title' => esc_html__('Settings', 'wpab-boilerplate'),
+						'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME . '#/settings',
+						'callback'   => array($this, 'add_setting_root_div')
+					)
+				)
+			)
 		);
 
-		foreach ($submenu_pages as $submenu_page) {
-			add_submenu_page(
-				$this->menu_info['menu_slug'],
-				esc_html($submenu_page['menu_title'] . ' - ' . $this->menu_info['page_title']),
-				$submenu_page['menu_title'],
+		foreach ($menu_items as $item) {
+			add_menu_page(
+				$item['page_title'],
+				$item['menu_title'],
 				'manage_wpab_boilerplate',
-				WPAB_BOILERPLATE_TEXT_DOMAIN . $submenu_page['menu_slug'],
-				array($this, 'add_setting_root_div')
+				$item['menu_slug'],
+				$item['callback'],
+				$item['icon_url'],
+				$item['position']
 			);
+
+			if (!empty($item['submenu'])) {
+				foreach ($item['submenu'] as $sub) {
+					add_submenu_page(
+						$item['menu_slug'], // Parent slug
+						$item['menu_title'] . ' - ' . $item['page_title'] ?? $item['menu_title'], // Page title
+						$sub['menu_title'],
+						'manage_wpab_boilerplate',
+						$sub['menu_slug'],
+						$sub['callback']
+					);
+				}
+			}
 		}
+
+		// Store menu info for other methods
+		$this->menu_info = array(
+			'menu_slug' => WPAB_BOILERPLATE_PLUGIN_NAME
+		);
 	}
 
 	/**
@@ -252,7 +261,7 @@ class Admin
 					'dateFormat' => get_option('date_format'),
 					'timeFormat' => get_option('time_format'),
 				),
-				'plugin_settings' => Common::get_instance()->get_settings()
+				'plugin_settings' => \WpabBoilerplate\Core\Settings::get_instance()->get_settings()
 			)
 		);
 
@@ -264,119 +273,6 @@ class Admin
 			'wpab-boilerplate',
 			$path_to_check
 		);
-	}
-
-	/**
-	 * Get settings schema.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @return array settings schema for this plugin.
-	 */
-	public function get_settings_schema()
-	{
-		/**
-		 * Filters the settings schema for the plugin.
-		 *
-		 * @since 1.0.0
-		 * @hook wpab_boilerplate_options_properties
-		 * @param array $setting_properties The associative array of setting properties.
-		 * @return array The filtered array of setting properties.
-		 */
-		$setting_properties = apply_filters(
-			'wpab_boilerplate_options_properties',
-			array(
-				'global_enableFeature' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'global_exampleText' => array(
-					'type'              => 'string',
-					'sanitize_callback' => 'sanitize_text_field',
-					'default'           => 'Hello from WPAB Boilerplate!',
-				),
-				'debug_enableMode' => array(
-					'type'    => 'boolean',
-					'default' => false,
-				),
-				'advanced_deleteAllOnUninstall' => array(
-					'type'    => 'boolean',
-					'default' => false,
-				),
-			),
-		);
-
-		return array(
-			'type'       => 'object',
-			'properties' => $setting_properties,
-		);
-	}
-
-	/**
-	 * Register settings.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function register_settings()
-	{
-		$defaults = Common::get_instance()->get_default_settings();
-
-		register_setting(
-			'wpab_boilerplate_settings_group',
-			WPAB_BOILERPLATE_OPTION_NAME,
-			array(
-				'type'    => 'object',
-				'default' => $defaults,
-				'show_in_rest' => array(
-					'schema' => $this->get_settings_schema(),
-				),
-				'sanitize_callback' => array($this, 'sanitize_settings_object'),
-			)
-		);
-	}
-
-	/**
-	 * Custom sanitization callback for the main settings object.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @param array $input The raw array of settings data submitted for saving.
-	 * @return array The sanitized array of settings data.
-	 */
-	public function sanitize_settings_object($input)
-	{
-		$schema = $this->get_settings_schema();
-		$properties = $schema['properties'] ?? array();
-		$default_options = Common::get_instance()->get_default_settings();
-		$sanitized_output = get_option(WPAB_BOILERPLATE_OPTION_NAME, $default_options);
-
-		foreach ($properties as $key => $details) {
-			if (!isset($input[$key])) {
-				continue;
-			}
-
-			$value = $input[$key];
-			$type = $details['type'] ?? 'string';
-
-			switch ($type) {
-				case 'boolean':
-					$sanitized_output[$key] = (bool) $value;
-					break;
-				case 'integer':
-					$sanitized_output[$key] = absint($value);
-					break;
-				case 'string':
-					$sanitized_output[$key] = sanitize_text_field($value);
-					break;
-				default:
-					$sanitized_output[$key] = sanitize_text_field($value);
-					break;
-			}
-		}
-
-		return $sanitized_output;
 	}
 
 	/**

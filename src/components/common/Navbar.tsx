@@ -19,6 +19,10 @@ const Navbar: FC = () => {
       path: "/",
     },
     // Add your menu items here
+    {
+      label: __("Logs", "wpab-boilerplate"),
+      path: "/logs",
+    },
     // {
     //   label: __("Settings", "wpab-boilerplate"),
     //   path: "/settings",

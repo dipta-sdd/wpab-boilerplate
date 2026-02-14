@@ -8,24 +8,21 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * The common functionality of the plugin.
- *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
+ * The settings functionality of the plugin.
  *
  * @since      1.0.0
  * @package    WPAB_Boilerplate
  * @subpackage WPAB_Boilerplate/Core
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
-class Common
+class Settings
 {
 	/**
 	 * The single instance of the class.
 	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @var   Common
+	 * @var   Settings
 	 */
 	private static $instance = null;
 
@@ -65,7 +62,7 @@ class Common
 	 * Gets an instance of this object.
 	 *
 	 * @access public
-	 * @return Common
+	 * @return Settings
 	 * @since 1.0.0
 	 */
 	public static function get_instance()
@@ -145,5 +142,118 @@ class Common
 		}
 		update_option(WPAB_BOILERPLATE_OPTION_NAME, $options);
 		$this->load_settings();
+	}
+
+	/**
+	 * Register settings.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function register()
+	{
+		$defaults = $this->get_default_settings();
+
+		register_setting(
+			'wpab_boilerplate_settings_group',
+			WPAB_BOILERPLATE_OPTION_NAME,
+			array(
+				'type'    => 'object',
+				'default' => $defaults,
+				'show_in_rest' => array(
+					'schema' => $this->get_settings_schema(),
+				),
+				'sanitize_callback' => array($this, 'sanitize_settings_object'),
+			)
+		);
+	}
+
+	/**
+	 * Get settings schema.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return array settings schema for this plugin.
+	 */
+	public function get_settings_schema()
+	{
+		/**
+		 * Filters the settings schema for the plugin.
+		 *
+		 * @since 1.0.0
+		 * @hook wpab_boilerplate_options_properties
+		 * @param array $setting_properties The associative array of setting properties.
+		 * @return array The filtered array of setting properties.
+		 */
+		$setting_properties = apply_filters(
+			'wpab_boilerplate_options_properties',
+			array(
+				'global_enableFeature' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
+				'global_exampleText' => array(
+					'type'              => 'string',
+					'sanitize_callback' => 'sanitize_text_field',
+					'default'           => 'Hello from WPAB Boilerplate!',
+				),
+				'debug_enableMode' => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+				'advanced_deleteAllOnUninstall' => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+			),
+		);
+
+		return array(
+			'type'       => 'object',
+			'properties' => $setting_properties,
+		);
+	}
+
+	/**
+	 * Custom sanitization callback for the main settings object.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @param array $input The raw array of settings data submitted for saving.
+	 * @return array The sanitized array of settings data.
+	 */
+	public function sanitize_settings_object($input)
+	{
+		$schema = $this->get_settings_schema();
+		$properties = $schema['properties'] ?? array();
+		$default_options = $this->get_default_settings();
+		$sanitized_output = get_option(WPAB_BOILERPLATE_OPTION_NAME, $default_options);
+
+		foreach ($properties as $key => $details) {
+			if (!isset($input[$key])) {
+				continue;
+			}
+
+			$value = $input[$key];
+			$type = $details['type'] ?? 'string';
+
+			switch ($type) {
+				case 'boolean':
+					$sanitized_output[$key] = (bool) $value;
+					break;
+				case 'integer':
+					$sanitized_output[$key] = absint($value);
+					break;
+				case 'string':
+					$sanitized_output[$key] = sanitize_text_field($value);
+					break;
+				default:
+					$sanitized_output[$key] = sanitize_text_field($value);
+					break;
+			}
+		}
+
+		return $sanitized_output;
 	}
 }

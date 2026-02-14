@@ -26,8 +26,8 @@ if (!function_exists('wpab_boilerplate_log')) {
 	 */
 	function wpab_boilerplate_log($message, $level = 'INFO')
 	{
-		$enable_logging = WpabBoilerplate\Core\Common::get_instance()->get_settings('debug_enableMode');
-		if (!$enable_logging && ($level !== 'ERROR' || $level !== 'error')) {
+		$enable_logging = WpabBoilerplate\Core\Settings::get_instance()->get_settings('debug_enableMode');
+		if (!$enable_logging && ($level !== 'ERROR' && $level !== 'error')) {
 			return;
 		}
 		$upload_dir = wp_upload_dir();
@@ -41,12 +41,11 @@ if (!function_exists('wpab_boilerplate_log')) {
 
 		$formatted_message = '';
 		if (is_array($message) || is_object($message)) {
-			// phpcs:ignore
-			$formatted_message = print_r($message, true);
+			$formatted_message = json_encode($message);
 		} else {
 			$formatted_message = $message;
 		}
-		// phpcs:ignore
+
 		$log_level = is_string($level) ? strtoupper($level) : (is_array($level) || is_object($level) ? print_r($level, true) : '');
 		$log_entry = sprintf(
 			"[%s] [%s]: %s\n",
