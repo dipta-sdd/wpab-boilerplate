@@ -1,0 +1,12 @@
+{
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#f02a74",
+    "titleBar.activeForeground": "#ffffff",
+    "activityBar.background": "#f02a74",
+    "activityBar.foreground": "#eda3ce",
+    "activityBar.inactiveForeground": "#ffffff",
+  },
+  "intelephense.environment.includePaths": [
+        "/var/www/html/wp-content/plugins/woocommerce"
+    ]
+}

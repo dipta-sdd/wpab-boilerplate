@@ -1,0 +1,286 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .wpab-p-x-page-default {
+    @apply wpab-px-[12px] md:wpab-px-[24px];
+  }
+  .wpab-bg-secondary{
+    @apply wpab-bg-[#f1f5f9];
+  }
+  .wpab-bg-primary{
+    @apply wpab-bg-[#3858e9];
+  }
+  .wpab-bg-primary-hovered{
+    @apply wpab-bg-[#3858ff];
+  }
+  .wpab-text-primary{
+    @apply wpab-text-[#3858e9];
+  }
+  .wpab-text-primary-hovered{
+    @apply wpab-text-[#3858e9];
+  }
+  .wpab-gap-default {
+    @apply wpab-gap-[12px];
+  }
+  .wpab-gap-default-big {
+    @apply wpab-gap-[12px] xl:wpab-gap-[36px];
+  }
+  .wpab-text-default {
+    @apply wpab-text-[13px] wpab-leading-[20px];
+  }
+  .wpab-text-secondary {
+    @apply wpab-text-[#949494];
+  }
+  .wpab-text-small {
+    @apply wpab-text-[12px] wpab-leading-[16px];
+  }
+  .wpab-border-default {
+    @apply wpab-border-[#e0e0e0];
+  }
+  .wpab-border-primary {
+    @apply wpab-border-[#3858e9];
+  }
+  .wpab-border-secondary{
+    @apply wpab-border-[#f1f5f9];
+  }
+  .wpab-outline-primary{
+    @apply wpab-outline-[#3858e9];
+  }
+}
+
+
+.toplevel_page_wpab-boilerplate #wpcontent {
+  padding-left: 0;
+  background: #f1f5f9;
+}
+.toplevel_page_wpab-boilerplate #wpwrap {
+  background: #f1f5f9;
+}
+.toplevel_page_wpab-boilerplate #wpbody-content .notice,
+.toplevel_page_wpab-boilerplate #wpfooter {
+  display: none;
+}
+#wpab-boilerplate {
+  font-family: 'SF Pro', 'Segoe UI', Tahoma, Verdana, sans-serif;
+  color: #000;
+}
+#wpab-boilerplate *,
+#wpab-boilerplate *::before,
+#wpab-boilerplate *::after {
+  box-sizing: border-box;
+}
+
+
+
+  // ==========================================================================
+  // Campaign Bay Skeleton Loader Component
+  // ==========================================================================
+
+  // --- Base Keyframes Animation for the Shimmer Effect ---
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  // --- Base Skeleton Class ---
+  .wpab-skeleton {
+    display: block;
+    background-color: #e9e9e9;
+    position: relative;
+    overflow: hidden; // This is crucial for the shimmer effect
+    border-radius: 6px;
+    & > * {
+      opacity: 0;
+    }
+  }
+  .wpab-skeleton-animation,
+  .wpab-skeleton{
+    position: relative;
+    overflow: hidden;
+// The shimmer pseudo-element
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      // A subtle gradient that creates the "shine"
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: translateX(-100%); // Start off-screen
+      animation: shimmer 1.5s infinite; // Apply the animation
+    }
+  }
+
+
+/* Chrome, Safari, Edge, Opera */
+.hide-spin-button::-webkit-outer-spin-button,
+.hide-spin-button::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.hide-spin-button[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* General (optional, for cross-browser consistency) */
+.hide-spin-button[type=number] {
+  appearance: none;
+}
+
+
+
+.wpab-add-campaigns-modal{
+  min-height: 90vh;
+}
+.wpab-add-campaigns-modal-example{
+  width: 50%;
+  display: none; // Hide on small devices
+}
+
+.wpab-add-campaigns-modal-grid-cols{
+  overflow-y: auto;
+  // scrollbar-width: none;
+}
+
+.wpab-add-campaigns-modal-overlay {
+  display: block; // Show overlay on small devices
+}
+
+.wpab-add-campaigns-modal-grid-item{
+    min-height: 170px;
+    width: 250px;
+    padding-top: 40px;
+    border: 1px solid #bdc4d1;
+    &:hover{
+      transform: translateY(-1px);
+    }
+  }
+
+
+@media (min-width: 600px) {
+  .wpab-add-campaigns-modal{
+    min-width: 560px;
+    min-height: 400px;
+  }
+  
+  .wpab-add-campaigns-modal-grid-cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 850px) {
+  .wpab-add-campaigns-modal{
+    min-width: 835px;
+  }
+  
+  .wpab-add-campaigns-modal-example{
+    display: block; // Show example panel on larger devices
+    width: 270px;
+  }
+  
+  .wpab-add-campaigns-modal-overlay {
+    display: none !important; // Hide overlay on larger devices
+  }
+  
+  .wpab-add-campaigns-modal-grid-cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .wpab-add-campaigns-modal-grid-item{
+    min-height: 136px;
+    padding-top: 28px;
+  }
+}
+@media (min-width: 1100px) {
+  .wpab-add-campaigns-modal{
+    min-width: 1080px;
+  }
+  
+  .wpab-add-campaigns-modal-grid-cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+
+
+.toast {
+   position: relative;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    opacity: 0;
+    /* Start hidden for animation */
+    transform: translateX(100%);
+    /* Start off-screen for animation */
+    animation: slideIn 0.3s forwards;
+    border-left-width: 5px;
+    border-left-style: solid;
+    backdrop-filter: blur(3px);
+  }
+
+  .toast--closing {
+    animation: slideOut 0.3s forwards;
+  }
+
+  @keyframes slideIn {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideOut {
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+
+  .toast--info {
+    background-color: #ffffff;
+    border-left-color: #2271b1;
+    color: #1d2327;
+  }
+
+  .toast--success {
+    background-color: #f0fff4;
+    border-left-color: #228b22;
+    color: #1a472a;
+  }
+
+  .toast--error {
+    background-color: #fff5f5;
+    border-left-color: #cc0000;
+    color: #5c2121;
+  }
+
+
+
+  @keyframes tooltip-fade { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+                .wpab-animate-tooltip { animation: tooltip-fade 0.15s ease-out forwards; }
