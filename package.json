@@ -17,6 +17,7 @@
     "@babel/core": "^7.28.4",
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
+    "@types/wordpress__components": "^23.0.12",
     "@wordpress/babel-plugin-makepot": "^6.26.0",
     "@wordpress/scripts": "^30.25.0",
     "autoprefixer": "^10.4.21",

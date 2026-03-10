@@ -1,3 +1,8 @@
+# todo
+
+- replacing localize text
+- adding composer
+
 # WPAB Boilerplate
 
 A modern WordPress plugin boilerplate with a React/TypeScript admin UI, REST API infrastructure, and modular PHP architecture.
@@ -27,7 +32,7 @@ wpab-boilerplate/
 │   ├── Admin/Admin.php     # Admin menu, enqueue, settings
 │   ├── Api/
 │   │   ├── ApiController.php    # Base REST controller
-│   │   └── SampleController.php # Example GET/POST endpoints
+│   │   └── SettingsController.php # Example GET/POST endpoints
 │   ├── Core/
 │   │   ├── Plugin.php      # Main orchestrator
 │   │   ├── Base.php        # Abstract singleton + hook manager

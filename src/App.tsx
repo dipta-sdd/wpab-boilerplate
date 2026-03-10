@@ -4,6 +4,7 @@ import AppLayout from "./components/common/AppLayout";
 import { WpabProvider } from "./store/wpabStore";
 import { ToastProvider } from "./store/toast/use-toast";
 import Logs from "./pages/Logs";
+import Components from "./pages/Components";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route element={<AppLayout />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="logs" element={<Logs />} />
+              <Route path="components" element={<Components />} />
               {/* Add your routes here */}
             </Route>
           </Routes>

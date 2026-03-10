@@ -38,7 +38,7 @@ const Dashboard: FC = () => {
           </div>
           <p className="wpab-text-[13px] wpab-text-gray-600">
             {__(
-              "A sample REST API controller is included. See app/Api/SampleController.php for the pattern.",
+              "A REST API controller is included. See app/Api/SettingsController.php for the pattern.",
               "wpab-boilerplate",
             )}
           </p>

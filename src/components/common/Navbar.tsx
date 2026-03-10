@@ -23,6 +23,10 @@ const Navbar: FC = () => {
       label: __("Logs", "wpab-boilerplate"),
       path: "/logs",
     },
+    {
+      label: __("Components", "wpab-boilerplate"),
+      path: "/components",
+    },
     // {
     //   label: __("Settings", "wpab-boilerplate"),
     //   path: "/settings",

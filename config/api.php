@@ -9,6 +9,6 @@
  */
 
 return array(
-    \WpabBoilerplate\Api\SampleController::class,
+    \WpabBoilerplate\Api\SettingsController::class,
     \WpabBoilerplate\Api\LogController::class,
 );
