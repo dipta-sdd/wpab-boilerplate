@@ -36,6 +36,7 @@ interface ClassicSelectProps {
   enableSearch?: boolean;
   size?: "short" | "regular";
   renderOption?: (option: SelectOption) => React.ReactNode;
+  differentDropdownWidth?: boolean;
 }
 
 export const ClassicSelect: React.FC<ClassicSelectProps> = ({
@@ -51,6 +52,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
   enableSearch = false,
   size = "short",
   renderOption,
+  differentDropdownWidth = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
@@ -207,11 +209,13 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
 
   const selectId = id || `classic-select-${Math.random().toString(36).slice(2, 9)}`;
   const sizeClass = size === "short" ? "short" : "regular-text";
+  const explicitWidth = size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
 
   return (
-    <div className={`campaignbay-relative ${className}`} ref={containerRef}>
+    <div className={`${sizeClass} ${className}`} ref={containerRef} style={{ verticalAlign: "middle", display: "inline-block", width: explicitWidth }}>
       {label && <label htmlFor={selectId} style={{ display: "block", marginBottom: 4 }}>{label}</label>}
 
+      <div className="wpab-relative">
       {/* Trigger that looks like WP native select */}
       <div
         id={selectId}
@@ -220,9 +224,8 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
         aria-expanded={isOpen}
         onClick={() => !disabled && setIsOpen(!isOpen)}
         onKeyDown={handleTriggerKeyDown}
-        className={`${sizeClass}`}
         style={{
-          display: "inline-flex",
+          display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           cursor: disabled ? "not-allowed" : "pointer",
@@ -237,8 +240,8 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
           transition: "box-shadow 0.1s linear",
           userSelect: "none",
           position: "relative",
-          verticalAlign: "middle",
           boxSizing: "border-box",
+          width: "100%",
           ...(isOpen ? { borderColor: "#2271b1", boxShadow: "0 0 0 1px #2271b1", outline: "2px solid transparent" } : {}),
         }}
       >
@@ -252,18 +255,19 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
         </span>
       </div>
 
-      {description && <p className="description" style={{ marginTop: 2 }}>{description}</p>}
-
       {/* Dropdown Menu */}
       {isOpen && (
         <div
-          className={`campaignbay-absolute campaignbay-z-50 campaignbay-bg-white campaignbay-border campaignbay-border-[#8c8f94] campaignbay-rounded-[3px] campaignbay-mt-1 ${sizeClass}`}
+          className={`wpab-absolute wpab-z-50 wpab-bg-white wpab-border wpab-border-[#8c8f94] wpab-rounded-[3px]`}
           style={{
             zIndex: 99999,
             boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
             padding: 0,
             boxSizing: "border-box",
-            minWidth: "100%", // ensure it matches trigger width
+            top: "100%",
+            left: 0,
+            marginTop: "-1px",
+            ...(differentDropdownWidth ? { minWidth: "100%" } : { width: "100%" }),
           }}
         >
           {enableSearch && (
@@ -279,12 +283,16 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
                 onKeyDown={handleSearchKeyDown}
                 onClick={(e) => e.stopPropagation()}
                 placeholder="Search..."
+                className="focus:wpab-outline-none focus:wpab-shadow-none"
                 style={{
                   width: "100%",
                   padding: "0 8px",
                   lineHeight: "2",
                   minHeight: "26px",
-                  border: "1px solid #8c8f94",
+                  border: "none",
+                  outline: "none",
+                  boxShadow: "none",
+                  background: "#fcfcfc", // Modified background
                   borderRadius: "3px",
                   boxSizing: "border-box",
                   fontSize: "13px"
@@ -376,6 +384,9 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
           </ul>
         </div>
       )}
+      </div>
+
+      {description && <p className="description" style={{ marginTop: 4, color: "#646970", fontSize: "13px" }}>{description}</p>}
 
       {/* Portal Tooltip or absolute Tooltip for variants */}
       {tooltipState?.visible && (

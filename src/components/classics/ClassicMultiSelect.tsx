@@ -38,6 +38,7 @@ interface ClassicMultiSelectProps {
   size?: "short" | "regular";
   renderOption?: (option: MultiSelectOption) => React.ReactNode;
   description?: string;
+  differentDropdownWidth?: boolean;
 }
 
 export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
@@ -54,6 +55,7 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
   size = "short",
   renderOption,
   description,
+  differentDropdownWidth = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
@@ -227,11 +229,13 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
 
   const selectId = id || `classic-multi-${Math.random().toString(36).slice(2, 9)}`;
   const sizeClass = size === "short" ? "short" : "regular-text";
+  const explicitWidth = size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
 
   return (
-    <div className={`campaignbay-relative ${className}`} ref={containerRef}>
+    <div className={`${sizeClass} ${className}`} ref={containerRef} style={{ verticalAlign: "middle", display: "inline-block", width: explicitWidth }}>
       {label && <label htmlFor={selectId} style={{ display: "block", marginBottom: 4 }}>{label}</label>}
 
+      <div className="wpab-relative">
       <div
         id={selectId}
         tabIndex={disabled ? -1 : 0}
@@ -239,9 +243,8 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
         aria-expanded={isOpen}
         onClick={() => !disabled && setIsOpen(!isOpen)}
         onKeyDown={handleTriggerKeyDown}
-        className={`${sizeClass}`}
         style={{
-          display: "inline-flex",
+          display: "flex",
           flexWrap: "wrap",
           alignItems: "center",
           gap: "4px",
@@ -254,6 +257,7 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
           transition: "box-shadow 0.1s linear",
           position: "relative",
           boxSizing: "border-box",
+          width: "100%",
           ...(isOpen ? { borderColor: "#2271b1", boxShadow: "0 0 0 1px #2271b1", outline: "2px solid transparent" } : {}),
         }}
       >
@@ -304,6 +308,7 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
             onKeyDown={handleSearchKeyDown}
             placeholder={value.length === 0 ? placeholder : ""}
             disabled={disabled}
+            className="focus:wpab-outline-none focus:wpab-shadow-none"
             style={{
               border: "none",
               outline: "none",
@@ -327,22 +332,23 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
         </span>
       </div>
 
-      {description && <p className="description" style={{ marginTop: 2 }}>{description}</p>}
-
       {isOpen && (
         <div
-          className={`campaignbay-absolute campaignbay-z-50 campaignbay-bg-white campaignbay-border campaignbay-border-[#8c8f94] campaignbay-rounded-[3px] campaignbay-mt-1 ${sizeClass}`}
+          className={`wpab-absolute wpab-z-50 wpab-bg-white wpab-border wpab-border-[#8c8f94] wpab-rounded-[3px]`}
           style={{
             zIndex: 99999,
             boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
             padding: 0,
             boxSizing: "border-box",
-            minWidth: "100%",
+            top: "100%",
+            left: 0,
+            marginTop: "-1px",
+            ...(differentDropdownWidth ? { minWidth: "100%" } : { width: "100%" }),
           }}
         >
           {isLoading ? (
             <div style={{ padding: "8px 12px", color: "#646970", fontSize: "13px", display: "flex", alignItems: "center", gap: "8px" }}>
-              <Hourglass size={14} className="campaignbay-animate-spin" /> Loading...
+              <Hourglass size={14} className="wpab-animate-spin" /> Loading...
             </div>
           ) : (
             <ul
@@ -456,6 +462,9 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
           )}
         </div>
       )}
+      </div>
+
+      {description && <p className="description" style={{ marginTop: 4, color: "#646970", fontSize: "13px" }}>{description}</p>}
 
       {tooltipState?.visible && (
         <div

@@ -188,7 +188,7 @@ const Select: React.FC<SelectProps> = ({
   enableSearch = false,
   border = borderClasses,
   hoverBorder = hoverBorderClasses,
-  color = "campaignbay-text-[#0a4b78]",
+  color = "wpab-text-[#0a4b78]",
   isError = false,
   errorClassName = errorClasses,
   differentDropdownWidth = false,
@@ -456,14 +456,14 @@ const Select: React.FC<SelectProps> = ({
   };
   return (
     <div
-      className={`campaignbay-relative campaignbay-w-full ${className} ${
+      className={`wpab-relative wpab-w-full ${className} ${
         classNames.wrapper || ""
       }`}
       ref={containerRef}
     >
       {label && (
         <label
-          className={`campaignbay-block campaignbay-text-sm campaignbay-font-medium campaignbay-text-gray-700 campaignbay-mb-1 ${
+          className={`wpab-block wpab-text-sm wpab-font-medium wpab-text-gray-700 wpab-mb-1 ${
             classNames.label || ""
           }`}
         >
@@ -484,29 +484,29 @@ const Select: React.FC<SelectProps> = ({
         onClick={() => !disabled && setIsOpen((prev) => !prev)}
         onKeyDown={handleTriggerKeyDown}
         className={`
-          campaignbay-ring-1 campaignbay-ring-transparent
-          campaignbay-relative campaignbay-flex campaignbay-flex-wrap  campaignbay-items-center campaignbay-justify-between campaignbay-w-full campaignbay-gap-0 campaignbay-px-4  campaignbay-text-left !campaignbay-cursor-pointer 
-          campaignbay-transition-all campaignbay-duration-200 campaignbay-ease-in-out campaignbay-border campaignbay-rounded-[8px] campaignbay-bg-white ${border} 
-          ${isCompact ? "campaignbay-py-[5px]" : "campaignbay-py-[9px]"}
+          wpab-ring-1 wpab-ring-transparent
+          wpab-relative wpab-flex wpab-flex-wrap  wpab-items-center wpab-justify-between wpab-w-full wpab-gap-0 wpab-px-4  wpab-text-left !wpab-cursor-pointer 
+          wpab-transition-all wpab-duration-200 wpab-ease-in-out wpab-border wpab-rounded-[8px] wpab-bg-white ${border} 
+          ${isCompact ? "wpab-py-[5px]" : "wpab-py-[9px]"}
           ${!disabled && !isOpen ? ` ${color} ` : ""}
           ${
             disabled
-              ? "campaignbay-bg-gray-100 campaignbay-cursor-not-allowed campaignbay-text-gray-400 campaignbay-border-gray-200"
+              ? "wpab-bg-gray-100 wpab-cursor-not-allowed wpab-text-gray-400 wpab-border-gray-200"
               : isError
               ? ""
-              : "hover:!campaignbay-border-[#3858e9]"
+              : "hover:!wpab-border-[#3858e9]"
           }
           ${isOpen ? (isError ? errorClassesManual : hoverClassesManual) : ""}
           ${isError ? `${errorClassName} ${classNames.error || ""}` : ""}
           ${classNames.select || ""} ${classNames.container || ""}
         `}
       >
-        <div className="campaignbay-flex-1 campaignbay-min-w-0">
+        <div className="wpab-flex-1 wpab-min-w-0">
           {enableSearch && isOpen ? (
             <input
               ref={searchInputRef}
               type="text"
-              className={`campaignbay-w-full !campaignbay-bg-transparent !campaignbay-border-none !campaignbay-shadow-none !campaignbay-outline-none !campaignbay-p-0 !campaignbay-font-[${fontWeight}] !campaignbay-text-[${fontSize}px] !campaignbay-leading-[20px] !campaignbay-min-h-[unset] ${
+              className={`wpab-w-full !wpab-bg-transparent !wpab-border-none !wpab-shadow-none !wpab-outline-none !wpab-p-0 !wpab-font-[${fontWeight}] !wpab-text-[${fontSize}px] !wpab-leading-[20px] !wpab-min-h-[unset] ${
                 classNames.search || ""
               }`}
               value={searchQuery}
@@ -520,11 +520,11 @@ const Select: React.FC<SelectProps> = ({
             />
           ) : (
             <span
-              className={`campaignbay-block campaignbay-truncate ${color} hover:!campaignbay-text-[#3858e9] campaignbay-text-[${fontSize}px] campaignbay-font-[${fontWeight}]`}
+              className={`wpab-block wpab-truncate ${color} hover:!wpab-text-[#3858e9] wpab-text-[${fontSize}px] wpab-font-[${fontWeight}]`}
             >
               {value ? (
                 <span
-                  className={`campaignbay-flex campaignbay-items-center campaignbay-gap-2 `}
+                  className={`wpab-flex wpab-items-center wpab-gap-2 `}
                 >
                   {renderOption && selectedOption ? renderOption(selectedOption) : selectedOption?.label}
                 </span>
@@ -537,10 +537,10 @@ const Select: React.FC<SelectProps> = ({
 
         {/* Chevron Icon */}
         {!hideIcon ? (
-          <span className="campaignbay-flex-shrink-0 campaignbay-ml-2 campaignbay-flex campaignbay-items-center">
+          <span className="wpab-flex-shrink-0 wpab-ml-2 wpab-flex wpab-items-center">
             <ChevronDown
-              className={`campaignbay-h-4 campaignbay-w-4 campaignbay-text-gray-700 campaignbay-transition-transform campaignbay-duration-200 ${
-                isOpen ? "campaignbay-transform campaignbay-rotate-180" : ""
+              className={`wpab-h-4 wpab-w-4 wpab-text-gray-700 wpab-transition-transform wpab-duration-200 ${
+                isOpen ? "wpab-transform wpab-rotate-180" : ""
               }`}
             />
           </span>
@@ -550,8 +550,8 @@ const Select: React.FC<SelectProps> = ({
       {/* Dropdown Panel */}
       {isOpen && (
         <div
-          className={`campaignbay-absolute campaignbay-z-50  campaignbay-bg-white campaignbay-border campaignbay-border-gray-200 campaignbay-rounded-b-lg ${
-            differentDropdownWidth ? "" : "campaignbay-w-full"
+          className={`wpab-absolute wpab-z-50  wpab-bg-white wpab-border wpab-border-gray-200 wpab-rounded-b-lg ${
+            differentDropdownWidth ? "" : "wpab-w-full"
           } ${classNames.dropdown || ""}`}
           style={{
             zIndex: 50000,
@@ -568,11 +568,11 @@ const Select: React.FC<SelectProps> = ({
             role="listbox"
             tabIndex={-1}
             onScroll={() => setTooltipState(null)} // Hide tooltip on scroll to prevent detachment
-            className={`campaignbay-max-h-60 campaignbay-overflow-auto focus:campaignbay-outline-none campaignbay-scrollbar-hide campaignbay-relative ${color} campaignbay-font-[${fontWeight}] campaignbay-text-[${fontSize}px]`}
+            className={`wpab-max-h-60 wpab-overflow-auto focus:wpab-outline-none wpab-scrollbar-hide wpab-relative ${color} wpab-font-[${fontWeight}] wpab-text-[${fontSize}px]`}
             style={{ scrollbarWidth: "none" }}
           >
             {filteredOptions.length === 0 ? (
-              <li className="campaignbay-relative campaignbay-cursor-default campaignbay-select-none campaignbay-p-1  campaignbay-italic campaignbay-text-center campaignbay-rounded-[8px]">
+              <li className="wpab-relative wpab-cursor-default wpab-select-none wpab-p-1  wpab-italic wpab-text-center wpab-rounded-[8px]">
                 {searchQuery ? "No results found" : "No options available"}
               </li>
             ) : (
@@ -601,22 +601,22 @@ const Select: React.FC<SelectProps> = ({
                       handleSelect(option);
                     }}
                     className={`
-                      campaignbay-group campaignbay-relative campaignbay-cursor-pointer campaignbay-select-none campaignbay-px-3  campaignbay-flex campaignbay-flex-nowrap campaignbay-justify-between campaignbay-min-h-[36px]campaignbay-font-medium campaignbay-transition-colors campaignbay-duration-150 !campaignbay-mb-0 campaignbay-border-b-[1px] campaignbay-border-gray-100  campaignbay-rounded-[8px] 
+                      wpab-group wpab-relative wpab-cursor-pointer wpab-select-none wpab-px-3  wpab-flex wpab-flex-nowrap wpab-justify-between wpab-min-h-[36px]wpab-font-medium wpab-transition-colors wpab-duration-150 !wpab-mb-0 wpab-border-b-[1px] wpab-border-gray-100  wpab-rounded-[8px] 
                       ${
                         isDisabled
-                          ? "campaignbay-opacity-100 !campaignbay-cursor-not-allowed campaignbay-text-gray-500 campaignbay-bg-gray-200"
+                          ? "wpab-opacity-100 !wpab-cursor-not-allowed wpab-text-gray-500 wpab-bg-gray-200"
                           : ""
                       }
                       ${
                         isComingSoon
-                          ? "campaignbay-opacity-100 !campaignbay-cursor-not-allowed !campaignbay-text-pink-500 hover:!campaignbay-text-pink-600 campaignbay-bg-gray-200"
+                          ? "wpab-opacity-100 !wpab-cursor-not-allowed !wpab-text-pink-500 hover:!wpab-text-pink-600 wpab-bg-gray-200"
                           : ""
                       }
                       ${
                         isHighlighted && !isDisabled
-                          ? "campaignbay-bg-blue-600 campaignbay-text-white"
+                          ? "wpab-bg-blue-600 wpab-text-white"
                           : isDisabled
-                          ? "campaignbay-text-gray-400"
+                          ? "wpab-text-gray-400"
                           : ""
                       }
                       ${
@@ -627,12 +627,12 @@ const Select: React.FC<SelectProps> = ({
                       ${classNames.option || ""}
                     `}
                   >
-                    <div className="campaignbay-flex campaignbay-items-center campaignbay-justify-between campaignbay-min-h-[36px] campaignbay-w-full campaignbay-gap-4">
+                    <div className="wpab-flex wpab-items-center wpab-justify-between wpab-min-h-[36px] wpab-w-full wpab-gap-4">
                       <span
-                        className={`campaignbay-block campaignbay-truncate ${
+                        className={`wpab-block wpab-truncate ${
                           isSelected
-                            ? "campaignbay-font-semibold"
-                            : "campaignbay-font-normal"
+                            ? "wpab-font-semibold"
+                            : "wpab-font-normal"
                         }`}
                       >
                         {renderOption ? renderOption(option) : option.label}
@@ -640,12 +640,12 @@ const Select: React.FC<SelectProps> = ({
 
                       {/* Lock Icon for Buy Pro */}
                       {isPro && (
-                        <LockKeyhole className="campaignbay-w-3.5 campaignbay-h-3.5 campaignbay-text-[#f02a74]" />
+                        <LockKeyhole className="wpab-w-3.5 wpab-h-3.5 wpab-text-[#f02a74]" />
                       )}
                       {isComingSoon && (
-                        <span className="campaignbay-bg-pink-600 campaignbay-text-white campaignbay-p-1 campaignbay-px-2 campaignbay-rounded-full campaignbay-text-xs campaignbay-flex campaignbay-items-center campaignbay-gap-1 campaignbay-flex-nowrap">
-                          <Hourglass className="campaignbay-w-3.5 campaignbay-h-3.5 campaignbay-text-white" />
-                          <span className="campaignbay-whitespace-nowrap">
+                        <span className="wpab-bg-pink-600 wpab-text-white wpab-p-1 wpab-px-2 wpab-rounded-full wpab-text-xs wpab-flex wpab-items-center wpab-gap-1 wpab-flex-nowrap">
+                          <Hourglass className="wpab-w-3.5 wpab-h-3.5 wpab-text-white" />
+                          <span className="wpab-whitespace-nowrap">
                             Coming Soon
                           </span>
                         </span>
@@ -655,14 +655,14 @@ const Select: React.FC<SelectProps> = ({
                     {/* Checkmark for selected item */}
                     {isSelected && !isPro && !isComingSoon && (
                       <span
-                        className={`campaignbay-px-3 campaignbay-pr-0 campaignbay-flex-nowrap campaignbay-flex campaignbay-items-center campaignbay-pr-4 ${
+                        className={`wpab-px-3 wpab-pr-0 wpab-flex-nowrap wpab-flex wpab-items-center wpab-pr-4 ${
                           isHighlighted && !isDisabled
-                            ? "campaignbay-text-white"
-                            : "campaignbay-text-blue-600"
+                            ? "wpab-text-white"
+                            : "wpab-text-blue-600"
                         }`}
                       >
                         <svg
-                          className="campaignbay-h-5 campaignbay-w-5"
+                          className="wpab-h-5 wpab-w-5"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                           fill="currentColor"
@@ -690,7 +690,7 @@ const Select: React.FC<SelectProps> = ({
         createPortal(
           <div
             ref={tooltipRef}
-            className="campaignbay-fixed campaignbay-z-[50001] campaignbay-flex campaignbay-flex-col campaignbay-items-center campaignbay-gap-1.5 campaignbay-bg-gray-900 campaignbay-text-white campaignbay-text-xs campaignbay-p-2 campaignbay-min-w-[140px] campaignbay-rounded-md campaignbay-shadow-lg"
+            className="wpab-fixed wpab-z-[50001] wpab-flex wpab-flex-col wpab-items-center wpab-gap-1.5 wpab-bg-gray-900 wpab-text-white wpab-text-xs wpab-p-2 wpab-min-w-[140px] wpab-rounded-md wpab-shadow-lg"
             style={{
               top: tooltipState.top + 5, // Adjusted to user preference
               left: tooltipState.left,
@@ -699,19 +699,19 @@ const Select: React.FC<SelectProps> = ({
             onMouseEnter={handleTooltipMouseEnter}
             onMouseLeave={handleTooltipMouseLeave}
           >
-            <span className="campaignbay-font-medium campaignbay-whitespace-nowrap">
+            <span className="wpab-font-medium wpab-whitespace-nowrap">
               Upgrade to unlock
             </span>
             <a
               href="#"
               target="_blank"
               onClick={(e) => e.preventDefault()}
-              className="campaignbay-w-full campaignbay-bg-[#f02a74] hover:!campaignbay-bg-[#e71161] campaignbay-text-white hover:!campaignbay-text-white campaignbay-font-bold campaignbay-py-1.5 campaignbay-px-3 campaignbay-transition-colors focus:campaignbay-outline-none focus:campaignbay-ring-0 campaignbay-cursor-pointer campaignbay-text-center campaignbay-rounded"
+              className="wpab-w-full wpab-bg-[#f02a74] hover:!wpab-bg-[#e71161] wpab-text-white hover:!wpab-text-white wpab-font-bold wpab-py-1.5 wpab-px-3 wpab-transition-colors focus:wpab-outline-none focus:wpab-ring-0 wpab-cursor-pointer wpab-text-center wpab-rounded"
             >
               Buy Pro
             </a>
             {/* Tooltip Arrow */}
-            <div className="campaignbay-absolute campaignbay-top-full campaignbay-left-1/2 -campaignbay-translate-x-1/2 campaignbay-border-4 campaignbay-border-transparent campaignbay-border-t-gray-900"></div>
+            <div className="wpab-absolute wpab-top-full wpab-left-1/2 -wpab-translate-x-1/2 wpab-border-4 wpab-border-transparent wpab-border-t-gray-900"></div>
           </div>,
           document.body,
         )}
