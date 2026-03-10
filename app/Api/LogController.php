@@ -107,8 +107,18 @@ class LogController extends ApiController
      */
     public function get_items($request)
     {
+        // // For testing: schedule a cron job 5 minutes later via Cron class
+        // // \WpabBoilerplate\Core\Cron::get_instance()->schedule_single(
+        // //     'test_cron',
+        // //     300,
+        // //     array( \WpabBoilerplate\Core\Cron::get_instance(), 'test_job' )
+        // // );
+        // // wpab_boilerplate_log( 'Test cron job scheduled to run at ' . (time() + 300) . ' time.', 'error' );
+
+        // wpab_boilerplate_log( 'Current server time is ' . time() . '.', 'error' );
+
         $content = Logger::get_merged_logs();
-        return rest_ensure_response(array('content' => $content));
+        return rest_ensure_response( array( 'content' => $content ) );
     }
 
     /**
