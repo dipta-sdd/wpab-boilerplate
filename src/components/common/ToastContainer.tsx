@@ -4,7 +4,6 @@ import { Toast } from "./Toast";
 
 export const ToastContainer: FC = () => {
   const { toasts, removeToast } = useToast();
-  console.log(toasts);
   return (
     <div className="wpab-fixed wpab-top-[10px] wpab-right-[10px] wpab-z-[999999] wpab-flex wpab-flex-col wpab-gap-[10px] wpab-min-w-[200px] wpab-pointer-events-none">
       {toasts.map((toast) => (
