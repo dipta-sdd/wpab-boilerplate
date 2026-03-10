@@ -5,6 +5,7 @@ import { WpabProvider } from "./store/wpabStore";
 import { ToastProvider } from "./store/toast/use-toast";
 import Logs from "./pages/Logs";
 import Components from "./pages/Components";
+import ClassicShowcase from "./pages/ClassicShowcase";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="logs" element={<Logs />} />
               <Route path="components" element={<Components />} />
+              <Route path="components-classic" element={<ClassicShowcase />} />
               {/* Add your routes here */}
             </Route>
           </Routes>
@@ -26,3 +28,4 @@ function App() {
 }
 
 export default App;
+

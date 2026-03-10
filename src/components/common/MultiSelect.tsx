@@ -5,6 +5,7 @@ import React, {
   KeyboardEvent,
   useMemo,
 } from "react";
+import apiFetch from "@wordpress/api-fetch";
 import { borderClasses, hoverBorderClasses } from "./classes";
 
 // Inline Icons to replace lucide-react
@@ -42,9 +43,9 @@ const X = ({ className }: { className?: string }) => (
 export interface MultiSelectOption {
   value: string | number;
   label: string;
-  labelNode?: React.ReactNode;
   className?: string;
   disabled?: boolean;
+  variant?: "buy_pro" | "coming_soon";
 }
 
 export interface MultiSelectProps {
@@ -52,7 +53,8 @@ export interface MultiSelectProps {
   ref?: React.Ref<HTMLDivElement>;
   value: (string | number)[];
   onChange: (value: (string | number)[]) => void;
-  options: MultiSelectOption[];
+  options?: MultiSelectOption[];
+  endpoint?: string;
   placeholder?: string;
   disabled?: boolean;
   className?: string;
@@ -71,6 +73,12 @@ export interface MultiSelectProps {
     error?: string;
   };
   isCompact?: boolean;
+
+  /**
+   * Custom render function for option display.
+   * Receives the option object and returns a ReactNode.
+   */
+  renderOption?: (option: MultiSelectOption) => React.ReactNode;
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -78,16 +86,18 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   ref,
   value = [],
   onChange,
-  options,
+  options = [],
+  endpoint,
   placeholder = "Select options...",
   disabled = false,
   className = "",
   label,
   enableSearch = true,
   isError = false,
-  errorClassName = "wpab-border-danger",
+  errorClassName = "campaignbay-border-danger",
   classNames = {},
   isCompact = false,
+  renderOption,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
@@ -98,6 +108,72 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   const listRef = useRef<HTMLUListElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const interactionType = useRef<"mouse" | "keyboard">("keyboard");
+
+  // Endpoint fetching state
+  const [fetchedOptions, setFetchedOptions] = useState<MultiSelectOption[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [allSeenOptions, setAllSeenOptions] = useState<MultiSelectOption[]>(
+    options || [],
+  );
+
+  useEffect(() => {
+    if (options && options.length > 0) {
+      setAllSeenOptions((prev) => {
+        const unique = new Map(prev.map((o) => [o.value, o]));
+        options.forEach((o) => unique.set(o.value, o));
+        return Array.from(unique.values());
+      });
+    }
+  }, [options]);
+
+  useEffect(() => {
+    if (fetchedOptions.length > 0) {
+      setAllSeenOptions((prev) => {
+        const unique = new Map(prev.map((o) => [o.value, o]));
+        fetchedOptions.forEach((o) => unique.set(o.value, o));
+        return Array.from(unique.values());
+      });
+    }
+  }, [fetchedOptions]);
+
+  // Fetch from endpoint with debounce
+  useEffect(() => {
+    if (!endpoint) return;
+
+    let isMounted = true;
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        setIsLoading(true);
+        const separator = endpoint.includes("?") ? "&" : "?";
+        const path = `${endpoint}${separator}search=${encodeURIComponent(
+          searchQuery,
+        )}`;
+
+        const response: any = await apiFetch({
+          path,
+          method: "GET",
+        });
+
+        if (isMounted && Array.isArray(response)) {
+          const newOptions = response.map((item: any) => ({
+            label: item.name,
+            value: item.id,
+          }));
+          setFetchedOptions(newOptions);
+        }
+      } catch (error) {
+        console.error("MultiSelect fetch error:", error);
+        if (isMounted) setFetchedOptions([]);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    }, 300);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(delayDebounceFn);
+    };
+  }, [searchQuery, endpoint]);
 
   // Handle outside click logic including Portal
   useEffect(() => {
@@ -126,19 +202,26 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
   // Get selected options objects
   const selectedOptions = useMemo(() => {
-    return options.filter((opt) => value.includes(opt.value));
-  }, [options, value]);
+    const combinedOptions = endpoint ? allSeenOptions : options || [];
+    return value.map((val) => {
+      const found = combinedOptions.find((opt) => opt.value === val);
+      return found ? found : { value: val, label: `${val}` };
+    });
+  }, [options, value, endpoint, allSeenOptions]);
 
   // Filter options based on search query (exclude already selected)
   const filteredOptions = useMemo(() => {
-    let filtered = options.filter((opt) => !value.includes(opt.value));
-    if (enableSearch && searchQuery) {
+    const baseOptions = endpoint ? fetchedOptions : options || [];
+    let filtered = baseOptions.filter((opt) => !value.includes(opt.value));
+
+    // Process local search only if no endpoint is specified
+    if (!endpoint && enableSearch && searchQuery) {
       filtered = filtered.filter((option) =>
         option.label.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
     return filtered;
-  }, [options, value, searchQuery, enableSearch]);
+  }, [options, value, searchQuery, enableSearch, endpoint, fetchedOptions]);
 
   // Reset search and highlighted index when opening/closing
   useEffect(() => {
@@ -245,14 +328,14 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
   return (
     <div
-      className={`wpab-relative wpab-w-full ${className} ${
+      className={`campaignbay-relative campaignbay-w-full ${className} ${
         classNames.wrapper || ""
       }`}
       ref={containerRef}
     >
       {label && (
         <label
-          className={`wpab-block wpab-text-sm wpab-font-bold wpab-text-gray-900 wpab-mb-2 ${
+          className={`campaignbay-block campaignbay-text-sm campaignbay-font-bold campaignbay-text-gray-900 campaignbay-mb-2 ${
             classNames.label || ""
           }`}
         >
@@ -266,14 +349,14 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         ref={ref}
         onClick={handleTriggerClick}
         className={`
-          wpab-relative wpab-flex wpab-flex-wrap wpab-items-center wpab-gap-2 wpab-w-full wpab-px-4 wpab-text-left !wpab-cursor-text
-          wpab-transition-all wpab-duration-200 wpab-ease-in-out wpab-border wpab-rounded-[8px] wpab-bg-white
+          campaignbay-relative campaignbay-flex campaignbay-flex-wrap campaignbay-items-center campaignbay-gap-2 campaignbay-w-full campaignbay-px-4 campaignbay-text-left !campaignbay-cursor-text
+          campaignbay-transition-all campaignbay-duration-200 campaignbay-ease-in-out campaignbay-border campaignbay-rounded-[8px] campaignbay-bg-white
           ${borderClasses}
-          ${isCompact ? "wpab-py-[4px]" : "wpab-py-[7px]"}
+          ${isCompact ? "campaignbay-py-[4px]" : "campaignbay-py-[7px]"}
           ${
             disabled
-              ? "wpab-bg-gray-50 wpab-cursor-not-allowed wpab-text-gray-400 wpab-border-gray-200"
-              : `hover:!wpab-border-primary`
+              ? "campaignbay-bg-gray-50 campaignbay-cursor-not-allowed campaignbay-text-gray-400 campaignbay-border-gray-200"
+              : `hover:!campaignbay-border-primary`
           }
           ${isOpen ? hoverBorderClasses : ""}
           ${isError ? errorClassName : ""}
@@ -285,7 +368,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           <span
             key={option.value}
             className={`
-                wpab-inline-flex wpab-items-center wpab-gap-1 wpab-bg-gray-100 wpab-text-gray-800 wpab-px-2 wpab-py-[2px] wpab-rounded-none wpab-text-[13px] wpab-leading-[20px] wpab-font-[400]
+                campaignbay-inline-flex campaignbay-items-center campaignbay-gap-1 campaignbay-bg-gray-100 campaignbay-text-gray-800 campaignbay-px-2 campaignbay-py-[2px] campaignbay-rounded-none campaignbay-text-[13px] campaignbay-leading-[20px] campaignbay-font-[400]
                 ${classNames.tag || ""}
             `}
           >
@@ -293,10 +376,10 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             <button
               type="button"
               onClick={(e) => handleRemove(option.value, e)}
-              className="wpab-flex wpab-items-center wpab-justify-center wpab-w-4 wpab-h-4 wpab-rounded-full hover:wpab-bg-gray-200 wpab-transition-colors wpab-text-gray-500"
+              className="campaignbay-flex campaignbay-items-center campaignbay-justify-center campaignbay-w-4 campaignbay-h-4 campaignbay-rounded-full hover:campaignbay-bg-gray-200 campaignbay-transition-colors campaignbay-text-gray-500"
               aria-label={`Remove ${option.label}`}
             >
-              <X className="wpab-w-3 wpab-h-3" />
+              <X className="campaignbay-w-3 campaignbay-h-3" />
             </button>
           </span>
         ))}
@@ -306,7 +389,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           ref={searchInputRef}
           type="text"
           className={`
-            wpab-flex-1 wpab-min-w-[80px] wpab-bg-transparent !wpab-border-none !wpab-shadow-none wpab-outline-none wpab-px-1 wpab-py-[2px]  !wpab-text-[13px] !wpab-leading-[20px] wpab-font-[400] wpab-text-gray-900 wpab-placeholder-gray-400 !wpab-min-h-[24px]
+            campaignbay-flex-1 campaignbay-min-w-[80px] campaignbay-bg-transparent !campaignbay-border-none !campaignbay-shadow-none campaignbay-outline-none campaignbay-px-1 campaignbay-py-[2px]  !campaignbay-text-[13px] !campaignbay-leading-[20px] campaignbay-font-[400] campaignbay-text-gray-900 campaignbay-placeholder-gray-400 !campaignbay-min-h-[24px]
             ${classNames.search || ""}
           `}
           value={searchQuery}
@@ -322,10 +405,10 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         />
 
         {/* Chevron Icon */}
-        <span className="wpab-flex-shrink-0 wpab-ml-auto wpab-flex wpab-items-center">
+        <span className="campaignbay-flex-shrink-0 campaignbay-ml-auto campaignbay-flex campaignbay-items-center">
           <ChevronDown
-            className={`wpab-h-4 wpab-w-4 wpab-text-gray-500 wpab-transition-transform wpab-duration-200 ${
-              isOpen ? "wpab-transform wpab-rotate-180" : ""
+            className={`campaignbay-h-4 campaignbay-w-4 campaignbay-text-gray-500 campaignbay-transition-transform campaignbay-duration-200 ${
+              isOpen ? "campaignbay-transform campaignbay-rotate-180" : ""
             }`}
           />
         </span>
@@ -336,7 +419,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         <div
           ref={dropdownRef}
           className={`
-                wpab-absolute wpab-z-[50000] wpab-w-full wpab-bg-white wpab-border wpab-border-gray-200 wpab-rounded-[12px] wpab-p-[4px] wpab-shadow-xl
+                campaignbay-absolute campaignbay-z-[50000] campaignbay-w-full campaignbay-bg-white campaignbay-border campaignbay-border-gray-200 campaignbay-rounded-[12px] campaignbay-p-[4px] campaignbay-shadow-xl
                 ${classNames.dropdown || ""}
             `}
           style={{
@@ -350,11 +433,15 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             ref={listRef}
             role="listbox"
             tabIndex={-1}
-            className="wpab-max-h-[204px] wpab-overflow-auto focus:wpab-outline-none"
+            className="campaignbay-max-h-[204px] campaignbay-overflow-auto focus:campaignbay-outline-none"
             style={{ scrollbarWidth: "none" }}
           >
-            {filteredOptions.length === 0 ? (
-              <li className="wpab-px-3 wpab-py-2 wpab-text-gray-500 wpab-text-sm wpab-text-center wpab-italic !wpab-mb-0 wpab-rounded-[8px]">
+            {isLoading ? (
+              <li className="campaignbay-px-3 campaignbay-py-2 campaignbay-text-gray-500 campaignbay-text-sm campaignbay-text-center campaignbay-italic !campaignbay-mb-0 campaignbay-rounded-[8px]">
+                Loading...
+              </li>
+            ) : filteredOptions.length === 0 ? (
+              <li className="campaignbay-px-3 campaignbay-py-2 campaignbay-text-gray-500 campaignbay-text-sm campaignbay-text-center campaignbay-italic !campaignbay-mb-0 campaignbay-rounded-[8px]">
                 {searchQuery ? "No results found" : "No more options"}
               </li>
             ) : (
@@ -376,22 +463,22 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                       handleSelect(option);
                     }}
                     className={`
-                        wpab-px-4 wpab-py-2.5 wpab-cursor-pointer wpab-text-sm wpab-transition-colors wpab-border-b wpab-border-gray-50 last:wpab-border-0 !wpab-mb-0  wpab-rounded-[8px]
+                        campaignbay-px-4 campaignbay-py-2.5 campaignbay-cursor-pointer campaignbay-text-sm campaignbay-transition-colors campaignbay-border-b campaignbay-border-gray-50 last:campaignbay-border-0 !campaignbay-mb-0  campaignbay-rounded-[8px]
                         ${
                           isDisabled
-                            ? "wpab-opacity-50 !wpab-cursor-not-allowed wpab-text-gray-400"
+                            ? "campaignbay-opacity-50 !campaignbay-cursor-not-allowed campaignbay-text-gray-400"
                             : ""
                         }
                         ${
                           isHighlighted && !isDisabled
-                            ? "wpab-bg-blue-600 wpab-text-white"
-                            : "wpab-text-gray-700"
+                            ? "campaignbay-bg-blue-600 campaignbay-text-white"
+                            : "campaignbay-text-gray-700"
                         }
                         ${option.className || ""}
                         ${classNames.option || ""}
                         `}
                   >
-                    {option.labelNode || option.label}
+                    {renderOption ? renderOption(option) : option.label}
                   </li>
                 );
               })
