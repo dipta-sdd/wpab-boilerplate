@@ -20,10 +20,13 @@ import Skeleton from "../components/common/Skeleton";
 import { Stepper } from "../components/common/Stepper";
 import { EditableText } from "../components/common/EditableText";
 import { CopyToClipboard } from "../components/common/CopyToClipboard";
+import { CardRadioGroup } from "../components/common/CardRadioGroup";
+
 const Components: FC = () => {
   const toastContext = useToast();
   const toast = toastContext?.toasts || [];
   const addToast = toastContext?.addToast || (() => {});
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
@@ -37,93 +40,215 @@ const Components: FC = () => {
   const [multiSelectValues, setMultiSelectValues] = useState<
     (string | number)[]
   >([]);
-  const [listSelectValue, setListSelectValue] = useState<string>("item1");
+  const [listSelectValue, setListSelectValue] = useState<string>("opt1");
   const [activeTab, setActiveTab] = useState("tab1");
   const [editableText, setEditableText] = useState("Click to edit me");
   const [currentStep, setCurrentStep] = useState(1);
+  const [cardValue, setCardValue] = useState("card1");
 
   const selectOptions = [
     { label: "Option 1", value: "opt1" },
     { label: "Option 2", value: "opt2" },
     { label: "Option 3", value: "opt3" },
+    { label: "Pro Option", value: "pro", variant: "buy_pro" as const },
+    { label: "Coming Soon", value: "soon", variant: "coming_soon" as const },
   ];
 
+  const cardOptions = [
+    {
+      value: "card1",
+      title: "Standard Feature",
+      description: "This is a standard feature card.",
+    },
+    {
+      value: "card2",
+      title: "Pro Feature",
+      description: "Upgrade to unlock this premium feature.",
+      variant: "buy_pro" as const,
+    },
+    {
+      value: "card3",
+      title: "Coming Soon",
+      description: "We are working hard on this one.",
+      variant: "coming_soon" as const,
+    },
+  ];
+
+  const Section = ({
+    title,
+    children,
+  }: {
+    title: string;
+    children: React.ReactNode;
+  }) => (
+    <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[24px] wpab-border wpab-border-gray-200 wpab-shadow-sm">
+      <h2 className="wpab-text-[18px] wpab-font-[700] wpab-text-gray-900 wpab-mb-[20px] wpab-border-b wpab-pb-2">
+        {title}
+      </h2>
+      <div className="wpab-space-y-[24px]">{children}</div>
+    </div>
+  );
+
+  const Subsection = ({
+    title,
+    children,
+  }: {
+    title: string;
+    children: React.ReactNode;
+  }) => (
+    <div>
+      <h3 className="wpab-text-[14px] wpab-font-[600] wpab-text-gray-500 wpab-mb-[12px] wpab-uppercase wpab-tracking-wider">
+        {title}
+      </h3>
+      <div className="wpab-flex wpab-flex-wrap wpab-gap-[12px] wpab-items-center">
+        {children}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="wpab-p-[24px]">
-      <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[24px] wpab-mb-[24px] wpab-border wpab-border-gray-200">
-        <h1 className="wpab-text-[24px] wpab-font-[700] wpab-text-gray-900 wpab-mb-[8px]">
-          {__("React Components Showcase", "wpab-boilerplate")}
+    <div className="wpab-p-[24px] wpab-max-w-[1200px] wpab-mx-auto wpab-space-y-[32px]">
+      <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[32px] wpab-border wpab-border-gray-200 wpab-shadow-sm">
+        <h1 className="wpab-text-[28px] wpab-font-[800] wpab-text-gray-900 wpab-mb-[8px]">
+          {__("Components Showcase", "wpab-boilerplate")}
         </h1>
-        <p className="wpab-text-[14px] wpab-text-gray-600 wpab-mb-0">
+        <p className="wpab-text-[15px] wpab-text-gray-600">
           {__(
-            "A collection of reusable UI components included in the boilerplate.",
+            "Every variant, color, and size available in our common component library.",
             "wpab-boilerplate",
           )}
         </p>
       </div>
 
-      <div className="wpab-grid wpab-grid-cols-1 lg:wpab-grid-cols-2 wpab-gap-[24px]">
-        {/* Buttons */}
-        <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[20px] wpab-border wpab-border-gray-200">
-          <h2 className="wpab-text-[18px] wpab-font-[600] wpab-text-gray-900 wpab-mb-[16px]">
-            Buttons
-          </h2>
-          <div className="wpab-flex wpab-flex-wrap wpab-gap-[12px]">
-            <Button color="primary">Primary</Button>
-            <Button color="secondary">Secondary</Button>
-            <Button variant="outline">Outline</Button>
-            <Button variant="ghost">Ghost</Button>
-            <Button color="danger">Danger</Button>
-            <Button color="primary">Loading</Button>
-            <Button color="primary" disabled>
-              Disabled
-            </Button>
-          </div>
-        </div>
+      <div className="wpab-grid wpab-grid-cols-1 wpab-gap-[32px]">
+        {/* BUTTONS */}
+        <Section title="Buttons">
+          <Subsection title="Colors & Variants">
+            <div className="wpab-grid wpab-grid-cols-3 wpab-gap-4 wpab-w-full">
+              <Button color="primary">Solid Primary</Button>
+              <Button color="primary" variant="outline">
+                Outline Primary
+              </Button>
+              <Button color="primary" variant="ghost">
+                Ghost Primary
+              </Button>
 
-        {/* Inputs */}
-        <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[20px] wpab-border wpab-border-gray-200">
-          <h2 className="wpab-text-[18px] wpab-font-[600] wpab-text-gray-900 wpab-mb-[16px]">
-            Inputs
-          </h2>
-          <div className="wpab-flex wpab-flex-col wpab-gap-[16px]">
-            <Input
-              label="Standard Input"
-              placeholder="Type something..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-            <NumberInput
-              label="Number Input"
-              value={numberValue}
-              onChange={(val) => setNumberValue(val ?? 0)}
-              min={0}
-              max={100}
-            />
-            <EditableText value={editableText} onChange={setEditableText} />
-          </div>
-        </div>
+              <Button color="secondary">Solid Secondary</Button>
+              <Button color="secondary" variant="outline">
+                Outline Secondary
+              </Button>
+              <Button color="secondary" variant="ghost">
+                Ghost Secondary
+              </Button>
 
-        {/* Toggles & Checkboxes */}
-        <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[20px] wpab-border wpab-border-gray-200">
-          <h2 className="wpab-text-[18px] wpab-font-[600] wpab-text-gray-900 wpab-mb-[16px]">
-            Selection Controls
-          </h2>
-          <div className="wpab-flex wpab-flex-col wpab-gap-[16px]">
-            <div className="wpab-flex wpab-items-center wpab-gap-[24px]">
-              <Checkbox
-                label="Checkbox"
-                checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)}
-              />
-              <div className="wpab-flex wpab-items-center wpab-gap-[8px]">
-                <span className="wpab-text-[13px] wpab-text-gray-900">
-                  Toggle Switch
-                </span>
-                <Switch checked={switchState} onChange={setSwitchState} />
-              </div>
+              <Button color="danger">Solid Danger</Button>
+              <Button color="danger" variant="outline">
+                Outline Danger
+              </Button>
+              <Button color="danger" variant="ghost">
+                Ghost Danger
+              </Button>
             </div>
-            <div className="wpab-flex wpab-items-center wpab-gap-[24px]">
+          </Subsection>
+          <Subsection title="Sizes">
+            <Button size="small">Small Button</Button>
+            <Button size="medium">Medium Button</Button>
+            <Button size="large">Large Button</Button>
+          </Subsection>
+          <Subsection title="States">
+            <Button disabled>Disabled Button</Button>
+            <Button>Regular Button</Button>
+          </Subsection>
+        </Section>
+
+        {/* INPUTS */}
+        <Section title="Inputs">
+          <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-2 wpab-gap-8">
+            <div className="wpab-space-y-6">
+              <Subsection title="Input Sizes">
+                <Input
+                  label="Small Input"
+                  size="small"
+                  placeholder="small..."
+                />
+                <Input
+                  label="Medium Input"
+                  size="medium"
+                  placeholder="medium..."
+                />
+                <Input
+                  label="Large Input"
+                  size="large"
+                  placeholder="large..."
+                />
+              </Subsection>
+              <Subsection title="Input States">
+                <Input label="Disabled" disabled value="Cannot type here" />
+                <Input
+                  label="Error State"
+                  error="This field is required"
+                  placeholder="Error demonstration..."
+                />
+              </Subsection>
+            </div>
+            <div className="wpab-space-y-6">
+              <Subsection title="Number Input Sizes">
+                <NumberInput
+                  label="Small"
+                  value={numberValue}
+                  onChange={(v) => setNumberValue(v ?? 0)}
+                />
+                <NumberInput
+                  label="Medium"
+                  value={numberValue}
+                  onChange={(v) => setNumberValue(v ?? 0)}
+                />
+                <NumberInput
+                  label="Large"
+                  value={numberValue}
+                  onChange={(v) => setNumberValue(v ?? 0)}
+                />
+              </Subsection>
+              <Subsection title="Number Input States">
+                <NumberInput
+                  label="Disabled"
+                  disabled
+                  value={10}
+                  onChange={() => {}}
+                />
+                <NumberInput
+                  label="Error"
+                  error="Invalid number"
+                  value={-5}
+                  onChange={(v) => setNumberValue(v ?? 0)}
+                />
+              </Subsection>
+            </div>
+          </div>
+          <Subsection title="Interactive Editable Text">
+            <EditableText value={editableText} onChange={setEditableText} />
+          </Subsection>
+        </Section>
+
+        {/* SELECTION CONTROLS */}
+        <Section title="Selection Controls">
+          <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-3 wpab-gap-8">
+            <Subsection title="Checkboxes">
+              <Checkbox label="Unchecked" checked={false} onChange={() => {}} />
+              <Checkbox label="Checked" checked={true} onChange={() => {}} />
+              <Checkbox
+                label="Disabled"
+                checked={false}
+                disabled
+                onChange={() => {}}
+              />
+              <Checkbox
+                label="Interactive"
+                checked={isChecked}
+                onChange={setIsChecked}
+              />
+            </Subsection>
+            <Subsection title="Radios">
               <Radio
                 label="Option 1"
                 checked={radioValue === "option1"}
@@ -134,168 +259,320 @@ const Components: FC = () => {
                 checked={radioValue === "option2"}
                 onChange={() => setRadioValue("option2")}
               />
-            </div>
+              <Radio
+                label="Disabled"
+                checked={false}
+                disabled
+                onChange={() => {}}
+              />
+            </Subsection>
+            <Subsection title="Switches">
+              <div className="wpab-space-y-4 wpab-w-full">
+                <div className="wpab-flex wpab-gap-4">
+                  <Switch
+                    size="small"
+                    checked={switchState}
+                    onChange={setSwitchState}
+                  />
+                  <Switch
+                    size="medium"
+                    checked={switchState}
+                    onChange={setSwitchState}
+                  />
+                  <Switch
+                    size="large"
+                    checked={switchState}
+                    onChange={setSwitchState}
+                  />
+                </div>
+                <div className="wpab-flex wpab-gap-4">
+                  <Switch checked={false} onChange={() => {}} />
+                  <Switch checked={true} onChange={() => {}} />
+                  <Switch checked={false} disabled onChange={() => {}} />
+                </div>
+              </div>
+            </Subsection>
           </div>
-        </div>
+        </Section>
 
-        {/* Dropdowns */}
-        <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[20px] wpab-border wpab-border-gray-200">
-          <h2 className="wpab-text-[18px] wpab-font-[600] wpab-text-gray-900 wpab-mb-[16px]">
-            Selects & Dropdowns
-          </h2>
-          <div className="wpab-flex wpab-flex-col wpab-gap-[16px]">
-            <Select
-              label="Single Select"
-              options={selectOptions}
-              value={selectValue}
-              onChange={setSelectValue}
-              placeholder="Choose an option..."
-            />
-            <MultiSelect
-              label="Multi Select"
-              options={selectOptions}
-              value={multiSelectValues}
-              onChange={setMultiSelectValues}
-              placeholder="Choose options..."
-            />
-            <div>
-              <p className="wpab-text-[14px] wpab-font-[600] wpab-text-gray-700 wpab-mb-[8px]">
-                List Select
-              </p>
+        {/* SELECTS */}
+        <Section title="Selects & Dropdowns">
+          <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-2 wpab-gap-8">
+            <Subsection title="Select Variants">
+              <Select
+                label="Single Select"
+                options={selectOptions}
+                value={selectValue}
+                onChange={setSelectValue}
+              />
+              <Select
+                label="With Search"
+                options={selectOptions}
+                value={selectValue}
+                onChange={setSelectValue}
+                enableSearch
+              />
+              <Select
+                label="Compact"
+                options={selectOptions}
+                value={selectValue}
+                onChange={setSelectValue}
+                isCompact
+              />
+            </Subsection>
+            <Subsection title="MultiSelect Variants">
+              <MultiSelect
+                label="Multi Select"
+                options={selectOptions}
+                value={multiSelectValues}
+                onChange={setMultiSelectValues}
+              />
+              <MultiSelect
+                label="No Search"
+                options={selectOptions}
+                value={multiSelectValues}
+                onChange={setMultiSelectValues}
+                enableSearch={false}
+              />
+              <MultiSelect
+                label="Compact"
+                options={selectOptions}
+                value={multiSelectValues}
+                onChange={setMultiSelectValues}
+                isCompact
+              />
+            </Subsection>
+          </div>
+          <Subsection title="List Select Sizes">
+            <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-3 wpab-gap-4 wpab-w-full">
               <ListSelect
+                size="small"
+                items={selectOptions}
+                selectedValues={[listSelectValue]}
+                onChange={setListSelectValue}
+              />
+              <ListSelect
+                size="medium"
+                items={selectOptions}
+                selectedValues={[listSelectValue]}
+                onChange={setListSelectValue}
+              />
+              <ListSelect
+                size="large"
                 items={selectOptions}
                 selectedValues={[listSelectValue]}
                 onChange={setListSelectValue}
               />
             </div>
-          </div>
-        </div>
+          </Subsection>
+        </Section>
 
-        {/* Feedback & Overlays */}
-        <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[20px] wpab-border wpab-border-gray-200">
-          <h2 className="wpab-text-[18px] wpab-font-[600] wpab-text-gray-900 wpab-mb-[16px]">
-            Feedback & Overlays
-          </h2>
-          <div className="wpab-flex wpab-flex-wrap wpab-gap-[16px] wpab-items-center">
+        {/* FEEDBACK & OVERLAYS */}
+        <Section title="Feedback & Overlays">
+          <Subsection title="Toasts">
             <Button
-              variant="outline"
-              onClick={() =>
-                addToast("This is a toast notification.", "success")
-              }
+              color="primary"
+              onClick={() => addToast("Successfully saved changes!", "success")}
             >
-              Show Toast
+              Success Toast
             </Button>
-
+            <Button
+              color="danger"
+              onClick={() => addToast("Failed to update settings.", "error")}
+            >
+              Error Toast
+            </Button>
+            <Button
+              color="secondary"
+              onClick={() => addToast("New update available.")}
+            >
+              Default Toast
+            </Button>
+          </Subsection>
+          <Subsection title="Modals">
             <Button variant="outline" onClick={() => setIsModalOpen(true)}>
               Open Custom Modal
             </Button>
-
-            <Button variant="outline" onClick={() => setIsConfirmOpen(true)}>
-              Open Confirm Modal
+            <Button
+              variant="outline"
+              color="danger"
+              onClick={() => setIsConfirmOpen(true)}
+            >
+              Open Confirmation
             </Button>
-
-            <ToolTip content="This is a helpful tooltip!">
-              <span className="wpab-text-blue-600 wpab-underline wpab-cursor-help">
-                Hover me for Tooltip
-              </span>
+          </Subsection>
+          <Subsection title="Tooltips (Positions)">
+            <ToolTip content="Tooltip on Top" position="top">
+              <Button size="small">Top</Button>
             </ToolTip>
-
+            <ToolTip content="Tooltip on Bottom" position="bottom">
+              <Button size="small">Bottom</Button>
+            </ToolTip>
+            <ToolTip content="Tooltip on Left" position="left">
+              <Button size="small">Left</Button>
+            </ToolTip>
+            <ToolTip content="Tooltip on Right" position="right">
+              <Button size="small">Right</Button>
+            </ToolTip>
+          </Subsection>
+          <Subsection title="Popovers">
             <Popover
-              trigger={<Button variant="ghost">Click for Popover</Button>}
+              align="bottom-left"
+              trigger={
+                <Button variant="ghost" size="small">
+                  Bottom Left
+                </Button>
+              }
               content={
-                <div className="wpab-p-[12px]">This is popover content.</div>
+                <div className="wpab-p-4">Content aligned bottom-left</div>
               }
             />
-
-            <CopyToClipboard text="Text to copy" />
-          </div>
-        </div>
-
-        {/* Misc & Layout */}
-        <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[20px] wpab-border wpab-border-gray-200">
-          <h2 className="wpab-text-[18px] wpab-font-[600] wpab-text-gray-900 wpab-mb-[16px]">
-            Misc & Layout
-          </h2>
-          <div className="wpab-flex wpab-flex-col wpab-gap-[24px]">
-            <div>
-              <p className="wpab-text-[14px] wpab-font-[600] wpab-text-gray-700 wpab-mb-[8px]">
-                Toggler (Tabs)
-              </p>
-              <Toggler
-                options={[
-                  { value: "tab1", label: "Tab 1" },
-                  { value: "tab2", label: "Tab 2" },
-                ]}
-                value={activeTab}
-                onChange={setActiveTab}
-              />
-            </div>
-
-            <div>
-              <p className="wpab-text-[14px] wpab-font-[600] wpab-text-gray-700 wpab-mb-[8px]">
-                Stepper
-              </p>
-              <Stepper
-                steps={["Step 1", "Step 2", "Step 3"]}
-                currentStep={currentStep}
-                setStep={setCurrentStep}
-              />
-              <div className="wpab-mt-[12px] wpab-flex wpab-gap-[8px]">
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-                >
-                  Prev
+            <Popover
+              align="top-right"
+              trigger={
+                <Button variant="ghost" size="small">
+                  Top Right
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentStep(Math.min(3, currentStep + 1))}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
+              }
+              content={
+                <div className="wpab-p-4">Content aligned top-right</div>
+              }
+            />
+          </Subsection>
+        </Section>
 
-            <div>
-              <p className="wpab-text-[14px] wpab-font-[600] wpab-text-gray-700 wpab-mb-[8px]">
-                Loaders & Skeletons
-              </p>
-              <div className="wpab-flex wpab-gap-[24px] wpab-items-center">
-                <Loader />
-                <div className="wpab-flex-1">
-                  <Skeleton height="20px" className="wpab-mb-[8px]" />
-                  <Skeleton height="20px" width="60%" />
+        {/* CARD RADIO GROUP */}
+        <Section title="Card Radio Groups">
+          <Subsection title="Responsive Grid Layout">
+            <CardRadioGroup
+              layout="responsive"
+              options={cardOptions}
+              value={cardValue}
+              onChange={setCardValue}
+            />
+          </Subsection>
+          <Subsection title="Horizontal Layout">
+            <CardRadioGroup
+              layout="horizontal"
+              options={cardOptions}
+              value={cardValue}
+              onChange={setCardValue}
+            />
+          </Subsection>
+        </Section>
+
+        {/* MISC & LAYOUT */}
+        <Section title="Misc & Layout">
+          <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-2 wpab-gap-12">
+            <div className="wpab-space-y-8">
+              <Subsection title="Toggler Sizes">
+                <Toggler
+                  size="small"
+                  options={[
+                    { label: "A", value: "a" },
+                    { label: "B", value: "b" },
+                  ]}
+                  value={"a"}
+                  onChange={() => {}}
+                />
+                <Toggler
+                  size="medium"
+                  options={[
+                    { label: "Tab 1", value: "1" },
+                    { label: "Tab 2", value: "2" },
+                  ]}
+                  value={"1"}
+                  onChange={() => {}}
+                />
+                <Toggler
+                  size="large"
+                  options={[
+                    { label: "Option 1", value: "o1" },
+                    { label: "Option 2", value: "o2" },
+                  ]}
+                  value={"o1"}
+                  onChange={() => {}}
+                />
+              </Subsection>
+              <Subsection title="Full Width Toggler">
+                <Toggler
+                  fullWidth
+                  options={[
+                    { label: "Yes", value: "y" },
+                    { label: "No", value: "n" },
+                  ]}
+                  value={"y"}
+                  onChange={() => {}}
+                />
+              </Subsection>
+            </div>
+            <div className="wpab-space-y-8">
+              <Subsection title="Stepper Progress">
+                <Stepper
+                  steps={["Identity", "Payment", "Confirm"]}
+                  currentStep={currentStep}
+                  setStep={setCurrentStep}
+                />
+                <div className="wpab-flex wpab-gap-2">
+                  <Button
+                    size="small"
+                    variant="outline"
+                    onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+                  >
+                    Prev
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outline"
+                    onClick={() => setCurrentStep(Math.min(3, currentStep + 1))}
+                  >
+                    Next
+                  </Button>
                 </div>
-              </div>
+              </Subsection>
+              <Subsection title="Loading States">
+                <div className="wpab-flex wpab-items-center wpab-gap-4">
+                  <Loader />
+                  <div className="wpab-w-32 wpab-space-y-2">
+                    <Skeleton height="12px" />
+                    <Skeleton height="12px" width="70%" />
+                  </div>
+                </div>
+              </Subsection>
             </div>
           </div>
-        </div>
+          <Subsection title="Utility">
+            <CopyToClipboard text="wpab-boilerplate-token-123" />
+          </Subsection>
+        </Section>
       </div>
 
+      {/* MODALS */}
       <CustomModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Custom Modal Example"
+        title="Component Demo Modal"
       >
-        <div className="wpab-p-[20px]">
-          <p>This is a custom modal using the common component.</p>
-          <div className="wpab-mt-[20px] wpab-flex wpab-justify-end">
-            <Button onClick={() => setIsModalOpen(false)}>Close</Button>
-          </div>
+        <div className="wpab-space-y-4">
+          <p>
+            This is the standard custom modal component. It supports custom
+            headers, footers, and content scrolling.
+          </p>
+          <Input label="Test input in modal" placeholder="Type here..." />
         </div>
       </CustomModal>
 
       <ConfirmationModal
         isOpen={isConfirmOpen}
-        onCancel={() => setIsConfirmOpen(false)}
+        title="Confirm Action"
+        message="Are you sure you want to proceed? This expanded showcase is quite large now."
         onConfirm={() => {
-          addToast("Confirmed!", "success");
+          addToast("Confirmed expansion!", "success");
           setIsConfirmOpen(false);
         }}
-        title="Are you sure?"
-        message="This is a confirmation dialogue."
-        confirmLabel="Yes, do it"
-        cancelLabel="Cancel"
+        onCancel={() => setIsConfirmOpen(false)}
+        confirmLabel="Yes, Expand"
+        cancelLabel="No, Wait"
       />
     </div>
   );
