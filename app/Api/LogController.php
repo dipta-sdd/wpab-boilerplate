@@ -10,9 +10,12 @@ if (!defined('ABSPATH')) {
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use WpabBoilerplate\Helper\Logger;
 
 /**
  * LogController class.
+ *
+ * Serves the merged last-30-days log content via the REST API.
  *
  * @since 1.0.0
  * @package    WPAB_Boilerplate
@@ -53,12 +56,9 @@ class LogController extends ApiController
      */
     public function register_routes()
     {
-        wpab_boilerplate_log('Registering routes for LogController', 'error');
-
-
         $namespace = $this->namespace . $this->version;
 
-        // GET endpoint: Retrieve sample data
+        // GET endpoint: Retrieve merged logs for last 30 days
         register_rest_route($namespace, '/logs', array(
             array(
                 'methods'             => \WP_REST_Server::READABLE,
@@ -67,7 +67,7 @@ class LogController extends ApiController
             ),
         ));
 
-        // POST endpoint: Create/update sample data
+        // DELETE endpoint: Clear all logs
         register_rest_route($namespace, '/logs', array(
             array(
                 'methods'             => \WP_REST_Server::DELETABLE,
@@ -100,54 +100,39 @@ class LogController extends ApiController
     }
 
     /**
-     * Get logs from file.
+     * Get merged logs from transient cache + today's file.
      *
      * @param WP_REST_Request $request Full data about the request.
      * @return WP_REST_Response|WP_Error
      */
     public function get_items($request)
     {
-        $upload_dir = wp_upload_dir();
-        $log_dir = $upload_dir['basedir'] . '/' . WPAB_BOILERPLATE_TEXT_DOMAIN . '-logs/';
-
-        // Find the most recent log file
-        $files = glob($log_dir . 'plugin-log-*.log');
-        if (empty($files)) {
-            return rest_ensure_response(array('content' => ''));
-        }
-
-        // Sort by name desc (dates will sort correctly)
-        rsort($files);
-        $log_file = $files[0];
-
-        if (!file_exists($log_file)) {
-            return rest_ensure_response(array('content' => ''));
-        }
-
-        $content = file_get_contents($log_file);
+        $content = Logger::get_merged_logs();
         return rest_ensure_response(array('content' => $content));
     }
 
     /**
-     * Clear logs.
+     * Clear all logs and the transient cache.
      *
      * @param WP_REST_Request $request Full data about the request.
      * @return WP_REST_Response|WP_Error
      */
     public function delete_items($request)
     {
-        $upload_dir = wp_upload_dir();
-        $log_dir = $upload_dir['basedir'] . '/' . WPAB_BOILERPLATE_TEXT_DOMAIN . '-logs/';
+        $log_dir = Logger::get_log_dir();
 
         // Delete all log files
         $files = glob($log_dir . 'plugin-log-*.log');
         if ($files) {
             foreach ($files as $file) {
                 if (file_exists($file)) {
-                    unlink($file);
+                    wp_delete_file($file);
                 }
             }
         }
+
+        // Clear the transient cache
+        delete_transient(\WpabBoilerplate\Core\Cron::LOG_CACHE_KEY);
 
         return rest_ensure_response(array('success' => true));
     }

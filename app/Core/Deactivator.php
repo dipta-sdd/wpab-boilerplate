@@ -27,6 +27,9 @@ class Deactivator
 	public static function deactivate()
 	{
 		self::remove_custom_capabilities();
+
+		// Unschedule all plugin cron events.
+		Cron::get_instance()->unschedule_all();
 	}
 
 	/**

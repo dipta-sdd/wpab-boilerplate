@@ -44,6 +44,9 @@ class Activator
 
 		// Add custom capabilities.
 		self::add_plugin_roles_and_capabilities();
+
+		// Schedule cron events.
+		Cron::get_instance()->schedule_events();
 	}
 
 	/**

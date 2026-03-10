@@ -11,4 +11,5 @@
 return array(
     \WpabBoilerplate\Admin\Admin::class,
     \WpabBoilerplate\Core\Settings::class,
+    \WpabBoilerplate\Core\Cron::class,
 );
