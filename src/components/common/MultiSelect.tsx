@@ -5,6 +5,7 @@ import React, {
   KeyboardEvent,
   useMemo,
 } from "react";
+import { createPortal } from "react-dom";
 import apiFetch from "@wordpress/api-fetch";
 import { borderClasses, hoverBorderClasses } from "./classes";
 
@@ -37,6 +38,41 @@ const X = ({ className }: { className?: string }) => (
   >
     <path d="M18 6 6 18" />
     <path d="m6 6 12 12" />
+  </svg>
+);
+
+const LockKeyhole = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <circle cx="12" cy="16" r="1" />
+    <rect x="3" y="10" width="18" height="12" rx="2" />
+    <path d="M7 10V7a5 5 0 0 1 10 0v3" />
+  </svg>
+);
+
+const Hourglass = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M5 22h14" />
+    <path d="M5 2h14" />
+    <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22" />
+    <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2" />
   </svg>
 );
 
@@ -107,7 +143,18 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const hoverTimeoutRef = useRef<number | null>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
   const interactionType = useRef<"mouse" | "keyboard">("keyboard");
+
+  // Tooltip state
+  const [tooltipState, setTooltipState] = useState<{
+    visible: boolean;
+    top: number;
+    left: number;
+    width: number;
+    index: number;
+  } | null>(null);
 
   // Endpoint fetching state
   const [fetchedOptions, setFetchedOptions] = useState<MultiSelectOption[]>([]);
@@ -184,8 +231,16 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
       const isInsideContainer = containerRef.current?.contains(target);
       const isInsideDropdown = dropdownRef.current?.contains(target);
 
+      if (
+        tooltipRef.current &&
+        tooltipRef.current.contains(target)
+      ) {
+        return;
+      }
+
       if (!isInsideContainer && !isInsideDropdown) {
         setIsOpen(false);
+        setTooltipState(null);
       }
     };
 
@@ -235,6 +290,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
       interactionType.current = "keyboard";
     } else {
       setSearchQuery("");
+      setTooltipState(null);
     }
   }, [isOpen, enableSearch]);
 
@@ -264,7 +320,13 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   }, [highlightedIndex, isOpen]);
 
   const handleSelect = (option: MultiSelectOption) => {
-    if (option.disabled) return;
+    if (
+      option.disabled ||
+      option.variant === "buy_pro" ||
+      option.variant === "coming_soon"
+    ) {
+      return;
+    }
     const newValue = [...value, option.value];
     onChange(newValue);
     setSearchQuery("");
@@ -324,6 +386,55 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         searchInputRef.current?.focus();
       });
     }
+  };
+
+  const handleOptionMouseEnter = (
+    e: React.MouseEvent<HTMLLIElement>,
+    index: number,
+    isPro: boolean,
+  ) => {
+    interactionType.current = "mouse";
+    setHighlightedIndex(index);
+
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+
+    if (isPro) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setTooltipState({
+        visible: true,
+        top: rect.top,
+        left: rect.left + rect.width / 2,
+        width: rect.width,
+        index,
+      });
+    } else {
+      setTooltipState(null);
+    }
+  };
+
+  const handleOptionMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    hoverTimeoutRef.current = window.setTimeout(() => {
+      setTooltipState((prev) => (prev ? { ...prev, visible: false } : null));
+    }, 100);
+  };
+
+  const handleTooltipMouseEnter = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setTooltipState((prev) => (prev ? { ...prev, visible: true } : null));
+  };
+
+  const handleTooltipMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setTooltipState(null);
   };
 
   return (
@@ -448,37 +559,62 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
               filteredOptions.map((option, index) => {
                 const isHighlighted = highlightedIndex === index;
                 const isDisabled = option.disabled;
+                const isPro = option.variant === "buy_pro";
+                const isComingSoon = option.variant === "coming_soon";
 
                 return (
                   <li
-                    key={option.value}
+                    key={`${option.value}-${index}`}
                     role="option"
                     aria-selected={false}
-                    onMouseEnter={() => {
-                      interactionType.current = "mouse";
-                      setHighlightedIndex(index);
+                    onMouseEnter={(e) => {
+                      handleOptionMouseEnter(e, index, !!isPro);
                     }}
+                    onMouseLeave={handleOptionMouseLeave}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleSelect(option);
                     }}
                     className={`
-                        wpab-px-4 wpab-py-2.5 wpab-cursor-pointer wpab-text-sm wpab-transition-colors wpab-border-b wpab-border-gray-50 last:wpab-border-0 !wpab-mb-0  wpab-rounded-[8px]
+                        wpab-group wpab-relative wpab-cursor-pointer wpab-select-none wpab-px-4 wpab-py-2.5 wpab-text-sm wpab-transition-colors wpab-border-b wpab-border-gray-50 last:wpab-border-0 !wpab-mb-0 wpab-rounded-[8px]
+                        wpab-flex wpab-flex-nowrap wpab-justify-between wpab-items-center
                         ${
-                          isDisabled
-                            ? "wpab-opacity-50 !wpab-cursor-not-allowed wpab-text-gray-400"
+                          isDisabled || isPro || isComingSoon
+                            ? "wpab-opacity-100 !wpab-cursor-not-allowed wpab-text-gray-500 wpab-bg-gray-100/50"
                             : ""
                         }
                         ${
-                          isHighlighted && !isDisabled
+                          isHighlighted && !isDisabled && !isPro && !isComingSoon
                             ? "wpab-bg-blue-600 wpab-text-white"
                             : "wpab-text-gray-700"
+                        }
+                        ${
+                          isComingSoon
+                            ? "hover:!wpab-text-pink-600 !wpab-text-pink-500"
+                            : ""
                         }
                         ${option.className || ""}
                         ${classNames.option || ""}
                         `}
                   >
-                    {renderOption ? renderOption(option) : option.label}
+                    <div className="wpab-flex wpab-items-center wpab-min-w-0 wpab-gap-4">
+                      <span className="wpab-block wpab-truncate">
+                        {renderOption ? renderOption(option) : option.label}
+                      </span>
+                    </div>
+
+                    {/* Lock Icon for Buy Pro */}
+                    {isPro && (
+                      <LockKeyhole className="wpab-w-3.5 wpab-h-3.5 wpab-text-[#f02a74] wpab-flex-shrink-0" />
+                    )}
+                    {isComingSoon && (
+                      <span className="wpab-bg-pink-600 wpab-text-white wpab-p-1 wpab-px-2 wpab-rounded-full wpab-text-xs wpab-flex wpab-items-center wpab-gap-1 wpab-flex-nowrap wpab-flex-shrink-0">
+                        <Hourglass className="wpab-w-3.5 wpab-h-3.5 wpab-text-white" />
+                        <span className="wpab-whitespace-nowrap">
+                          Coming Soon
+                        </span>
+                      </span>
+                    )}
                   </li>
                 );
               })
@@ -486,6 +622,38 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           </ul>
         </div>
       )}
+
+      {/* Tooltip Portal - Renders to body to avoid clipping and stacking issues */}
+      {isOpen &&
+        tooltipState?.visible &&
+        createPortal(
+          <div
+            ref={tooltipRef}
+            className="wpab-fixed wpab-z-[50001] wpab-flex wpab-flex-col wpab-items-center wpab-gap-1.5 wpab-bg-gray-900 wpab-text-white wpab-text-xs wpab-p-2 wpab-min-w-[140px] wpab-rounded-md wpab-shadow-lg"
+            style={{
+              top: tooltipState.top + 5,
+              left: tooltipState.left,
+              transform: "translate(-50%, -100%)",
+            }}
+            onMouseEnter={handleTooltipMouseEnter}
+            onMouseLeave={handleTooltipMouseLeave}
+          >
+            <span className="wpab-font-medium wpab-whitespace-nowrap">
+              Upgrade to unlock
+            </span>
+            <a
+              href="#"
+              target="_blank"
+              onClick={(e) => e.preventDefault()}
+              className="wpab-w-full wpab-bg-[#f02a74] hover:!wpab-bg-[#e71161] wpab-text-white hover:!wpab-text-white wpab-font-bold wpab-py-1.5 wpab-px-3 wpab-transition-colors focus:wpab-outline-none focus:wpab-ring-0 wpab-cursor-pointer wpab-text-center wpab-rounded"
+            >
+              Buy Pro
+            </a>
+            {/* Tooltip Arrow */}
+            <div className="wpab-absolute wpab-top-full wpab-left-1/2 -wpab-translate-x-1/2 wpab-border-4 wpab-border-transparent wpab-border-t-gray-900"></div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 };

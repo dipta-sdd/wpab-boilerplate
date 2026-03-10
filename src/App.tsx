@@ -6,11 +6,13 @@ import { ToastProvider } from "./store/toast/use-toast";
 import Logs from "./pages/Logs";
 import Components from "./pages/Components";
 import ClassicShowcase from "./pages/ClassicShowcase";
+import { ToastContainer } from "./components/common/ToastContainer";
 
 function App() {
   return (
     <WpabProvider>
       <ToastProvider>
+        <ToastContainer />
         <HashRouter>
           <Routes>
             <Route element={<AppLayout />}>
@@ -28,4 +30,3 @@ function App() {
 }
 
 export default App;
-
