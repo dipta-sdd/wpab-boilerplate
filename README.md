@@ -38,24 +38,41 @@ wpab-boilerplate-classic/
 ├── wpab-boilerplate.php        # Plugin bootstrap, constants & autoloader
 ├── uninstall.php               # Cleanup routines on plugin deletion
 ├── app/                        # PHP Backend Application
-│   ├── Admin/Admin.php         # Admin menu & localized script enqueuing
-│   ├── Api/                    # REST API Controllers (LogController, SettingsController)
-│   ├── Core/                   # Core mechanics (Plugin, Base, Cron, Settings, Activator)
-│   ├── Data/DbManager.php      # Custom table schemas
-│   ├── Helper/Loader,Logger    # Hook queues and custom logging
+│   ├── Admin/
+│   │   └── Admin.php           # Admin menu & localized script enqueuing
+│   ├── Api/                    # REST API Controllers
+│   │   ├── ApiController.php   # Base controller with security logic
+│   │   ├── LogController.php   # Handles database log retrieval
+│   │   └── SettingsController.php # Manages plugin settings via REST
+│   ├── Core/                   # Core mechanics
+│   │   ├── Activator.php       # Plugin activation (tables, defaults)
+│   │   ├── Deactivator.php     # Plugin deactivation (cron cleanup)
+│   │   ├── Base.php            # Singleton base with auto-hooking
+│   │   ├── Plugin.php          # Main coordinator & class loader
+│   │   ├── Settings.php        # Settings API abstraction layer
+│   │   └── Cron.php            # Dynamic WP-Cron scheduling engine
+│   ├── Data/
+│   │   └── DbManager.php       # DB schema definitions & dbDelta()
+│   ├── Helper/
+│   │   ├── Loader.php          # Action/Filter registration queue
+│   │   └── Logger.php          # Custom DB-based logging system
 │   └── functions.php           # Global helper functions & white label filters
-├── src/                        # React / TypeScript Frontend
-│   ├── index.tsx               # JS Entry point
-│   ├── App.tsx                 # Router & provider wrappers
-│   ├── pages/                  # Route views (Dashboard, ClassicShowcase, etc.)
+├── config/                     # Configuration registries
+│   ├── api.php                 # Registration of REST controllers
+│   └── core.php                # Registration of core background classes
+├── src/                        # React / TypeScript Frontend (SPA)
+│   ├── index.tsx               # Entry point
+│   ├── App.tsx                 # Router & Layout orchestration
+│   ├── pages/                  # Route views (Dashboard, Logs, Showcase)
 │   ├── components/
-│   │   ├── common/             # Modern, Tailwind-powered UI components
-│   │   └── classics/           # Native WP/WooCommerce style components
-│   ├── store/                  # React Context definitions
-│   └── styles/                 # Scoped SCSS, Tailwind configuration, & preflight guards
-├── build/                      # Compiled JS/CSS output (generated)
-├── assets/                     # Static media
-└── languages/                  # i18n translation strings
+│   │   ├── common/             # Modern, Tailwind UI library
+│   │   └── classics/           # Native WP/WC style component library
+│   ├── store/                  # Global state management (Context API)
+│   └── styles/                 # SCSS & Tailwind preflight guard system
+├── build/                      # Compiled JS/CSS production assets
+├── assets/                     # Images, icons, and static media
+├── languages/                  # i18n translation files (.pot, .json)
+└── vendor/                     # Composer dependencies (PHP)
 ```
 
 ---
@@ -103,14 +120,26 @@ npm run build
 
 ---
 
-## 🎨 Working with UI Components
+## 🎨 Layout & Component Systems
 
-### When to use `common` vs `classics`?
-- **Use `common`** when building a standalone dashboard page (like an Analytics tab or a visual dragging builder) where you want complete control over the modern, app-like aesthetic.
-- **Use `classics`** when building setting form pages that need to sit alongside WooCommerce settings natively. These components utilize core WP classes (`form-table`, `regular-text`) and intentionally bypass Tailwind's global property resets to ensure they look 100% native.
+### 1. Dual Layout Support
+The boilerplate includes two layout systems. You can switch between them globally in `src/App.tsx`:
 
-### Preserving Native Styles
-If you are writing custom HTML alongside Tailwind classes and notice native WordPress styles breaking (like `h2` sizing or link styling), add the `wpab-ignore-preflight` class to the element to bypass the Tailwind CSS reset.
+- **`ClassicLayout`**: Default. Provides a native WooCommerce settings experience with `ClassicNavbar` (tabs) and standard WordPress branding.
+- **`AppLayout`**: Modern, sidebar-driven dashboard experience designed for custom applications.
+
+### 2. Component Libraries
+- **`classics/`**: Use these for native-looking settings pages.
+    - `ClassicSettingsTable`: Renders fields in a standard `form-table`.
+    - `ClassicNavbar`: Renders native-style tabs with active underline.
+    - `ClassicSelect` / `ClassicMultiSelect`: Custom-built to match native styles with search capability.
+    - `ClassicTooltip`: 1:1 match of the WooCommerce help tip icon and style.
+- **`common/`**: Use these for modern dashboard interfaces where you want full Tailwind control.
+
+### 3. Styling Architecture (Preflight Guard)
+Tailwind's preflight resets often break native WordPress styles (like `h2` sizing or input borders). This boilerplate uses a custom guard:
+
+By adding the **`wpab-ignore-preflight`** class to any element (or its parent), you prevent Tailwind's default reset from affecting it, allowing the native WordPress/WooCommerce CSS to take precedence.
 
 ---
 
