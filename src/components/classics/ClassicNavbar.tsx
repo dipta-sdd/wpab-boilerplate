@@ -38,18 +38,28 @@ const ClassicNavbar: FC = () => {
   };
 
   return (
-    <nav className="nav-tab-wrapper wpab-mb-6 wpab-ignore-preflight">
+    <nav className="wpab-flex wpab-items-center wpab-gap-6 wpab-border-b wpab-border-gray-200 wpab-mb-8 wpab-ignore-preflight">
       {menus.map((menu) => (
         <a
           key={menu.path}
           href={`#${menu.path}`}
-          className={`nav-tab ${isActive(menu.path) ? "nav-tab-active" : ""}`}
+          className={`
+            wpab-pb-3 wpab-text-[14px] wpab-transition-all wpab-no-underline wpab-relative
+            ${
+              isActive(menu.path)
+                ? "wpab-text-gray-900 wpab-font-bold"
+                : "wpab-text-gray-600 wpab-font-normal hover:wpab-text-[#2271b1]"
+            }
+          `}
           onClick={(e) => {
             e.preventDefault();
             navigate(menu.path);
           }}
         >
           {menu.label}
+          {isActive(menu.path) && (
+            <div className="wpab-absolute wpab-bottom-[-1px] wpab-left-0 wpab-w-full wpab-h-[3px] wpab-bg-[#2271b1]" />
+          )}
         </a>
       ))}
     </nav>

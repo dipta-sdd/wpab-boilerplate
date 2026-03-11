@@ -20,9 +20,11 @@ const ClassicLayout: FC = () => {
 
   return (
     <div className="wrap wpab-p-6">
-      <h1 className="wpab-ignore-preflight wpab-mb-4">{getPageTitle()}</h1>
+      <h1 className="wpab-ignore-preflight wpab-font-bold wpab-text-[22px] wpab-mb-6">
+        {getPageTitle()}
+      </h1>
       <ClassicNavbar />
-      <div className="wpab-mt-6">
+      <div className="wpab-mt-2">
         <Outlet />
       </div>
     </div>
