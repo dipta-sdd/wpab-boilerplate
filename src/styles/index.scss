@@ -388,19 +388,19 @@ summary {
 Removes the default spacing and border for appropriate elements.
 */
 
-blockquote,
-dl,
-dd,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-hr,
-figure,
-p,
-pre {
+blockquote:not(.wpab-ignore-preflight),
+dl:not(.wpab-ignore-preflight),
+dd:not(.wpab-ignore-preflight),
+h1:not(.wpab-ignore-preflight),
+h2:not(.wpab-ignore-preflight),
+h3:not(.wpab-ignore-preflight),
+h4:not(.wpab-ignore-preflight),
+h5:not(.wpab-ignore-preflight),
+h6:not(.wpab-ignore-preflight),
+hr:not(.wpab-ignore-preflight),
+figure:not(.wpab-ignore-preflight),
+p:not(.wpab-ignore-preflight),
+pre:not(.wpab-ignore-preflight) {
   margin: 0;
 }
 

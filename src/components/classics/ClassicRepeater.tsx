@@ -51,6 +51,7 @@ export function ClassicRepeater<T extends ClassicRepeaterItem>({
               className={`wc-metabox ${isOpen ? "" : "closed"}`}
             >
               <h3
+                className="wpab-ignore-preflight"
                 onClick={() => toggle(item.id)}
                 style={{ cursor: "pointer" }}
               >
