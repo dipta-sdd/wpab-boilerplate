@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, KeyboardEvent, useMemo } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  KeyboardEvent,
+  useMemo,
+} from "react";
 import { ChevronDown, X, Lock, Hourglass } from "lucide-react";
 import { MultiSelectOption } from "../common/MultiSelect";
 import apiFetch from "@wordpress/api-fetch";
@@ -90,7 +96,9 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
       if (!isOpen) return; // Only fetch when opened
       setIsLoading(true);
       const url = new URL(
-        endpoint.startsWith("http") ? endpoint : `${window.location.origin}/wp-json${endpoint}`
+        endpoint.startsWith("http")
+          ? endpoint
+          : `${window.location.origin}/wp-json${endpoint}`,
       );
       if (searchQuery) url.searchParams.append("search", searchQuery);
 
@@ -105,14 +113,16 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
           if (active) setIsLoading(false);
         });
     }
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [endpoint, searchQuery, isOpen]);
 
   const filteredOptions = useMemo(() => {
     if (endpoint) return effectiveOptions;
     if (!enableSearch || !searchQuery) return effectiveOptions;
     return effectiveOptions.filter((opt) =>
-      opt.label.toLowerCase().includes(searchQuery.toLowerCase())
+      opt.label.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [effectiveOptions, searchQuery, enableSearch, endpoint]);
 
@@ -135,7 +145,12 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
   }, [isOpen, enableSearch, filteredOptions.length]);
 
   useEffect(() => {
-    if (isOpen && listRef.current && highlightedIndex >= 0 && interactionType.current === "keyboard") {
+    if (
+      isOpen &&
+      listRef.current &&
+      highlightedIndex >= 0 &&
+      interactionType.current === "keyboard"
+    ) {
       const list = listRef.current;
       const element = list.children[highlightedIndex] as HTMLElement;
       if (element) {
@@ -144,7 +159,8 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
         const elementTop = element.offsetTop;
         const elementBottom = elementTop + element.offsetHeight;
         if (elementTop < listTop) list.scrollTop = elementTop;
-        else if (elementBottom > listBottom) list.scrollTop = elementBottom - list.clientHeight;
+        else if (elementBottom > listBottom)
+          list.scrollTop = elementBottom - list.clientHeight;
       }
     }
   }, [highlightedIndex, isOpen]);
@@ -152,14 +168,15 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
   const handleSelect = (option: MultiSelectOption) => {
     // @ts-ignore - sharing variant types from Select for consistency
     const variant = option.variant;
-    if (option.disabled || variant === "buy_pro" || variant === "coming_soon") return;
+    if (option.disabled || variant === "buy_pro" || variant === "coming_soon")
+      return;
 
     if (value.includes(option.value)) {
       onChange(value.filter((v) => v !== option.value));
     } else {
       onChange([...value, option.value]);
     }
-    
+
     if (searchInputRef.current) {
       searchInputRef.current.focus();
     }
@@ -184,12 +201,18 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
       case "ArrowDown":
         e.preventDefault();
         if (!isOpen) setIsOpen(true);
-        else setHighlightedIndex((prev) => (prev < filteredOptions.length - 1 ? prev + 1 : 0));
+        else
+          setHighlightedIndex((prev) =>
+            prev < filteredOptions.length - 1 ? prev + 1 : 0,
+          );
         break;
       case "ArrowUp":
         e.preventDefault();
         if (!isOpen) setIsOpen(true);
-        else setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : filteredOptions.length - 1));
+        else
+          setHighlightedIndex((prev) =>
+            prev > 0 ? prev - 1 : filteredOptions.length - 1,
+          );
         break;
       case "Escape":
         if (isOpen) {
@@ -205,15 +228,20 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
-        setHighlightedIndex((prev) => (prev < filteredOptions.length - 1 ? prev + 1 : 0));
+        setHighlightedIndex((prev) =>
+          prev < filteredOptions.length - 1 ? prev + 1 : 0,
+        );
         break;
       case "ArrowUp":
         e.preventDefault();
-        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : filteredOptions.length - 1));
+        setHighlightedIndex((prev) =>
+          prev > 0 ? prev - 1 : filteredOptions.length - 1,
+        );
         break;
       case "Enter":
         e.preventDefault();
-        if (filteredOptions[highlightedIndex]) handleSelect(filteredOptions[highlightedIndex]);
+        if (filteredOptions[highlightedIndex])
+          handleSelect(filteredOptions[highlightedIndex]);
         break;
       case "Backspace":
         if (!searchQuery && value.length > 0) {
@@ -227,241 +255,314 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
     }
   };
 
-  const selectId = id || `classic-multi-${Math.random().toString(36).slice(2, 9)}`;
+  const selectId =
+    id || `classic-multi-${Math.random().toString(36).slice(2, 9)}`;
   const sizeClass = size === "short" ? "short" : "regular-text";
-  const explicitWidth = size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
+  const explicitWidth =
+    size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
 
   return (
-    <div className={`${sizeClass} ${className}`} ref={containerRef} style={{ verticalAlign: "middle" }}>
-      {label && <label htmlFor={selectId} style={{ display: "block", marginBottom: 4 }}>{label}</label>}
+    <div
+      className={`${sizeClass} ${className}`}
+      ref={containerRef}
+      style={{ verticalAlign: "middle" }}
+    >
+      {label && (
+        <label htmlFor={selectId} style={{ display: "block", marginBottom: 4 }}>
+          {label}
+        </label>
+      )}
 
       <div className="wpab-relative" style={{ width: explicitWidth }}>
-      <div
-        id={selectId}
-        tabIndex={disabled ? -1 : 0}
-        role="combobox"
-        aria-expanded={isOpen}
-        onClick={() => !disabled && setIsOpen(!isOpen)}
-        onKeyDown={handleTriggerKeyDown}
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          gap: "4px",
-          cursor: disabled ? "not-allowed" : "text",
-          backgroundColor: disabled ? "#f0f0f1" : "#fff",
-          border: "1px solid #8c8f94",
-          borderRadius: "3px",
-          padding: "3px 24px 3px 6px",
-          minHeight: "30px",
-          transition: "box-shadow 0.1s linear",
-          position: "relative",
-          boxSizing: "border-box",
-          width: "100%",
-          ...(isOpen ? { borderColor: "#2271b1", boxShadow: "0 0 0 1px #2271b1", outline: "2px solid transparent" } : {}),
-        }}
-      >
-        {selectedOptions.map((opt) => (
-          <span
-            key={opt.value}
-            style={{
-              backgroundColor: "#f0f0f1",
-              border: "1px solid #c3c4c7",
-              borderRadius: "3px",
-              padding: "0 4px",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-              fontSize: "12px",
-              color: "#3c434a",
-              lineHeight: "20px"
-            }}
-          >
-            {opt.label}
-            <button
-              onClick={(e) => handleRemove(e, opt.value)}
-              style={{
-                background: "none",
-                border: "none",
-                padding: 0,
-                cursor: "pointer",
-                color: "#8c8f94",
-                display: "flex",
-                alignItems: "center"
-              }}
-            >
-              <X size={12} />
-            </button>
-          </span>
-        ))}
-
-        {/* Search input embedded in the trigger */}
-        {enableSearch && (
-          <input
-            ref={searchInputRef}
-            type="text"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              if (!isOpen) setIsOpen(true);
-            }}
-            onKeyDown={handleSearchKeyDown}
-            placeholder={value.length === 0 ? placeholder : ""}
-            disabled={disabled}
-            className="focus:wpab-outline-none focus:wpab-shadow-none"
-            style={{
-              border: "none",
-              outline: "none",
-              background: "transparent",
-              minWidth: "50px",
-              flex: 1,
-              padding: 0,
-              fontSize: "13px",
-              boxShadow: "none",
-            }}
-          />
-        )}
-
-        {!enableSearch && value.length === 0 && (
-          <span style={{ color: "#8c8f94", fontSize: "13px", paddingLeft: "4px" }}>{placeholder}</span>
-        )}
-
-        {/* Chevron icon pointing down */}
-        <span style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", display: "flex", pointerEvents: "none" }}>
-          <ChevronDown size={14} color="#50575e" />
-        </span>
-      </div>
-
-      {isOpen && (
         <div
-          className={`wpab-absolute wpab-z-50 wpab-bg-white wpab-border wpab-border-[#8c8f94] wpab-rounded-[3px]`}
+          id={selectId}
+          tabIndex={disabled ? -1 : 0}
+          role="combobox"
+          aria-expanded={isOpen}
+          onClick={() => !disabled && setIsOpen(!isOpen)}
+          onKeyDown={handleTriggerKeyDown}
           style={{
-            zIndex: 99999,
-            boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-            padding: 0,
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: "4px",
+            cursor: disabled ? "not-allowed" : "text",
+            backgroundColor: disabled ? "#f0f0f1" : "#fff",
+            border: "1px solid #8c8f94",
+            borderRadius: "3px",
+            padding: "3px 24px 3px 6px",
+            minHeight: "30px",
+            transition: "box-shadow 0.1s linear",
+            position: "relative",
             boxSizing: "border-box",
-            top: "100%",
-            left: 0,
-            marginTop: "-1px",
-            ...(differentDropdownWidth ? { minWidth: "100%" } : { width: "100%" }),
+            width: "100%",
+            ...(isOpen
+              ? {
+                  borderColor: "#2271b1",
+                  boxShadow: "0 0 0 1px #2271b1",
+                  outline: "2px solid transparent",
+                }
+              : {}),
           }}
         >
-          {isLoading ? (
-            <div style={{ padding: "8px 12px", color: "#646970", fontSize: "13px", display: "flex", alignItems: "center", gap: "8px" }}>
-              <Hourglass size={14} className="wpab-animate-spin" /> Loading...
-            </div>
-          ) : (
-            <ul
-              ref={listRef}
-              role="listbox"
+          {selectedOptions.map((opt) => (
+            <span
+              key={opt.value}
               style={{
-                maxHeight: "220px",
-                overflowY: "auto",
-                margin: 0,
-                padding: "4px 0",
-                listStyle: "none",
+                backgroundColor: "#f0f0f1",
+                border: "1px solid #c3c4c7",
+                borderRadius: "3px",
+                padding: "0 4px",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                fontSize: "12px",
+                color: "#3c434a",
+                lineHeight: "20px",
               }}
             >
-              {filteredOptions.length === 0 ? (
-                <li style={{ padding: "6px 12px", color: "#646970", fontStyle: "italic", fontSize: "13px" }}>
-                  {searchQuery ? "No results found" : "No options available"}
-                </li>
-              ) : (
-                filteredOptions.map((opt, index) => {
-                  const isSelected = value.includes(opt.value);
-                  const isHighlighted = highlightedIndex === index;
-                  // @ts-ignore
-                  const variant = opt.variant;
-                  const isPro = variant === "buy_pro";
-                  const isComingSoon = variant === "coming_soon";
-                  const isDisabled = opt.disabled || isPro || isComingSoon;
+              {opt.label}
+              <button
+                onClick={(e) => handleRemove(e, opt.value)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                  color: "#8c8f94",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <X size={12} />
+              </button>
+            </span>
+          ))}
 
-                  return (
-                    <li
-                      key={opt.value}
-                      role="option"
-                      aria-selected={isSelected}
-                      onMouseEnter={(e) => {
-                        interactionType.current = "mouse";
-                        setHighlightedIndex(index);
-                        if (isPro || isComingSoon) {
-                          const rect = e.currentTarget.getBoundingClientRect();
-                          setTooltipState({
-                            visible: true,
-                            top: rect.top,
-                            left: rect.left + rect.width / 2,
-                            text: isPro ? "Available in Pro" : "Coming Soon",
-                          });
-                        } else {
-                          setTooltipState(null);
-                        }
-                      }}
-                      onMouseLeave={() => setTooltipState(null)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelect(opt);
-                      }}
-                      style={{
-                        padding: "6px 12px",
-                        cursor: isDisabled ? "not-allowed" : "pointer",
-                        backgroundColor: isHighlighted ? "#2271b1" : "transparent",
-                        color: isHighlighted ? "#fff" : isDisabled ? "#a7aaad" : "#2c3338",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          readOnly
-                          style={{
-                            pointerEvents: "none",
-                            margin: 0,
-                            borderRadius: "2px",
-                            border: `1px solid ${isHighlighted ? "#fff" : "#8c8f94"}`,
-                            width: "14px",
-                            height: "14px",
-                          }}
-                        />
-                        <span>{renderOption ? renderOption(opt) : opt.label}</span>
-                      </div>
+          {/* Search input embedded in the trigger */}
+          {enableSearch && (
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                if (!isOpen) setIsOpen(true);
+              }}
+              onKeyDown={handleSearchKeyDown}
+              placeholder={value.length === 0 ? placeholder : ""}
+              disabled={disabled}
+              className="focus:wpab-outline-none focus:wpab-shadow-none"
+              style={{
+                border: "none",
+                outline: "none",
+                background: "transparent",
+                minWidth: "50px",
+                flex: 1,
+                padding: 0,
+                fontSize: "13px",
+                boxShadow: "none",
+              }}
+            />
+          )}
 
-                      {/* Icons for variants */}
-                      {isPro && (
-                        <span style={{ color: isHighlighted ? "#fff" : "#ffb900", display: "flex" }}>
-                          <Lock size={14} />
-                        </span>
-                      )}
-                      {isComingSoon && (
-                        <span
+          {!enableSearch && value.length === 0 && (
+            <span
+              style={{ color: "#8c8f94", fontSize: "13px", paddingLeft: "4px" }}
+            >
+              {placeholder}
+            </span>
+          )}
+
+          {/* Chevron icon pointing down */}
+          <span
+            style={{
+              position: "absolute",
+              right: 6,
+              top: "50%",
+              transform: "translateY(-50%)",
+              display: "flex",
+              pointerEvents: "none",
+            }}
+          >
+            <ChevronDown size={14} color="#50575e" />
+          </span>
+        </div>
+
+        {isOpen && (
+          <div
+            className={`wpab-absolute wpab-z-50 wpab-bg-white wpab-border wpab-border-[#8c8f94] wpab-rounded-[3px]`}
+            style={{
+              zIndex: 99999,
+              boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
+              padding: 0,
+              boxSizing: "border-box",
+              top: "100%",
+              left: 0,
+              marginTop: "-1px",
+              ...(differentDropdownWidth
+                ? { minWidth: "100%" }
+                : { width: "100%" }),
+            }}
+          >
+            {isLoading ? (
+              <div
+                style={{
+                  padding: "8px 12px",
+                  color: "#646970",
+                  fontSize: "13px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <Hourglass size={14} className="wpab-animate-spin" /> Loading...
+              </div>
+            ) : (
+              <ul
+                ref={listRef}
+                role="listbox"
+                style={{
+                  maxHeight: "220px",
+                  overflowY: "auto",
+                  margin: 0,
+                  padding: "0",
+                  listStyle: "none",
+                }}
+              >
+                {filteredOptions.length === 0 ? (
+                  <li
+                    style={{
+                      padding: "6px 12px",
+                      color: "#646970",
+                      fontStyle: "italic",
+                      fontSize: "13px",
+                      margin: "0"
+                    }}
+                  >
+                    {searchQuery ? "No results found" : "No options available"}
+                  </li>
+                ) : (
+                  filteredOptions.map((opt, index) => {
+                    const isSelected = value.includes(opt.value);
+                    const isHighlighted = highlightedIndex === index;
+                    // @ts-ignore
+                    const variant = opt.variant;
+                    const isPro = variant === "buy_pro";
+                    const isComingSoon = variant === "coming_soon";
+                    const isDisabled = opt.disabled || isPro || isComingSoon;
+
+                    return (
+                      <li
+                        key={opt.value}
+                        role="option"
+                        aria-selected={isSelected}
+                        onMouseEnter={(e) => {
+                          interactionType.current = "mouse";
+                          setHighlightedIndex(index);
+                          if (isPro || isComingSoon) {
+                            const rect =
+                              e.currentTarget.getBoundingClientRect();
+                            setTooltipState({
+                              visible: true,
+                              top: rect.top,
+                              left: rect.left + rect.width / 2,
+                              text: isPro ? "Available in Pro" : "Coming Soon",
+                            });
+                          } else {
+                            setTooltipState(null);
+                          }
+                        }}
+                        onMouseLeave={() => setTooltipState(null)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelect(opt);
+                        }}
+                        style={{
+                          padding: "6px 12px",
+                          cursor: isDisabled ? "not-allowed" : "pointer",
+                          backgroundColor: isHighlighted
+                            ? "#2271b1"
+                            : "transparent",
+                          color: isHighlighted
+                            ? "#fff"
+                            : isDisabled
+                            ? "#a7aaad"
+                            : "#2c3338",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          fontSize: "13px",
+                          margin: "0",
+                        }}
+                      >
+                        <div
                           style={{
-                            fontSize: "10px",
-                            textTransform: "uppercase",
-                            backgroundColor: isHighlighted ? "rgba(255,255,255,0.2)" : "#f0f0f1",
-                            color: isHighlighted ? "#fff" : "#646970",
-                            padding: "2px 6px",
-                            borderRadius: "10px",
-                            fontWeight: 600,
                             display: "flex",
                             alignItems: "center",
-                            gap: "4px"
+                            gap: "8px",
                           }}
                         >
-                          <Hourglass size={10} />
-                          Soon
-                        </span>
-                      )}
-                    </li>
-                  );
-                })
-              )}
-            </ul>
-          )}
-        </div>
-      )}
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            readOnly
+                            style={{
+                              pointerEvents: "none",
+                              margin: 0,
+                              borderRadius: "2px",
+                              border: `1px solid ${
+                                isHighlighted ? "#fff" : "#8c8f94"
+                              }`,
+                              width: "14px",
+                              height: "14px",
+                            }}
+                          />
+                          <span>
+                            {renderOption ? renderOption(opt) : opt.label}
+                          </span>
+                        </div>
+
+                        {/* Icons for variants */}
+                        {isPro && (
+                          <span
+                            style={{
+                              color: isHighlighted ? "#fff" : "#ffb900",
+                              display: "flex",
+                            }}
+                          >
+                            <Lock size={14} />
+                          </span>
+                        )}
+                        {isComingSoon && (
+                          <span
+                            style={{
+                              fontSize: "10px",
+                              textTransform: "uppercase",
+                              backgroundColor: isHighlighted
+                                ? "rgba(255,255,255,0.2)"
+                                : "#f0f0f1",
+                              color: isHighlighted ? "#fff" : "#646970",
+                              padding: "2px 6px",
+                              borderRadius: "10px",
+                              fontWeight: 600,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "4px",
+                            }}
+                          >
+                            <Hourglass size={10} />
+                            Soon
+                          </span>
+                        )}
+                      </li>
+                    );
+                  })
+                )}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
 
       {description && <p className="description">{description}</p>}
@@ -480,7 +581,7 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
             fontSize: "12px",
             pointerEvents: "none",
             zIndex: 100000,
-            whiteSpace: "nowrap"
+            whiteSpace: "nowrap",
           }}
         >
           {tooltipState.text}
