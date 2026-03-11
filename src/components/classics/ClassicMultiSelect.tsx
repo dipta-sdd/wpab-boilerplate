@@ -503,21 +503,39 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
                             gap: "8px",
                           }}
                         >
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            readOnly
-                            style={{
-                              pointerEvents: "none",
-                              margin: 0,
-                              borderRadius: "2px",
-                              border: `1px solid ${
-                                isHighlighted ? "#fff" : "#8c8f94"
-                              }`,
-                              width: "14px",
-                              height: "14px",
-                            }}
-                          />
+                          <div
+                            className={`
+                            wpab-flex wpab-items-center wpab-justify-center
+                            wpab-w-4 wpab-h-4 wpab-rounded wpab-border-2 wpab-transition-all wpab-duration-200
+                            ${
+                              isSelected
+                                ? isHighlighted
+                                  ? "wpab-border-white wpab-bg-white"
+                                  : "wpab-border-[#2271b1] wpab-bg-[#2271b1]"
+                                : isHighlighted
+                                ? "wpab-border-white wpab-bg-transparent"
+                                : "wpab-border-[#8c8f94] wpab-bg-white"
+                            }
+                          `}
+                          >
+                            <svg
+                              className={`wpab-w-3.5 wpab-h-3.5 wpab-transform wpab-transition-transform wpab-duration-200 ${
+                                isSelected ? "wpab-scale-100" : "wpab-scale-0"
+                              } ${
+                                isHighlighted && isSelected
+                                  ? "wpab-text-[#2271b1]"
+                                  : "wpab-text-white"
+                              }`}
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
                           <span>
                             {renderOption ? renderOption(opt) : opt.label}
                           </span>

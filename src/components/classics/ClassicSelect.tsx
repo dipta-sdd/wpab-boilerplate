@@ -276,7 +276,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
             cursor: disabled ? "not-allowed" : "pointer",
             backgroundColor: disabled ? "#f0f0f1" : "#fff",
             color: disabled ? "#a7aaad" : "#2c3338",
-            border: "1px solid #8c8f94",
+            border: "1px solid #8c8f94 ",
             borderRadius: "3px",
             padding: "0 24px 0 8px",
             minHeight: "30px",

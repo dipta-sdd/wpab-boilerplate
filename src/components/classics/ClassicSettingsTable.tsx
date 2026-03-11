@@ -36,8 +36,8 @@ export const ClassicSettingsTable: React.FC<ClassicSettingsTableProps> = ({
           {fields.map((field, index) => (
             <tr key={field.id || index}>
               <th scope="row">
-                <label htmlFor={field.id} className="wpab-inline-flex wpab-items-center">
-                  {field.label}
+                <label htmlFor={field.id} className="wpab-flex wpab-items-center">
+                  <span className="wpab-w-full">{field.label}</span>
                   {field.tooltip && (
                     <ClassicTooltip tip={field.tooltip} className="wpab-ml-1" />
                   )}
