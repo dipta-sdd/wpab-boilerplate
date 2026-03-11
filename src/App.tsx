@@ -7,6 +7,7 @@ import Logs from "./pages/Logs";
 import Components from "./pages/Components";
 import ClassicShowcase from "./pages/ClassicShowcase";
 import { ToastContainer } from "./components/common/ToastContainer";
+import { useMenuSync } from "./utils/useMenuSync";
 
 function App() {
   return (
@@ -14,15 +15,20 @@ function App() {
       <ToastProvider>
         <ToastContainer />
         <HashRouter>
-          <Routes>
-            <Route element={<AppLayout />}>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="logs" element={<Logs />} />
-              <Route path="components" element={<Components />} />
-              <Route path="components-classic" element={<ClassicShowcase />} />
-              {/* Add your routes here */}
-            </Route>
-          </Routes>
+          <MenuSyncProvider>
+            <Routes>
+              <Route element={<AppLayout />}>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="logs" element={<Logs />} />
+                <Route path="components" element={<Components />} />
+                <Route
+                  path="components-classic"
+                  element={<ClassicShowcase />}
+                />
+                {/* Add your routes here */}
+              </Route>
+            </Routes>
+          </MenuSyncProvider>
         </HashRouter>
       </ToastProvider>
     </WpabProvider>
@@ -30,3 +36,8 @@ function App() {
 }
 
 export default App;
+
+const MenuSyncProvider = ({ children }: { children: React.ReactNode }) => {
+  useMenuSync();
+  return <>{children}</>;
+};

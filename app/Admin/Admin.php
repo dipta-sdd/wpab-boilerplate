@@ -45,20 +45,12 @@ class Admin
 	 */
 	public static function get_instance()
 	{
-		static $instance = null;
 		if (null === self::$instance) {
 			self::$instance = new self();
 		}
 		return self::$instance;
 	}
 
-	/**
-	 * Add Admin Page Menu page.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @return void
-	 */
 	/**
 	 * Get plugin data (formerly white label options).
 	 *
@@ -91,6 +83,9 @@ class Admin
 	 */
 	public function add_admin_menu()
 	{
+		if (function_exists('wpab_boilerplate_log')) {
+			wpab_boilerplate_log('Admin: Registering WPAB admin menu', 'info');
+		}
 		$plugin_data = $this->get_plugin_data();
 
 		// Define menu items
@@ -99,18 +94,23 @@ class Admin
 				'page_title' => $plugin_data['plugin_name'],
 				'menu_title' => $plugin_data['menu_label'],
 				'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME,
-				'icon_url'   => $plugin_data['menu_icon'],
+				'icon_url'   => $plugin_data['custom_icon'],
 				'position'   => $plugin_data['position'],
 				'callback'   => array($this, 'add_setting_root_div'),
 				'submenu'    => array(
 					array(
 						'menu_title' => esc_html__('Dashboard', 'wpab-boilerplate'),
-						'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME, // Same as parent slug makes it the first item
+						'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME,
 						'callback'   => array($this, 'add_setting_root_div')
 					),
 					array(
 						'menu_title' => esc_html__('Settings', 'wpab-boilerplate'),
 						'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME . '#/settings',
+						'callback'   => array($this, 'add_setting_root_div')
+					),
+					array(
+						'menu_title' => esc_html__('Components', 'wpab-boilerplate'),
+						'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME . '#/components-classic',
 						'callback'   => array($this, 'add_setting_root_div')
 					)
 				)
@@ -118,6 +118,9 @@ class Admin
 		);
 
 		foreach ($menu_items as $item) {
+			if (function_exists('wpab_boilerplate_log')) {
+				wpab_boilerplate_log('Admin: Adding menu page: ' . $item['menu_title'], 'debug');
+			}
 			add_menu_page(
 				$item['page_title'],
 				$item['menu_title'],
@@ -130,9 +133,10 @@ class Admin
 
 			if (!empty($item['submenu'])) {
 				foreach ($item['submenu'] as $sub) {
+					// The first submenu item should use the same slug as add_menu_page to override the default parent name
 					add_submenu_page(
 						$item['menu_slug'], // Parent slug
-						$item['menu_title'] . ' - ' . $item['page_title'] ?? $item['menu_title'], // Page title
+						$item['page_title'] . ' - ' . $sub['menu_title'], // Page title
 						$sub['menu_title'],
 						'manage_wpab_boilerplate',
 						$sub['menu_slug'],
@@ -146,6 +150,28 @@ class Admin
 		$this->menu_info = array(
 			'menu_slug' => WPAB_BOILERPLATE_PLUGIN_NAME
 		);
+
+		// Add custom submenu under Products (simulating TubeBay)
+		add_submenu_page(
+			'edit.php?post_type=product',
+			esc_html__('WPAB Boilerplate', 'wpab-boilerplate'),
+			esc_html__('WPAB Boilerplate', 'wpab-boilerplate'),
+			'manage_wpab_boilerplate',
+			'wpab-boilerplate-redirect',
+			array($this, 'redirect_to_dashboard')
+		);
+	}
+
+	/**
+	 * Redirect to the main dashboard.
+	 *
+	 * @return void
+	 */
+	public function redirect_to_dashboard()
+	{
+		$redirect_url = admin_url('admin.php?page=' . WPAB_BOILERPLATE_PLUGIN_NAME);
+		wp_safe_redirect($redirect_url);
+		exit;
 	}
 
 	/**
@@ -158,7 +184,10 @@ class Admin
 	public function is_menu_page()
 	{
 		$screen = get_current_screen();
-		$admin_scripts_bases = array('toplevel_page_' . WPAB_BOILERPLATE_PLUGIN_NAME);
+		$admin_scripts_bases = array(
+			'toplevel_page_' . WPAB_BOILERPLATE_PLUGIN_NAME,
+			'product_page_' . WPAB_BOILERPLATE_PLUGIN_NAME, // Match TubeBay
+		);
 		if (!(isset($screen->base) && in_array($screen->base, $admin_scripts_bases, true))) {
 			return false;
 		}
@@ -210,6 +239,10 @@ class Admin
 			return;
 		}
 
+		if (function_exists('wpab_boilerplate_log')) {
+			wpab_boilerplate_log('Admin: Enqueueing admin resources for WPAB menu page', 'debug');
+		}
+
 		$deps_file = WPAB_BOILERPLATE_PATH . 'build/admin.asset.php';
 		$dependency = array('wp-i18n');
 		$version = WPAB_BOILERPLATE_VERSION;
@@ -217,6 +250,13 @@ class Admin
 			$deps_file = require $deps_file;
 			$dependency = $deps_file['dependencies'];
 			$version = $deps_file['version'];
+			if (function_exists('wpab_boilerplate_log')) {
+				wpab_boilerplate_log('Admin: Loaded exact build dependencies: ' . wp_json_encode($dependency), 'debug');
+			}
+		} else {
+			if (function_exists('wpab_boilerplate_log')) {
+				wpab_boilerplate_log('Admin: Build asset file not found; falling back to default dependencies', 'debug');
+			}
 		}
 
 		/**
@@ -261,7 +301,8 @@ class Admin
 					'dateFormat' => get_option('date_format'),
 					'timeFormat' => get_option('time_format'),
 				),
-				'plugin_settings' => \WpabBoilerplate\Core\Settings::get_instance()->get_settings()
+				'plugin_settings' => \WpabBoilerplate\Core\Settings::get_instance()->get_settings(),
+				'products_url'    => admin_url('edit.php?post_type=product'),
 			)
 		);
 
