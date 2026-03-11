@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import apiFetch from "@wordpress/api-fetch";
+import { __ } from "@wordpress/i18n";
 
 const Logs = () => {
   const [logs, setLogs] = useState<string>("");
@@ -37,15 +38,11 @@ const Logs = () => {
   }, []);
 
   return (
-    <div className="wpab-p-6">
-      <div className="wpab-flex wpab-justify-between wpab-items-center wpab-mb-6">
+    <div className="wpab-max-w-[1200px] wpab-mx-auto">
+      <div className="wpab-flex wpab-justify-between wpab-items-end wpab-mb-6">
         <div>
-          <h1 className="wpab-text-2xl wpab-font-bold wpab-text-gray-900">
-            Debug Logs
-          </h1>
-          <p className="wpab-text-sm wpab-text-gray-500 wpab-mt-1">
-            View logs stored in
-            /wp-content/uploads/wpab-boilerplate-logs/debug.log
+          <p className="wpab-text-sm wpab-text-gray-500">
+            {__("View logs stored in /wp-content/uploads/wpab-boilerplate-logs/", "wpab-boilerplate")}
           </p>
         </div>
         <div className="wpab-flex wpab-gap-2">

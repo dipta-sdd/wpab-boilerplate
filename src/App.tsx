@@ -1,6 +1,5 @@
 import Dashboard from "./pages/Dashboard";
-import { HashRouter, Route, Routes } from "react-router-dom";
-import AppLayout from "./components/common/AppLayout";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { WpabProvider } from "./store/wpabStore";
 import { ToastProvider } from "./store/toast/use-toast";
 import Logs from "./pages/Logs";
@@ -8,6 +7,8 @@ import Components from "./pages/Components";
 import ClassicShowcase from "./pages/ClassicShowcase";
 import { ToastContainer } from "./components/common/ToastContainer";
 import { useMenuSync } from "./utils/useMenuSync";
+import { ClassicLayout } from "./components/classics";
+// import AppLayout from "./components/common/AppLayout"; // Keep modern layout for future use
 
 function App() {
   return (
@@ -17,7 +18,12 @@ function App() {
         <HashRouter>
           <MenuSyncProvider>
             <Routes>
-              <Route element={<AppLayout />}>
+              {/* 
+                BOILERPLATE NOTE: 
+                - Use <ClassicLayout /> for native WordPress/WooCommerce aesthetics.
+                - Use <AppLayout /> (from components/common) for modern, custom dashboard aesthetics.
+              */}
+              <Route element={<ClassicLayout />}>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="logs" element={<Logs />} />
                 <Route path="components" element={<Components />} />

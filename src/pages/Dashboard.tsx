@@ -6,20 +6,16 @@ const Dashboard: FC = () => {
   const store = useWpabStore();
 
   return (
-    <div className="wpab-p-[24px]">
+    <div className="wpab-max-w-[1200px] wpab-mx-auto">
       {/* Welcome Banner */}
       <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[24px] wpab-mb-[24px] wpab-border wpab-border-gray-200">
-        <h1 className="wpab-text-[24px] wpab-font-[700] wpab-text-gray-900 wpab-mb-[8px]">
-          {__("Welcome to", "wpab-boilerplate")}{" "}
-          {store.pluginData?.plugin_name || "WPAB Boilerplate"}
-        </h1>
-        <p className="wpab-text-[14px] wpab-text-gray-600 wpab-mb-0">
+        <p className="wpab-text-[15px] wpab-text-gray-600 wpab-mb-2">
           {__(
-            "Your plugin is ready. Start building something amazing!",
+            "Your plugin is ready. Start building something amazing with our dual modern and classic components!",
             "wpab-boilerplate",
           )}
         </p>
-        <p className="wpab-text-[12px] wpab-text-gray-400 wpab-mt-[4px]">
+        <p className="wpab-text-[12px] wpab-text-gray-400">
           {__("Version", "wpab-boilerplate")}: {store.version}
         </p>
       </div>
