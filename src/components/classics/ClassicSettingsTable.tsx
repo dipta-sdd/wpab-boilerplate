@@ -1,11 +1,16 @@
 import React from "react";
+import { ClassicTooltip } from "./ClassicTooltip";
 
-interface SettingsField {
-  label: string;
+export interface SettingsField {
+  id?: string;
+  label: string | React.ReactNode;
+  tooltip?: string;
   render: () => React.ReactNode;
 }
 
-interface ClassicSettingsTableProps {
+export interface ClassicSettingsTableProps {
+  title?: string | React.ReactNode;
+  description?: string | React.ReactNode;
   fields: SettingsField[];
   className?: string;
 }
@@ -13,21 +18,36 @@ interface ClassicSettingsTableProps {
 /**
  * WordPress settings page layout using `form-table`.
  * Labels on the left, inputs on the right — like WooCommerce > Settings.
+ * Supports a section title, description, and field tooltips natively.
  */
 export const ClassicSettingsTable: React.FC<ClassicSettingsTableProps> = ({
+  title,
+  description,
   fields,
   className = "",
 }) => {
   return (
-    <table className={`form-table ${className}`}>
-      <tbody>
-        {fields.map((field, index) => (
-          <tr key={index}>
-            <th scope="row">{field.label}</th>
-            <td>{field.render()}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className={`wpab-settings-section wpab-mb-8 last:wpab-mb-0 ${className}`}>
+      {title && <h2>{title}</h2>}
+      {description && <p>{description}</p>}
+      
+      <table className="form-table">
+        <tbody>
+          {fields.map((field, index) => (
+            <tr key={field.id || index}>
+              <th scope="row">
+                <label htmlFor={field.id} className="wpab-inline-flex wpab-items-center">
+                  {field.label}
+                  {field.tooltip && (
+                    <ClassicTooltip tip={field.tooltip} className="wpab-ml-1" />
+                  )}
+                </label>
+              </th>
+              <td>{field.render()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };

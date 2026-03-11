@@ -18,11 +18,9 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
   title,
   children,
 }) => (
-  <div className="postbox" style={{ marginBottom: 20 }}>
-    <h2 className="hndle" style={{ padding: "8px 12px", margin: 0 }}>
-      <span>{title}</span>
-    </h2>
-    <div className="inside">{children}</div>
+  <div style={{ marginBottom: 40, marginTop: 40 }}>
+    <h2>{title}</h2>
+    {children}
   </div>
 );
 
@@ -399,51 +397,172 @@ const ClassicShowcase: React.FC = () => {
       </Section>
 
       {/* ── Settings Table ── */}
-      <Section title="9. Settings Table (form-table)">
+      <Section title="9. WooCommerce Settings Layouts (form-table)">
         <ClassicSettingsTable
+          title="Store Address"
+          description="This is where your business is located. Tax rates and shipping rates will use this address."
           fields={[
             {
-              label: "Site Title",
-              render: () => (
-                <ClassicInput
-                  size="regular"
-                  placeholder="My WordPress Site"
-                />
-              ),
+              id: "address_1",
+              label: "Address line 1",
+              tooltip: "The street address for your business location.",
+              render: () => <ClassicInput size="regular" placeholder="Dhaka" />,
             },
             {
-              label: "Tagline",
-              render: () => (
-                <ClassicInput
-                  size="regular"
-                  placeholder="Just another WordPress site"
-                  description="In a few words, explain what this site is about."
-                />
-              ),
+              id: "address_2",
+              label: "Address line 2",
+              tooltip: "Apartment, suite, unit etc. (optional)",
+              render: () => <ClassicInput size="regular" />,
             },
             {
-              label: "Currency",
+              id: "city",
+              label: "City",
+              tooltip: "City, town or village.",
+              render: () => <ClassicInput size="regular" placeholder="Dhaka" />,
+            },
+            {
+              id: "country_state",
+              label: "Country / State",
+              tooltip: "Choose the country and state for your store.",
               render: () => (
                 <ClassicSelect
-                  size="short"
-                  options={[
-                    { value: "USD", label: "US Dollar ($)" },
-                    { value: "EUR", label: "Euro (€)" },
-                    { value: "GBP", label: "Pound Sterling (£)" },
-                  ]}
-                  value="USD"
+                  size="regular"
+                  options={[{ value: "bd-syl", label: "Bangladesh — Sylhet" }]}
+                  value="bd-syl"
                   onChange={() => {}}
                 />
               ),
             },
             {
-              label: "Enable Logging",
+              id: "postcode",
+              label: "Postcode / ZIP",
+              tooltip: "Postal code for your business.",
+              render: () => <ClassicInput size="regular" placeholder="1000" />,
+            },
+          ]}
+        />
+
+        <ClassicSettingsTable
+          title="General options"
+          fields={[
+            {
+              label: "Selling location(s)",
+              tooltip: "Choose which countries you want to sell to.",
+              render: () => (
+                <ClassicSelect
+                  size="regular"
+                  options={[{ value: "all", label: "Sell to all countries" }]}
+                  value="all"
+                  onChange={() => {}}
+                />
+              ),
+            },
+            {
+              label: "Shipping location(s)",
+              tooltip: "Choose which countries you want to ship to.",
+              render: () => (
+                <ClassicSelect
+                  size="regular"
+                  options={[
+                    { value: "all", label: "Ship to all countries you sell to" },
+                  ]}
+                  value="all"
+                  onChange={() => {}}
+                />
+              ),
+            },
+            {
+              label: "Default customer location",
+              tooltip: "Determines the customer's default location.",
+              render: () => (
+                <ClassicSelect
+                  size="regular"
+                  options={[{ value: "shop", label: "Shop country/region" }]}
+                  value="shop"
+                  onChange={() => {}}
+                />
+              ),
+            },
+          ]}
+        />
+
+        <ClassicSettingsTable
+          title="Taxes and coupons"
+          description="Enable taxes and coupons and configure how they are calculated."
+          fields={[
+            {
+              label: "Enable taxes",
               render: () => (
                 <ClassicCheckbox
-                  label="Log debug information"
+                  label="Enable tax rates and calculations"
+                  description="Rates will be configurable and taxes will be calculated during checkout."
                   checked={checkboxA}
                   onChange={setCheckboxA}
                 />
+              ),
+            },
+            {
+              label: "Enable coupons",
+              render: () => (
+                <div className="wpab-flex wpab-flex-col wpab-gap-2">
+                  <ClassicCheckbox
+                    label="Enable the use of coupon codes"
+                    description="Coupons can be applied from the cart and checkout pages."
+                    checked={checkboxB}
+                    onChange={setCheckboxB}
+                  />
+                  <ClassicCheckbox
+                    label="Calculate coupon discounts sequentially"
+                    description="When applying multiple coupons, apply the first coupon to the full price and the second coupon to the discounted price and so on."
+                    checked={false}
+                    onChange={() => {}}
+                  />
+                </div>
+              ),
+            },
+          ]}
+        />
+
+        <ClassicSettingsTable
+          title="Currency options"
+          description="The following options affect how prices are displayed on the frontend."
+          fields={[
+            {
+              label: "Currency",
+              tooltip: "Choose the default currency for the store.",
+              render: () => (
+                <ClassicSelect
+                  size="regular"
+                  options={[{ value: "usd", label: "United States (US) dollar ($) — USD" }]}
+                  value="usd"
+                  onChange={() => {}}
+                />
+              ),
+            },
+            {
+              label: "Currency position",
+              tooltip: "Choose the location of the currency symbol.",
+              render: () => (
+                <ClassicSelect
+                  size="regular"
+                  options={[{ value: "right", label: "Right" }]}
+                  value="right"
+                  onChange={() => {}}
+                />
+              ),
+            },
+            {
+              label: "Thousand separator",
+              tooltip: "Character used for thousand separation.",
+              render: () => (
+                <ClassicInput size="small" placeholder="," />
+              ),
+            },
+            {
+              label: "Decimal separator",
+              tooltip: "Character used for decimal separation.",
+              render: () => (
+                <ClassicInput size="small" placeholder="." />
               ),
             },
           ]}
