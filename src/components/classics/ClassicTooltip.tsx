@@ -1,3 +1,4 @@
+import { CircleQuestionMark, CircleQuestionMarkIcon } from "lucide-react";
 import React, { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 
@@ -50,20 +51,7 @@ export const ClassicTooltip: React.FC<ClassicTooltipProps> = ({
         tabIndex={0}
         style={{ cursor: "help" }}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="wpab-w-3 wpab-h-3"
-        >
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-          <line x1="12" y1="17" x2="12.01" y2="17"></line>
-        </svg>
+        <CircleQuestionMarkIcon />
       </span>
       {visible &&
         createPortal(
