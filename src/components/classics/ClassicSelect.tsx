@@ -386,7 +386,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
       )}
       </div>
 
-      {description && <p className="description">{description}</p>}
+      {description && <p className="description wpab-block">{description}</p>}
 
       {/* Portal Tooltip or absolute Tooltip for variants */}
       {tooltipState?.visible && (
