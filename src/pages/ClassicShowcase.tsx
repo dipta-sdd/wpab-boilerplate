@@ -18,8 +18,22 @@ const Section: React.FC<{ title?: string; children: React.ReactNode }> = ({
   title,
   children,
 }) => (
-  <div className="wpab-section" style={{ marginTop: "2em", border: "none", background: "none", padding: 0 }}>
-    {title && <h2 className="title">{title}</h2>}
+  <div className="wpab-section" style={{ marginTop: "3em", border: "none", background: "none", padding: 0 }}>
+    {title && (
+      <h2 
+        className="title wpab-ignore-preflight" 
+        // style={{ 
+        //   fontSize: "23px", 
+        //   fontWeight: 400, 
+        //   color: "#1d2327", 
+        //   marginBottom: "16px",
+        //   marginTop: 0,
+        //   padding: 0
+        // }}
+      >
+        {title}
+      </h2>
+    )}
     {children}
   </div>
 );
@@ -57,7 +71,7 @@ const ClassicShowcase: React.FC = () => {
   ];
 
   return (
-    <div className="wrap">
+    <div className="wrap wpab-p-6">
       <h1>Classic Components Showcase</h1>
       <p className="description">
         These components use native WordPress &amp; WooCommerce admin CSS
