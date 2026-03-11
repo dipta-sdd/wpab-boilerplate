@@ -42,7 +42,7 @@ export const ClassicInput: React.FC<ClassicInputProps> = ({
         type={props.type || "text"}
         {...props}
       />
-      {description && <span className="description">{description}</span>}
+      {description && <p className="description wpab-block">{description}</p>}
     </>
   );
 };

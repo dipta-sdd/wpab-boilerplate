@@ -33,7 +33,11 @@ export const ClassicCheckbox: React.FC<ClassicCheckboxProps> = ({
         />
         {label && <> {label}</>}
       </label>
-      {description && <span className="description">{description}</span>}
+      {description && (
+        <p className="description" style={{ display: "block", marginTop: "4px" }}>
+          {description}
+        </p>
+      )}
     </>
   );
 };

@@ -29,7 +29,7 @@ export const ClassicSettingsTable: React.FC<ClassicSettingsTableProps> = ({
   return (
     <div className={`wpab-settings-section wpab-mb-8 last:wpab-mb-0 ${className}`}>
       {title && <h2>{title}</h2>}
-      {description && <p>{description}</p>}
+      {description && <p className="description">{description}</p>}
       
       <table className="form-table">
         <tbody>

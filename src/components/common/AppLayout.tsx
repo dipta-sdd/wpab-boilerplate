@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 
 const AppLayout: FC = () => {
   return (
-    <div className="wpab-cb-container radius-large">
+    <div className="wpab-cb-container">
       <Navbar />
       <Outlet />
     </div>

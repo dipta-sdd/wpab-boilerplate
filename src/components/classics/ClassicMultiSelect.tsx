@@ -232,10 +232,10 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
   const explicitWidth = size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
 
   return (
-    <div className={`${sizeClass} ${className}`} ref={containerRef} style={{ verticalAlign: "middle", display: "inline-block", width: explicitWidth }}>
+    <div className={`${sizeClass} ${className}`} ref={containerRef} style={{ verticalAlign: "middle" }}>
       {label && <label htmlFor={selectId} style={{ display: "block", marginBottom: 4 }}>{label}</label>}
 
-      <div className="wpab-relative">
+      <div className="wpab-relative" style={{ width: explicitWidth }}>
       <div
         id={selectId}
         tabIndex={disabled ? -1 : 0}
@@ -464,7 +464,7 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
       )}
       </div>
 
-      {description && <p className="description" style={{ marginTop: 4, color: "#646970", fontSize: "13px" }}>{description}</p>}
+      {description && <p className="description">{description}</p>}
 
       {tooltipState?.visible && (
         <div

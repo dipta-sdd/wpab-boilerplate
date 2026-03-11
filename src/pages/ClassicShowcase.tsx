@@ -14,12 +14,12 @@ import {
 } from "../components/classics";
 
 /* ───── helpers ───── */
-const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
+const Section: React.FC<{ title?: string; children: React.ReactNode }> = ({
   title,
   children,
 }) => (
-  <div style={{ marginBottom: 40, marginTop: 40 }}>
-    <h2>{title}</h2>
+  <div className="wpab-section" style={{ marginTop: "2em", border: "none", background: "none", padding: 0 }}>
+    {title && <h2 className="title">{title}</h2>}
     {children}
   </div>
 );

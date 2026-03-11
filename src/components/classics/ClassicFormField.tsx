@@ -31,7 +31,7 @@ export const ClassicFormField: React.FC<ClassicFormFieldProps> = ({
     <p className={`${layoutClass} ${className}`}>
       {label && <label htmlFor={htmlFor}>{label}</label>}
       {children}
-      {description && <span className="description">{description}</span>}
+      {description && <p className="description">{description}</p>}
     </p>
   );
 };
