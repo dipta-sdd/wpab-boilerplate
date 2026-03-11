@@ -32,19 +32,12 @@ define('WPAB_BOILERPLATE_OPTION_NAME', 'wpab_boilerplate');
 define('WPAB_BOILERPLATE_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('WPAB_BOILERPLATE_DEV_MODE', true);
 
-spl_autoload_register(function ($class) {
-	// Only handle our plugin's classes
-	if (strpos($class, 'WpabBoilerplate\\') !== 0) {
-		return;
-	}
-	// Convert namespace to file path
-	$file = WPAB_BOILERPLATE_PATH . 'app/' . str_replace('\\', '/', substr($class, 15)) . '.php';
-
-	// Load the file if it exists
-	if (file_exists($file)) {
-		require_once $file;
-	}
-});
+/**
+ * Initialize Composer Autoloader.
+ */
+if (file_exists(WPAB_BOILERPLATE_PATH . 'vendor/autoload.php')) {
+	require_once WPAB_BOILERPLATE_PATH . 'vendor/autoload.php';
+}
 
 require_once WPAB_BOILERPLATE_PATH . 'app/functions.php';
 

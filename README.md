@@ -35,44 +35,62 @@ This boilerplate is designed to provide everything you need to build a complex, 
 
 ``` text
 wpab-boilerplate-classic/
-├── wpab-boilerplate.php        # Plugin bootstrap, constants & autoloader
-├── uninstall.php               # Cleanup routines on plugin deletion
 ├── app/                        # PHP Backend Application
 │   ├── Admin/
-│   │   └── Admin.php           # Admin menu & localized script enqueuing
+│   │   ├── Admin.php           # Admin menu & localized script enqueuing
+│   │   └── index.php
 │   ├── Api/                    # REST API Controllers
 │   │   ├── ApiController.php   # Base controller with security logic
 │   │   ├── LogController.php   # Handles database log retrieval
-│   │   └── SettingsController.php # Manages plugin settings via REST
+│   │   ├── SettingsController.php # Manages plugin settings via REST
+│   │   └── index.php
 │   ├── Core/                   # Core mechanics
 │   │   ├── Activator.php       # Plugin activation (tables, defaults)
 │   │   ├── Deactivator.php     # Plugin deactivation (cron cleanup)
 │   │   ├── Base.php            # Singleton base with auto-hooking
 │   │   ├── Plugin.php          # Main coordinator & class loader
 │   │   ├── Settings.php        # Settings API abstraction layer
-│   │   └── Cron.php            # Dynamic WP-Cron scheduling engine
+│   │   ├── Cron.php            # Dynamic WP-Cron scheduling engine
+│   │   └── index.php
 │   ├── Data/
-│   │   └── DbManager.php       # DB schema definitions & dbDelta()
+│   │   ├── DbManager.php       # DB schema definitions & dbDelta()
+│   │   └── index.php
 │   ├── Helper/
 │   │   ├── Loader.php          # Action/Filter registration queue
-│   │   └── Logger.php          # Custom DB-based logging system
-│   └── functions.php           # Global helper functions & white label filters
+│   │   ├── Logger.php          # Custom DB-based logging system
+│   │   └── index.php
+│   ├── functions.php           # Global helper functions & white label filters
+│   └── index.php
 ├── config/                     # Configuration registries
 │   ├── api.php                 # Registration of REST controllers
 │   └── core.php                # Registration of core background classes
 ├── src/                        # React / TypeScript Frontend (SPA)
-│   ├── index.tsx               # Entry point
-│   ├── App.tsx                 # Router & Layout orchestration
-│   ├── pages/                  # Route views (Dashboard, Logs, Showcase)
 │   ├── components/
-│   │   ├── common/             # Modern, Tailwind UI library
-│   │   └── classics/           # Native WP/WC style component library
-│   ├── store/                  # Global state management (Context API)
-│   └── styles/                 # SCSS & Tailwind preflight guard system
-├── build/                      # Compiled JS/CSS production assets
+│   │   ├── classics/           # Native WP/WC style components
+│   │   │   ├── ClassicButton.tsx, ClassicCheckbox.tsx, ClassicFormField.tsx
+│   │   │   ├── ClassicInput.tsx, ClassicLayout.tsx, ClassicMultiSelect.tsx
+│   │   │   ├── ClassicNavbar.tsx, ClassicRepeater.tsx, ClassicSelect.tsx
+│   │   │   ├── ClassicSettingsTable.tsx, ClassicTable.tsx, ClassicTooltip.tsx
+│   │   │   └── index.ts
+│   │   └── common/             # Modern UI library (30+ components)
+│   ├── pages/                  # Route views (Dashboard, Logs, Showcase, etc.)
+│   ├── store/                  # State management (Context API)
+│   ├── styles/                 # SCSS & Tailwind preflight guard system
+│   ├── utils/                  # API helpers, types, and hooks
+│   ├── App.tsx                 # Router & Layout orchestration
+│   └── index.tsx               # Entry point
 ├── assets/                     # Images, icons, and static media
 ├── languages/                  # i18n translation files (.pot, .json)
-└── vendor/                     # Composer dependencies (PHP)
+├── vendor/                     # Composer dependencies (PHP)
+├── wpab-boilerplate.php        # Plugin bootstrap & autoloader
+├── uninstall.php               # Cleanup on plugin deletion
+├── rename.sh                   # Script for global find & replace
+├── package.json                # NPM configuration
+├── composer.json               # Composer configuration
+├── tsconfig.json               # TypeScript configuration
+├── tailwind.config.js          # Tailwind CSS configuration
+├── postcss.config.js           # PostCSS configuration
+└── webpack.config.js           # Webpack configuration
 ```
 
 ---
