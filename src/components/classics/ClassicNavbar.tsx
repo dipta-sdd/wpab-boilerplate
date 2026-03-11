@@ -38,13 +38,14 @@ const ClassicNavbar: FC = () => {
   };
 
   return (
-    <nav className="wpab-flex wpab-items-center wpab-gap-6 wpab-border-b wpab-border-gray-200 wpab-mb-8 wpab-ignore-preflight">
+    <nav className="wpab-flex wpab-items-center wpab-gap-6 wpab-border-b wpab-border-gray-200 wpab-mb-8 wpab-ignore-preflight wpab-p-x-page-default wpab-bg-white">
       {menus.map((menu) => (
         <a
           key={menu.path}
           href={`#${menu.path}`}
           className={`
-            wpab-pb-3 wpab-text-[14px] wpab-transition-all wpab-no-underline wpab-relative
+            wpab-pb-3 wpab-text-[14px] wpab-transition-all wpab-no-underline wpab-relative focus:wpab-outline-none
+            focus:wpab-border-t-0 focus:wpab-border-l-0 focus:wpab-border-r-0 focus:wpab-shadow-none
             ${
               isActive(menu.path)
                 ? "wpab-text-gray-900 wpab-font-bold"

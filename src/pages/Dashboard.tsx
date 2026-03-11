@@ -6,7 +6,7 @@ const Dashboard: FC = () => {
   const store = useWpabStore();
 
   return (
-    <div className="wpab-max-w-[1200px] wpab-mx-auto">
+    <div className="">
       {/* Welcome Banner */}
       <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[24px] wpab-mb-[24px] wpab-border wpab-border-gray-200">
         <p className="wpab-text-[15px] wpab-text-gray-600 wpab-mb-2">

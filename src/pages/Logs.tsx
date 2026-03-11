@@ -38,11 +38,14 @@ const Logs = () => {
   }, []);
 
   return (
-    <div className="wpab-max-w-[1200px] wpab-mx-auto">
+    <div className="">
       <div className="wpab-flex wpab-justify-between wpab-items-end wpab-mb-6">
         <div>
           <p className="wpab-text-sm wpab-text-gray-500">
-            {__("View logs stored in /wp-content/uploads/wpab-boilerplate-logs/", "wpab-boilerplate")}
+            {__(
+              "View logs stored in /wp-content/uploads/wpab-boilerplate-logs/",
+              "wpab-boilerplate",
+            )}
           </p>
         </div>
         <div className="wpab-flex wpab-gap-2">

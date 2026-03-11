@@ -61,7 +61,7 @@ const ClassicShowcase: React.FC = () => {
   ];
 
   return (
-    <div className="wpab-max-w-[1200px] wpab-mx-auto wpab-space-y-[32px]">
+    <div className=" wpab-space-y-[32px]">
       <div className="wpab-grid wpab-grid-cols-1 wpab-gap-[32px]">
         {/* ── Buttons ── */}
         <Section title="1. Buttons &amp; Actions">

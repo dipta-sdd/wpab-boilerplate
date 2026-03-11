@@ -107,7 +107,7 @@ const Components: FC = () => {
   );
 
   return (
-    <div className="wpab-p-[24px] wpab-max-w-[1200px] wpab-mx-auto wpab-space-y-[32px]">
+    <div className="wpab-p-[24px]  wpab-space-y-[32px]">
       <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[32px] wpab-border wpab-border-gray-200 wpab-shadow-sm">
         <h1 className="wpab-text-[28px] wpab-font-[800] wpab-text-gray-900 wpab-mb-[8px]">
           {__("Components Showcase", "wpab-boilerplate")}

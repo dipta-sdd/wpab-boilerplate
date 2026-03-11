@@ -19,12 +19,12 @@ const ClassicLayout: FC = () => {
   };
 
   return (
-    <div className="wrap wpab-p-6">
-      <h1 className="wpab-ignore-preflight wpab-font-bold wpab-text-[22px] wpab-mb-6">
+    <div className="">
+      <h1 className="wpab-ignore-preflight wpab-font-[600] wpab-text-[16px] wpab-p-x-page-default wpab-bg-white wpab-m-0 wpab-py-[18px]">
         {getPageTitle()}
       </h1>
       <ClassicNavbar />
-      <div className="wpab-mt-2">
+      <div className="wpab-mt-2 wpab-p-x-page-default">
         <Outlet />
       </div>
     </div>
