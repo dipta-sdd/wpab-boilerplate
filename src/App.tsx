@@ -5,6 +5,7 @@ import { ToastProvider } from "./store/toast/use-toast";
 import Logs from "./pages/Logs";
 import Components from "./pages/Components";
 import ClassicShowcase from "./pages/ClassicShowcase";
+import Settings from "./pages/Settings";
 import { ToastContainer } from "./components/common/ToastContainer";
 import { useMenuSync } from "./utils/useMenuSync";
 import { ClassicLayout } from "./components/classics";
@@ -31,6 +32,7 @@ function App() {
                   path="components-classic"
                   element={<ClassicShowcase />}
                 />
+                <Route path="settings" element={<Settings />} />
                 {/* Add your routes here */}
               </Route>
             </Routes>

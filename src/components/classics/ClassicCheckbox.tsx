@@ -64,7 +64,7 @@ export const ClassicCheckbox: React.FC<ClassicCheckboxProps> = ({
           />
         </div>
         {label && (
-          <span className="wpab-text-[13px] wpab-font-[400] wpab-leading-[20px] wpab-text-[#1e1e1e]">
+          <span>
             {label}
           </span>
         )}

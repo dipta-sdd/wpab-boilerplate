@@ -29,6 +29,10 @@ const ClassicNavbar: FC = () => {
       label: __("Components (Classic)", "wpab-boilerplate"),
       path: "/components-classic",
     },
+    {
+      label: __("Settings", "wpab-boilerplate"),
+      path: "/settings",
+    },
   ];
 
   const isActive = (path: string) => {

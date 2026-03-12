@@ -391,12 +391,12 @@ Removes the default spacing and border for appropriate elements.
 blockquote:not(.wpab-ignore-preflight),
 dl:not(.wpab-ignore-preflight),
 dd:not(.wpab-ignore-preflight),
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
+h1:not(.wpab-ignore-preflight), // use only on classic mode
+h2:not(.wpab-ignore-preflight), // use only on classic mode
+h3:not(.wpab-ignore-preflight), // use only on classic mode
+h4:not(.wpab-ignore-preflight), // use only on classic mode
+h5:not(.wpab-ignore-preflight), // use only on classic mode
+h6:not(.wpab-ignore-preflight), // use only on classic mode
 hr:not(.wpab-ignore-preflight),
 figure:not(.wpab-ignore-preflight),
 p:not(.wpab-ignore-preflight),
