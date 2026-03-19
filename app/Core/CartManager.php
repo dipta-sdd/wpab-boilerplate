@@ -40,16 +40,16 @@ class CartManager extends Base
 
 		// Stage 1: Validation
 		$loader->add_filter('woocommerce_add_to_cart_validation', $this, 'validate_add_to_cart', 10, 3);
-		
+
 		// Stage 2: Add cart item data (Process & Math)
 		$loader->add_filter('woocommerce_add_cart_item_data', $this, 'add_cart_item_data', 10, 3);
-		
+
 		// Stage 3: Calculate totals
-		$loader->add_action('woocommerce_before_calculate_totals', $this, 'calculate_totals', 10, 1);
-		
+		$loader->add_action('woocommerce_before_calculate_totals', $this, 'calculate_totals', 100, 1);
+
 		// Stage 4: Cart & Checkout display
 		$loader->add_filter('woocommerce_get_item_data', $this, 'get_item_data', 10, 2);
-		
+
 		// Stage 5: Order meta storage
 		$loader->add_action('woocommerce_checkout_create_order_line_item', $this, 'add_order_item_meta', 10, 4);
 
@@ -128,24 +128,24 @@ class CartManager extends Base
 		// Format: $_POST['optionbay_addons'][$group_id][$field_id] = $value
 		// We use $_REQUEST to allow GET reqs to add to cart (though rare)
 		$submitted_data = $_REQUEST['optionbay_addons'] ?? array();
-		
+
 		// If file uploads are present
 		$files_data = $_FILES['optionbay_addons'] ?? array();
 
 		foreach ($group_ids as $group_id) {
 			$schema = $this->get_group_schema($group_id);
 			$group_data = $submitted_data[$group_id] ?? array();
-			
+
 			// Format $_FILES array for easier access
 			$group_files = array();
 			if (!empty($files_data['name'][$group_id])) {
 				foreach ($files_data['name'][$group_id] as $field_id => $name) {
 					$group_files[$field_id] = array(
-						'name'     => $name,
-						'type'     => $files_data['type'][$group_id][$field_id] ?? '',
+						'name' => $name,
+						'type' => $files_data['type'][$group_id][$field_id] ?? '',
 						'tmp_name' => $files_data['tmp_name'][$group_id][$field_id] ?? '',
-						'error'    => $files_data['error'][$group_id][$field_id] ?? UPLOAD_ERR_NO_FILE,
-						'size'     => $files_data['size'][$group_id][$field_id] ?? 0,
+						'error' => $files_data['error'][$group_id][$field_id] ?? UPLOAD_ERR_NO_FILE,
+						'size' => $files_data['size'][$group_id][$field_id] ?? 0,
 					);
 				}
 			}
@@ -203,16 +203,16 @@ class CartManager extends Base
 		foreach ($group_ids as $group_id) {
 			$schema = $this->get_group_schema($group_id);
 			$group_data = $submitted_data[$group_id] ?? array();
-			
+
 			$group_files = array();
 			if (!empty($files_data['name'][$group_id])) {
 				foreach ($files_data['name'][$group_id] as $field_id => $name) {
 					$group_files[$field_id] = array(
-						'name'     => $name,
-						'type'     => $files_data['type'][$group_id][$field_id] ?? '',
+						'name' => $name,
+						'type' => $files_data['type'][$group_id][$field_id] ?? '',
 						'tmp_name' => $files_data['tmp_name'][$group_id][$field_id] ?? '',
-						'error'    => $files_data['error'][$group_id][$field_id] ?? UPLOAD_ERR_NO_FILE,
-						'size'     => $files_data['size'][$group_id][$field_id] ?? 0,
+						'error' => $files_data['error'][$group_id][$field_id] ?? UPLOAD_ERR_NO_FILE,
+						'size' => $files_data['size'][$group_id][$field_id] ?? 0,
 					);
 				}
 			}
@@ -244,16 +244,17 @@ class CartManager extends Base
 				// Only save non-empty values
 				if ($value !== null && $value !== '') {
 					$sanitized_value = $field->sanitize($value);
-					
+					error_log("[OptionBay Pricing] Storing session data for field {$field_id} with value " . print_r($sanitized_value, true));
+
 					// Store raw data for display and Order meta
 					$session_data[] = array(
-						'group_id'      => $group_id,
-						'field_id'      => $field_id,
-						'name'          => $field_schema['label'] ?? $field_schema['id'],
-						'value'         => $sanitized_value,
+						'group_id' => $group_id,
+						'field_id' => $field_id,
+						'name' => $field_schema['label'] ?? $field_schema['id'],
+						'value' => $sanitized_value,
 						'display_value' => $field->get_display_value($sanitized_value),
-						'field_type'    => $field_schema['type'],
-						'weight'        => $field->get_weight($sanitized_value),
+						'field_type' => $field_schema['type'],
+						'weight' => $field->get_weight($sanitized_value),
 					);
 				}
 			}
@@ -265,7 +266,7 @@ class CartManager extends Base
 				'fields' => $session_data,
 				// Calculate total prices during calculate_totals
 			);
-			
+
 			// Force unique cart item key so different options don't merge
 			$cart_item_data['unique_key'] = md5(microtime() . wp_rand());
 		}
@@ -279,7 +280,7 @@ class CartManager extends Base
 	private function handle_file_upload($file_array)
 	{
 		require_once ABSPATH . 'wp-admin/includes/file.php';
-		
+
 		$upload_overrides = array('test_form' => false);
 		$movefile = wp_handle_upload($file_array, $upload_overrides);
 
@@ -305,7 +306,10 @@ class CartManager extends Base
 
 		// Ensure we don't recurse if our own plugin triggers price checks
 		static $is_calculating = false;
-		if ($is_calculating) return;
+		if ($is_calculating) {
+			error_log("[OptionBay Pricing] Already calculating, skipping._____________");
+			return;
+		}
 		$is_calculating = true;
 
 		foreach ($cart_object->get_cart() as $cart_item_key => $cart_item) {
@@ -313,21 +317,22 @@ class CartManager extends Base
 				continue;
 			}
 
-			// In phase 7 we'll pass this to Pricing Engine. For now just track it.
-			// Actually we need to recalculate from Schema because prices might be %
-			// This is just a stub for Phase 7 where strategy pattern takes over.
+
 
 			$product = $cart_item['data'];
 			$base_price = (float) $product->get_price('edit');
 			$total_price_addition = 0.0;
 			$total_weight_addition = 0.0;
 
+			error_log("[OptionBay Pricing] Cart item {$cart_item_key} Base Price: {$base_price}");
+
 			foreach ($cart_item[self::CART_KEY]['fields'] as &$field_data) {
 				$total_weight_addition += $field_data['weight'];
 
 				$group_id = $field_data['group_id'] ?? 0;
 				$field_id = $field_data['field_id'] ?? '';
-				if (!$group_id || !$field_id) continue;
+				if (!$group_id || !$field_id)
+					continue;
 
 				$schema = $this->get_group_schema($group_id);
 				$field_schema = null;
@@ -338,7 +343,10 @@ class CartManager extends Base
 					}
 				}
 
-				if (!$field_schema) continue;
+				if (!$field_schema) {
+					error_log("[OptionBay Pricing] Schema not found for group {$group_id}, field {$field_id}");
+					continue;
+				}
 
 				$qty = $cart_item['quantity'];
 
@@ -346,31 +354,46 @@ class CartManager extends Base
 				if (in_array($field_schema['type'], ['select', 'radio', 'checkbox'])) {
 					$options = $field_schema['options'] ?? [];
 					$values = is_array($field_data['value']) ? $field_data['value'] : [$field_data['value']];
-					
+
+					error_log("[OptionBay Pricing] Option field {$field_id} values: " . print_r($values, true));
+
 					foreach ($values as $val) {
 						foreach ($options as $opt) {
 							if ($opt['value'] === $val) {
 								$p_type = $opt['price_type'] ?? 'flat';
-								$p_amount = (float)($opt['price'] ?? 0);
-								$total_price_addition += PricingEngine::calculate($p_type, $base_price, $p_amount, $val, $qty);
+								$p_amount = (float) ($opt['price'] ?? 0);
+								$price_delta = PricingEngine::calculate($p_type, $base_price, $p_amount, $val, $qty);
+								$total_price_addition += $price_delta;
+								error_log("[OptionBay Pricing] Match Option! Adding {$price_delta} for {$val} (Type: {$p_type}, Configured: {$p_amount})");
 							}
 						}
 					}
 				} else {
 					$p_type = $field_schema['price_type'] ?? 'none';
-					$p_amount = (float)($field_schema['price'] ?? 0);
-					$total_price_addition += PricingEngine::calculate($p_type, $base_price, $p_amount, $field_data['value'], $qty);
+					$p_amount = (float) ($field_schema['price'] ?? 0);
+					$price_delta = PricingEngine::calculate($p_type, $base_price, $p_amount, $field_data['value'], $qty);
+					$total_price_addition += $price_delta;
+					error_log("[OptionBay Pricing] Field {$field_id}! Adding {$price_delta} (Type: {$p_type}, Configured: {$p_amount})");
 				}
 			}
 
 			if ($total_price_addition > 0) {
-				$product->set_price($base_price + $total_price_addition);
+				$new_price = $base_price + $total_price_addition;
+				// error_log(print_r($cart_object->cart_contents[$cart_item_key]['data'], true));
+				$cart_object->cart_contents[$cart_item_key]['data']->set_price($new_price);
+				error_log("[OptionBay Pricing] Setting final price to {$new_price}");
+				error_log("[OptionBay Pricing] final price is " . $cart_object->cart_contents[$cart_item_key]['data']->get_price());
+				// error_log(print_r($cart_object->cart_contents[$cart_item_key]['data'], true));
+				// error_log("___________________________________");
+				// error_log(print_r($cart_object->cart_contents[$cart_item_key], true));
 			}
 
 			if ($total_weight_addition > 0) {
 				$base_weight = (float) $product->get_weight();
-				$product->set_weight($base_weight + $total_weight_addition);
+				$cart_object->cart_contents[$cart_item_key]['data']->set_weight($base_weight + $total_weight_addition);
 			}
+			error_log("final price is " . $cart_object->cart_contents[$cart_item_key]['data']->get_price());
+
 		}
 
 		$is_calculating = false;
@@ -395,8 +418,8 @@ class CartManager extends Base
 				}
 
 				$item_data[] = array(
-					'name'    => $field['name'],
-					'value'   => $display,
+					'name' => $field['name'],
+					'value' => $display,
 					'display' => '', // tells WC not to escape again if we returned HTML in 'value'
 				);
 			}
@@ -413,7 +436,7 @@ class CartManager extends Base
 	{
 		if (isset($values[self::CART_KEY]) && !empty($values[self::CART_KEY]['fields'])) {
 			foreach ($values[self::CART_KEY]['fields'] as $field) {
-				
+
 				$display = $field['display_value'];
 				if ($field['field_type'] === 'file' && is_array($field['value']) && isset($field['value']['url'])) {
 					// In order meta, we save the full URL
