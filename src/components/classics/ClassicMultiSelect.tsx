@@ -67,7 +67,9 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState("");
   const [apiOptions, setApiOptions] = useState<MultiSelectOption[]>([]);
+  const [allSeenOptions, setAllSeenOptions] = useState<MultiSelectOption[]>(options || []);
   const [isLoading, setIsLoading] = useState(false);
+  const initialFetchDone = useRef(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -87,6 +89,38 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
     setSearchQuery("");
     setTooltipState(null);
   });
+
+  // Merge fetched options into allSeenOptions so selected items keep their labels
+  useEffect(() => {
+    if (apiOptions.length > 0) {
+      setAllSeenOptions((prev) => {
+        const map = new Map(prev.map((o) => [o.value, o]));
+        apiOptions.forEach((o) => map.set(o.value, o));
+        return Array.from(map.values());
+      });
+    }
+  }, [apiOptions]);
+
+  // Initial fetch when component mounts with pre-selected values
+  // Uses the `ids` parameter so the API returns exactly these items
+  useEffect(() => {
+    if (!endpoint || initialFetchDone.current || value.length === 0) return;
+    initialFetchDone.current = true;
+
+    const separator = endpoint.includes("?") ? "&" : "?";
+    const path = `${endpoint}${separator}ids=${value.join(",")}`;
+
+    apiFetch({ path, method: "GET" })
+      .then((res: any) => {
+        const data = res?.data || res || [];
+        setAllSeenOptions((prev) => {
+          const map = new Map(prev.map((o) => [o.value, o]));
+          data.forEach((o: MultiSelectOption) => map.set(o.value, o));
+          return Array.from(map.values());
+        });
+      })
+      .catch(() => {});
+  }, [endpoint, value]);
 
   const effectiveOptions = endpoint ? apiOptions : options;
 
@@ -126,10 +160,14 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
     );
   }, [effectiveOptions, searchQuery, enableSearch, endpoint]);
 
-  // Selected values
+  // Selected values — use allSeenOptions for endpoint mode so labels persist
   const selectedOptions = useMemo(() => {
-    return effectiveOptions.filter((opt) => value.includes(opt.value));
-  }, [effectiveOptions, value]);
+    const lookupSource = endpoint ? allSeenOptions : effectiveOptions;
+    return value.map((v) => {
+      const found = lookupSource.find((opt) => opt.value === v);
+      return found || { value: v, label: `${v}` };
+    });
+  }, [effectiveOptions, allSeenOptions, value, endpoint]);
 
   useEffect(() => {
     if (isOpen) {

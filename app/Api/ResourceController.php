@@ -114,8 +114,22 @@ class ResourceController extends ApiController
 	{
 		$search = $request->get_param('search');
 		$search = !empty($search) ? sanitize_text_field($search) : '';
+		$ids = $request->get_param('ids');
 
 		optionbay_log('ResourceController: Searching products with term: ' . $search, 'DEBUG');
+
+		// If specific IDs requested, return only those (for resolving pre-selected values)
+		if (!empty($ids)) {
+			$id_list = array_map('absint', explode(',', sanitize_text_field($ids)));
+			$products = array();
+			foreach ($id_list as $pid) {
+				$product = wc_get_product($pid);
+				if ($product) {
+					$products[] = $this->format_product($product);
+				}
+			}
+			return rest_ensure_response($products);
+		}
 
 		$products = array();
 
@@ -239,6 +253,28 @@ class ResourceController extends ApiController
 	public function get_categories($request)
 	{
 		$search = $request->get_param('search');
+		$ids = $request->get_param('ids');
+
+		// If specific IDs requested, return only those
+		if (!empty($ids)) {
+			$id_list = array_map('absint', explode(',', sanitize_text_field($ids)));
+			$terms = get_terms(array(
+				'taxonomy'   => 'product_cat',
+				'include'    => $id_list,
+				'hide_empty' => false,
+			));
+			$categories = array();
+			if (!is_wp_error($terms)) {
+				foreach ($terms as $term) {
+					$categories[] = array(
+						'value' => $term->term_id,
+						'label' => $term->name . ' (' . $term->count . ')',
+						'count' => $term->count,
+					);
+				}
+			}
+			return rest_ensure_response($categories);
+		}
 
 		$args = array(
 			'taxonomy'   => 'product_cat',
@@ -282,6 +318,28 @@ class ResourceController extends ApiController
 	public function get_tags($request)
 	{
 		$search = $request->get_param('search');
+		$ids = $request->get_param('ids');
+
+		// If specific IDs requested, return only those
+		if (!empty($ids)) {
+			$id_list = array_map('absint', explode(',', sanitize_text_field($ids)));
+			$terms = get_terms(array(
+				'taxonomy'   => 'product_tag',
+				'include'    => $id_list,
+				'hide_empty' => false,
+			));
+			$tags = array();
+			if (!is_wp_error($terms)) {
+				foreach ($terms as $term) {
+					$tags[] = array(
+						'value' => $term->term_id,
+						'label' => $term->name . ' (' . $term->count . ')',
+						'count' => $term->count,
+					);
+				}
+			}
+			return rest_ensure_response($tags);
+		}
 
 		$args = array(
 			'taxonomy'   => 'product_tag',
