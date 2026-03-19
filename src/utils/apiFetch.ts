@@ -15,3 +15,6 @@ declare global {
 const { nonce, rest_url } = window?.wpabBoilerplate_Localize || {};
 if (nonce) apiFetch.use(apiFetch.createNonceMiddleware(nonce));
 if (rest_url) apiFetch.use(apiFetch.createRootURLMiddleware(rest_url));
+
+export default apiFetch;
+

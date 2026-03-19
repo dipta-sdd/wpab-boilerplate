@@ -6,6 +6,8 @@ import Logs from "./pages/Logs";
 import Components from "./pages/Components";
 import ClassicShowcase from "./pages/ClassicShowcase";
 import Settings from "./pages/Settings";
+import AddonList from "./pages/AddonList";
+import AddonBuilder from "./pages/AddonBuilder";
 import { ToastContainer } from "./components/common/ToastContainer";
 import { useMenuSync } from "./utils/useMenuSync";
 import { ClassicLayout } from "./components/classics";
@@ -33,6 +35,9 @@ function App() {
                   element={<ClassicShowcase />}
                 />
                 <Route path="settings" element={<Settings />} />
+                <Route path="option-groups" element={<AddonList />} />
+                <Route path="option-groups/new" element={<AddonBuilder />} />
+                <Route path="option-groups/:id" element={<AddonBuilder />} />
                 {/* Add your routes here */}
               </Route>
             </Routes>

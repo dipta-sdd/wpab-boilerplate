@@ -1,5 +1,5 @@
 {
-    "name": "wp-anchor-bay/wpab-boilerplate",
+    "name": "wpanchorbay/optionbay",
     "description": "A comprehensive WordPress plugin boilerplate with React/TypeScript frontend.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "WpabBoilerplate\\": "app/"
+            "OptionBay\\": "app/"
         }
     }
 }

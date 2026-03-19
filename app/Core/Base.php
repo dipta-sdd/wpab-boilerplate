@@ -1,6 +1,6 @@
 <?php
 
-namespace WpabBoilerplate\Core;
+namespace OptionBay\Core;
 
 /**
  * The Base Hook Manager class.

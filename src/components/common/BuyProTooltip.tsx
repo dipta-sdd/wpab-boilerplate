@@ -82,7 +82,7 @@ export const BuyProTooltip: React.FC<BuyProTooltipProps> = ({
             onMouseLeave={handleTooltipMouseLeave}
           >
             <span className="wpab-font-medium wpab-whitespace-nowrap">
-              {__("Upgrade to unlock", "wpab-boilerplate")}
+              {__("Upgrade to unlock", "optionbay")}
             </span>
             <a
               href={store.pluginData?.support_uri || "#"}
@@ -90,7 +90,7 @@ export const BuyProTooltip: React.FC<BuyProTooltipProps> = ({
               rel="noopener noreferrer"
               className="wpab-w-full wpab-bg-[#f02a74] hover:!wpab-bg-[#e71161] wpab-text-white hover:!wpab-text-white wpab-font-bold wpab-py-1.5 wpab-px-3 wpab-transition-colors focus:wpab-outline-none focus:wpab-ring-0 wpab-cursor-pointer wpab-text-center wpab-no-underline"
             >
-              {__("Buy Pro", "wpab-boilerplate")}
+              {__("Buy Pro", "optionbay")}
             </a>
             {/* Tooltip Arrow */}
             <div className="wpab-absolute wpab-top-full wpab-left-1/2 -wpab-translate-x-1/2 wpab-border-4 wpab-border-transparent wpab-border-t-gray-900"></div>

@@ -1,13 +1,13 @@
 <?php
 
-namespace WpabBoilerplate\Helper;
+namespace OptionBay\Helper;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
 	exit;
 }
 
-use WpabBoilerplate\Core\Cron;
+use OptionBay\Core\Cron;
 
 /**
  * Handles all logging for the plugin.
@@ -72,7 +72,7 @@ class Logger
 		if (!empty($context)) {
 			$message .= ' ' . wp_json_encode($context);
 		}
-		wpab_boilerplate_log($message, $level);
+		optionbay_log($message, $level);
 	}
 
 	/**
@@ -85,7 +85,7 @@ class Logger
 	public static function get_log_dir()
 	{
 		$upload_dir = wp_upload_dir();
-		return $upload_dir['basedir'] . '/' . WPAB_BOILERPLATE_TEXT_DOMAIN . '-logs/';
+		return $upload_dir['basedir'] . '/' . OPTIONBAY_TEXT_DOMAIN . '-logs/';
 	}
 
 	/**

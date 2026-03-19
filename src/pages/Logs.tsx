@@ -12,7 +12,7 @@ const Logs = () => {
     setError("");
     try {
       const response = await apiFetch<{ content: string }>({
-        path: "/wpab-boilerplate/v1/logs",
+        path: "/optionbay/v1/logs",
       });
       setLogs(response.content || "No logs found.");
     } catch (err: any) {
@@ -26,7 +26,7 @@ const Logs = () => {
     if (!confirm("Are you sure you want to clear the logs?")) return;
 
     try {
-      await apiFetch({ path: "/wpab-boilerplate/v1/logs", method: "DELETE" });
+      await apiFetch({ path: "/optionbay/v1/logs", method: "DELETE" });
       setLogs("No logs found.");
     } catch (err: any) {
       alert(err.message || "Failed to clear logs.");
@@ -43,8 +43,8 @@ const Logs = () => {
         <div>
           <p className="wpab-text-sm wpab-text-gray-500">
             {__(
-              "View logs stored in /wp-content/uploads/wpab-boilerplate-logs/",
-              "wpab-boilerplate",
+              "View logs stored in /wp-content/uploads/optionbay-logs/",
+              "optionbay",
             )}
           </p>
         </div>

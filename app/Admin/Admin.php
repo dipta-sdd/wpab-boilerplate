@@ -1,8 +1,8 @@
 <?php
 
-namespace WpabBoilerplate\Admin;
+namespace OptionBay\Admin;
 
-use WpabBoilerplate\Core\Settings;
+use OptionBay\Core\Settings;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -61,10 +61,10 @@ class Admin
 	private function get_plugin_data()
 	{
 		return array(
-			'plugin_name' => esc_html__('WPAB Boilerplate', 'wpab-boilerplate'),
-			'short_name'  => esc_html__('WPAB Boilerplate', 'wpab-boilerplate'),
-			'menu_label'  => esc_html__('WPAB Boilerplate', 'wpab-boilerplate'),
-			'custom_icon' => WPAB_BOILERPLATE_URL . 'assets/img/icon.svg',
+			'plugin_name' => esc_html__('OptionBay', 'optionbay'),
+			'short_name'  => esc_html__('OptionBay', 'optionbay'),
+			'menu_label'  => esc_html__('OptionBay', 'optionbay'),
+			'custom_icon' => OPTIONBAY_URL . 'assets/img/icon.svg',
 			'menu_icon'   => 'dashicons-admin-plugins',
 			'author_name' => 'WP Anchor Bay',
 			'author_uri'  => 'https://wpanchorbay.com',
@@ -83,8 +83,8 @@ class Admin
 	 */
 	public function add_admin_menu()
 	{
-		if (function_exists('wpab_boilerplate_log')) {
-			wpab_boilerplate_log('Admin: Registering WPAB admin menu', 'info');
+		if (function_exists('optionbay_log')) {
+			optionbay_log('Admin: Registering WPAB admin menu', 'info');
 		}
 		$plugin_data = $this->get_plugin_data();
 
@@ -93,24 +93,24 @@ class Admin
 			array(
 				'page_title' => $plugin_data['plugin_name'],
 				'menu_title' => $plugin_data['menu_label'],
-				'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME,
+				'menu_slug'  => OPTIONBAY_PLUGIN_NAME,
 				'icon_url'   => $plugin_data['custom_icon'],
 				'position'   => $plugin_data['position'],
 				'callback'   => array($this, 'add_setting_root_div'),
 				'submenu'    => array(
 					array(
-						'menu_title' => esc_html__('Dashboard', 'wpab-boilerplate'),
-						'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME,
+						'menu_title' => esc_html__('Dashboard', 'optionbay'),
+						'menu_slug'  => OPTIONBAY_PLUGIN_NAME,
 						'callback'   => array($this, 'add_setting_root_div')
 					),
 					array(
-						'menu_title' => esc_html__('Settings', 'wpab-boilerplate'),
-						'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME . '#/settings',
+						'menu_title' => esc_html__('Settings', 'optionbay'),
+						'menu_slug'  => OPTIONBAY_PLUGIN_NAME . '#/settings',
 						'callback'   => array($this, 'add_setting_root_div')
 					),
 					array(
-						'menu_title' => esc_html__('Components', 'wpab-boilerplate'),
-						'menu_slug'  => WPAB_BOILERPLATE_PLUGIN_NAME . '#/components-classic',
+						'menu_title' => esc_html__('Components', 'optionbay'),
+						'menu_slug'  => OPTIONBAY_PLUGIN_NAME . '#/components-classic',
 						'callback'   => array($this, 'add_setting_root_div')
 					)
 				)
@@ -118,13 +118,13 @@ class Admin
 		);
 
 		foreach ($menu_items as $item) {
-			if (function_exists('wpab_boilerplate_log')) {
-				wpab_boilerplate_log('Admin: Adding menu page: ' . $item['menu_title'], 'debug');
+			if (function_exists('optionbay_log')) {
+				optionbay_log('Admin: Adding menu page: ' . $item['menu_title'], 'debug');
 			}
 			add_menu_page(
 				$item['page_title'],
 				$item['menu_title'],
-				'manage_wpab_boilerplate',
+				'manage_optionbay',
 				$item['menu_slug'],
 				$item['callback'],
 				$item['icon_url'],
@@ -138,7 +138,7 @@ class Admin
 						$item['menu_slug'], // Parent slug
 						$item['page_title'] . ' - ' . $sub['menu_title'], // Page title
 						$sub['menu_title'],
-						'manage_wpab_boilerplate',
+						'manage_optionbay',
 						$sub['menu_slug'],
 						$sub['callback']
 					);
@@ -148,16 +148,16 @@ class Admin
 
 		// Store menu info for other methods
 		$this->menu_info = array(
-			'menu_slug' => WPAB_BOILERPLATE_PLUGIN_NAME
+			'menu_slug' => OPTIONBAY_PLUGIN_NAME
 		);
 
 		// Add custom submenu under Products (simulating TubeBay)
 		add_submenu_page(
 			'edit.php?post_type=product',
-			esc_html__('WPAB Boilerplate', 'wpab-boilerplate'),
-			esc_html__('WPAB Boilerplate', 'wpab-boilerplate'),
-			'manage_wpab_boilerplate',
-			'wpab-boilerplate-redirect',
+			esc_html__('OptionBay', 'optionbay'),
+			esc_html__('OptionBay', 'optionbay'),
+			'manage_optionbay',
+			'optionbay-redirect',
 			array($this, 'redirect_to_dashboard')
 		);
 	}
@@ -169,7 +169,7 @@ class Admin
 	 */
 	public function redirect_to_dashboard()
 	{
-		$redirect_url = admin_url('admin.php?page=' . WPAB_BOILERPLATE_PLUGIN_NAME);
+		$redirect_url = admin_url('admin.php?page=' . OPTIONBAY_PLUGIN_NAME);
 		wp_safe_redirect($redirect_url);
 		exit;
 	}
@@ -185,8 +185,8 @@ class Admin
 	{
 		$screen = get_current_screen();
 		$admin_scripts_bases = array(
-			'toplevel_page_' . WPAB_BOILERPLATE_PLUGIN_NAME,
-			'product_page_' . WPAB_BOILERPLATE_PLUGIN_NAME, // Match TubeBay
+			'toplevel_page_' . OPTIONBAY_PLUGIN_NAME,
+			'product_page_' . OPTIONBAY_PLUGIN_NAME, // Match TubeBay
 		);
 		if (!(isset($screen->base) && in_array($screen->base, $admin_scripts_bases, true))) {
 			return false;
@@ -219,9 +219,9 @@ class Admin
 	 */
 	public function add_setting_root_div()
 	{
-		echo '<div id="' . esc_attr(WPAB_BOILERPLATE_PLUGIN_NAME) . '">
+		echo '<div id="' . esc_attr(OPTIONBAY_PLUGIN_NAME) . '">
 			<div class="wpab-loader-container">
-				<p>' . esc_html__('Loading...', 'wpab-boilerplate') . '</p>
+				<p>' . esc_html__('Loading...', 'optionbay') . '</p>
 			</div>
 		</div>';
 	}
@@ -239,23 +239,23 @@ class Admin
 			return;
 		}
 
-		if (function_exists('wpab_boilerplate_log')) {
-			wpab_boilerplate_log('Admin: Enqueueing admin resources for WPAB menu page', 'debug');
+		if (function_exists('optionbay_log')) {
+			optionbay_log('Admin: Enqueueing admin resources for WPAB menu page', 'debug');
 		}
 
-		$deps_file = WPAB_BOILERPLATE_PATH . 'build/admin.asset.php';
+		$deps_file = OPTIONBAY_PATH . 'build/admin.asset.php';
 		$dependency = array('wp-i18n');
-		$version = WPAB_BOILERPLATE_VERSION;
+		$version = OPTIONBAY_VERSION;
 		if (file_exists($deps_file)) {
 			$deps_file = require $deps_file;
 			$dependency = $deps_file['dependencies'];
 			$version = $deps_file['version'];
-			if (function_exists('wpab_boilerplate_log')) {
-				wpab_boilerplate_log('Admin: Loaded exact build dependencies: ' . wp_json_encode($dependency), 'debug');
+			if (function_exists('optionbay_log')) {
+				optionbay_log('Admin: Loaded exact build dependencies: ' . wp_json_encode($dependency), 'debug');
 			}
 		} else {
-			if (function_exists('wpab_boilerplate_log')) {
-				wpab_boilerplate_log('Admin: Build asset file not found; falling back to default dependencies', 'debug');
+			if (function_exists('optionbay_log')) {
+				optionbay_log('Admin: Build asset file not found; falling back to default dependencies', 'debug');
 			}
 		}
 
@@ -263,55 +263,55 @@ class Admin
 		 * Filters the URL of the main admin JavaScript file.
 		 *
 		 * @since 1.0.0
-		 * @hook wpab_boilerplate_admin_script
+		 * @hook optionbay_admin_script
 		 * @param string $script_url The URL to the admin.js file.
 		 */
-		$admin_script = apply_filters('wpab_boilerplate_admin_script', WPAB_BOILERPLATE_URL . 'build/admin.js');
-		wp_enqueue_script(WPAB_BOILERPLATE_PLUGIN_NAME, $admin_script, $dependency, $version, true);
+		$admin_script = apply_filters('optionbay_admin_script', OPTIONBAY_URL . 'build/admin.js');
+		wp_enqueue_script(OPTIONBAY_PLUGIN_NAME, $admin_script, $dependency, $version, true);
 
 		/**
 		 * Filters the URL of the main admin CSS file.
 		 *
 		 * @since 1.0.0
-		 * @hook wpab_boilerplate_admin_css
+		 * @hook optionbay_admin_css
 		 * @param string $style_url The URL to the admin.css file.
 		 */
-		$admin_css = apply_filters('wpab_boilerplate_admin_css', WPAB_BOILERPLATE_URL . 'build/admin.css');
-		wp_enqueue_style(WPAB_BOILERPLATE_PLUGIN_NAME, $admin_css, array(), $version);
-		wp_style_add_data(WPAB_BOILERPLATE_PLUGIN_NAME, 'rtl', 'replace');
+		$admin_css = apply_filters('optionbay_admin_css', OPTIONBAY_URL . 'build/admin.css');
+		wp_enqueue_style(OPTIONBAY_PLUGIN_NAME, $admin_css, array(), $version);
+		wp_style_add_data(OPTIONBAY_PLUGIN_NAME, 'rtl', 'replace');
 
 		/**
 		 * Filters the data passed from PHP to the main admin JavaScript application.
 		 *
 		 * @since 1.0.0
-		 * @hook wpab_boilerplate_admin_localize
+		 * @hook optionbay_admin_localize
 		 * @param array $localize An associative array of data to be passed to JS.
 		 * @return array The filtered localization data array.
 		 */
 		$localize = apply_filters(
-			'wpab_boilerplate_admin_localize',
+			'optionbay_admin_localize',
 			array(
 				'version'     => $version,
-				'root_id'     => WPAB_BOILERPLATE_PLUGIN_NAME,
+				'root_id'     => OPTIONBAY_PLUGIN_NAME,
 				'nonce'       => wp_create_nonce('wp_rest'),
-				'store'       => WPAB_BOILERPLATE_PLUGIN_NAME,
+				'store'       => OPTIONBAY_PLUGIN_NAME,
 				'rest_url'    => get_rest_url(),
 				'pluginData'  => $this->get_plugin_data(),
 				'wpSettings'  => array(
 					'dateFormat' => get_option('date_format'),
 					'timeFormat' => get_option('time_format'),
 				),
-				'plugin_settings' => \WpabBoilerplate\Core\Settings::get_instance()->get_settings(),
+				'plugin_settings' => \OptionBay\Core\Settings::get_instance()->get_settings(),
 				'products_url'    => admin_url('edit.php?post_type=product'),
 			)
 		);
 
-		wp_localize_script(WPAB_BOILERPLATE_PLUGIN_NAME, 'wpabBoilerplate_Localize', $localize);
+		wp_localize_script(OPTIONBAY_PLUGIN_NAME, 'wpabBoilerplate_Localize', $localize);
 
-		$path_to_check = WPAB_BOILERPLATE_PATH . 'languages';
+		$path_to_check = OPTIONBAY_PATH . 'languages';
 		wp_set_script_translations(
-			WPAB_BOILERPLATE_PLUGIN_NAME,
-			'wpab-boilerplate',
+			OPTIONBAY_PLUGIN_NAME,
+			'optionbay',
 			$path_to_check
 		);
 	}
@@ -329,14 +329,14 @@ class Admin
 	 */
 	public function add_plugin_action_links($actions, $plugin_file, $plugin_data, $context)
 	{
-		$actions[] = '<a href="' . esc_url(menu_page_url($this->menu_info['menu_slug'], false)) . '">' . esc_html__('Settings', 'wpab-boilerplate') . '</a>';
+		$actions[] = '<a href="' . esc_url(menu_page_url($this->menu_info['menu_slug'], false)) . '">' . esc_html__('Settings', 'optionbay') . '</a>';
 		return $actions;
 	}
 	/**
 	 * Register the hooks for the admin area.
 	 *
 	 * @since    1.0.0
-	 * @param    \WpabBoilerplate\Core\Plugin $plugin The Plugin instance.
+	 * @param    \OptionBay\Core\Plugin $plugin The Plugin instance.
 	 * @return   void
 	 */
 	public function run($plugin)
@@ -347,7 +347,7 @@ class Admin
 		$loader->add_filter('admin_body_class', $this, 'add_has_sticky_header');
 		$loader->add_action('admin_enqueue_scripts', $this, 'enqueue_resources');
 
-		$plugin_basename = plugin_basename(WPAB_BOILERPLATE_PATH . 'wpab-boilerplate.php');
+		$plugin_basename = plugin_basename(OPTIONBAY_PATH . 'optionbay.php');
 		$loader->add_filter('plugin_action_links_' . $plugin_basename, $this, 'add_plugin_action_links', 10, 4);
 	}
 }

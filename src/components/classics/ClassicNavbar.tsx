@@ -14,23 +14,19 @@ const ClassicNavbar: FC = () => {
 
   const menus: MenuLink[] = [
     {
-      label: __("Dashboard", "wpab-boilerplate"),
+      label: __("Dashboard", "optionbay"),
       path: "/",
     },
     {
-      label: __("Logs", "wpab-boilerplate"),
+      label: __("Option Groups", "optionbay"),
+      path: "/option-groups",
+    },
+    {
+      label: __("Logs", "optionbay"),
       path: "/logs",
     },
     {
-      label: __("Components", "wpab-boilerplate"),
-      path: "/components",
-    },
-    {
-      label: __("Components (Classic)", "wpab-boilerplate"),
-      path: "/components-classic",
-    },
-    {
-      label: __("Settings", "wpab-boilerplate"),
+      label: __("Settings", "optionbay"),
       path: "/settings",
     },
   ];

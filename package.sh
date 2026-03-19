@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define the zip filename
-ZIP_NAME="wpab-boilerplate.zip"
-PLUGIN_SLUG="wpab-boilerplate"
+ZIP_NAME="optionbay.zip"
+PLUGIN_SLUG="optionbay"
 
 # Cleanup previous build if exists
 rm -rf dist
@@ -23,7 +23,7 @@ echo "Copying files..."
 cp index.php dist/$PLUGIN_SLUG/
 cp readme.txt dist/$PLUGIN_SLUG/
 cp uninstall.php dist/$PLUGIN_SLUG/
-cp wpab-boilerplate.php dist/$PLUGIN_SLUG/
+cp optionbay.php dist/$PLUGIN_SLUG/
 
 # Create the zip file
 echo "Creating zip file..."
@@ -42,4 +42,4 @@ echo "- build/"
 echo "- index.php"
 echo "- readme.txt"
 echo "- uninstall.php"
-echo "- wpab-boilerplate.php"
+echo "- optionbay.php"

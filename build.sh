@@ -27,7 +27,7 @@ fi
 
 # 4. Add headers
 HEADER="/*
- * WPAB Boilerplate
+ * OptionBay
  * Copyright (c) $(date +%Y) WP Anchor Bay - https://wpanchorbay.com
  *
  * This software is licensed under the GPLv2 or later.

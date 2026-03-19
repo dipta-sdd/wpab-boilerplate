@@ -1,6 +1,6 @@
 <?php
 
-namespace WpabBoilerplate\Core;
+namespace OptionBay\Core;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -37,7 +37,7 @@ class Cron
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const HOOK_PREFIX = 'wpab_boilerplate_cron_';
+	const HOOK_PREFIX = 'optionbay_cron_';
 
 	/**
 	 * Transient key for the merged-logs cache.
@@ -45,7 +45,7 @@ class Cron
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const LOG_CACHE_KEY = 'wpab_boilerplate_logs_cache';
+	const LOG_CACHE_KEY = 'optionbay_logs_cache';
 
 	/**
 	 * Option key that stores the last-run timestamps for fallback detection.
@@ -53,7 +53,7 @@ class Cron
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const LAST_RUN_OPTION = 'wpab_boilerplate_cron_last_run';
+	const LAST_RUN_OPTION = 'optionbay_cron_last_run';
 
 	/**
 	 * Registry of dynamically scheduled callbacks.
@@ -122,11 +122,11 @@ class Cron
 		 * Filters the list of cron jobs registered by the plugin.
 		 *
 		 * @since 1.0.0
-		 * @hook wpab_boilerplate_cron_jobs
+		 * @hook optionbay_cron_jobs
 		 * @param array $jobs The array of cron job definitions.
 		 * @return array
 		 */
-		return apply_filters('wpab_boilerplate_cron_jobs', array(
+		return apply_filters('optionbay_cron_jobs', array(
 			array(
 				'hook'     => self::HOOK_PREFIX . 'purge_old_logs',
 				'interval' => 'daily',
@@ -186,7 +186,7 @@ class Cron
 
 			foreach ( $hooks as $hook => $events ) {
 				// Only handle our own plugin hooks.
-				if ( strpos( $hook, 'wpab_boilerplate_' ) !== 0 ) {
+				if ( strpos( $hook, 'optionbay_' ) !== 0 ) {
 					continue;
 				}
 
@@ -245,7 +245,7 @@ class Cron
 		}
 
 		$scheduled = wp_schedule_single_event( time() + $delay, $hook, $args );
-		wpab_boilerplate_log( 'Cron: scheduled single event "' . $hook . '" to run in ' . $delay . 's.', 'INFO' );
+		optionbay_log( 'Cron: scheduled single event "' . $hook . '" to run in ' . $delay . 's.', 'INFO' );
 		return (bool) $scheduled;
 	}
 
@@ -274,7 +274,7 @@ class Cron
 		}
 
 		$scheduled = wp_schedule_event( time(), $interval, $hook, $args );
-		wpab_boilerplate_log( 'Cron: scheduled recurring event "' . $hook . '" with interval "' . $interval . '".', 'INFO' );
+		optionbay_log( 'Cron: scheduled recurring event "' . $hook . '" with interval "' . $interval . '".', 'INFO' );
 		return (bool) $scheduled;
 	}
 
@@ -307,8 +307,8 @@ class Cron
 	 */
 	private function maybe_prefix_hook( $hook )
 	{
-		if ( strpos( $hook, 'wpab_boilerplate_' ) !== 0 ) {
-			$hook = 'wpab_boilerplate_' . $hook;
+		if ( strpos( $hook, 'optionbay_' ) !== 0 ) {
+			$hook = 'optionbay_' . $hook;
 		}
 		return $hook;
 	}
@@ -427,7 +427,7 @@ class Cron
 	 */
 	public function test_job()
 	{
-		wpab_boilerplate_log('Test cron job executed successfully.', 'error');
+		optionbay_log('Test cron job executed successfully.', 'error');
 	}
 
 	// ------------------------------------------------------------------
@@ -444,7 +444,7 @@ class Cron
 	public function get_log_dir()
 	{
 		$upload_dir = wp_upload_dir();
-		return $upload_dir['basedir'] . '/' . WPAB_BOILERPLATE_TEXT_DOMAIN . '-logs/';
+		return $upload_dir['basedir'] . '/' . OPTIONBAY_TEXT_DOMAIN . '-logs/';
 	}
 
 	/**
@@ -499,7 +499,7 @@ class Cron
 	 * Register the hooks for the cron system.
 	 *
 	 * @since 1.0.0
-	 * @param \WpabBoilerplate\Core\Plugin $plugin The Plugin instance.
+	 * @param \OptionBay\Core\Plugin $plugin The Plugin instance.
 	 * @return void
 	 */
 	public function run($plugin)
@@ -519,6 +519,6 @@ class Cron
 		}
 
 		// Register the test cron callback.
-		add_action('wpab_boilerplate_test_cron', array($this, 'test_job'));
+		add_action('optionbay_test_cron', array($this, 'test_job'));
 	}
 }

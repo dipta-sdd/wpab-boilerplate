@@ -15,24 +15,24 @@ const Navbar: FC = () => {
 
   const menus: MenuLink[] = [
     {
-      label: __("Dashboard", "wpab-boilerplate"),
+      label: __("Dashboard", "optionbay"),
       path: "/",
     },
     // Add your menu items here
     {
-      label: __("Logs", "wpab-boilerplate"),
+      label: __("Logs", "optionbay"),
       path: "/logs",
     },
     {
-      label: __("Components", "wpab-boilerplate"),
+      label: __("Components", "optionbay"),
       path: "/components",
     },
     {
-      label: __("Components (Classic)", "wpab-boilerplate"),
+      label: __("Components (Classic)", "optionbay"),
       path: "/components-classic",
     },
     // {
-    //   label: __("Settings", "wpab-boilerplate"),
+    //   label: __("Settings", "optionbay"),
     //   path: "/settings",
     // },
   ];
@@ -52,7 +52,7 @@ const Navbar: FC = () => {
         <div className="wpab-flex wpab-px-[12px] wpab-justify-between wpab-items-center wpab-flex-wrap md:wpab-flex-nowrap wpab-gap-[4px] wpab-relative">
           <div className="wpab-flex wpab-items-center wpab-gap-[4px] wpab-py-[12px]">
             <span className="wpab-font-[700] wpab-text-[16px] wpab-text-gray-900">
-              {store.pluginData?.plugin_name || "WPAB Boilerplate"}
+              {store.pluginData?.plugin_name || "OptionBay"}
             </span>
           </div>
           <div

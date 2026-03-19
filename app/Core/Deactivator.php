@@ -1,6 +1,6 @@
 <?php
 
-namespace WpabBoilerplate\Core;
+namespace OptionBay\Core;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -42,7 +42,7 @@ class Deactivator
 	private static function remove_custom_capabilities()
 	{
 		$roles = get_editable_roles();
-		$custom_capability = 'manage_wpab_boilerplate';
+		$custom_capability = 'manage_optionbay';
 
 		foreach ($roles as $role_name => $role_info) {
 			$role = get_role($role_name);

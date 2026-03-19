@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import "./styles/index.scss";
 import App from "./App";
 
-const rootElement = document.getElementById("wpab-boilerplate");
+const rootElement = document.getElementById("optionbay");
 if (rootElement) {
   createRoot(rootElement).render(<App />);
 }

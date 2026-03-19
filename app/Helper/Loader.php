@@ -1,6 +1,6 @@
 <?php
 
-namespace WpabBoilerplate\Helper;
+namespace OptionBay\Helper;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {

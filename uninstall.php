@@ -12,25 +12,25 @@ if (! defined('WP_UNINSTALL_PLUGIN')) {
 	exit;
 }
 
-define('WPAB_BOILERPLATE_OPTION_NAME', 'wpab_boilerplate');
-define('WPAB_BOILERPLATE_TEXT_DOMAIN', 'wpab-boilerplate');
+define('OPTIONBAY_OPTION_NAME', 'optionbay');
+define('OPTIONBAY_TEXT_DOMAIN', 'optionbay');
 
-wpab_boilerplate_run_uninstall();
+optionbay_run_uninstall();
 
 /**
  * The main controller function for the uninstallation process.
  *
  * @since 1.0.0
  */
-function wpab_boilerplate_run_uninstall()
+function optionbay_run_uninstall()
 {
-	$options = get_option(WPAB_BOILERPLATE_OPTION_NAME);
+	$options = get_option(OPTIONBAY_OPTION_NAME);
 
 	// Only proceed if user opted in to delete all data.
 	if (! empty($options['advanced_deleteAllOnUninstall']) && true === $options['advanced_deleteAllOnUninstall']) {
-		wpab_boilerplate_drop_custom_tables();
-		wpab_boilerplate_delete_plugin_options();
-		wpab_boilerplate_remove_capabilities();
+		optionbay_drop_custom_tables();
+		optionbay_delete_plugin_options();
+		optionbay_remove_capabilities();
 	}
 }
 
@@ -39,12 +39,12 @@ function wpab_boilerplate_run_uninstall()
  *
  * @since 1.0.0
  */
-function wpab_boilerplate_drop_custom_tables()
+function optionbay_drop_custom_tables()
 {
 	global $wpdb;
 
 	$tables = array(
-		$wpdb->prefix . 'wpab_boilerplate_items',
+		$wpdb->prefix . 'optionbay_items',
 	);
 
 	foreach ($tables as $table) {
@@ -57,9 +57,9 @@ function wpab_boilerplate_drop_custom_tables()
  *
  * @since 1.0.0
  */
-function wpab_boilerplate_delete_plugin_options()
+function optionbay_delete_plugin_options()
 {
-	delete_option(WPAB_BOILERPLATE_OPTION_NAME);
+	delete_option(OPTIONBAY_OPTION_NAME);
 }
 
 /**
@@ -67,14 +67,14 @@ function wpab_boilerplate_delete_plugin_options()
  *
  * @since 1.0.0
  */
-function wpab_boilerplate_remove_capabilities()
+function optionbay_remove_capabilities()
 {
 	$editable_roles = get_editable_roles();
 
 	foreach ($editable_roles as $role_name => $role_info) {
 		$role = get_role($role_name);
-		if ($role && $role->has_cap('manage_wpab_boilerplate')) {
-			$role->remove_cap('manage_wpab_boilerplate');
+		if ($role && $role->has_cap('manage_optionbay')) {
+			$role->remove_cap('manage_optionbay');
 		}
 	}
 }

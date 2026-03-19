@@ -1,8 +1,8 @@
 <?php
 
-namespace WpabBoilerplate\Core;
+namespace OptionBay\Core;
 
-use WpabBoilerplate\Data\DbManager;
+use OptionBay\Data\DbManager;
 
 /**
  * Fired during plugin activation.
@@ -71,7 +71,7 @@ class Activator
 	private static function secure_log_directory()
 	{
 		$upload_dir = wp_upload_dir();
-		$log_dir = $upload_dir['basedir'] . '/' . WPAB_BOILERPLATE_TEXT_DOMAIN . '-logs/';
+		$log_dir = $upload_dir['basedir'] . '/' . OPTIONBAY_TEXT_DOMAIN . '-logs/';
 
 		if (!is_dir($log_dir)) {
 			wp_mkdir_p($log_dir);
@@ -105,7 +105,7 @@ class Activator
 	 */
 	private static function add_plugin_roles_and_capabilities()
 	{
-		$custom_capability = 'manage_wpab_boilerplate';
+		$custom_capability = 'manage_optionbay';
 
 		$admin_role = get_role('administrator');
 		if ($admin_role && !$admin_role->has_cap($custom_capability)) {

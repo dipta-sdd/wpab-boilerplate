@@ -17,21 +17,21 @@ if (!defined('ABSPATH')) {
 
 
 
-if (!function_exists('wpab_boilerplate_log')) {
+if (!function_exists('optionbay_log')) {
 	/**
 	 * Log messages to the debug log file.
 	 *
 	 * @param mixed  $message  The message to log.
 	 * @param string $level    The log level (e.g., 'DEBUG', 'INFO', 'ERROR').
 	 */
-	function wpab_boilerplate_log($message, $level = 'INFO')
+	function optionbay_log($message, $level = 'INFO')
 	{
-		$enable_logging = WpabBoilerplate\Core\Settings::get_instance()->get_settings('debug_enableMode');
+		$enable_logging = OptionBay\Core\Settings::get_instance()->get_settings('debug_enableMode');
 		if (!$enable_logging && ($level !== 'ERROR' && $level !== 'error')) {
 			return;
 		}
 		$upload_dir = wp_upload_dir();
-		$log_dir = $upload_dir['basedir'] . '/' . WPAB_BOILERPLATE_TEXT_DOMAIN . '-logs/';
+		$log_dir = $upload_dir['basedir'] . '/' . OPTIONBAY_TEXT_DOMAIN . '-logs/';
 
 		if (!is_dir($log_dir)) {
 			wp_mkdir_p($log_dir);
@@ -58,7 +58,7 @@ if (!function_exists('wpab_boilerplate_log')) {
 }
 
 
-if (!function_exists('wpab_boilerplate_get_value')) {
+if (!function_exists('optionbay_get_value')) {
 	/**
 	 * Safely retrieve a value from a nested array or object using dot notation.
 	 * Returns default if key is missing OR if value is an empty string.
@@ -69,7 +69,7 @@ if (!function_exists('wpab_boilerplate_get_value')) {
 	 * @param mixed        $default The default value if key is not found.
 	 * @return mixed
 	 */
-	function wpab_boilerplate_get_value($target, $key, $default = null)
+	function optionbay_get_value($target, $key, $default = null)
 	{
 		if (is_null($key) || trim($key) == '') {
 			return $target;

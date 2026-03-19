@@ -1,4 +1,4 @@
-=== WPAB Boilerplate ===
+=== OptionBay ===
 Contributors: wpanchorbay
 Tags: boilerplate, react, typescript, admin, rest-api
 Requires at least: 5.8
@@ -12,7 +12,7 @@ A modern WordPress plugin boilerplate with React/TypeScript admin UI, REST API i
 
 == Description ==
 
-**WPAB Boilerplate** is a modern starting point for building WordPress plugins. It bridges the gap between classic WordPress development and modern JavaScript tooling.
+**OptionBay** is a modern starting point for building WordPress plugins. It bridges the gap between classic WordPress development and modern JavaScript tooling.
 
 **Key Features:**
 

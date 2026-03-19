@@ -1,4 +1,4 @@
-# WPAB Boilerplate (Classic & Modern)
+# OptionBay (Classic & Modern)
 
 A comprehensive, production-ready WordPress plugin boilerplate that bridges the gap between modern React/TypeScript development and native WordPress/WooCommerce aesthetics.
 
@@ -34,7 +34,7 @@ This boilerplate is designed to provide everything you need to build a complex, 
 ## 📁 Directory Structure
 
 ``` text
-wpab-boilerplate-classic/
+optionbay-classic/
 ├── app/                        # PHP Backend Application
 │   ├── Admin/
 │   │   ├── Admin.php           # Admin menu & localized script enqueuing
@@ -82,7 +82,7 @@ wpab-boilerplate-classic/
 ├── assets/                     # Images, icons, and static media
 ├── languages/                  # i18n translation files (.pot, .json)
 ├── vendor/                     # Composer dependencies (PHP)
-├── wpab-boilerplate.php        # Plugin bootstrap & autoloader
+├── optionbay.php        # Plugin bootstrap & autoloader
 ├── uninstall.php               # Cleanup on plugin deletion
 ├── rename.sh                   # Script for global find & replace
 ├── package.json                # NPM configuration
@@ -109,12 +109,12 @@ To white-label the boilerplate, replace these identifier strings throughout the 
 
 | Find String                 | Replace With (Example) | Context                     |
 | --------------------------- | ---------------------- | --------------------------- |
-| `WpabBoilerplate`           | `YourNamespace`        | PHP Namespaces              |
-| `WPAB_BOILERPLATE_`         | `YOUR_PLUGIN_`         | PHP Constants               |
-| `wpab-boilerplate`          | `your-plugin-slug`     | Text domains, URLs, Classes |
-| `wpab_boilerplate`          | `your_plugin_slug`     | PHP Variable/Option names   |
+| `OptionBay`           | `YourNamespace`        | PHP Namespaces              |
+| `OPTIONBAY_`         | `YOUR_PLUGIN_`         | PHP Constants               |
+| `optionbay`          | `your-plugin-slug`     | Text domains, URLs, Classes |
+| `optionbay`          | `your_plugin_slug`     | PHP Variable/Option names   |
 | `wpabBoilerplate`           | `yourPlugin`           | JS Globals                  |
-| `WPAB Boilerplate`          | `Your Plugin Title`    | UI Text                     |
+| `OptionBay`          | `Your Plugin Title`    | UI Text                     |
 | `wpab-`                     | `yourprefix-`          | Tailwind CSS Prefix         |
 
 ### 3. Install Dependencies

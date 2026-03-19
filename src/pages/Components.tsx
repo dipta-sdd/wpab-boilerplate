@@ -110,12 +110,12 @@ const Components: FC = () => {
     <div className="wpab-p-[24px]  wpab-space-y-[32px]">
       <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[32px] wpab-border wpab-border-gray-200 wpab-shadow-sm">
         <h1 className="wpab-text-[28px] wpab-font-[800] wpab-text-gray-900 wpab-mb-[8px]">
-          {__("Components Showcase", "wpab-boilerplate")}
+          {__("Components Showcase", "optionbay")}
         </h1>
         <p className="wpab-text-[15px] wpab-text-gray-600">
           {__(
             "Every variant, color, and size available in our common component library.",
-            "wpab-boilerplate",
+            "optionbay",
           )}
         </p>
       </div>
@@ -542,7 +542,7 @@ const Components: FC = () => {
             </div>
           </div>
           <Subsection title="Utility">
-            <CopyToClipboard text="wpab-boilerplate-token-123" />
+            <CopyToClipboard text="optionbay-token-123" />
           </Subsection>
         </Section>
       </div>

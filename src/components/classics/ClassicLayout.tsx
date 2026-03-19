@@ -11,11 +11,15 @@ const ClassicLayout: FC = () => {
   // Determine page title based on route
   const getPageTitle = () => {
     const path = location.pathname;
-    if (path === "/") return __("Dashboard", "wpab-boilerplate");
-    if (path === "/logs") return __("Logs", "wpab-boilerplate");
-    if (path === "/components") return __("Modern Components Showcase", "wpab-boilerplate");
-    if (path === "/components-classic") return __("Classic Components Showcase", "wpab-boilerplate");
-    return store.pluginData?.plugin_name || __("WPAB Boilerplate", "wpab-boilerplate");
+    if (path === "/") return __("Dashboard", "optionbay");
+    if (path === "/logs") return __("Logs", "optionbay");
+    if (path === "/option-groups/new") return __("New Option Group", "optionbay");
+    if (path.startsWith("/option-groups/")) return __("Edit Option Group", "optionbay");
+    if (path === "/option-groups") return __("Option Groups", "optionbay");
+    if (path === "/components") return __("Modern Components Showcase", "optionbay");
+    if (path === "/components-classic") return __("Classic Components Showcase", "optionbay");
+    if (path === "/settings") return __("Settings", "optionbay");
+    return store.pluginData?.plugin_name || __("OptionBay", "optionbay");
   };
 
   return (

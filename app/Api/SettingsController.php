@@ -1,13 +1,13 @@
 <?php
 
-namespace WpabBoilerplate\Api;
+namespace OptionBay\Api;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
     exit;
 }
 
-use WpabBoilerplate\Core\Settings;
+use OptionBay\Core\Settings;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -112,7 +112,7 @@ class SettingsController extends ApiController
 
         return new WP_REST_Response(array(
             'success' => true,
-            'message' => __('Settings updated successfully.', 'wpab-boilerplate'),
+            'message' => __('Settings updated successfully.', 'optionbay'),
             'data'    => $settings_instance->get_settings(),
         ), 200);
     }

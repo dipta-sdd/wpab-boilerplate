@@ -29,14 +29,14 @@ const Settings: React.FC = () => {
   const fetchSettings = async () => {
     try {
       const response: any = await apiFetch({
-        path: "wpab-boilerplate/v1/settings",
+        path: "optionbay/v1/settings",
       });
       if (response.success) {
         setSettings(response.data);
       }
     } catch (error) {
       console.error("Error fetching settings:", error);
-      addToast(__("Failed to load settings.", "wpab-boilerplate"), "error");
+      addToast(__("Failed to load settings.", "optionbay"), "error");
     } finally {
       setIsLoading(false);
     }
@@ -47,17 +47,17 @@ const Settings: React.FC = () => {
     setIsSaving(true);
     try {
       const response: any = await apiFetch({
-        path: "wpab-boilerplate/v1/settings",
+        path: "optionbay/v1/settings",
         method: "POST",
         data: settings,
       });
       if (response.success) {
         setSettings(response.data);
-        addToast(__("Settings saved successfully.", "wpab-boilerplate"), "success");
+        addToast(__("Settings saved successfully.", "optionbay"), "success");
       }
     } catch (error) {
       console.error("Error saving settings:", error);
-      addToast(__("Failed to save settings.", "wpab-boilerplate"), "error");
+      addToast(__("Failed to save settings.", "optionbay"), "error");
     } finally {
       setIsSaving(false);
     }
@@ -66,7 +66,7 @@ const Settings: React.FC = () => {
   if (isLoading) {
     return (
       <div className="wpab-p-page-default">
-        <p>{__("Loading settings...", "wpab-boilerplate")}</p>
+        <p>{__("Loading settings...", "optionbay")}</p>
       </div>
     );
   }
@@ -74,7 +74,7 @@ const Settings: React.FC = () => {
   if (!settings) {
     return (
       <div className="wpab-p-page-default">
-        <p>{__("Failed to load settings.", "wpab-boilerplate")}</p>
+        <p>{__("Failed to load settings.", "optionbay")}</p>
       </div>
     );
   }
@@ -82,34 +82,34 @@ const Settings: React.FC = () => {
   return (
     <div className="wpab-p-page-default wpab-ignore-preflight">
       <ClassicSettingsTable
-        title={__("Global Settings", "wpab-boilerplate")}
+        title={__("Global Settings", "optionbay")}
         description={__(
           "Configure the main functionality of your plugin.",
-          "wpab-boilerplate"
+          "optionbay"
         )}
         fields={[
           {
             id: "global_enableFeature",
-            label: __("Enable Core Feature", "wpab-boilerplate"),
-            tooltip: __("Toggle the main functionality of the plugin.", "wpab-boilerplate"),
+            label: __("Enable Core Feature", "optionbay"),
+            tooltip: __("Toggle the main functionality of the plugin.", "optionbay"),
             render: () => (
               <ClassicCheckbox
                 checked={settings.global_enableFeature}
                 onChange={(val) =>
                   setSettings({ ...settings, global_enableFeature: val })
                 }
-                label={__("Enable the amazing feature", "wpab-boilerplate")}
+                label={__("Enable the amazing feature", "optionbay")}
                 description={__(
                   "When enabled, the plugin will perform its core magic.",
-                  "wpab-boilerplate"
+                  "optionbay"
                 )}
               />
             ),
           },
           {
             id: "global_exampleText",
-            label: __("Welcome Message", "wpab-boilerplate"),
-            tooltip: __("The text shown on the dashboard.", "wpab-boilerplate"),
+            label: __("Welcome Message", "optionbay"),
+            tooltip: __("The text shown on the dashboard.", "optionbay"),
             render: () => (
               <ClassicInput
                 value={settings.global_exampleText}
@@ -118,7 +118,7 @@ const Settings: React.FC = () => {
                 }
                 description={__(
                   "Enter a custom welcome message for your users.",
-                  "wpab-boilerplate"
+                  "optionbay"
                 )}
                 size="regular"
               />
@@ -128,32 +128,32 @@ const Settings: React.FC = () => {
       />
 
       <ClassicSettingsTable
-        title={__("Advanced Settings", "wpab-boilerplate")}
+        title={__("Advanced Settings", "optionbay")}
         description={__(
           "Careful! These settings affect data persistence and debugging.",
-          "wpab-boilerplate"
+          "optionbay"
         )}
         fields={[
           {
             id: "debug_enableMode",
-            label: __("Debug Mode", "wpab-boilerplate"),
+            label: __("Debug Mode", "optionbay"),
             render: () => (
               <ClassicCheckbox
                 checked={settings.debug_enableMode}
                 onChange={(val) =>
                   setSettings({ ...settings, debug_enableMode: val })
                 }
-                label={__("Enable developer logging", "wpab-boilerplate")}
+                label={__("Enable developer logging", "optionbay")}
                 description={__(
                   "Detailed logs will be written to the database for troubleshooting.",
-                  "wpab-boilerplate"
+                  "optionbay"
                 )}
               />
             ),
           },
           {
             id: "advanced_deleteAllOnUninstall",
-            label: __("Delete Data on Uninstall", "wpab-boilerplate"),
+            label: __("Delete Data on Uninstall", "optionbay"),
             render: () => (
               <ClassicCheckbox
                 checked={settings.advanced_deleteAllOnUninstall}
@@ -163,10 +163,10 @@ const Settings: React.FC = () => {
                     advanced_deleteAllOnUninstall: val,
                   })
                 }
-                label={__("Purge all plugin data", "wpab-boilerplate")}
+                label={__("Purge all plugin data", "optionbay")}
                 description={__(
                   "WARNING: Checking this will delete all plugin tables and settings when the plugin is deleted.",
-                  "wpab-boilerplate"
+                  "optionbay"
                 )}
               />
             ),
@@ -181,7 +181,7 @@ const Settings: React.FC = () => {
           loading={isSaving}
           disabled={isSaving}
         >
-          {__("Save Changes", "wpab-boilerplate")}
+          {__("Save Changes", "optionbay")}
         </ClassicButton>
       </div>
     </div>

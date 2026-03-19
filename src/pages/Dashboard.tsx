@@ -12,11 +12,11 @@ const Dashboard: FC = () => {
         <p className="wpab-text-[15px] wpab-text-gray-600 wpab-mb-2">
           {__(
             "Your plugin is ready. Start building something amazing with our dual modern and classic components!",
-            "wpab-boilerplate",
+            "optionbay",
           )}
         </p>
         <p className="wpab-text-[12px] wpab-text-gray-400">
-          {__("Version", "wpab-boilerplate")}: {store.version}
+          {__("Version", "optionbay")}: {store.version}
         </p>
       </div>
 
@@ -29,13 +29,13 @@ const Dashboard: FC = () => {
               <span className="wpab-text-[20px]">📄</span>
             </div>
             <h3 className="wpab-text-[16px] wpab-font-[600] wpab-text-gray-900">
-              {__("REST API", "wpab-boilerplate")}
+              {__("REST API", "optionbay")}
             </h3>
           </div>
           <p className="wpab-text-[13px] wpab-text-gray-600">
             {__(
               "A REST API controller is included. See app/Api/SettingsController.php for the pattern.",
-              "wpab-boilerplate",
+              "optionbay",
             )}
           </p>
         </div>
@@ -47,13 +47,13 @@ const Dashboard: FC = () => {
               <span className="wpab-text-[20px]">⚛️</span>
             </div>
             <h3 className="wpab-text-[16px] wpab-font-[600] wpab-text-gray-900">
-              {__("React Components", "wpab-boilerplate")}
+              {__("React Components", "optionbay")}
             </h3>
           </div>
           <p className="wpab-text-[13px] wpab-text-gray-600">
             {__(
               "Pre-built UI components: Button, Input, Select, Modal, Toast, and more in src/components/common/.",
-              "wpab-boilerplate",
+              "optionbay",
             )}
           </p>
         </div>
@@ -65,13 +65,13 @@ const Dashboard: FC = () => {
               <span className="wpab-text-[20px]">🗃️</span>
             </div>
             <h3 className="wpab-text-[16px] wpab-font-[600] wpab-text-gray-900">
-              {__("Database", "wpab-boilerplate")}
+              {__("Database", "optionbay")}
             </h3>
           </div>
           <p className="wpab-text-[13px] wpab-text-gray-600">
             {__(
               "Custom table creation on activation via app/Data/DbManager.php. Includes example items & logs tables.",
-              "wpab-boilerplate",
+              "optionbay",
             )}
           </p>
         </div>

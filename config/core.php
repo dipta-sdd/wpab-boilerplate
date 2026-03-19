@@ -9,7 +9,8 @@
  */
 
 return array(
-    \WpabBoilerplate\Admin\Admin::class,
-    \WpabBoilerplate\Core\Settings::class,
-    \WpabBoilerplate\Core\Cron::class,
+    \OptionBay\Admin\Admin::class,
+    \OptionBay\Core\Settings::class,
+    \OptionBay\Core\Cron::class,
+    \OptionBay\Core\AddonGroup::class,
 );

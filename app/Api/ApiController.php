@@ -1,6 +1,6 @@
 <?php
 
-namespace WpabBoilerplate\Api;
+namespace OptionBay\Api;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -36,7 +36,7 @@ class ApiController extends WP_REST_Controller
 	 *
 	 * @var string
 	 */
-	public $namespace = WPAB_BOILERPLATE_TEXT_DOMAIN . '/';
+	public $namespace = OPTIONBAY_TEXT_DOMAIN . '/';
 
 	/**
 	 * Rest route version.
@@ -94,7 +94,7 @@ class ApiController extends WP_REST_Controller
 	 */
 	public function __clone()
 	{
-		_doing_it_wrong(__FUNCTION__, esc_html__('Cloning is not allowed.', 'wpab-boilerplate'), '1.0.0');
+		_doing_it_wrong(__FUNCTION__, esc_html__('Cloning is not allowed.', 'optionbay'), '1.0.0');
 	}
 
 	/**
@@ -106,7 +106,7 @@ class ApiController extends WP_REST_Controller
 	 */
 	public function __wakeup()
 	{
-		_doing_it_wrong(__FUNCTION__, esc_html__('Unserializing is not allowed.', 'wpab-boilerplate'), '1.0.0');
+		_doing_it_wrong(__FUNCTION__, esc_html__('Unserializing is not allowed.', 'optionbay'), '1.0.0');
 	}
 
 	/**
@@ -118,17 +118,17 @@ class ApiController extends WP_REST_Controller
 	 */
 	public function get_item_permissions_check($request)
 	{
-		if (!current_user_can('manage_wpab_boilerplate')) {
+		if (!current_user_can('manage_optionbay')) {
 			return new WP_Error(
 				'rest_forbidden',
-				__('Sorry, you are not allowed to access this resource.', 'wpab-boilerplate'),
+				__('Sorry, you are not allowed to access this resource.', 'optionbay'),
 				array('status' => rest_authorization_required_code())
 			);
 		}
 
 		$nonce = $request->get_header('X-WP-Nonce');
 		if (!$nonce || !wp_verify_nonce($nonce, 'wp_rest')) {
-			return new WP_Error('rest_nonce_invalid', __('The security token is invalid.', 'wpab-boilerplate'), array('status' => 403));
+			return new WP_Error('rest_nonce_invalid', __('The security token is invalid.', 'optionbay'), array('status' => 403));
 		}
 
 		return true;
@@ -143,10 +143,10 @@ class ApiController extends WP_REST_Controller
 	 */
 	public function update_item_permissions_check($request)
 	{
-		if (!current_user_can('manage_wpab_boilerplate')) {
+		if (!current_user_can('manage_optionbay')) {
 			return new WP_Error(
 				'rest_forbidden',
-				__('Sorry, you are not allowed to access this resource.', 'wpab-boilerplate'),
+				__('Sorry, you are not allowed to access this resource.', 'optionbay'),
 				array('status' => rest_authorization_required_code())
 			);
 		}
@@ -160,7 +160,7 @@ class ApiController extends WP_REST_Controller
 		if (!wp_verify_nonce($nonce, 'wp_rest')) {
 			return new WP_Error(
 				'rest_invalid_nonce',
-				__('Invalid or missing nonce.', 'wpab-boilerplate'),
+				__('Invalid or missing nonce.', 'optionbay'),
 				array('status' => 403)
 			);
 		}

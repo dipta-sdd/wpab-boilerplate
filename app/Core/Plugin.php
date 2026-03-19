@@ -1,14 +1,13 @@
 <?php
 
-namespace WpabBoilerplate\Core;
+namespace OptionBay\Core;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
 	exit;
 }
 
-use WpabBoilerplate\Admin\Admin;
-use WpabBoilerplate\Helper\Loader;
+use OptionBay\Helper\Loader;
 
 /**
  * The core plugin class.
@@ -84,7 +83,7 @@ class Plugin
 	private function define_core_hooks()
 	{
 		// Initialize API controllers from config
-		$api_controllers = include WPAB_BOILERPLATE_PATH . 'config/api.php';
+		$api_controllers = include OPTIONBAY_PATH . 'config/api.php';
 		error_log('API Controllers: ' . print_r($api_controllers, true));
 		if (is_array($api_controllers)) {
 			foreach ($api_controllers as $controller) {
@@ -145,7 +144,7 @@ class Plugin
 	 */
 	public function enqueue_public_styles()
 	{
-		wp_enqueue_style(WPAB_BOILERPLATE_OPTION_NAME . '_public', WPAB_BOILERPLATE_URL . 'assets/css/public.css', array(), WPAB_BOILERPLATE_VERSION);
+		wp_enqueue_style(OPTIONBAY_OPTION_NAME . '_public', OPTIONBAY_URL . 'assets/css/public.css', array(), OPTIONBAY_VERSION);
 	}
 
 	/**
@@ -167,7 +166,7 @@ class Plugin
 	private function define_admin_hooks()
 	{
 		// Initialize Core classes from config
-		$core_classes = include WPAB_BOILERPLATE_PATH . 'config/core.php';
+		$core_classes = include OPTIONBAY_PATH . 'config/core.php';
 		if (is_array($core_classes)) {
 			foreach ($core_classes as $class) {
 				if (class_exists($class) && method_exists($class, 'get_instance')) {
@@ -189,10 +188,10 @@ class Plugin
 	 */
 	public function change_plugin_display_name($plugins)
 	{
-		$plugin_basename = plugin_basename(WPAB_BOILERPLATE_PATH . 'wpab-boilerplate.php');
+		$plugin_basename = plugin_basename(OPTIONBAY_PATH . 'optionbay.php');
 
 		if (isset($plugins[$plugin_basename])) {
-			$plugins[$plugin_basename]['Name'] = 'WPAB Boilerplate';
+			$plugins[$plugin_basename]['Name'] = 'OptionBay';
 		}
 
 		return $plugins;

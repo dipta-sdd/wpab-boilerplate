@@ -1,6 +1,6 @@
 <?php
 
-namespace WpabBoilerplate\Core;
+namespace OptionBay\Core;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -40,7 +40,7 @@ class Settings
 		* Global Settings
 		==================================================*/
 		'global_enableFeature' => true,
-		'global_exampleText'   => 'Hello from WPAB Boilerplate!',
+		'global_exampleText'   => 'Hello from OptionBay!',
 
 		/*==================================================
 		* Advanced Settings
@@ -114,7 +114,7 @@ class Settings
 	 */
 	public function load_settings()
 	{
-		$options = get_option(WPAB_BOILERPLATE_OPTION_NAME);
+		$options = get_option(OPTIONBAY_OPTION_NAME);
 		if (!is_array($options)) {
 			$options = array();
 		}
@@ -140,7 +140,7 @@ class Settings
 		} else {
 			$options = $key_or_data;
 		}
-		update_option(WPAB_BOILERPLATE_OPTION_NAME, $options);
+		update_option(OPTIONBAY_OPTION_NAME, $options);
 		$this->load_settings();
 	}
 
@@ -156,8 +156,8 @@ class Settings
 		$defaults = $this->get_default_settings();
 
 		register_setting(
-			'wpab_boilerplate_settings_group',
-			WPAB_BOILERPLATE_OPTION_NAME,
+			'optionbay_settings_group',
+			OPTIONBAY_OPTION_NAME,
 			array(
 				'type'    => 'object',
 				'default' => $defaults,
@@ -182,12 +182,12 @@ class Settings
 		 * Filters the settings schema for the plugin.
 		 *
 		 * @since 1.0.0
-		 * @hook wpab_boilerplate_options_properties
+		 * @hook optionbay_options_properties
 		 * @param array $setting_properties The associative array of setting properties.
 		 * @return array The filtered array of setting properties.
 		 */
 		$setting_properties = apply_filters(
-			'wpab_boilerplate_options_properties',
+			'optionbay_options_properties',
 			array(
 				'global_enableFeature' => array(
 					'type'    => 'boolean',
@@ -196,7 +196,7 @@ class Settings
 				'global_exampleText' => array(
 					'type'              => 'string',
 					'sanitize_callback' => 'sanitize_text_field',
-					'default'           => 'Hello from WPAB Boilerplate!',
+					'default'           => 'Hello from OptionBay!',
 				),
 				'debug_enableMode' => array(
 					'type'    => 'boolean',
@@ -228,7 +228,7 @@ class Settings
 		$schema = $this->get_settings_schema();
 		$properties = $schema['properties'] ?? array();
 		$default_options = $this->get_default_settings();
-		$sanitized_output = get_option(WPAB_BOILERPLATE_OPTION_NAME, $default_options);
+		$sanitized_output = get_option(OPTIONBAY_OPTION_NAME, $default_options);
 
 		foreach ($properties as $key => $details) {
 			if (!isset($input[$key])) {
@@ -260,7 +260,7 @@ class Settings
 	 * Register the hooks for settings.
 	 *
 	 * @since    1.0.0
-	 * @param    \WpabBoilerplate\Core\Plugin $plugin The Plugin instance.
+	 * @param    \OptionBay\Core\Plugin $plugin The Plugin instance.
 	 * @return   void
 	 */
 	public function run($plugin)

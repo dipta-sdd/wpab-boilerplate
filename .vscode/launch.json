@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for Xdebug (Boilerplate)",
+            "type": "php",
+            "request": "launch",
+            "port": 9003,
+            "pathMappings": {
+                "/var/www/html/wp-content/plugins/optionbay": "${workspaceRoot}"
+            },
+            "xdebugSettings": {
+                "show_exception_notifications": 0
+            }
+        }
+    ]
+}

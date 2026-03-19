@@ -554,24 +554,24 @@ video {
 }
 
 
-.toplevel_page_wpab-boilerplate #wpcontent {
+.toplevel_page_optionbay #wpcontent {
   padding-left: 0;
   background: #f0f0f1;
 }
-.toplevel_page_wpab-boilerplate #wpwrap {
+.toplevel_page_optionbay #wpwrap {
   background: #f0f0f1;
 }
-.toplevel_page_wpab-boilerplate #wpbody-content .notice,
-.toplevel_page_wpab-boilerplate #wpfooter {
+.toplevel_page_optionbay #wpbody-content .notice,
+.toplevel_page_optionbay #wpfooter {
   display: none;
 }
-#wpab-boilerplate {
+#optionbay {
   font-family: 'SF Pro', 'Segoe UI', Tahoma, Verdana, sans-serif;
   color: #000;
 }
-#wpab-boilerplate *,
-#wpab-boilerplate *::before,
-#wpab-boilerplate *::after {
+#optionbay *,
+#optionbay *::before,
+#optionbay *::after {
   box-sizing: border-box;
 }
 

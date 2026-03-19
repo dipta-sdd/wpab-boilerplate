@@ -1,14 +1,14 @@
 {
-  "name": "wpab-boilerplate",
+  "name": "optionbay",
   "version": "1.0.0",
-  "description": "WPAB Boilerplate - A modern WordPress plugin boilerplate with React/TypeScript admin UI.",
+  "description": "OptionBay - A modern WordPress plugin boilerplate with React/TypeScript admin UI.",
   "main": "index.js",
   "scripts": {
     "build": "wp-scripts build",
     "start": "wp-scripts start",
     "build:legacy": "cross-env BUILD_TARGET=legacy wp-scripts build",
     "start:legacy": "cross-env BUILD_TARGET=legacy wp-scripts start",
-    "makepot": "wp i18n make-pot . languages/wpab-boilerplate.pot --domain=wpab-boilerplate --slug=wpab-boilerplate --exclude='node_modules,vendor,src'",
+    "makepot": "wp i18n make-pot . languages/optionbay.pot --domain=optionbay --slug=optionbay --exclude='node_modules,vendor,src'",
     "make-json": "wp i18n make-json languages --no-purge"
   },
   "author": "WPAnchorBay",
@@ -39,6 +39,7 @@
     "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
     "@wordpress/api-fetch": "^7.31.0",
     "@wordpress/date": "^5.28.0",
     "@wordpress/i18n": "^5.26.0",
@@ -48,7 +49,7 @@
     "react-router-dom": "^7.6.3"
   },
   "wp-i18n": {
-    "domain": "wpab-boilerplate",
-    "potFile": "languages/wpab-boilerplate.pot"
+    "domain": "optionbay",
+    "potFile": "languages/optionbay.pot"
   }
 }

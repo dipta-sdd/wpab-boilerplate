@@ -7,7 +7,7 @@ export const useMenuSync = (): void => {
     useEffect(() => {
         const path = location.pathname;
 
-        const selector = `ul.wp-submenu a[href*="admin.php?page=wpab-boilerplate"]`;
+        const selector = `ul.wp-submenu a[href*="admin.php?page=optionbay"]`;
         const baseLink = document.querySelector<HTMLAnchorElement>(selector);
 
         if (baseLink) {

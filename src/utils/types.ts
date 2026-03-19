@@ -1,5 +1,5 @@
 /**
- * Type definitions for the WPAB Boilerplate plugin.
+ * Type definitions for the OptionBay plugin.
  *
  * Customize these types for your own plugin's data structures.
  */
