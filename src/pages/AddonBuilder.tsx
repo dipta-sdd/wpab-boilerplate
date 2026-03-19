@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from "react";
+import { useEffect, useCallback, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { __ } from "@wordpress/i18n";
 import {
@@ -604,6 +604,8 @@ function BuilderInner() {
   const params = useParams<{ id: string }>();
   const isEdit = !!params.id;
 
+  const [activeAssignmentType, setActiveAssignmentType] = useState<"product" | "category" | "tag">("product");
+
   // Load existing group
   useEffect(() => {
     if (!isEdit) return;
@@ -641,6 +643,15 @@ function BuilderInner() {
 
     loadGroup();
   }, [isEdit, params.id, dispatch]);
+
+  // Sync initial assignment type when loading an existing group
+  useEffect(() => {
+    const nonGlobal = state.assignments.filter((a) => a.target_type !== "global");
+    if (nonGlobal.length > 0) {
+      setActiveAssignmentType(nonGlobal[0].target_type as "product" | "category" | "tag");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.settings?.priority]); // Just need to trigger once on load, priority is decent proxy since it's in the payload
 
   // Save handler
   const handleSave = useCallback(async () => {
@@ -920,10 +931,6 @@ function BuilderInner() {
               </div>
 
               {!state.assignments.some((a) => a.target_type === "global") && (() => {
-                // Determine the active assignment type from current data
-                const nonGlobal = state.assignments.filter((a) => a.target_type !== "global");
-                const activeType = nonGlobal.length > 0 ? nonGlobal[0].target_type : "product";
-
                 return (
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     {/* Assignment Type Selector */}
@@ -932,8 +939,9 @@ function BuilderInner() {
                         {__("Assign By", "optionbay")}
                       </label>
                       <ClassicSelect
-                        value={activeType}
+                        value={activeAssignmentType}
                         onChange={(val) => {
+                          setActiveAssignmentType(val as any);
                           // Clear existing non-global assignments when switching type
                           dispatch({ type: "SET_ASSIGNMENTS", payload: [] });
                         }}
@@ -946,7 +954,7 @@ function BuilderInner() {
                     </div>
 
                     {/* Products MultiSelect */}
-                    {activeType === "product" && (
+                    {activeAssignmentType === "product" && (
                       <div>
                         <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
                           {__("Select Products", "optionbay")}
@@ -971,7 +979,7 @@ function BuilderInner() {
                     )}
 
                     {/* Categories MultiSelect */}
-                    {activeType === "category" && (
+                    {activeAssignmentType === "category" && (
                       <div>
                         <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
                           {__("Select Categories", "optionbay")}
@@ -995,7 +1003,7 @@ function BuilderInner() {
                     )}
 
                     {/* Tags MultiSelect */}
-                    {activeType === "tag" && (
+                    {activeAssignmentType === "tag" && (
                       <div>
                         <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
                           {__("Select Tags", "optionbay")}
