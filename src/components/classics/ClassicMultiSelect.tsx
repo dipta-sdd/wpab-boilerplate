@@ -91,30 +91,30 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
   const effectiveOptions = endpoint ? apiOptions : options;
 
   useEffect(() => {
-    let active = true;
-    if (endpoint) {
-      if (!isOpen) return; // Only fetch when opened
-      setIsLoading(true);
-      const url = new URL(
-        endpoint.startsWith("http")
-          ? endpoint
-          : `${window.location.origin}/wp-json${endpoint}`,
-      );
-      if (searchQuery) url.searchParams.append("search", searchQuery);
+    if (!endpoint) return;
+    if (!isOpen) return; // Only fetch when opened
 
-      apiFetch({ path: url.pathname + url.search })
-        .then((res: any) => {
-          if (active) {
-            setApiOptions(res?.data || res || []);
-            setIsLoading(false);
-          }
-        })
-        .catch(() => {
-          if (active) setIsLoading(false);
-        });
-    }
+    let active = true;
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        setIsLoading(true);
+        const separator = endpoint.includes("?") ? "&" : "?";
+        const path = `${endpoint}${separator}search=${encodeURIComponent(searchQuery)}`;
+
+        const res: any = await apiFetch({ path, method: "GET" });
+
+        if (active) {
+          setApiOptions(res?.data || res || []);
+          setIsLoading(false);
+        }
+      } catch {
+        if (active) setIsLoading(false);
+      }
+    }, 300);
+
     return () => {
       active = false;
+      clearTimeout(delayDebounceFn);
     };
   }, [endpoint, searchQuery, isOpen]);
 
@@ -257,9 +257,9 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
 
   const selectId =
     id || `classic-multi-${Math.random().toString(36).slice(2, 9)}`;
-  const sizeClass = size === "short" ? "short" : "regular-text";
+  const sizeClass = size === "short" ? "" : "";
   const explicitWidth =
-    size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
+    size === "short" ? "min-content" : size === "regular" ? "auto" : "100%";
 
   return (
     <div

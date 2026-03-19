@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { __ } from "@wordpress/i18n";
 import {
@@ -7,7 +7,7 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { ClassicButton, ClassicInput, ClassicSelect, ClassicCheckbox } from "../components/classics";
+import { ClassicButton, ClassicInput, ClassicSelect, ClassicCheckbox, ClassicMultiSelect } from "../components/classics";
 import { ClassicRepeater } from "../components/classics/ClassicRepeater";
 import {
   AddonProvider,
@@ -17,6 +17,31 @@ import {
   FieldOption,
 } from "../store/AddonContext";
 import apiFetch from "../utils/apiFetch";
+import { MultiSelectOption } from "../components/common/MultiSelect";
+
+// ─── Product option rendering ────────────────────────────────────────────
+
+/** Custom render for product options in ClassicMultiSelect (shows thumbnail, ID, SKU) */
+function renderProductOption(option: MultiSelectOption) {
+  const opt = option as any;
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      {opt.image && (
+        <img
+          src={opt.image}
+          alt=""
+          style={{ width: 32, height: 32, objectFit: "cover", borderRadius: "4px", flexShrink: 0 }}
+        />
+      )}
+      <div style={{ minWidth: 0 }}>
+        <div style={{ fontWeight: 500, lineHeight: "1.3" }}>{opt.label}</div>
+        <div style={{ fontSize: "11px", color: "#888", lineHeight: "1.3" }}>
+          ID: {opt.value}{opt.sku ? ` • SKU: ${opt.sku}` : ""}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ─── Field Types ─────────────────────────────────────────────────────────
 
@@ -881,7 +906,6 @@ function BuilderInner() {
                       dispatch({
                         type: "SET_ASSIGNMENTS",
                         payload: [
-                          ...state.assignments.filter((a) => a.target_type !== "global"),
                           { target_type: "global", target_id: 0, is_exclusion: false, priority: state.settings.priority },
                         ],
                       });
@@ -895,111 +919,107 @@ function BuilderInner() {
                 />
               </div>
 
-              {!state.assignments.some((a) => a.target_type === "global") && (
-                <>
-                  <div style={{ marginBottom: "12px" }}>
-                    <p className="description" style={{ marginBottom: "12px" }}>
-                      {__("Assign to specific items or exclude them:", "optionbay")}
-                    </p>
+              {!state.assignments.some((a) => a.target_type === "global") && (() => {
+                // Determine the active assignment type from current data
+                const nonGlobal = state.assignments.filter((a) => a.target_type !== "global");
+                const activeType = nonGlobal.length > 0 ? nonGlobal[0].target_type : "product";
 
-                    {state.assignments
-                      .filter((a) => a.target_type !== "global")
-                      .map((assignment, idx) => (
-                        <div key={idx} style={{ 
-                          display: "flex", 
-                          flexDirection: "column",
-                          gap: "8px", 
-                          marginBottom: "15px", 
-                          padding: "10px",
-                          background: "#f9f9f9",
-                          border: "1px solid #eee",
-                          borderRadius: "4px"
-                        }}>
-                          <div style={{ display: "flex", gap: "5px" }}>
-                            <select
-                              value={assignment.target_type}
-                              onChange={(e) => {
-                                const newAssignments = [...state.assignments];
-                                const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
-                                const realIdx = globalCount + idx;
-                                newAssignments[realIdx] = {
-                                  ...newAssignments[realIdx],
-                                  target_type: e.target.value as any,
-                                };
-                                dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
-                              }}
-                              style={{ flex: 1 }}
-                            >
-                              <option value="product">{__("Product", "optionbay")}</option>
-                              <option value="category">{__("Category", "optionbay")}</option>
-                              <option value="tag">{__("Tag", "optionbay")}</option>
-                            </select>
-                            <ClassicInput
-                              type="number"
-                              size="small"
-                              value={assignment.target_id || ""}
-                              onChange={(e) => {
-                                const newAssignments = [...state.assignments];
-                                const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
-                                const realIdx = globalCount + idx;
-                                newAssignments[realIdx] = {
-                                  ...newAssignments[realIdx],
-                                  target_id: parseInt(e.target.value) || 0,
-                                };
-                                dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
-                              }}
-                              placeholder="ID"
-                              style={{ width: "70px" }}
-                            />
-                            <button
-                              type="button"
-                              className="ob-remove-option"
-                              style={{ marginLeft: "5px" }}
-                              onClick={() => {
-                                const newAssignments = [...state.assignments];
-                                const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
-                                newAssignments.splice(globalCount + idx, 1);
-                                dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
-                              }}
-                            >
-                              ×
-                            </button>
-                          </div>
-                          <ClassicCheckbox
-                            label={__("Exclude this target", "optionbay")}
-                            checked={assignment.is_exclusion}
-                            onChange={(checked) => {
-                              const newAssignments = [...state.assignments];
-                              const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
-                              const realIdx = globalCount + idx;
-                              newAssignments[realIdx] = {
-                                ...newAssignments[realIdx],
-                                is_exclusion: checked,
-                              };
-                              dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
-                            }}
-                          />
-                        </div>
-                      ))}
+                return (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                    {/* Assignment Type Selector */}
+                    <div>
+                      <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
+                        {__("Assign By", "optionbay")}
+                      </label>
+                      <ClassicSelect
+                        value={activeType}
+                        onChange={(val) => {
+                          // Clear existing non-global assignments when switching type
+                          dispatch({ type: "SET_ASSIGNMENTS", payload: [] });
+                        }}
+                        options={[
+                          { value: "product", label: __("Products", "optionbay") },
+                          { value: "category", label: __("Categories", "optionbay") },
+                          { value: "tag", label: __("Tags", "optionbay") },
+                        ]}
+                      />
+                    </div>
 
-                    <ClassicButton
-                      variant="secondary"
-                      style={{ width: "100%" }}
-                      onClick={() => {
-                        dispatch({
-                          type: "SET_ASSIGNMENTS",
-                          payload: [
-                            ...state.assignments,
-                            { target_type: "product", target_id: 0, is_exclusion: false, priority: state.settings.priority },
-                          ],
-                        });
-                      }}
-                    >
-                      + {__("Add Rule", "optionbay")}
-                    </ClassicButton>
+                    {/* Products MultiSelect */}
+                    {activeType === "product" && (
+                      <div>
+                        <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
+                          {__("Select Products", "optionbay")}
+                        </label>
+                        <ClassicMultiSelect
+                          value={state.assignments.filter((a) => a.target_type === "product").map((a) => a.target_id)}
+                          onChange={(ids) => {
+                            const productAssignments = (ids as number[]).map((id) => ({
+                              target_type: "product" as const,
+                              target_id: id,
+                              is_exclusion: false,
+                              priority: state.settings.priority,
+                            }));
+                            dispatch({ type: "SET_ASSIGNMENTS", payload: productAssignments });
+                          }}
+                          endpoint="/optionbay/v1/resources/products"
+                          placeholder={__("Search products by name, ID, or SKU...", "optionbay")}
+                          renderOption={renderProductOption}
+                          size="regular"
+                        />
+                      </div>
+                    )}
+
+                    {/* Categories MultiSelect */}
+                    {activeType === "category" && (
+                      <div>
+                        <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
+                          {__("Select Categories", "optionbay")}
+                        </label>
+                        <ClassicMultiSelect
+                          value={state.assignments.filter((a) => a.target_type === "category").map((a) => a.target_id)}
+                          onChange={(ids) => {
+                            const categoryAssignments = (ids as number[]).map((id) => ({
+                              target_type: "category" as const,
+                              target_id: id,
+                              is_exclusion: false,
+                              priority: state.settings.priority,
+                            }));
+                            dispatch({ type: "SET_ASSIGNMENTS", payload: categoryAssignments });
+                          }}
+                          endpoint="/optionbay/v1/resources/categories"
+                          placeholder={__("Search categories...", "optionbay")}
+                          size="regular"
+                        />
+                      </div>
+                    )}
+
+                    {/* Tags MultiSelect */}
+                    {activeType === "tag" && (
+                      <div>
+                        <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
+                          {__("Select Tags", "optionbay")}
+                        </label>
+                        <ClassicMultiSelect
+                          value={state.assignments.filter((a) => a.target_type === "tag").map((a) => a.target_id)}
+                          onChange={(ids) => {
+                            const tagAssignments = (ids as number[]).map((id) => ({
+                              target_type: "tag" as const,
+                              target_id: id,
+                              is_exclusion: false,
+                              priority: state.settings.priority,
+                            }));
+                            dispatch({ type: "SET_ASSIGNMENTS", payload: tagAssignments });
+                          }}
+                          endpoint="/optionbay/v1/resources/tags"
+                          placeholder={__("Search tags...", "optionbay")}
+                          size="regular"
+                        />
+                      </div>
+                    )}
                   </div>
-                </>
-              )}
+                );
+              })()}
             </div>
           </div>
         </div>

@@ -891,7 +891,6 @@ video {
     border: 1px solid #c3c4c7;
     border-radius: 8px;
     margin-bottom: 20px;
-    overflow: hidden;
 
     .ob-sidebar-header {
       padding: 12px 15px;
@@ -899,6 +898,8 @@ video {
       border-bottom: 1px solid #e5e7eb;
       font-weight: 600;
       font-size: 14px;
+      border-top-left-radius: 8px;
+      
     }
 
     .ob-sidebar-content {

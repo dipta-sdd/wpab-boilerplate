@@ -244,8 +244,9 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
 
   const selectId =
     id || `classic-select-${Math.random().toString(36).slice(2, 9)}`;
-  const sizeClass = size === "short" ? "short" : "regular-text";
+  const sizeClass = size === "short" ? "min-content" : "";
   const explicitWidth =
+    size === "short" ? "min-content" : size === "regular" ? "auto" : "100%";
     size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
 
   return (
