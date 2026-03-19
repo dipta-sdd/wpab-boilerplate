@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface CheckboxProps {
   label?: string | React.ReactNode;
@@ -13,35 +13,61 @@ interface CheckboxProps {
   };
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange, disabled, classNames }) => {
+export const Checkbox: React.FC<CheckboxProps> = ({
+  label,
+  checked,
+  onChange,
+  disabled,
+  classNames,
+}) => {
   return (
-    <label className={`wpab-flex wpab-items-center wpab-gap-3 wpab-cursor-pointer ${disabled ? 'wpab-opacity-50 wpab-cursor-not-allowed' : ''} ${classNames?.root || ''}`}>
-      <div className={`
-        wpab-flex wpab-items-center wpab-justify-center
-        wpab-w-4 wpab-h-4 wpab-rounded wpab-border-2 wpab-transition-all wpab-duration-200
-        ${checked ? 'wpab-border-primary wpab-bg-primary' : 'wpab-border-[#949494] wpab-bg-transparent hover:wpab-border-primary'}
-        ${classNames?.box || ''}
-      `}>
-        <svg 
-            className={`wpab-w-3.5 wpab-h-3.5 wpab-text-white wpab-transform wpab-transition-transform wpab-duration-200 ${checked ? 'wpab-scale-100' : 'wpab-scale-0'} ${classNames?.icon || ''}`} 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="3" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
+    <label
+      className={`optionbay-flex optionbay-items-center optionbay-gap-3 optionbay-cursor-pointer ${
+        disabled ? "optionbay-opacity-50 optionbay-cursor-not-allowed" : ""
+      } ${classNames?.root || ""}`}
+    >
+      <div
+        className={`
+        optionbay-flex optionbay-items-center optionbay-justify-center
+        optionbay-w-4 optionbay-h-4 optionbay-rounded optionbay-border-2 optionbay-transition-all optionbay-duration-200
+        ${
+          checked
+            ? "optionbay-border-primary optionbay-bg-primary"
+            : "optionbay-border-[#949494] optionbay-bg-transparent hover:optionbay-border-primary"
+        }
+        ${classNames?.box || ""}
+      `}
+      >
+        <svg
+          className={`optionbay-w-3.5 optionbay-h-3.5 optionbay-text-white optionbay-transform optionbay-transition-transform optionbay-duration-200 ${
+            checked ? "optionbay-scale-100" : "optionbay-scale-0"
+          } ${classNames?.icon || ""}`}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-            <polyline points="20 6 9 17 4 12"></polyline>
+          <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
-        <input 
-          type="checkbox" 
-          className="!wpab-hidden" 
-          checked={checked} 
+        <input
+          type="checkbox"
+          className="!optionbay-hidden"
+          checked={checked}
           onChange={(e) => onChange(e.target.checked)}
           disabled={disabled}
         />
       </div>
-      {label && <span className={`wpab-text-[13px] wpab-font-[400] wpab-leading-[20px] wpab-text-[#1e1e1e] ${classNames?.label || ''}`}>{label}</span>}
+      {label && (
+        <span
+          className={`optionbay-text-[13px] optionbay-font-[400] optionbay-leading-[20px] optionbay-text-[#1e1e1e] ${
+            classNames?.label || ""
+          }`}
+        >
+          {label}
+        </span>
+      )}
     </label>
   );
 };

@@ -1,7 +1,15 @@
-const HeaderContainer = ({ children, className="" }: { children: React.ReactNode, className?: string }) => {
-    return <div className={`wpab-flex wpab-justify-between ${className}`}>
-        {children}
-    </div>;
+const HeaderContainer = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={`optionbay-flex optionbay-justify-between ${className}`}>
+      {children}
+    </div>
+  );
 };
 
 export default HeaderContainer;

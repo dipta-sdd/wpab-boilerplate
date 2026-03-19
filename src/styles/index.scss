@@ -113,8 +113,8 @@
 */
 
 *,
-*:not(.wpab-ignore-preflight)::before,
-*:not(.wpab-ignore-preflight)::after {
+*:not(.optionbay-ignore-preflight)::before,
+*:not(.optionbay-ignore-preflight)::after {
   box-sizing: border-box; /* 1 */
   border-width: 0; /* 2 */
   border-style: solid; /* 2 */
@@ -184,12 +184,12 @@ abbr:where([title]) {
 Remove the default font size and weight for headings.
 */
 
-h1:not(.wpab-ignore-preflight),
-h2:not(.wpab-ignore-preflight),
-h3:not(.wpab-ignore-preflight),
-h4:not(.wpab-ignore-preflight),
-h5:not(.wpab-ignore-preflight),
-h6:not(.wpab-ignore-preflight) {
+h1:not(.optionbay-ignore-preflight),
+h2:not(.optionbay-ignore-preflight),
+h3:not(.optionbay-ignore-preflight),
+h4:not(.optionbay-ignore-preflight),
+h5:not(.optionbay-ignore-preflight),
+h6:not(.optionbay-ignore-preflight) {
   font-size: inherit;
   font-weight: inherit;
 }
@@ -198,7 +198,7 @@ h6:not(.wpab-ignore-preflight) {
 Reset links to optimize for opt-in styling instead of opt-out.
 */
 
-a:not(.wpab-ignore-preflight) {
+a:not(.optionbay-ignore-preflight) {
   color: inherit;
   text-decoration: inherit;
 }
@@ -207,8 +207,8 @@ a:not(.wpab-ignore-preflight) {
 Add the correct font weight in Edge and Safari.
 */
 
-b:not(.wpab-ignore-preflight),
-strong:not(.wpab-ignore-preflight) {
+b:not(.optionbay-ignore-preflight),
+strong:not(.optionbay-ignore-preflight) {
   font-weight: bolder;
 }
 
@@ -233,7 +233,7 @@ pre {
 Add the correct font size in all browsers.
 */
 
-small:not(.wpab-ignore-preflight) {
+small:not(.optionbay-ignore-preflight) {
   font-size: 80%;
 }
 
@@ -241,19 +241,19 @@ small:not(.wpab-ignore-preflight) {
 Prevent `sub` and `sup` elements from affecting the line height in all browsers.
 */
 
-sub:not(.wpab-ignore-preflight),
-sup:not(.wpab-ignore-preflight) {
+sub:not(.optionbay-ignore-preflight),
+sup:not(.optionbay-ignore-preflight) {
   font-size: 75%;
   line-height: 0;
   position: relative;
   vertical-align: baseline;
 }
 
-sub:not(.wpab-ignore-preflight) {
+sub:not(.optionbay-ignore-preflight) {
   bottom: -0.25em;
 }
 
-sup:not(.wpab-ignore-preflight) {
+sup:not(.optionbay-ignore-preflight) {
   top: -0.5em;
 }
 
@@ -263,7 +263,7 @@ sup:not(.wpab-ignore-preflight) {
 3. Remove gaps between table borders by default.
 */
 
-table:not(.wpab-ignore-preflight) {
+table:not(.optionbay-ignore-preflight) {
   text-indent: 0; /* 1 */
   border-color: inherit; /* 2 */
   border-collapse: collapse; /* 3 */
@@ -388,19 +388,19 @@ summary {
 Removes the default spacing and border for appropriate elements.
 */
 
-blockquote:not(.wpab-ignore-preflight),
-dl:not(.wpab-ignore-preflight),
-dd:not(.wpab-ignore-preflight),
-h1:not(.wpab-ignore-preflight), // use only on classic mode
-h2:not(.wpab-ignore-preflight), // use only on classic mode
-h3:not(.wpab-ignore-preflight), // use only on classic mode
-h4:not(.wpab-ignore-preflight), // use only on classic mode
-h5:not(.wpab-ignore-preflight), // use only on classic mode
-h6:not(.wpab-ignore-preflight), // use only on classic mode
-hr:not(.wpab-ignore-preflight),
-figure:not(.wpab-ignore-preflight),
-p:not(.wpab-ignore-preflight),
-pre:not(.wpab-ignore-preflight) {
+blockquote:not(.optionbay-ignore-preflight),
+dl:not(.optionbay-ignore-preflight),
+dd:not(.optionbay-ignore-preflight),
+h1:not(.optionbay-ignore-preflight), // use only on classic mode
+h2:not(.optionbay-ignore-preflight), // use only on classic mode
+h3:not(.optionbay-ignore-preflight), // use only on classic mode
+h4:not(.optionbay-ignore-preflight), // use only on classic mode
+h5:not(.optionbay-ignore-preflight), // use only on classic mode
+h6:not(.optionbay-ignore-preflight), // use only on classic mode
+hr:not(.optionbay-ignore-preflight),
+figure:not(.optionbay-ignore-preflight),
+p:not(.optionbay-ignore-preflight),
+pre:not(.optionbay-ignore-preflight) {
   margin: 0;
 }
 
@@ -506,50 +506,50 @@ video {
 
 
 @layer components {
-  .wpab-p-x-page-default {
-    @apply wpab-px-[12px] md:wpab-px-[24px];
+  .optionbay-p-x-page-default {
+    @apply optionbay-px-[12px] md:optionbay-px-[24px];
   }
-  .wpab-bg-secondary{
-    @apply wpab-bg-[#f1f5f9];
+  .optionbay-bg-secondary{
+    @apply optionbay-bg-[#f1f5f9];
   }
-  .wpab-bg-primary{
-    @apply wpab-bg-[#3858e9];
+  .optionbay-bg-primary{
+    @apply optionbay-bg-[#3858e9];
   }
-  .wpab-bg-primary-hovered{
-    @apply wpab-bg-[#3858ff];
+  .optionbay-bg-primary-hovered{
+    @apply optionbay-bg-[#3858ff];
   }
-  .wpab-text-primary{
-    @apply wpab-text-[#3858e9];
+  .optionbay-text-primary{
+    @apply optionbay-text-[#3858e9];
   }
-  .wpab-text-primary-hovered{
-    @apply wpab-text-[#3858e9];
+  .optionbay-text-primary-hovered{
+    @apply optionbay-text-[#3858e9];
   }
-  .wpab-gap-default {
-    @apply wpab-gap-[12px];
+  .optionbay-gap-default {
+    @apply optionbay-gap-[12px];
   }
-  .wpab-gap-default-big {
-    @apply wpab-gap-[12px] xl:wpab-gap-[36px];
+  .optionbay-gap-default-big {
+    @apply optionbay-gap-[12px] xl:optionbay-gap-[36px];
   }
-  .wpab-text-default {
-    @apply wpab-text-[13px] wpab-leading-[20px];
+  .optionbay-text-default {
+    @apply optionbay-text-[13px] optionbay-leading-[20px];
   }
-  .wpab-text-secondary {
-    @apply wpab-text-[#949494];
+  .optionbay-text-secondary {
+    @apply optionbay-text-[#949494];
   }
-  .wpab-text-small {
-    @apply wpab-text-[12px] wpab-leading-[16px];
+  .optionbay-text-small {
+    @apply optionbay-text-[12px] optionbay-leading-[16px];
   }
-  .wpab-border-default {
-    @apply wpab-border-[#e0e0e0];
+  .optionbay-border-default {
+    @apply optionbay-border-[#e0e0e0];
   }
-  .wpab-border-primary {
-    @apply wpab-border-[#3858e9];
+  .optionbay-border-primary {
+    @apply optionbay-border-[#3858e9];
   }
-  .wpab-border-secondary{
-    @apply wpab-border-[#f1f5f9];
+  .optionbay-border-secondary{
+    @apply optionbay-border-[#f1f5f9];
   }
-  .wpab-outline-primary{
-    @apply wpab-outline-[#3858e9];
+  .optionbay-outline-primary{
+    @apply optionbay-outline-[#3858e9];
   }
 }
 
@@ -592,7 +592,7 @@ video {
   }
 
   // --- Base Skeleton Class ---
-  .wpab-skeleton {
+  .optionbay-skeleton {
     display: block;
     background-color: #e9e9e9;
     position: relative;
@@ -602,8 +602,8 @@ video {
       opacity: 0;
     }
   }
-  .wpab-skeleton-animation,
-  .wpab-skeleton{
+  .optionbay-skeleton-animation,
+  .optionbay-skeleton{
     position: relative;
     overflow: hidden;
 // The shimmer pseudo-element
@@ -646,24 +646,24 @@ video {
 
 
 
-.wpab-add-campaigns-modal{
+.optionbay-add-campaigns-modal{
   min-height: 90vh;
 }
-.wpab-add-campaigns-modal-example{
+.optionbay-add-campaigns-modal-example{
   width: 50%;
   display: none; // Hide on small devices
 }
 
-.wpab-add-campaigns-modal-grid-cols{
+.optionbay-add-campaigns-modal-grid-cols{
   overflow-y: auto;
   // scrollbar-width: none;
 }
 
-.wpab-add-campaigns-modal-overlay {
+.optionbay-add-campaigns-modal-overlay {
   display: block; // Show overlay on small devices
 }
 
-.wpab-add-campaigns-modal-grid-item{
+.optionbay-add-campaigns-modal-grid-item{
     min-height: 170px;
     width: 250px;
     padding-top: 40px;
@@ -675,43 +675,43 @@ video {
 
 
 @media (min-width: 600px) {
-  .wpab-add-campaigns-modal{
+  .optionbay-add-campaigns-modal{
     min-width: 560px;
     min-height: 400px;
   }
   
-  .wpab-add-campaigns-modal-grid-cols {
+  .optionbay-add-campaigns-modal-grid-cols {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (min-width: 850px) {
-  .wpab-add-campaigns-modal{
+  .optionbay-add-campaigns-modal{
     min-width: 835px;
   }
   
-  .wpab-add-campaigns-modal-example{
+  .optionbay-add-campaigns-modal-example{
     display: block; // Show example panel on larger devices
     width: 270px;
   }
   
-  .wpab-add-campaigns-modal-overlay {
+  .optionbay-add-campaigns-modal-overlay {
     display: none !important; // Hide overlay on larger devices
   }
   
-  .wpab-add-campaigns-modal-grid-cols {
+  .optionbay-add-campaigns-modal-grid-cols {
     grid-template-columns: repeat(2, 1fr);
   }
-  .wpab-add-campaigns-modal-grid-item{
+  .optionbay-add-campaigns-modal-grid-item{
     min-height: 136px;
     padding-top: 28px;
   }
 }
 @media (min-width: 1100px) {
-  .wpab-add-campaigns-modal{
+  .optionbay-add-campaigns-modal{
     min-width: 1080px;
   }
   
-  .wpab-add-campaigns-modal-grid-cols {
+  .optionbay-add-campaigns-modal-grid-cols {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -786,7 +786,7 @@ video {
 
 
   @keyframes tooltip-fade { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-                .wpab-animate-tooltip { animation: tooltip-fade 0.15s ease-out forwards; }
+                .optionbay-animate-tooltip { animation: tooltip-fade 0.15s ease-out forwards; }
 
 // ==========================================================================
 // OptionBay Builder UI

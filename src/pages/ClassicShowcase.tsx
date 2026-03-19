@@ -18,8 +18,8 @@ const Section: React.FC<{ title?: string; children: React.ReactNode }> = ({
   title,
   children,
 }) => (
-  <div className="wpab-section wpab-ignore-preflight">
-    {title && <h2 className="title wpab-ignore-preflight">{title}</h2>}
+  <div className="optionbay-section optionbay-ignore-preflight">
+    {title && <h2 className="title optionbay-ignore-preflight">{title}</h2>}
     {children}
   </div>
 );
@@ -61,8 +61,8 @@ const ClassicShowcase: React.FC = () => {
   ];
 
   return (
-    <div className=" wpab-space-y-[32px]">
-      <div className="wpab-grid wpab-grid-cols-1 wpab-gap-[32px]">
+    <div className=" optionbay-space-y-[32px]">
+      <div className="optionbay-grid optionbay-grid-cols-1 optionbay-gap-[32px]">
         {/* ── Buttons ── */}
         <Section title="1. Buttons &amp; Actions">
           <p>
@@ -522,7 +522,7 @@ const ClassicShowcase: React.FC = () => {
               {
                 label: "Enable coupons",
                 render: () => (
-                  <div className="wpab-flex wpab-flex-col wpab-gap-2">
+                  <div className="optionbay-flex optionbay-flex-col optionbay-gap-2">
                     <ClassicCheckbox
                       label="Enable the use of coupon codes"
                       description="Coupons can be applied from the cart and checkout pages."

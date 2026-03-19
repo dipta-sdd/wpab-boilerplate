@@ -13,22 +13,26 @@ const ClassicLayout: FC = () => {
     const path = location.pathname;
     if (path === "/") return __("Dashboard", "optionbay");
     if (path === "/logs") return __("Logs", "optionbay");
-    if (path === "/option-groups/new") return __("New Option Group", "optionbay");
-    if (path.startsWith("/option-groups/")) return __("Edit Option Group", "optionbay");
+    if (path === "/option-groups/new")
+      return __("New Option Group", "optionbay");
+    if (path.startsWith("/option-groups/"))
+      return __("Edit Option Group", "optionbay");
     if (path === "/option-groups") return __("Option Groups", "optionbay");
-    if (path === "/components") return __("Modern Components Showcase", "optionbay");
-    if (path === "/components-classic") return __("Classic Components Showcase", "optionbay");
+    if (path === "/components")
+      return __("Modern Components Showcase", "optionbay");
+    if (path === "/components-classic")
+      return __("Classic Components Showcase", "optionbay");
     if (path === "/settings") return __("Settings", "optionbay");
     return store.pluginData?.plugin_name || __("OptionBay", "optionbay");
   };
 
   return (
     <div className="">
-      <h1 className="wpab-ignore-preflight wpab-font-[600] wpab-text-[16px] wpab-p-x-page-default wpab-bg-white wpab-m-0 wpab-py-[18px]">
+      <h1 className="optionbay-ignore-preflight optionbay-font-[600] optionbay-text-[16px] optionbay-p-x-page-default optionbay-bg-white optionbay-m-0 optionbay-py-[18px]">
         {getPageTitle()}
       </h1>
       <ClassicNavbar />
-      <div className="wpab-mt-2 wpab-p-x-page-default">
+      <div className="optionbay-mt-2 optionbay-p-x-page-default">
         <Outlet />
       </div>
     </div>

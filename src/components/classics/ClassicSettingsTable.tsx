@@ -27,19 +27,27 @@ export const ClassicSettingsTable: React.FC<ClassicSettingsTableProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`wpab-settings-section wpab-mb-8 last:wpab-mb-0 ${className}`}>
-      {title && <h2 className="wpab-ignore-preflight">{title}</h2>}
+    <div
+      className={`optionbay-settings-section optionbay-mb-8 last:optionbay-mb-0 ${className}`}
+    >
+      {title && <h2 className="optionbay-ignore-preflight">{title}</h2>}
       {description && <p className="description ">{description}</p>}
-      
+
       <table className="form-table">
         <tbody>
           {fields.map((field, index) => (
             <tr key={field.id || index}>
               <th scope="row">
-                <label htmlFor={field.id} className="wpab-flex wpab-items-center">
-                  <span className="wpab-w-full">{field.label}</span>
+                <label
+                  htmlFor={field.id}
+                  className="optionbay-flex optionbay-items-center"
+                >
+                  <span className="optionbay-w-full">{field.label}</span>
                   {field.tooltip && (
-                    <ClassicTooltip tip={field.tooltip} className="wpab-ml-1" />
+                    <ClassicTooltip
+                      tip={field.tooltip}
+                      className="optionbay-ml-1"
+                    />
                   )}
                 </label>
               </th>

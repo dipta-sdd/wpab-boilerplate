@@ -1,5 +1,10 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { borderClasses, errorWithInClasses, hoverWithInClasses, transitionClasses } from "./classes";
+import {
+  borderClasses,
+  errorWithInClasses,
+  hoverWithInClasses,
+  transitionClasses,
+} from "./classes";
 
 interface NumberInputProps {
   value: number | null | undefined;
@@ -140,10 +145,10 @@ export const NumberInput: React.FC<NumberInputProps> = ({
   };
 
   return (
-    <div className={`wpab-w-full ${classNames?.wrapper || ""}`}>
+    <div className={`optionbay-w-full ${classNames?.wrapper || ""}`}>
       {label && (
         <label
-          className={`wpab-block wpab-text-sm wpab-font-bold wpab-text-gray-900 wpab-mb-2 ${
+          className={`optionbay-block optionbay-text-sm optionbay-font-bold optionbay-text-gray-900 optionbay-mb-2 ${
             classNames?.label || ""
           }`}
         >
@@ -153,18 +158,14 @@ export const NumberInput: React.FC<NumberInputProps> = ({
 
       <div
         className={`
-          wpab-flex wpab-items-center wpab-justify-between wpab-overflow-hidden
-          wpab-rounded-[8px] wpab-bg-white wpab-min-w-min wpab-py-[1px]
+          optionbay-flex optionbay-items-center optionbay-justify-between optionbay-overflow-hidden
+          optionbay-rounded-[8px] optionbay-bg-white optionbay-min-w-min optionbay-py-[1px]
           ${borderClasses}
           ${transitionClasses}
-          ${
-            error
-              ? errorWithInClasses
-              : hoverWithInClasses
-          }
+          ${error ? errorWithInClasses : hoverWithInClasses}
           ${
             disabled
-              ? "wpab-opacity-50 wpab-cursor-not-allowed wpab-bg-gray-50"
+              ? "optionbay-opacity-50 optionbay-cursor-not-allowed optionbay-bg-gray-50"
               : ""
           }
           ${className}
@@ -178,34 +179,37 @@ export const NumberInput: React.FC<NumberInputProps> = ({
           onBlur={handleBlur}
           disabled={disabled}
           className={`
-            !wpab-border-none !wpab-outline-none 
-            focus:!wpab-outline-none focus:!wpab-border-none focus:!wpab-shadow-none
-            wpab-px-[12px] wpab-py-[9px] 
-            wpab-text-[13px] wpab-leading-[20px] 
-            wpab-text-[#1e1e1e] wpab-font-[400] 
-            wpab-min-w-[60px] wpab-w-full 
-            wpab-bg-transparent wpab-border-none wpab-outline-none 
-            wpab-placeholder-gray-400
+            !optionbay-border-none !optionbay-outline-none 
+            focus:!optionbay-outline-none focus:!optionbay-border-none focus:!optionbay-shadow-none
+            optionbay-px-[12px] optionbay-py-[9px] 
+            optionbay-text-[13px] optionbay-leading-[20px] 
+            optionbay-text-[#1e1e1e] optionbay-font-[400] 
+            optionbay-min-w-[60px] optionbay-w-full 
+            optionbay-bg-transparent optionbay-border-none optionbay-outline-none 
+            optionbay-placeholder-gray-400
             hide-spin-button
-            ${disabled ? "wpab-cursor-not-allowed" : ""}
+            ${disabled ? "optionbay-cursor-not-allowed" : ""}
             ${classNames?.input || ""}
           `}
           placeholder={placeholder}
         />
 
         <div
-          className={`wpab-flex wpab-items-center wpab-px-2 !wpab-pl-0.5 wpab-space-x-1 wpab-select-none ${
+          className={`optionbay-flex optionbay-items-center optionbay-px-2 !optionbay-pl-0.5 optionbay-space-x-1 optionbay-select-none ${
             classNames?.buttonContainer || ""
           }`}
         >
           <button
             type="button"
             onClick={handleIncrement}
-            disabled={disabled || (value !== null && value !== undefined && value >= max)}
+            disabled={
+              disabled ||
+              (value !== null && value !== undefined && value >= max)
+            }
             className={`
-              wpab-p-2 !wpab-pr-0.5 wpab-text-gray-500 wpab-transition-colors wpab-duration-150
-              hover:wpab-text-gray-900 focus:wpab-outline-none active:wpab-scale-95
-              disabled:wpab-opacity-30 disabled:hover:wpab-text-gray-500
+              optionbay-p-2 !optionbay-pr-0.5 optionbay-text-gray-500 optionbay-transition-colors optionbay-duration-150
+              hover:optionbay-text-gray-900 focus:optionbay-outline-none active:optionbay-scale-95
+              disabled:optionbay-opacity-30 disabled:hover:optionbay-text-gray-500
               ${classNames?.incrementButton || ""}
             `}
             aria-label="Increase value"
@@ -228,11 +232,14 @@ export const NumberInput: React.FC<NumberInputProps> = ({
           <button
             type="button"
             onClick={handleDecrement}
-            disabled={disabled || (value !== null && value !== undefined && value <= min)}
+            disabled={
+              disabled ||
+              (value !== null && value !== undefined && value <= min)
+            }
             className={`
-              wpab-p-2 wpab-text-gray-500 wpab-transition-colors wpab-duration-150
-              hover:wpab-text-gray-900 focus:wpab-outline-none active:wpab-scale-95
-              disabled:wpab-opacity-30 disabled:hover:wpab-text-gray-500
+              optionbay-p-2 optionbay-text-gray-500 optionbay-transition-colors optionbay-duration-150
+              hover:optionbay-text-gray-900 focus:optionbay-outline-none active:optionbay-scale-95
+              disabled:optionbay-opacity-30 disabled:hover:optionbay-text-gray-500
               ${classNames?.decrementButton || ""}
             `}
             aria-label="Decrease value"
@@ -255,7 +262,7 @@ export const NumberInput: React.FC<NumberInputProps> = ({
 
       {error && (
         <span
-          className={`wpab-mt-1 wpab-text-xs wpab-text-red-500 ${
+          className={`optionbay-mt-1 optionbay-text-xs optionbay-text-red-500 ${
             classNames?.error || ""
           }`}
         >

@@ -38,18 +38,18 @@ const ClassicNavbar: FC = () => {
   };
 
   return (
-    <nav className="wpab-flex wpab-items-center wpab-gap-6 wpab-border-b wpab-border-gray-200 wpab-mb-8 wpab-ignore-preflight wpab-p-x-page-default wpab-bg-white">
+    <nav className="optionbay-flex optionbay-items-center optionbay-gap-6 optionbay-border-b optionbay-border-gray-200 optionbay-mb-8 optionbay-ignore-preflight optionbay-p-x-page-default optionbay-bg-white">
       {menus.map((menu) => (
         <a
           key={menu.path}
           href={`#${menu.path}`}
           className={`
-            wpab-pb-3 wpab-text-[14px] wpab-transition-all wpab-no-underline wpab-relative focus:wpab-outline-none
-            focus:wpab-border-t-0 focus:wpab-border-l-0 focus:wpab-border-r-0 focus:wpab-shadow-none
+            optionbay-pb-3 optionbay-text-[14px] optionbay-transition-all optionbay-no-underline optionbay-relative focus:optionbay-outline-none
+            focus:optionbay-border-t-0 focus:optionbay-border-l-0 focus:optionbay-border-r-0 focus:optionbay-shadow-none
             ${
               isActive(menu.path)
-                ? "wpab-text-gray-900 wpab-font-bold"
-                : "wpab-text-gray-600 wpab-font-normal hover:wpab-text-[#2271b1]"
+                ? "optionbay-text-gray-900 optionbay-font-bold"
+                : "optionbay-text-gray-600 optionbay-font-normal hover:optionbay-text-[#2271b1]"
             }
           `}
           onClick={(e) => {
@@ -59,7 +59,7 @@ const ClassicNavbar: FC = () => {
         >
           {menu.label}
           {isActive(menu.path) && (
-            <div className="wpab-absolute wpab-bottom-[-1px] wpab-left-0 wpab-w-full wpab-h-[3px] wpab-bg-[#2271b1]" />
+            <div className="optionbay-absolute optionbay-bottom-[-1px] optionbay-left-0 optionbay-w-full optionbay-h-[3px] optionbay-bg-[#2271b1]" />
           )}
         </a>
       ))}

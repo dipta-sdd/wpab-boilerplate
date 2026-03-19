@@ -81,11 +81,11 @@ const Components: FC = () => {
     title: string;
     children: React.ReactNode;
   }) => (
-    <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[24px] wpab-border wpab-border-gray-200 wpab-shadow-sm">
-      <h2 className="wpab-text-[18px] wpab-font-[700] wpab-text-gray-900 wpab-mb-[20px] wpab-border-b wpab-pb-2">
+    <div className="optionbay-bg-white optionbay-rounded-[12px] optionbay-p-[24px] optionbay-border optionbay-border-gray-200 optionbay-shadow-sm">
+      <h2 className="optionbay-text-[18px] optionbay-font-[700] optionbay-text-gray-900 optionbay-mb-[20px] optionbay-border-b optionbay-pb-2">
         {title}
       </h2>
-      <div className="wpab-space-y-[24px]">{children}</div>
+      <div className="optionbay-space-y-[24px]">{children}</div>
     </div>
   );
 
@@ -97,22 +97,22 @@ const Components: FC = () => {
     children: React.ReactNode;
   }) => (
     <div>
-      <h3 className="wpab-text-[14px] wpab-font-[600] wpab-text-gray-500 wpab-mb-[12px] wpab-uppercase wpab-tracking-wider">
+      <h3 className="optionbay-text-[14px] optionbay-font-[600] optionbay-text-gray-500 optionbay-mb-[12px] optionbay-uppercase optionbay-tracking-wider">
         {title}
       </h3>
-      <div className="wpab-flex wpab-flex-wrap wpab-gap-[12px] wpab-items-center">
+      <div className="optionbay-flex optionbay-flex-wrap optionbay-gap-[12px] optionbay-items-center">
         {children}
       </div>
     </div>
   );
 
   return (
-    <div className="wpab-p-[24px]  wpab-space-y-[32px]">
-      <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[32px] wpab-border wpab-border-gray-200 wpab-shadow-sm">
-        <h1 className="wpab-text-[28px] wpab-font-[800] wpab-text-gray-900 wpab-mb-[8px]">
+    <div className="optionbay-p-[24px]  optionbay-space-y-[32px]">
+      <div className="optionbay-bg-white optionbay-rounded-[12px] optionbay-p-[32px] optionbay-border optionbay-border-gray-200 optionbay-shadow-sm">
+        <h1 className="optionbay-text-[28px] optionbay-font-[800] optionbay-text-gray-900 optionbay-mb-[8px]">
           {__("Components Showcase", "optionbay")}
         </h1>
-        <p className="wpab-text-[15px] wpab-text-gray-600">
+        <p className="optionbay-text-[15px] optionbay-text-gray-600">
           {__(
             "Every variant, color, and size available in our common component library.",
             "optionbay",
@@ -120,11 +120,11 @@ const Components: FC = () => {
         </p>
       </div>
 
-      <div className="wpab-grid wpab-grid-cols-1 wpab-gap-[32px]">
+      <div className="optionbay-grid optionbay-grid-cols-1 optionbay-gap-[32px]">
         {/* BUTTONS */}
         <Section title="Buttons">
           <Subsection title="Colors & Variants">
-            <div className="wpab-grid wpab-grid-cols-3 wpab-gap-4 wpab-w-full">
+            <div className="optionbay-grid optionbay-grid-cols-3 optionbay-gap-4 optionbay-w-full">
               <Button color="primary">Solid Primary</Button>
               <Button color="primary" variant="outline">
                 Outline Primary
@@ -163,8 +163,8 @@ const Components: FC = () => {
 
         {/* INPUTS */}
         <Section title="Inputs">
-          <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-2 wpab-gap-8">
-            <div className="wpab-space-y-6">
+          <div className="optionbay-grid optionbay-grid-cols-1 md:optionbay-grid-cols-2 optionbay-gap-8">
+            <div className="optionbay-space-y-6">
               <Subsection title="Input Sizes">
                 <Input
                   label="Small Input"
@@ -191,7 +191,7 @@ const Components: FC = () => {
                 />
               </Subsection>
             </div>
-            <div className="wpab-space-y-6">
+            <div className="optionbay-space-y-6">
               <Subsection title="Number Input Sizes">
                 <NumberInput
                   label="Small"
@@ -232,7 +232,7 @@ const Components: FC = () => {
 
         {/* SELECTION CONTROLS */}
         <Section title="Selection Controls">
-          <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-3 wpab-gap-8">
+          <div className="optionbay-grid optionbay-grid-cols-1 md:optionbay-grid-cols-3 optionbay-gap-8">
             <Subsection title="Checkboxes">
               <Checkbox label="Unchecked" checked={false} onChange={() => {}} />
               <Checkbox label="Checked" checked={true} onChange={() => {}} />
@@ -267,8 +267,8 @@ const Components: FC = () => {
               />
             </Subsection>
             <Subsection title="Switches">
-              <div className="wpab-space-y-4 wpab-w-full">
-                <div className="wpab-flex wpab-gap-4">
+              <div className="optionbay-space-y-4 optionbay-w-full">
+                <div className="optionbay-flex optionbay-gap-4">
                   <Switch
                     size="small"
                     checked={switchState}
@@ -285,7 +285,7 @@ const Components: FC = () => {
                     onChange={setSwitchState}
                   />
                 </div>
-                <div className="wpab-flex wpab-gap-4">
+                <div className="optionbay-flex optionbay-gap-4">
                   <Switch checked={false} onChange={() => {}} />
                   <Switch checked={true} onChange={() => {}} />
                   <Switch checked={false} disabled onChange={() => {}} />
@@ -297,7 +297,7 @@ const Components: FC = () => {
 
         {/* SELECTS */}
         <Section title="Selects & Dropdowns">
-          <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-2 wpab-gap-8">
+          <div className="optionbay-grid optionbay-grid-cols-1 md:optionbay-grid-cols-2 optionbay-gap-8">
             <Subsection title="Select Variants">
               <Select
                 label="Single Select"
@@ -344,7 +344,7 @@ const Components: FC = () => {
             </Subsection>
           </div>
           <Subsection title="List Select Sizes">
-            <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-3 wpab-gap-4 wpab-w-full">
+            <div className="optionbay-grid optionbay-grid-cols-1 md:optionbay-grid-cols-3 optionbay-gap-4 optionbay-w-full">
               <ListSelect
                 size="small"
                 items={selectOptions}
@@ -424,7 +424,7 @@ const Components: FC = () => {
                 </Button>
               }
               content={
-                <div className="wpab-p-4">Content aligned bottom-left</div>
+                <div className="optionbay-p-4">Content aligned bottom-left</div>
               }
             />
             <Popover
@@ -435,7 +435,7 @@ const Components: FC = () => {
                 </Button>
               }
               content={
-                <div className="wpab-p-4">Content aligned top-right</div>
+                <div className="optionbay-p-4">Content aligned top-right</div>
               }
             />
           </Subsection>
@@ -463,8 +463,8 @@ const Components: FC = () => {
 
         {/* MISC & LAYOUT */}
         <Section title="Misc & Layout">
-          <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-2 wpab-gap-12">
-            <div className="wpab-space-y-8">
+          <div className="optionbay-grid optionbay-grid-cols-1 md:optionbay-grid-cols-2 optionbay-gap-12">
+            <div className="optionbay-space-y-8">
               <Subsection title="Toggler Sizes">
                 <Toggler
                   size="small"
@@ -506,14 +506,14 @@ const Components: FC = () => {
                 />
               </Subsection>
             </div>
-            <div className="wpab-space-y-8">
+            <div className="optionbay-space-y-8">
               <Subsection title="Stepper Progress">
                 <Stepper
                   steps={["Identity", "Payment", "Confirm"]}
                   currentStep={currentStep}
                   setStep={setCurrentStep}
                 />
-                <div className="wpab-flex wpab-gap-2">
+                <div className="optionbay-flex optionbay-gap-2">
                   <Button
                     size="small"
                     variant="outline"
@@ -531,9 +531,9 @@ const Components: FC = () => {
                 </div>
               </Subsection>
               <Subsection title="Loading States">
-                <div className="wpab-flex wpab-items-center wpab-gap-4">
+                <div className="optionbay-flex optionbay-items-center optionbay-gap-4">
                   <Loader />
-                  <div className="wpab-w-32 wpab-space-y-2">
+                  <div className="optionbay-w-32 optionbay-space-y-2">
                     <Skeleton height="12px" />
                     <Skeleton height="12px" width="70%" />
                   </div>
@@ -553,7 +553,7 @@ const Components: FC = () => {
         onClose={() => setIsModalOpen(false)}
         title="Component Demo Modal"
       >
-        <div className="wpab-space-y-4">
+        <div className="optionbay-space-y-4">
           <p>
             This is the standard custom modal component. It supports custom
             headers, footers, and content scrolling.

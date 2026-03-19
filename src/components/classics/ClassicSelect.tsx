@@ -247,7 +247,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
   const sizeClass = size === "short" ? "min-content" : "";
   const explicitWidth =
     size === "short" ? "min-content" : size === "regular" ? "auto" : "100%";
-    size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
+  size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
 
   return (
     <div
@@ -261,7 +261,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
         </label>
       )}
 
-      <div className="wpab-relative" style={{ width: explicitWidth }}>
+      <div className="optionbay-relative" style={{ width: explicitWidth }}>
         {/* Trigger that looks like WP native select */}
         <div
           id={selectId}
@@ -329,7 +329,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
         {/* Dropdown Menu */}
         {isOpen && (
           <div
-            className={`wpab-absolute wpab-z-50 wpab-bg-white wpab-border wpab-border-[#8c8f94] wpab-rounded-[3px]`}
+            className={`optionbay-absolute optionbay-z-50 optionbay-bg-white optionbay-border optionbay-border-[#8c8f94] optionbay-rounded-[3px]`}
             style={{
               zIndex: 99999,
               boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
@@ -364,7 +364,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
                   onKeyDown={handleSearchKeyDown}
                   onClick={(e) => e.stopPropagation()}
                   placeholder="Search..."
-                  className="focus:wpab-outline-none focus:wpab-shadow-none"
+                  className="focus:optionbay-outline-none focus:optionbay-shadow-none"
                   style={{
                     width: "100%",
                     padding: "0 8px",

@@ -3,6 +3,7 @@
 A comprehensive, production-ready WordPress plugin boilerplate that bridges the gap between modern React/TypeScript development and native WordPress/WooCommerce aesthetics.
 
 ## Core Philosophy
+
 This boilerplate is designed to provide everything you need to build a complex, scalable WordPress plugin. It offers a robust, Object-Oriented PHP backend and a powerful React single-page application (SPA) frontend. Uniquely, it provides **two distinct UI component libraries**: one for modern, custom dashboard interfaces, and another designed specifically to blend seamlessly into native WordPress and WooCommerce settings pages.
 
 ---
@@ -10,6 +11,7 @@ This boilerplate is designed to provide everything you need to build a complex, 
 ## 🚀 Key Features
 
 ### Robust PHP Backend Architecture
+
 - **OOP Structure & Autoloading**: PSR-4 compliant namespace-to-directory autoloading.
 - **Base Singleton Pattern (`Base.php`)**: A reliable singleton abstract class that manages instance creation and automatic hook registration.
 - **REST API Infrastructure (`ApiController.php`)**: Secure, extendable base controllers with built-in permission checks and namespace management.
@@ -20,12 +22,13 @@ This boilerplate is designed to provide everything you need to build a complex, 
 - **White Label Ready**: Fully filterable plugin name, slugs, icons, and URLs via `functions.php`.
 
 ### Modern React / TypeScript Frontend
+
 - **SPA Architecture**: Powered by React 18+ and `react-router-dom` for fluid navigation within the WP admin.
 - **Dual Component Libraries**:
-    - **`common` (Modern UI)**: 30+ reusable Tailwind CSS components (Modals, Toasts, MultiSelects, Steppers, etc.) designed for custom, app-like interfaces.
-    - **`classics` (Native UI)**: 10+ components (`ClassicInput`, `ClassicSettingsTable`, `ClassicRepeater`) built to 1:1 match native WooCommerce and WordPress settings aesthetics.
-- **Tailwind CSS Integration**: Fully configured Tailwind setup using a custom `wpab-` prefix to prevent style bleed.
-- **Preflight Conflict Mitigation**: Custom `wpab-ignore-preflight` guard class integrated into `index.scss` to allow Tailwind usage without destroying native WP/WC typography and input styles.
+  - **`common` (Modern UI)**: 30+ reusable Tailwind CSS components (Modals, Toasts, MultiSelects, Steppers, etc.) designed for custom, app-like interfaces.
+  - **`classics` (Native UI)**: 10+ components (`ClassicInput`, `ClassicSettingsTable`, `ClassicRepeater`) built to 1:1 match native WooCommerce and WordPress settings aesthetics.
+- **Tailwind CSS Integration**: Fully configured Tailwind setup using a custom `optionbay-` prefix to prevent style bleed.
+- **Preflight Conflict Mitigation**: Custom `optionbay-ignore-preflight` guard class integrated into `index.scss` to allow Tailwind usage without destroying native WP/WC typography and input styles.
 - **State Management**: React Context stores integrated with `wp_localize_script` data bridges.
 - **Production Build System**: Powered by `@wordpress/scripts` (Webpack) for modern and legacy JS builds.
 
@@ -33,7 +36,7 @@ This boilerplate is designed to provide everything you need to build a complex, 
 
 ## 📁 Directory Structure
 
-``` text
+```text
 optionbay-classic/
 ├── app/                        # PHP Backend Application
 │   ├── Admin/
@@ -98,40 +101,49 @@ optionbay-classic/
 ## 🛠 Getting Started
 
 ### 1. Clone & Rename
+
 Use this repository as a template for your new plugin.
+
 ```bash
 git clone <repo_url> your-plugin-name
 cd your-plugin-name
 ```
 
 ### 2. Global Find & Replace
+
 To white-label the boilerplate, replace these identifier strings throughout the entire codebase:
 
-| Find String                 | Replace With (Example) | Context                     |
-| --------------------------- | ---------------------- | --------------------------- |
-| `OptionBay`           | `YourNamespace`        | PHP Namespaces              |
-| `OPTIONBAY_`         | `YOUR_PLUGIN_`         | PHP Constants               |
-| `optionbay`          | `your-plugin-slug`     | Text domains, URLs, Classes |
-| `optionbay`          | `your_plugin_slug`     | PHP Variable/Option names   |
-| `wpabBoilerplate`           | `yourPlugin`           | JS Globals                  |
-| `OptionBay`          | `Your Plugin Title`    | UI Text                     |
-| `wpab-`                     | `yourprefix-`          | Tailwind CSS Prefix         |
+| Find String       | Replace With (Example) | Context                     |
+| ----------------- | ---------------------- | --------------------------- |
+| `OptionBay`       | `YourNamespace`        | PHP Namespaces              |
+| `OPTIONBAY_`      | `YOUR_PLUGIN_`         | PHP Constants               |
+| `optionbay`       | `your-plugin-slug`     | Text domains, URLs, Classes |
+| `optionbay`       | `your_plugin_slug`     | PHP Variable/Option names   |
+| `wpabBoilerplate` | `yourPlugin`           | JS Globals                  |
+| `OptionBay`       | `Your Plugin Title`    | UI Text                     |
+| `optionbay-`      | `yourprefix-`          | Tailwind CSS Prefix         |
 
 ### 3. Install Dependencies
+
 ```bash
 npm install
 composer install # (If dependencies are added later)
 ```
 
 ### 4. Development Workflow
+
 Launch the Webpack dev server with hot-reload capabilities:
+
 ```bash
 npm run start
 ```
-*Note: Make sure your local WordPress environment has `SCRIPT_DEBUG` set to `true` to load the development assets.*
+
+_Note: Make sure your local WordPress environment has `SCRIPT_DEBUG` set to `true` to load the development assets._
 
 ### 5. Production Build
+
 Compile minified, optimized JS/CSS assets into the `/build` directory:
+
 ```bash
 npm run build
 ```
@@ -141,23 +153,26 @@ npm run build
 ## 🎨 Layout & Component Systems
 
 ### 1. Dual Layout Support
+
 The boilerplate includes two layout systems. You can switch between them globally in `src/App.tsx`:
 
 - **`ClassicLayout`**: Default. Provides a native WooCommerce settings experience with `ClassicNavbar` (tabs) and standard WordPress branding.
 - **`AppLayout`**: Modern, sidebar-driven dashboard experience designed for custom applications.
 
 ### 2. Component Libraries
+
 - **`classics/`**: Use these for native-looking settings pages.
-    - `ClassicSettingsTable`: Renders fields in a standard `form-table`.
-    - `ClassicNavbar`: Renders native-style tabs with active underline.
-    - `ClassicSelect` / `ClassicMultiSelect`: Custom-built to match native styles with search capability.
-    - `ClassicTooltip`: 1:1 match of the WooCommerce help tip icon and style.
+  - `ClassicSettingsTable`: Renders fields in a standard `form-table`.
+  - `ClassicNavbar`: Renders native-style tabs with active underline.
+  - `ClassicSelect` / `ClassicMultiSelect`: Custom-built to match native styles with search capability.
+  - `ClassicTooltip`: 1:1 match of the WooCommerce help tip icon and style.
 - **`common/`**: Use these for modern dashboard interfaces where you want full Tailwind control.
 
 ### 3. Styling Architecture (Preflight Guard)
+
 Tailwind's preflight resets often break native WordPress styles (like `h2` sizing or input borders). This boilerplate uses a custom guard:
 
-By adding the **`wpab-ignore-preflight`** class to any element (or its parent), you prevent Tailwind's default reset from affecting it, allowing the native WordPress/WooCommerce CSS to take precedence.
+By adding the **`optionbay-ignore-preflight`** class to any element (or its parent), you prevent Tailwind's default reset from affecting it, allowing the native WordPress/WooCommerce CSS to take precedence.
 
 ---
 
@@ -168,4 +183,5 @@ By adding the **`wpab-ignore-preflight`** class to any element (or its parent), 
 - Node.js 18+
 
 ## 📄 License
+
 GPLv2 or later.

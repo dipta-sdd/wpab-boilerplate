@@ -8,31 +8,31 @@ const Dashboard: FC = () => {
   return (
     <div className="">
       {/* Welcome Banner */}
-      <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[24px] wpab-mb-[24px] wpab-border wpab-border-gray-200">
-        <p className="wpab-text-[15px] wpab-text-gray-600 wpab-mb-2">
+      <div className="optionbay-bg-white optionbay-rounded-[12px] optionbay-p-[24px] optionbay-mb-[24px] optionbay-border optionbay-border-gray-200">
+        <p className="optionbay-text-[15px] optionbay-text-gray-600 optionbay-mb-2">
           {__(
             "Your plugin is ready. Start building something amazing with our dual modern and classic components!",
             "optionbay",
           )}
         </p>
-        <p className="wpab-text-[12px] wpab-text-gray-400">
+        <p className="optionbay-text-[12px] optionbay-text-gray-400">
           {__("Version", "optionbay")}: {store.version}
         </p>
       </div>
 
       {/* Info Cards Grid */}
-      <div className="wpab-grid wpab-grid-cols-1 md:wpab-grid-cols-3 wpab-gap-[16px]">
+      <div className="optionbay-grid optionbay-grid-cols-1 md:optionbay-grid-cols-3 optionbay-gap-[16px]">
         {/* Card 1 */}
-        <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[20px] wpab-border wpab-border-gray-200">
-          <div className="wpab-flex wpab-items-center wpab-gap-[12px] wpab-mb-[12px]">
-            <div className="wpab-w-[40px] wpab-h-[40px] wpab-bg-blue-100 wpab-rounded-[8px] wpab-flex wpab-items-center wpab-justify-center">
-              <span className="wpab-text-[20px]">📄</span>
+        <div className="optionbay-bg-white optionbay-rounded-[12px] optionbay-p-[20px] optionbay-border optionbay-border-gray-200">
+          <div className="optionbay-flex optionbay-items-center optionbay-gap-[12px] optionbay-mb-[12px]">
+            <div className="optionbay-w-[40px] optionbay-h-[40px] optionbay-bg-blue-100 optionbay-rounded-[8px] optionbay-flex optionbay-items-center optionbay-justify-center">
+              <span className="optionbay-text-[20px]">📄</span>
             </div>
-            <h3 className="wpab-text-[16px] wpab-font-[600] wpab-text-gray-900">
+            <h3 className="optionbay-text-[16px] optionbay-font-[600] optionbay-text-gray-900">
               {__("REST API", "optionbay")}
             </h3>
           </div>
-          <p className="wpab-text-[13px] wpab-text-gray-600">
+          <p className="optionbay-text-[13px] optionbay-text-gray-600">
             {__(
               "A REST API controller is included. See app/Api/SettingsController.php for the pattern.",
               "optionbay",
@@ -41,16 +41,16 @@ const Dashboard: FC = () => {
         </div>
 
         {/* Card 2 */}
-        <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[20px] wpab-border wpab-border-gray-200">
-          <div className="wpab-flex wpab-items-center wpab-gap-[12px] wpab-mb-[12px]">
-            <div className="wpab-w-[40px] wpab-h-[40px] wpab-bg-green-100 wpab-rounded-[8px] wpab-flex wpab-items-center wpab-justify-center">
-              <span className="wpab-text-[20px]">⚛️</span>
+        <div className="optionbay-bg-white optionbay-rounded-[12px] optionbay-p-[20px] optionbay-border optionbay-border-gray-200">
+          <div className="optionbay-flex optionbay-items-center optionbay-gap-[12px] optionbay-mb-[12px]">
+            <div className="optionbay-w-[40px] optionbay-h-[40px] optionbay-bg-green-100 optionbay-rounded-[8px] optionbay-flex optionbay-items-center optionbay-justify-center">
+              <span className="optionbay-text-[20px]">⚛️</span>
             </div>
-            <h3 className="wpab-text-[16px] wpab-font-[600] wpab-text-gray-900">
+            <h3 className="optionbay-text-[16px] optionbay-font-[600] optionbay-text-gray-900">
               {__("React Components", "optionbay")}
             </h3>
           </div>
-          <p className="wpab-text-[13px] wpab-text-gray-600">
+          <p className="optionbay-text-[13px] optionbay-text-gray-600">
             {__(
               "Pre-built UI components: Button, Input, Select, Modal, Toast, and more in src/components/common/.",
               "optionbay",
@@ -59,16 +59,16 @@ const Dashboard: FC = () => {
         </div>
 
         {/* Card 3 */}
-        <div className="wpab-bg-white wpab-rounded-[12px] wpab-p-[20px] wpab-border wpab-border-gray-200">
-          <div className="wpab-flex wpab-items-center wpab-gap-[12px] wpab-mb-[12px]">
-            <div className="wpab-w-[40px] wpab-h-[40px] wpab-bg-purple-100 wpab-rounded-[8px] wpab-flex wpab-items-center wpab-justify-center">
-              <span className="wpab-text-[20px]">🗃️</span>
+        <div className="optionbay-bg-white optionbay-rounded-[12px] optionbay-p-[20px] optionbay-border optionbay-border-gray-200">
+          <div className="optionbay-flex optionbay-items-center optionbay-gap-[12px] optionbay-mb-[12px]">
+            <div className="optionbay-w-[40px] optionbay-h-[40px] optionbay-bg-purple-100 optionbay-rounded-[8px] optionbay-flex optionbay-items-center optionbay-justify-center">
+              <span className="optionbay-text-[20px]">🗃️</span>
             </div>
-            <h3 className="wpab-text-[16px] wpab-font-[600] wpab-text-gray-900">
+            <h3 className="optionbay-text-[16px] optionbay-font-[600] optionbay-text-gray-900">
               {__("Database", "optionbay")}
             </h3>
           </div>
-          <p className="wpab-text-[13px] wpab-text-gray-600">
+          <p className="optionbay-text-[13px] optionbay-text-gray-600">
             {__(
               "Custom table creation on activation via app/Data/DbManager.php. Includes example items & logs tables.",
               "optionbay",

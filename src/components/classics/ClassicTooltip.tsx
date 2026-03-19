@@ -33,7 +33,7 @@ export const ClassicTooltip: React.FC<ClassicTooltipProps> = ({
     <>
       <span
         ref={iconRef}
-        className={`wpab-inline-flex wpab-items-center wpab-justify-center wpab-w-[16px] wpab-h-[16px] wpab-rounded-full wpab-bg-[#72777c] hover:wpab-bg-[#50575e] wpab-text-white wpab-transition-colors wpab-ml-1 ${className}`}
+        className={`optionbay-inline-flex optionbay-items-center optionbay-justify-center optionbay-w-[16px] optionbay-h-[16px] optionbay-rounded-full optionbay-bg-[#72777c] hover:optionbay-bg-[#50575e] optionbay-text-white optionbay-transition-colors optionbay-ml-1 ${className}`}
         onPointerEnter={(e) => {
           updateCoords();
           setVisible(true);
@@ -87,7 +87,7 @@ export const ClassicTooltip: React.FC<ClassicTooltipProps> = ({
               }}
             />
           </div>,
-          document.body
+          document.body,
         )}
     </>
   );

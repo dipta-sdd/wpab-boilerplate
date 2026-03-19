@@ -48,27 +48,29 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <div className="wpab-bg-white wpab-p-0 !wpab-border-0 !wpab-border-b !wpab-border-gray-300 wpab-z-50 wpab-relative">
-        <div className="wpab-flex wpab-px-[12px] wpab-justify-between wpab-items-center wpab-flex-wrap md:wpab-flex-nowrap wpab-gap-[4px] wpab-relative">
-          <div className="wpab-flex wpab-items-center wpab-gap-[4px] wpab-py-[12px]">
-            <span className="wpab-font-[700] wpab-text-[16px] wpab-text-gray-900">
+      <div className="optionbay-bg-white optionbay-p-0 !optionbay-border-0 !optionbay-border-b !optionbay-border-gray-300 optionbay-z-50 optionbay-relative">
+        <div className="optionbay-flex optionbay-px-[12px] optionbay-justify-between optionbay-items-center optionbay-flex-wrap md:optionbay-flex-nowrap optionbay-gap-[4px] optionbay-relative">
+          <div className="optionbay-flex optionbay-items-center optionbay-gap-[4px] optionbay-py-[12px]">
+            <span className="optionbay-font-[700] optionbay-text-[16px] optionbay-text-gray-900">
               {store.pluginData?.plugin_name || "OptionBay"}
             </span>
           </div>
           <div
-            className={`wpab-flex-1 md:wpab-flex-none wpab-flex-col md:wpab-flex-row wpab-justify-stretch md:wpab-items-center wpab-absolute md:wpab-relative wpab-top-[102%] md:wpab-top-auto wpab-left-0 wpab-w-full md:wpab-w-auto wpab-gap-0 md:wpab-gap-[6px] wpab-bg-white !wpab-border-0 ${
-              isMobileMenuOpen ? "wpab-flex" : "wpab-hidden md:wpab-flex"
+            className={`optionbay-flex-1 md:optionbay-flex-none optionbay-flex-col md:optionbay-flex-row optionbay-justify-stretch md:optionbay-items-center optionbay-absolute md:optionbay-relative optionbay-top-[102%] md:optionbay-top-auto optionbay-left-0 optionbay-w-full md:optionbay-w-auto optionbay-gap-0 md:optionbay-gap-[6px] optionbay-bg-white !optionbay-border-0 ${
+              isMobileMenuOpen
+                ? "optionbay-flex"
+                : "optionbay-hidden md:optionbay-flex"
             }`}
           >
-            <nav className="wpab-items-stretch md:wpab-items-center wpab-gap-0 wpab-flex wpab-flex-col md:wpab-flex-row wpab-w-full">
+            <nav className="optionbay-items-stretch md:optionbay-items-center optionbay-gap-0 optionbay-flex optionbay-flex-col md:optionbay-flex-row optionbay-w-full">
               {menus.map((menu) => (
                 <span
                   key={menu.path}
-                  className={`wpab-text-default wpab-font-[700]
-                    wpab-cursor-pointer wpab-py-[8px] wpab-px-[16px] wpab-border-b md:wpab-border-b-0 wpab-border-gray-300 last:wpab-border-gray-300 ${
+                  className={`optionbay-text-default optionbay-font-[700]
+                    optionbay-cursor-pointer optionbay-py-[8px] optionbay-px-[16px] optionbay-border-b md:optionbay-border-b-0 optionbay-border-gray-300 last:optionbay-border-gray-300 ${
                       activeTab === menu.path
-                        ? "wpab-text-blue-800 wpab-bg-gray-100 wpab-rounded-[0] md:wpab-rounded-[8px]"
-                        : "wpab-text-gray-800 hover:wpab-text-blue-800"
+                        ? "optionbay-text-blue-800 optionbay-bg-gray-100 optionbay-rounded-[0] md:optionbay-rounded-[8px]"
+                        : "optionbay-text-gray-800 hover:optionbay-text-blue-800"
                     }`}
                   onClick={() => {
                     navigate(menu.path);
@@ -81,7 +83,7 @@ const Navbar: FC = () => {
             </nav>
           </div>
           <button
-            className="wpab-flex md:wpab-hidden wpab-items-center wpab-gap-[2px] wpab-text-gray-800 hover:wpab-text-blue-800"
+            className="optionbay-flex md:optionbay-hidden optionbay-items-center optionbay-gap-[2px] optionbay-text-gray-800 hover:optionbay-text-blue-800"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileMenuOpen}
@@ -92,7 +94,7 @@ const Navbar: FC = () => {
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="wpab-transition-all wpab-duration-300 wpab-ease-in-out"
+              className="optionbay-transition-all optionbay-duration-300 optionbay-ease-in-out"
               aria-hidden="true"
             >
               {isMobileMenuOpen ? (
@@ -143,7 +145,7 @@ const Navbar: FC = () => {
       </div>
       {isMobileMenuOpen && (
         <div
-          className="wpab-fixed wpab-top-0 wpab-left-0 wpab-w-full wpab-h-full wpab-bg-black wpab-opacity-60 wpab-z-40 md:wpab-hidden"
+          className="optionbay-fixed optionbay-top-0 optionbay-left-0 optionbay-w-full optionbay-h-full optionbay-bg-black optionbay-opacity-60 optionbay-z-40 md:optionbay-hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

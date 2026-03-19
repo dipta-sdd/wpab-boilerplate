@@ -133,12 +133,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
   }, []);
 
   const arrowClasses = {
-    top: "wpab-top-full wpab-left-1/2 wpab--translate-x-1/2 wpab-border-t-gray-900",
+    top: "optionbay-top-full optionbay-left-1/2 optionbay--translate-x-1/2 optionbay-border-t-gray-900",
     bottom:
-      "wpab-bottom-full wpab-left-1/2 wpab--translate-x-1/2 wpab-border-b-gray-900",
-    left: "wpab-left-full wpab-top-1/2 wpab--translate-y-1/2 wpab-border-l-gray-900",
+      "optionbay-bottom-full optionbay-left-1/2 optionbay--translate-x-1/2 optionbay-border-b-gray-900",
+    left: "optionbay-left-full optionbay-top-1/2 optionbay--translate-y-1/2 optionbay-border-l-gray-900",
     right:
-      "wpab-right-full wpab-top-1/2 wpab--translate-y-1/2 wpab-border-r-gray-900",
+      "optionbay-right-full optionbay-top-1/2 optionbay--translate-y-1/2 optionbay-border-r-gray-900",
   }[position];
 
   return (
@@ -149,7 +149,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         onMouseLeave={handleMouseLeave}
         onFocus={handleMouseEnter}
         onBlur={handleMouseLeave}
-        className={`wpab-inline-block ${classNames?.trigger || ""}`}
+        className={`optionbay-inline-block ${classNames?.trigger || ""}`}
       >
         {children}
       </div>
@@ -160,7 +160,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             className={`
-            wpab-fixed wpab-z-[60]
+            optionbay-fixed optionbay-z-[60]
             ${className}
             ${classNames?.root || ""}
           `}
@@ -171,7 +171,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
             }}
           >
             <div
-              className={`wpab-animate-tooltip wpab-relative wpab-px-2.5 wpab-py-1.5 wpab-bg-gray-900 wpab-text-white wpab-text-xs wpab-rounded wpab-shadow-lg ${
+              className={`optionbay-animate-tooltip optionbay-relative optionbay-px-2.5 optionbay-py-1.5 optionbay-bg-gray-900 optionbay-text-white optionbay-text-xs optionbay-rounded optionbay-shadow-lg ${
                 classNames?.content || ""
               }`}
             >
@@ -183,7 +183,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
                     href={docLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="wpab-text-blue-400 hover:wpab-text-blue-300 wpab-underline"
+                    className="optionbay-text-blue-400 hover:optionbay-text-blue-300 optionbay-underline"
                   >
                     Read More
                   </a>
@@ -191,7 +191,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
               )}
               <div
                 className={`
-                wpab-absolute wpab-border-[5px] wpab-border-transparent
+                optionbay-absolute optionbay-border-[5px] optionbay-border-transparent
                 ${arrowClasses}
                 ${classNames?.arrow || ""}
               `}

@@ -17,11 +17,11 @@ const Skeleton: FC<SkeletonProps> = ({
 }) => {
   return (
     <div
-      className={`wpab-skeleton ${
-        height ? `wpab-h-${height}` : ""
-      } ${width ? `wpab-w-${width}` : ""} ${
-        borderRadius ? `wpab-br-${borderRadius}` : ""
-      } ${className || ""}`}
+      className={`optionbay-skeleton ${height ? `optionbay-h-${height}` : ""} ${
+        width ? `optionbay-w-${width}` : ""
+      } ${borderRadius ? `optionbay-br-${borderRadius}` : ""} ${
+        className || ""
+      }`}
     >
       {children}
     </div>

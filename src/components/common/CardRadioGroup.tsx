@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { SelectionCard } from './SelectionCard';
+import React, { useState, useRef } from "react";
+import { createPortal } from "react-dom";
+import { SelectionCard } from "./SelectionCard";
 
 export interface CardOption {
   value: string;
@@ -8,25 +8,25 @@ export interface CardOption {
   description: string;
   icon?: React.ReactNode;
   disabled?: boolean;
-  variant?: 'buy_pro' | 'coming_soon';
+  variant?: "buy_pro" | "coming_soon";
 }
 
 interface CardRadioGroupProps {
   options: CardOption[];
   value: string;
   onChange: (value: string) => void;
-  layout?: 'vertical' | 'horizontal' | 'responsive';
+  layout?: "vertical" | "horizontal" | "responsive";
   className?: string;
   classNames?: {
     root?: string;
     card?: {
-        root?: string;
-        iconWrapper?: string;
-        circle?: string;
-        dot?: string;
-        textWrapper?: string;
-        title?: string;
-        description?: string;
+      root?: string;
+      iconWrapper?: string;
+      circle?: string;
+      dot?: string;
+      textWrapper?: string;
+      title?: string;
+      description?: string;
     };
   };
 }
@@ -35,22 +35,24 @@ export const CardRadioGroup: React.FC<CardRadioGroupProps> = ({
   options,
   value,
   onChange,
-  layout = 'responsive',
-  className = '',
-  classNames
+  layout = "responsive",
+  className = "",
+  classNames,
 }) => {
-  let containerClass = '';
-  
+  let containerClass = "";
+
   switch (layout) {
-    case 'vertical':
-      containerClass = 'wpab-flex wpab-flex-col wpab-gap-4';
+    case "vertical":
+      containerClass = "optionbay-flex optionbay-flex-col optionbay-gap-4";
       break;
-    case 'horizontal':
-      containerClass = 'wpab-flex wpab-flex-row wpab-gap-4 wpab-overflow-x-auto wpab-pb-2'; // Added overflow handling for safe horizontal scrolling if needed
+    case "horizontal":
+      containerClass =
+        "optionbay-flex optionbay-flex-row optionbay-gap-4 optionbay-overflow-x-auto optionbay-pb-2"; // Added overflow handling for safe horizontal scrolling if needed
       break;
-    case 'responsive':
+    case "responsive":
     default:
-      containerClass = 'wpab-grid wpab-grid-cols-1 md:!wpab-grid-cols-2 wpab-gap-4';
+      containerClass =
+        "optionbay-grid optionbay-grid-cols-1 md:!optionbay-grid-cols-2 optionbay-gap-4";
       break;
   }
 
@@ -65,7 +67,10 @@ export const CardRadioGroup: React.FC<CardRadioGroupProps> = ({
   const hoverTimeoutRef = useRef<number | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const handleCardMouseEnter = (e: React.MouseEvent<HTMLDivElement>, isPro: boolean) => {
+  const handleCardMouseEnter = (
+    e: React.MouseEvent<HTMLDivElement>,
+    isPro: boolean,
+  ) => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
@@ -110,7 +115,9 @@ export const CardRadioGroup: React.FC<CardRadioGroupProps> = ({
 
   return (
     <>
-      <div className={`${containerClass} ${className} ${classNames?.root || ''}`}>
+      <div
+        className={`${containerClass} ${className} ${classNames?.root || ""}`}
+      >
         {options.map((option) => (
           <SelectionCard
             key={option.value}
@@ -121,7 +128,9 @@ export const CardRadioGroup: React.FC<CardRadioGroupProps> = ({
             icon={option.icon}
             disabled={option.disabled}
             variant={option.variant}
-            onMouseEnter={(e) => handleCardMouseEnter(e, option.variant === 'buy_pro')}
+            onMouseEnter={(e) =>
+              handleCardMouseEnter(e, option.variant === "buy_pro")
+            }
             onMouseLeave={handleCardMouseLeave}
             classNames={classNames?.card}
           />
@@ -133,7 +142,7 @@ export const CardRadioGroup: React.FC<CardRadioGroupProps> = ({
         createPortal(
           <div
             ref={tooltipRef}
-            className="wpab-fixed wpab-z-[50001] wpab-flex wpab-flex-col wpab-items-center wpab-gap-1.5 wpab-bg-gray-900 wpab-text-white wpab-text-xs wpab-p-2 wpab-min-w-[140px] wpab-rounded-md wpab-shadow-lg"
+            className="optionbay-fixed optionbay-z-[50001] optionbay-flex optionbay-flex-col optionbay-items-center optionbay-gap-1.5 optionbay-bg-gray-900 optionbay-text-white optionbay-text-xs optionbay-p-2 optionbay-min-w-[140px] optionbay-rounded-md optionbay-shadow-lg"
             style={{
               top: tooltipState.top - 10, // Slight offset upwards from the card top
               left: tooltipState.left,
@@ -142,21 +151,21 @@ export const CardRadioGroup: React.FC<CardRadioGroupProps> = ({
             onMouseEnter={handleTooltipMouseEnter}
             onMouseLeave={handleTooltipMouseLeave}
           >
-            <span className="wpab-font-medium wpab-whitespace-nowrap">
+            <span className="optionbay-font-medium optionbay-whitespace-nowrap">
               Upgrade to unlock
             </span>
             <a
               href="#"
               target="_blank"
               onClick={(e) => e.preventDefault()}
-              className="wpab-w-full wpab-bg-[#f02a74] hover:!wpab-bg-[#e71161] wpab-text-white hover:!wpab-text-white wpab-font-bold wpab-py-1.5 wpab-px-3 wpab-transition-colors focus:wpab-outline-none focus:wpab-ring-0 wpab-cursor-pointer wpab-text-center wpab-rounded"
+              className="optionbay-w-full optionbay-bg-[#f02a74] hover:!optionbay-bg-[#e71161] optionbay-text-white hover:!optionbay-text-white optionbay-font-bold optionbay-py-1.5 optionbay-px-3 optionbay-transition-colors focus:optionbay-outline-none focus:optionbay-ring-0 optionbay-cursor-pointer optionbay-text-center optionbay-rounded"
             >
               Buy Pro
             </a>
             {/* Tooltip Arrow */}
-            <div className="wpab-absolute wpab-top-full wpab-left-1/2 -wpab-translate-x-1/2 wpab-border-4 wpab-border-transparent wpab-border-t-gray-900"></div>
+            <div className="optionbay-absolute optionbay-top-full optionbay-left-1/2 -optionbay-translate-x-1/2 optionbay-border-4 optionbay-border-transparent optionbay-border-t-gray-900"></div>
           </div>,
-          document.body
+          document.body,
         )}
     </>
   );

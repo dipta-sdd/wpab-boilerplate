@@ -39,31 +39,31 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 
   return (
     <div
-      className={`wpab-fixed wpab-inset-0 wpab-z-[60000] wpab-flex wpab-items-center wpab-justify-center wpab-bg-black/50 wpab-backdrop-blur-sm wpab-transition-opacity ${
+      className={`optionbay-fixed optionbay-inset-0 optionbay-z-[60000] optionbay-flex optionbay-items-center optionbay-justify-center optionbay-bg-black/50 optionbay-backdrop-blur-sm optionbay-transition-opacity ${
         classNames.overlay || ""
       }`}
     >
       <div
-        className={`wpab-bg-white wpab-rounded-lg wpab-shadow-xl wpab-pt-6 wpab-pb-3 wpab-px-8 wpab-max-w-sm wpab-w-full wpab-mx-4 wpab-transform wpab-transition-all wpab-scale-100 ${
+        className={`optionbay-bg-white optionbay-rounded-lg optionbay-shadow-xl optionbay-pt-6 optionbay-pb-3 optionbay-px-8 optionbay-max-w-sm optionbay-w-full optionbay-mx-4 optionbay-transform optionbay-transition-all optionbay-scale-100 ${
           classNames.content || ""
         }`}
       >
         <h3
-          className={`wpab-text-lg wpab-font-bold wpab-text-gray-900 wpab-mb-2 wpab-text-nowrap ${
+          className={`optionbay-text-lg optionbay-font-bold optionbay-text-gray-900 optionbay-mb-2 optionbay-text-nowrap ${
             classNames.title || ""
           }`}
         >
           {title}
         </h3>
         <p
-          className={`wpab-text-gray-600 wpab-mb-6 wpab-text-sm wpab-leading-relaxed ${
+          className={`optionbay-text-gray-600 optionbay-mb-6 optionbay-text-sm optionbay-leading-relaxed ${
             classNames.message || ""
           }`}
         >
           {message}
         </p>
         <div
-          className={`wpab-flex wpab-justify-end wpab-gap-3 ${
+          className={`optionbay-flex optionbay-justify-end optionbay-gap-3 ${
             classNames.footer || ""
           }`}
         >

@@ -7,7 +7,13 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { ClassicButton, ClassicInput, ClassicSelect, ClassicCheckbox, ClassicMultiSelect } from "../components/classics";
+import {
+  ClassicButton,
+  ClassicInput,
+  ClassicSelect,
+  ClassicCheckbox,
+  ClassicMultiSelect,
+} from "../components/classics";
 import { ClassicRepeater } from "../components/classics/ClassicRepeater";
 import {
   AddonProvider,
@@ -30,13 +36,20 @@ function renderProductOption(option: MultiSelectOption) {
         <img
           src={opt.image}
           alt=""
-          style={{ width: 32, height: 32, objectFit: "cover", borderRadius: "4px", flexShrink: 0 }}
+          style={{
+            width: 32,
+            height: 32,
+            objectFit: "cover",
+            borderRadius: "4px",
+            flexShrink: 0,
+          }}
         />
       )}
       <div style={{ minWidth: 0 }}>
         <div style={{ fontWeight: 500, lineHeight: "1.3" }}>{opt.label}</div>
         <div style={{ fontSize: "11px", color: "#888", lineHeight: "1.3" }}>
-          ID: {opt.value}{opt.sku ? ` • SKU: ${opt.sku}` : ""}
+          ID: {opt.value}
+          {opt.sku ? ` • SKU: ${opt.sku}` : ""}
         </div>
       </div>
     </div>
@@ -76,7 +89,9 @@ function OptionEditor({
 
   return (
     <div className="ob-option-editor" style={{ marginTop: "15px" }}>
-      <label style={{ fontWeight: 600, display: "block", marginBottom: "10px" }}>
+      <label
+        style={{ fontWeight: 600, display: "block", marginBottom: "10px" }}
+      >
         {__("Choices", "optionbay")}
       </label>
       {options.map((opt, idx) => (
@@ -127,7 +142,10 @@ function OptionEditor({
                 },
               })
             }
-            options={PRICE_TYPES.map((pt) => ({ value: pt.value, label: pt.label }))}
+            options={PRICE_TYPES.map((pt) => ({
+              value: pt.value,
+              label: pt.label,
+            }))}
             size="short"
           />
           <button
@@ -152,7 +170,13 @@ function OptionEditor({
             type: "ADD_OPTION",
             payload: {
               fieldId,
-              option: { label: "", value: "", price_type: "flat", price: 0, weight: 0 },
+              option: {
+                label: "",
+                value: "",
+                price_type: "flat",
+                price: 0,
+                weight: 0,
+              },
             },
           })
         }
@@ -205,7 +229,9 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
           <div className="ob-condition-row" style={{ marginBottom: "15px" }}>
             <select
               value={conditions.action}
-              onChange={(e) => updateConditions({ action: e.target.value as "show" | "hide" })}
+              onChange={(e) =>
+                updateConditions({ action: e.target.value as "show" | "hide" })
+              }
             >
               <option value="show">{__("Show", "optionbay")}</option>
               <option value="hide">{__("Hide", "optionbay")}</option>
@@ -213,7 +239,9 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
             <span>{__("this field if", "optionbay")}</span>
             <select
               value={conditions.match}
-              onChange={(e) => updateConditions({ match: e.target.value as "ALL" | "ANY" })}
+              onChange={(e) =>
+                updateConditions({ match: e.target.value as "ALL" | "ANY" })
+              }
             >
               <option value="ALL">{__("ALL", "optionbay")}</option>
               <option value="ANY">{__("ANY", "optionbay")}</option>
@@ -227,7 +255,10 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
                 value={rule.target_field_id}
                 onChange={(e) => {
                   const rules = [...(conditions.rules || [])];
-                  rules[idx] = { ...rules[idx], target_field_id: e.target.value };
+                  rules[idx] = {
+                    ...rules[idx],
+                    target_field_id: e.target.value,
+                  };
                   updateConditions({ rules });
                 }}
                 style={{ flex: 1 }}
@@ -254,7 +285,9 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
                 <option value="<">{__("less than", "optionbay")}</option>
                 <option value="contains">{__("contains", "optionbay")}</option>
                 <option value="empty">{__("is empty", "optionbay")}</option>
-                <option value="not_empty">{__("is not empty", "optionbay")}</option>
+                <option value="not_empty">
+                  {__("is not empty", "optionbay")}
+                </option>
               </select>
               {!["empty", "not_empty"].includes(rule.operator) && (
                 <ClassicInput
@@ -273,7 +306,9 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
                 type="button"
                 className="ob-remove-option"
                 onClick={() => {
-                  const rules = (conditions.rules || []).filter((_, i) => i !== idx);
+                  const rules = (conditions.rules || []).filter(
+                    (_, i) => i !== idx,
+                  );
                   updateConditions({ rules });
                 }}
               >
@@ -316,7 +351,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className={`ob-field-card ${snapshot.isDragging ? "is-dragging" : ""}`}
+          className={`ob-field-card ${
+            snapshot.isDragging ? "is-dragging" : ""
+          }`}
           style={{ ...provided.draggableProps.style }}
         >
           {/* Header */}
@@ -335,7 +372,11 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
               <span className="ob-field-type-badge">{field.type}</span>
               {field.required && (
                 <span
-                  style={{ color: "#c00", marginLeft: "4px", fontWeight: "bold" }}
+                  style={{
+                    color: "#c00",
+                    marginLeft: "4px",
+                    fontWeight: "bold",
+                  }}
                   title={__("Required field", "optionbay")}
                 >
                   *
@@ -344,7 +385,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
             </div>
             <ClassicButton
               variant="link-delete"
-              onClick={() => dispatch({ type: "REMOVE_FIELD", payload: field.id })}
+              onClick={() =>
+                dispatch({ type: "REMOVE_FIELD", payload: field.id })
+              }
               style={{ fontSize: "12px", textDecoration: "none" }}
             >
               {__("Remove", "optionbay")}
@@ -376,7 +419,10 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                           max_file_size: defaults.max_file_size,
                         });
                       }}
-                      options={FIELD_TYPES.map((ft) => ({ value: ft.value, label: ft.label }))}
+                      options={FIELD_TYPES.map((ft) => ({
+                        value: ft.value,
+                        label: ft.label,
+                      }))}
                     />
                   </td>
                 </tr>
@@ -403,7 +449,10 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                       rows={2}
                       value={field.description}
                       onChange={(e) => update({ description: e.target.value })}
-                      placeholder={__("Help text shown below the field", "optionbay")}
+                      placeholder={__(
+                        "Help text shown below the field",
+                        "optionbay",
+                      )}
                     />
                   </td>
                 </tr>
@@ -428,8 +477,13 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                       <ClassicInput
                         size="regular"
                         value={field.placeholder}
-                        onChange={(e) => update({ placeholder: e.target.value })}
-                        placeholder={__("Optional placeholder text", "optionbay")}
+                        onChange={(e) =>
+                          update({ placeholder: e.target.value })
+                        }
+                        placeholder={__(
+                          "Optional placeholder text",
+                          "optionbay",
+                        )}
                       />
                     </td>
                   </tr>
@@ -443,8 +497,13 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                       <td>
                         <ClassicSelect
                           value={field.price_type}
-                          onChange={(val) => update({ price_type: String(val) })}
-                          options={PRICE_TYPES.map((pt) => ({ value: pt.value, label: pt.label }))}
+                          onChange={(val) =>
+                            update({ price_type: String(val) })
+                          }
+                          options={PRICE_TYPES.map((pt) => ({
+                            value: pt.value,
+                            label: pt.label,
+                          }))}
                         />
                       </td>
                     </tr>
@@ -472,7 +531,13 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 {["text", "textarea"].includes(field.type) && (
                   <tr>
                     <th scope="row">{__("Restrictions", "optionbay")}</th>
-                    <td style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    <td
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                        alignItems: "center",
+                      }}
+                    >
                       <label style={{ fontSize: "12px" }}>
                         {__("Min Length:", "optionbay")}{" "}
                         <ClassicInput
@@ -480,7 +545,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                           size="small"
                           value={field.min_length || ""}
                           onChange={(e) =>
-                            update({ min_length: parseInt(e.target.value) || 0 })
+                            update({
+                              min_length: parseInt(e.target.value) || 0,
+                            })
                           }
                           min={0}
                         />
@@ -492,7 +559,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                           size="small"
                           value={field.max_length || ""}
                           onChange={(e) =>
-                            update({ max_length: parseInt(e.target.value) || 0 })
+                            update({
+                              max_length: parseInt(e.target.value) || 0,
+                            })
                           }
                           min={0}
                         />
@@ -506,7 +575,14 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                   <tr>
                     <th scope="row">{__("Restrictions", "optionbay")}</th>
                     <td>
-                      <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "10px",
+                          alignItems: "center",
+                          marginBottom: "8px",
+                        }}
+                      >
                         <label style={{ fontSize: "12px" }}>
                           {__("Min:", "optionbay")}{" "}
                           <ClassicInput
@@ -514,7 +590,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                             size="small"
                             value={field.min_value ?? ""}
                             onChange={(e) =>
-                              update({ min_value: parseFloat(e.target.value) || 0 })
+                              update({
+                                min_value: parseFloat(e.target.value) || 0,
+                              })
                             }
                           />
                         </label>
@@ -525,7 +603,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                             size="small"
                             value={field.max_value ?? ""}
                             onChange={(e) =>
-                              update({ max_value: parseFloat(e.target.value) || 0 })
+                              update({
+                                max_value: parseFloat(e.target.value) || 0,
+                              })
                             }
                           />
                         </label>
@@ -536,7 +616,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                           type="number"
                           size="small"
                           value={field.step ?? ""}
-                          onChange={(e) => update({ step: parseFloat(e.target.value) || 1 })}
+                          onChange={(e) =>
+                            update({ step: parseFloat(e.target.value) || 1 })
+                          }
                           step="0.01"
                         />
                       </label>
@@ -548,16 +630,25 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 {field.type === "file" && (
                   <>
                     <tr>
-                      <th scope="row">{__("File Restrictions", "optionbay")}</th>
+                      <th scope="row">
+                        {__("File Restrictions", "optionbay")}
+                      </th>
                       <td>
-                        <label style={{ display: "block", marginBottom: "8px" }}>
+                        <label
+                          style={{ display: "block", marginBottom: "8px" }}
+                        >
                           <span style={{ fontSize: "12px", display: "block" }}>
-                            {__("Allowed Extensions (comma separated):", "optionbay")}
+                            {__(
+                              "Allowed Extensions (comma separated):",
+                              "optionbay",
+                            )}
                           </span>
                           <ClassicInput
                             size="regular"
                             value={field.allowed_types || ""}
-                            onChange={(e) => update({ allowed_types: e.target.value })}
+                            onChange={(e) =>
+                              update({ allowed_types: e.target.value })
+                            }
                             placeholder=".jpg,.png,.pdf"
                           />
                         </label>
@@ -570,7 +661,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                             size="small"
                             value={field.max_file_size || ""}
                             onChange={(e) =>
-                              update({ max_file_size: parseInt(e.target.value) || 5 })
+                              update({
+                                max_file_size: parseInt(e.target.value) || 5,
+                              })
                             }
                             min={1}
                           />
@@ -604,7 +697,9 @@ function BuilderInner() {
   const params = useParams<{ id: string }>();
   const isEdit = !!params.id;
 
-  const [activeAssignmentType, setActiveAssignmentType] = useState<"product" | "category" | "tag">("product");
+  const [activeAssignmentType, setActiveAssignmentType] = useState<
+    "product" | "category" | "tag"
+  >("product");
 
   // Load existing group
   useEffect(() => {
@@ -625,7 +720,11 @@ function BuilderInner() {
             title: data.title,
             status: data.status,
             schema: data.schema || [],
-            settings: data.settings || { layout: "flat", priority: 10, active: true },
+            settings: data.settings || {
+              layout: "flat",
+              priority: 10,
+              active: true,
+            },
             assignments: (data.assignments || []).map((a: any) => ({
               ...a,
               target_id: parseInt(a.target_id) || 0,
@@ -635,7 +734,10 @@ function BuilderInner() {
           },
         });
       } catch (err) {
-        dispatch({ type: "SET_ERROR", payload: __("Failed to load option group.", "optionbay") });
+        dispatch({
+          type: "SET_ERROR",
+          payload: __("Failed to load option group.", "optionbay"),
+        });
       } finally {
         dispatch({ type: "SET_LOADING", payload: false });
       }
@@ -646,11 +748,15 @@ function BuilderInner() {
 
   // Sync initial assignment type when loading an existing group
   useEffect(() => {
-    const nonGlobal = state.assignments.filter((a) => a.target_type !== "global");
+    const nonGlobal = state.assignments.filter(
+      (a) => a.target_type !== "global",
+    );
     if (nonGlobal.length > 0) {
-      setActiveAssignmentType(nonGlobal[0].target_type as "product" | "category" | "tag");
+      setActiveAssignmentType(
+        nonGlobal[0].target_type as "product" | "category" | "tag",
+      );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.settings?.priority]); // Just need to trigger once on load, priority is decent proxy since it's in the payload
 
   // Save handler
@@ -688,7 +794,8 @@ function BuilderInner() {
     } catch (err: any) {
       dispatch({
         type: "SET_ERROR",
-        payload: err?.message || __("Failed to save option group.", "optionbay"),
+        payload:
+          err?.message || __("Failed to save option group.", "optionbay"),
       });
     } finally {
       dispatch({ type: "SET_SAVING", payload: false });
@@ -713,7 +820,7 @@ function BuilderInner() {
   if (state.isLoading) {
     return (
       <div style={{ textAlign: "center", padding: "100px 0" }}>
-        <p className="wpab-loader-container">
+        <p className="optionbay-loader-container">
           <span className="spinner is-active" style={{ float: "none" }}></span>
           <br />
           {__("Loading option group...", "optionbay")}
@@ -723,10 +830,13 @@ function BuilderInner() {
   }
 
   return (
-    <div className="ob-builder wpab-ignore-preflight">
+    <div className="ob-builder optionbay-ignore-preflight">
       {/* Error notice */}
       {state.error && (
-        <div className="notice notice-error is-dismissible" style={{ marginBottom: "20px" }}>
+        <div
+          className="notice notice-error is-dismissible"
+          style={{ marginBottom: "20px" }}
+        >
           <p>{state.error}</p>
         </div>
       )}
@@ -751,11 +861,16 @@ function BuilderInner() {
           ← {__("Back to List", "optionbay")}
         </ClassicButton>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <span style={{ fontSize: "13px", color: "#646970" }}>{__("Status:", "optionbay")}</span>
+          <span style={{ fontSize: "13px", color: "#646970" }}>
+            {__("Status:", "optionbay")}
+          </span>
           <ClassicSelect
             value={state.status}
             onChange={(val) =>
-              dispatch({ type: "SET_STATUS", payload: String(val) as "publish" | "draft" })
+              dispatch({
+                type: "SET_STATUS",
+                payload: String(val) as "publish" | "draft",
+              })
             }
             options={[
               { value: "publish", label: __("Active", "optionbay") },
@@ -783,7 +898,7 @@ function BuilderInner() {
         <div style={{ flex: 1 }}>
           {/* Group Title */}
           <div className="ob-builder-title-wrapper">
-            <div className="postbox">
+            {/* <div className="postbox"> */}
               <div className="inside" style={{ padding: "0" }}>
                 <ClassicInput
                   className="ob-builder-title-input"
@@ -795,14 +910,18 @@ function BuilderInner() {
                   placeholder={__("Enter Option Group Title", "optionbay")}
                 />
               </div>
-            </div>
+            {/* </div> */}
           </div>
 
           {/* Fields list with drag-and-drop */}
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="fields-list">
               {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps} style={{ minHeight: "100px" }}>
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  style={{ minHeight: "100px" }}
+                >
                   {state.schema.length === 0 ? (
                     <div
                       className="postbox"
@@ -819,16 +938,15 @@ function BuilderInner() {
                         {__("Your group is empty", "optionbay")}
                       </p>
                       <p style={{ fontSize: "13px" }}>
-                        {__("Click the field buttons in the sidebar to start building.", "optionbay")}
+                        {__(
+                          "Click the field buttons in the sidebar to start building.",
+                          "optionbay",
+                        )}
                       </p>
                     </div>
                   ) : (
                     state.schema.map((field, index) => (
-                      <FieldRow
-                        key={field.id}
-                        field={field}
-                        index={index}
-                      />
+                      <FieldRow key={field.id} field={field} index={index} />
                     ))
                   )}
                   {provided.placeholder}
@@ -842,7 +960,9 @@ function BuilderInner() {
         <div style={{ width: "320px" }}>
           {/* Add Field Section */}
           <div className="ob-sidebar-section">
-            <div className="ob-sidebar-header">{__("Add Fields", "optionbay")}</div>
+            <div className="ob-sidebar-header">
+              {__("Add Fields", "optionbay")}
+            </div>
             <div className="ob-sidebar-content">
               <div className="ob-add-field-grid">
                 {FIELD_TYPES.map((ft) => (
@@ -860,10 +980,18 @@ function BuilderInner() {
 
           {/* Group Settings Section */}
           <div className="ob-sidebar-section">
-            <div className="ob-sidebar-header">{__("Group Settings", "optionbay")}</div>
+            <div className="ob-sidebar-header">
+              {__("Group Settings", "optionbay")}
+            </div>
             <div className="ob-sidebar-content">
               <div style={{ marginBottom: "15px" }}>
-                <label style={{ display: "block", marginBottom: "5px", fontWeight: 600 }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    fontWeight: 600,
+                  }}
+                >
                   {__("Display Layout", "optionbay")}
                 </label>
                 <ClassicSelect
@@ -875,14 +1003,23 @@ function BuilderInner() {
                     })
                   }
                   options={[
-                    { value: "flat", label: __("Flat (Standard)", "optionbay") },
+                    {
+                      value: "flat",
+                      label: __("Flat (Standard)", "optionbay"),
+                    },
                     { value: "accordion", label: __("Accordion", "optionbay") },
                   ]}
                   size="regular"
                 />
               </div>
               <div style={{ marginBottom: "5px" }}>
-                <label style={{ display: "block", marginBottom: "5px", fontWeight: 600 }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    fontWeight: 600,
+                  }}
+                >
                   {__("Priority Order", "optionbay")}
                 </label>
                 <ClassicInput
@@ -906,128 +1043,213 @@ function BuilderInner() {
 
           {/* Assignment Rules Section */}
           <div className="ob-sidebar-section">
-            <div className="ob-sidebar-header">{__("Assignment Rules", "optionbay")}</div>
+            <div className="ob-sidebar-header">
+              {__("Assignment Rules", "optionbay")}
+            </div>
             <div className="ob-sidebar-content">
-              <div style={{ marginBottom: "15px", paddingBottom: "15px", borderBottom: "1px solid #eee" }}>
+              <div
+                style={{
+                  marginBottom: "15px",
+                  paddingBottom: "15px",
+                  borderBottom: "1px solid #eee",
+                }}
+              >
                 <ClassicCheckbox
                   label={__("Global (All Products)", "optionbay")}
-                  checked={state.assignments.some((a) => a.target_type === "global")}
+                  checked={state.assignments.some(
+                    (a) => a.target_type === "global",
+                  )}
                   onChange={(checked) => {
                     if (checked) {
                       dispatch({
                         type: "SET_ASSIGNMENTS",
                         payload: [
-                          { target_type: "global", target_id: 0, is_exclusion: false, priority: state.settings.priority },
+                          {
+                            target_type: "global",
+                            target_id: 0,
+                            is_exclusion: false,
+                            priority: state.settings.priority,
+                          },
                         ],
                       });
                     } else {
                       dispatch({
                         type: "SET_ASSIGNMENTS",
-                        payload: state.assignments.filter((a) => a.target_type !== "global"),
+                        payload: state.assignments.filter(
+                          (a) => a.target_type !== "global",
+                        ),
                       });
                     }
                   }}
                 />
               </div>
 
-              {!state.assignments.some((a) => a.target_type === "global") && (() => {
-                return (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                    {/* Assignment Type Selector */}
-                    <div>
-                      <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
-                        {__("Assign By", "optionbay")}
-                      </label>
-                      <ClassicSelect
-                        value={activeAssignmentType}
-                        onChange={(val) => {
-                          setActiveAssignmentType(val as any);
-                          // Clear existing non-global assignments when switching type
-                          dispatch({ type: "SET_ASSIGNMENTS", payload: [] });
-                        }}
-                        options={[
-                          { value: "product", label: __("Products", "optionbay") },
-                          { value: "category", label: __("Categories", "optionbay") },
-                          { value: "tag", label: __("Tags", "optionbay") },
-                        ]}
-                      />
+              {!state.assignments.some((a) => a.target_type === "global") &&
+                (() => {
+                  return (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "12px",
+                      }}
+                    >
+                      {/* Assignment Type Selector */}
+                      <div>
+                        <label
+                          style={{
+                            display: "block",
+                            marginBottom: "5px",
+                            fontWeight: 600,
+                            fontSize: "13px",
+                          }}
+                        >
+                          {__("Assign By", "optionbay")}
+                        </label>
+                        <ClassicSelect
+                          value={activeAssignmentType}
+                          onChange={(val) => {
+                            setActiveAssignmentType(val as any);
+                            // Clear existing non-global assignments when switching type
+                            dispatch({ type: "SET_ASSIGNMENTS", payload: [] });
+                          }}
+                          options={[
+                            {
+                              value: "product",
+                              label: __("Products", "optionbay"),
+                            },
+                            {
+                              value: "category",
+                              label: __("Categories", "optionbay"),
+                            },
+                            { value: "tag", label: __("Tags", "optionbay") },
+                          ]}
+                        />
+                      </div>
+
+                      {/* Products MultiSelect */}
+                      {activeAssignmentType === "product" && (
+                        <div>
+                          <label
+                            style={{
+                              display: "block",
+                              marginBottom: "5px",
+                              fontWeight: 600,
+                              fontSize: "13px",
+                            }}
+                          >
+                            {__("Select Products", "optionbay")}
+                          </label>
+                          <ClassicMultiSelect
+                            value={state.assignments
+                              .filter((a) => a.target_type === "product")
+                              .map((a) => a.target_id)}
+                            onChange={(ids) => {
+                              const productAssignments = (ids as number[]).map(
+                                (id) => ({
+                                  target_type: "product" as const,
+                                  target_id: id,
+                                  is_exclusion: false,
+                                  priority: state.settings.priority,
+                                }),
+                              );
+                              dispatch({
+                                type: "SET_ASSIGNMENTS",
+                                payload: productAssignments,
+                              });
+                            }}
+                            endpoint="/optionbay/v1/resources/products"
+                            placeholder={__(
+                              "Search products by name, ID, or SKU...",
+                              "optionbay",
+                            )}
+                            renderOption={renderProductOption}
+                            size="regular"
+                          />
+                        </div>
+                      )}
+
+                      {/* Categories MultiSelect */}
+                      {activeAssignmentType === "category" && (
+                        <div>
+                          <label
+                            style={{
+                              display: "block",
+                              marginBottom: "5px",
+                              fontWeight: 600,
+                              fontSize: "13px",
+                            }}
+                          >
+                            {__("Select Categories", "optionbay")}
+                          </label>
+                          <ClassicMultiSelect
+                            value={state.assignments
+                              .filter((a) => a.target_type === "category")
+                              .map((a) => a.target_id)}
+                            onChange={(ids) => {
+                              const categoryAssignments = (ids as number[]).map(
+                                (id) => ({
+                                  target_type: "category" as const,
+                                  target_id: id,
+                                  is_exclusion: false,
+                                  priority: state.settings.priority,
+                                }),
+                              );
+                              dispatch({
+                                type: "SET_ASSIGNMENTS",
+                                payload: categoryAssignments,
+                              });
+                            }}
+                            endpoint="/optionbay/v1/resources/categories"
+                            placeholder={__(
+                              "Search categories...",
+                              "optionbay",
+                            )}
+                            size="regular"
+                          />
+                        </div>
+                      )}
+
+                      {/* Tags MultiSelect */}
+                      {activeAssignmentType === "tag" && (
+                        <div>
+                          <label
+                            style={{
+                              display: "block",
+                              marginBottom: "5px",
+                              fontWeight: 600,
+                              fontSize: "13px",
+                            }}
+                          >
+                            {__("Select Tags", "optionbay")}
+                          </label>
+                          <ClassicMultiSelect
+                            value={state.assignments
+                              .filter((a) => a.target_type === "tag")
+                              .map((a) => a.target_id)}
+                            onChange={(ids) => {
+                              const tagAssignments = (ids as number[]).map(
+                                (id) => ({
+                                  target_type: "tag" as const,
+                                  target_id: id,
+                                  is_exclusion: false,
+                                  priority: state.settings.priority,
+                                }),
+                              );
+                              dispatch({
+                                type: "SET_ASSIGNMENTS",
+                                payload: tagAssignments,
+                              });
+                            }}
+                            endpoint="/optionbay/v1/resources/tags"
+                            placeholder={__("Search tags...", "optionbay")}
+                            size="regular"
+                          />
+                        </div>
+                      )}
                     </div>
-
-                    {/* Products MultiSelect */}
-                    {activeAssignmentType === "product" && (
-                      <div>
-                        <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
-                          {__("Select Products", "optionbay")}
-                        </label>
-                        <ClassicMultiSelect
-                          value={state.assignments.filter((a) => a.target_type === "product").map((a) => a.target_id)}
-                          onChange={(ids) => {
-                            const productAssignments = (ids as number[]).map((id) => ({
-                              target_type: "product" as const,
-                              target_id: id,
-                              is_exclusion: false,
-                              priority: state.settings.priority,
-                            }));
-                            dispatch({ type: "SET_ASSIGNMENTS", payload: productAssignments });
-                          }}
-                          endpoint="/optionbay/v1/resources/products"
-                          placeholder={__("Search products by name, ID, or SKU...", "optionbay")}
-                          renderOption={renderProductOption}
-                          size="regular"
-                        />
-                      </div>
-                    )}
-
-                    {/* Categories MultiSelect */}
-                    {activeAssignmentType === "category" && (
-                      <div>
-                        <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
-                          {__("Select Categories", "optionbay")}
-                        </label>
-                        <ClassicMultiSelect
-                          value={state.assignments.filter((a) => a.target_type === "category").map((a) => a.target_id)}
-                          onChange={(ids) => {
-                            const categoryAssignments = (ids as number[]).map((id) => ({
-                              target_type: "category" as const,
-                              target_id: id,
-                              is_exclusion: false,
-                              priority: state.settings.priority,
-                            }));
-                            dispatch({ type: "SET_ASSIGNMENTS", payload: categoryAssignments });
-                          }}
-                          endpoint="/optionbay/v1/resources/categories"
-                          placeholder={__("Search categories...", "optionbay")}
-                          size="regular"
-                        />
-                      </div>
-                    )}
-
-                    {/* Tags MultiSelect */}
-                    {activeAssignmentType === "tag" && (
-                      <div>
-                        <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
-                          {__("Select Tags", "optionbay")}
-                        </label>
-                        <ClassicMultiSelect
-                          value={state.assignments.filter((a) => a.target_type === "tag").map((a) => a.target_id)}
-                          onChange={(ids) => {
-                            const tagAssignments = (ids as number[]).map((id) => ({
-                              target_type: "tag" as const,
-                              target_id: id,
-                              is_exclusion: false,
-                              priority: state.settings.priority,
-                            }));
-                            dispatch({ type: "SET_ASSIGNMENTS", payload: tagAssignments });
-                          }}
-                          endpoint="/optionbay/v1/resources/tags"
-                          placeholder={__("Search tags...", "optionbay")}
-                          size="regular"
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })()}
+                  );
+                })()}
             </div>
           </div>
         </div>

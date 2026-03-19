@@ -62,15 +62,15 @@ class Admin
 	{
 		return array(
 			'plugin_name' => esc_html__('OptionBay', 'optionbay'),
-			'short_name'  => esc_html__('OptionBay', 'optionbay'),
-			'menu_label'  => esc_html__('OptionBay', 'optionbay'),
+			'short_name' => esc_html__('OptionBay', 'optionbay'),
+			'menu_label' => esc_html__('OptionBay', 'optionbay'),
 			'custom_icon' => OPTIONBAY_URL . 'assets/img/icon.svg',
-			'menu_icon'   => 'dashicons-admin-plugins',
+			'menu_icon' => 'dashicons-admin-plugins',
 			'author_name' => 'WP Anchor Bay',
-			'author_uri'  => 'https://wpanchorbay.com',
+			'author_uri' => 'https://wpanchorbay.com',
 			'support_uri' => 'https://wpanchorbay.com/support',
-			'docs_uri'    => 'https://docs.wpanchorbay.com',
-			'position'    => 57,
+			'docs_uri' => 'https://docs.wpanchorbay.com',
+			'position' => 57,
 		);
 	}
 
@@ -91,25 +91,25 @@ class Admin
 			array(
 				'page_title' => $plugin_data['plugin_name'],
 				'menu_title' => $plugin_data['menu_label'],
-				'menu_slug'  => OPTIONBAY_PLUGIN_NAME,
-				'icon_url'   => $plugin_data['custom_icon'],
-				'position'   => $plugin_data['position'],
-				'callback'   => array($this, 'add_setting_root_div'),
-				'submenu'    => array(
+				'menu_slug' => OPTIONBAY_PLUGIN_NAME,
+				'icon_url' => $plugin_data['custom_icon'],
+				'position' => $plugin_data['position'],
+				'callback' => array($this, 'add_setting_root_div'),
+				'submenu' => array(
 					array(
 						'menu_title' => esc_html__('Dashboard', 'optionbay'),
-						'menu_slug'  => OPTIONBAY_PLUGIN_NAME,
-						'callback'   => array($this, 'add_setting_root_div')
+						'menu_slug' => OPTIONBAY_PLUGIN_NAME,
+						'callback' => array($this, 'add_setting_root_div')
 					),
 					array(
 						'menu_title' => esc_html__('Settings', 'optionbay'),
-						'menu_slug'  => OPTIONBAY_PLUGIN_NAME . '#/settings',
-						'callback'   => array($this, 'add_setting_root_div')
+						'menu_slug' => OPTIONBAY_PLUGIN_NAME . '#/settings',
+						'callback' => array($this, 'add_setting_root_div')
 					),
 					array(
 						'menu_title' => esc_html__('Components', 'optionbay'),
-						'menu_slug'  => OPTIONBAY_PLUGIN_NAME . '#/components-classic',
-						'callback'   => array($this, 'add_setting_root_div')
+						'menu_slug' => OPTIONBAY_PLUGIN_NAME . '#/components-classic',
+						'callback' => array($this, 'add_setting_root_div')
 					)
 				)
 			)
@@ -216,7 +216,7 @@ class Admin
 	public function add_setting_root_div()
 	{
 		echo '<div id="' . esc_attr(OPTIONBAY_PLUGIN_NAME) . '">
-			<div class="wpab-loader-container">
+			<div class="optionbay-loader-container">
 				<p>' . esc_html__('Loading...', 'optionbay') . '</p>
 			</div>
 		</div>';
@@ -281,18 +281,18 @@ class Admin
 		$localize = apply_filters(
 			'optionbay_admin_localize',
 			array(
-				'version'     => $version,
-				'root_id'     => OPTIONBAY_PLUGIN_NAME,
-				'nonce'       => wp_create_nonce('wp_rest'),
-				'store'       => OPTIONBAY_PLUGIN_NAME,
-				'rest_url'    => get_rest_url(),
-				'pluginData'  => $this->get_plugin_data(),
-				'wpSettings'  => array(
+				'version' => $version,
+				'root_id' => OPTIONBAY_PLUGIN_NAME,
+				'nonce' => wp_create_nonce('wp_rest'),
+				'store' => OPTIONBAY_PLUGIN_NAME,
+				'rest_url' => get_rest_url(),
+				'pluginData' => $this->get_plugin_data(),
+				'wpSettings' => array(
 					'dateFormat' => get_option('date_format'),
 					'timeFormat' => get_option('time_format'),
 				),
 				'plugin_settings' => \OptionBay\Core\Settings::get_instance()->get_settings(),
-				'products_url'    => admin_url('edit.php?post_type=product'),
+				'products_url' => admin_url('edit.php?post_type=product'),
 			)
 		);
 
@@ -322,7 +322,7 @@ class Admin
 		$actions[] = '<a href="' . esc_url(menu_page_url($this->menu_info['menu_slug'], false)) . '">' . esc_html__('Settings', 'optionbay') . '</a>';
 		return $actions;
 	}
-	
+
 	/**
 	 * Register the hooks for the admin area.
 	 *

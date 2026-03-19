@@ -188,7 +188,7 @@ const Select: React.FC<SelectProps> = ({
   enableSearch = false,
   border = borderClasses,
   hoverBorder = hoverBorderClasses,
-  color = "wpab-text-[#0a4b78]",
+  color = "optionbay-text-[#0a4b78]",
   isError = false,
   errorClassName = errorClasses,
   differentDropdownWidth = false,
@@ -456,14 +456,14 @@ const Select: React.FC<SelectProps> = ({
   };
   return (
     <div
-      className={`wpab-relative wpab-w-full ${className} ${
+      className={`optionbay-relative optionbay-w-full ${className} ${
         classNames.wrapper || ""
       }`}
       ref={containerRef}
     >
       {label && (
         <label
-          className={`wpab-block wpab-text-sm wpab-font-medium wpab-text-gray-700 wpab-mb-1 ${
+          className={`optionbay-block optionbay-text-sm optionbay-font-medium optionbay-text-gray-700 optionbay-mb-1 ${
             classNames.label || ""
           }`}
         >
@@ -484,29 +484,29 @@ const Select: React.FC<SelectProps> = ({
         onClick={() => !disabled && setIsOpen((prev) => !prev)}
         onKeyDown={handleTriggerKeyDown}
         className={`
-          wpab-ring-1 wpab-ring-transparent
-          wpab-relative wpab-flex wpab-flex-wrap  wpab-items-center wpab-justify-between wpab-w-full wpab-gap-0 wpab-px-4  wpab-text-left !wpab-cursor-pointer 
-          wpab-transition-all wpab-duration-200 wpab-ease-in-out wpab-border wpab-rounded-[8px] wpab-bg-white ${border} 
-          ${isCompact ? "wpab-py-[5px]" : "wpab-py-[9px]"}
+          optionbay-ring-1 optionbay-ring-transparent
+          optionbay-relative optionbay-flex optionbay-flex-wrap  optionbay-items-center optionbay-justify-between optionbay-w-full optionbay-gap-0 optionbay-px-4  optionbay-text-left !optionbay-cursor-pointer 
+          optionbay-transition-all optionbay-duration-200 optionbay-ease-in-out optionbay-border optionbay-rounded-[8px] optionbay-bg-white ${border} 
+          ${isCompact ? "optionbay-py-[5px]" : "optionbay-py-[9px]"}
           ${!disabled && !isOpen ? ` ${color} ` : ""}
           ${
             disabled
-              ? "wpab-bg-gray-100 wpab-cursor-not-allowed wpab-text-gray-400 wpab-border-gray-200"
+              ? "optionbay-bg-gray-100 optionbay-cursor-not-allowed optionbay-text-gray-400 optionbay-border-gray-200"
               : isError
               ? ""
-              : "hover:!wpab-border-[#3858e9]"
+              : "hover:!optionbay-border-[#3858e9]"
           }
           ${isOpen ? (isError ? errorClassesManual : hoverClassesManual) : ""}
           ${isError ? `${errorClassName} ${classNames.error || ""}` : ""}
           ${classNames.select || ""} ${classNames.container || ""}
         `}
       >
-        <div className="wpab-flex-1 wpab-min-w-0">
+        <div className="optionbay-flex-1 optionbay-min-w-0">
           {enableSearch && isOpen ? (
             <input
               ref={searchInputRef}
               type="text"
-              className={`wpab-w-full !wpab-bg-transparent !wpab-border-none !wpab-shadow-none !wpab-outline-none !wpab-p-0 !wpab-font-[${fontWeight}] !wpab-text-[${fontSize}px] !wpab-leading-[20px] !wpab-min-h-[unset] ${
+              className={`optionbay-w-full !optionbay-bg-transparent !optionbay-border-none !optionbay-shadow-none !optionbay-outline-none !optionbay-p-0 !optionbay-font-[${fontWeight}] !optionbay-text-[${fontSize}px] !optionbay-leading-[20px] !optionbay-min-h-[unset] ${
                 classNames.search || ""
               }`}
               value={searchQuery}
@@ -520,13 +520,15 @@ const Select: React.FC<SelectProps> = ({
             />
           ) : (
             <span
-              className={`wpab-block wpab-truncate ${color} hover:!wpab-text-[#3858e9] wpab-text-[${fontSize}px] wpab-font-[${fontWeight}]`}
+              className={`optionbay-block optionbay-truncate ${color} hover:!optionbay-text-[#3858e9] optionbay-text-[${fontSize}px] optionbay-font-[${fontWeight}]`}
             >
               {value ? (
                 <span
-                  className={`wpab-flex wpab-items-center wpab-gap-2 `}
+                  className={`optionbay-flex optionbay-items-center optionbay-gap-2 `}
                 >
-                  {renderOption && selectedOption ? renderOption(selectedOption) : selectedOption?.label}
+                  {renderOption && selectedOption
+                    ? renderOption(selectedOption)
+                    : selectedOption?.label}
                 </span>
               ) : (
                 placeholder
@@ -537,10 +539,10 @@ const Select: React.FC<SelectProps> = ({
 
         {/* Chevron Icon */}
         {!hideIcon ? (
-          <span className="wpab-flex-shrink-0 wpab-ml-2 wpab-flex wpab-items-center">
+          <span className="optionbay-flex-shrink-0 optionbay-ml-2 optionbay-flex optionbay-items-center">
             <ChevronDown
-              className={`wpab-h-4 wpab-w-4 wpab-text-gray-700 wpab-transition-transform wpab-duration-200 ${
-                isOpen ? "wpab-transform wpab-rotate-180" : ""
+              className={`optionbay-h-4 optionbay-w-4 optionbay-text-gray-700 optionbay-transition-transform optionbay-duration-200 ${
+                isOpen ? "optionbay-transform optionbay-rotate-180" : ""
               }`}
             />
           </span>
@@ -550,8 +552,8 @@ const Select: React.FC<SelectProps> = ({
       {/* Dropdown Panel */}
       {isOpen && (
         <div
-          className={`wpab-absolute wpab-z-50  wpab-bg-white wpab-border wpab-border-gray-200 wpab-rounded-b-lg ${
-            differentDropdownWidth ? "" : "wpab-w-full"
+          className={`optionbay-absolute optionbay-z-50  optionbay-bg-white optionbay-border optionbay-border-gray-200 optionbay-rounded-b-lg ${
+            differentDropdownWidth ? "" : "optionbay-w-full"
           } ${classNames.dropdown || ""}`}
           style={{
             zIndex: 50000,
@@ -568,11 +570,11 @@ const Select: React.FC<SelectProps> = ({
             role="listbox"
             tabIndex={-1}
             onScroll={() => setTooltipState(null)} // Hide tooltip on scroll to prevent detachment
-            className={`wpab-max-h-60 wpab-overflow-auto focus:wpab-outline-none wpab-scrollbar-hide wpab-relative ${color} wpab-font-[${fontWeight}] wpab-text-[${fontSize}px]`}
+            className={`optionbay-max-h-60 optionbay-overflow-auto focus:optionbay-outline-none optionbay-scrollbar-hide optionbay-relative ${color} optionbay-font-[${fontWeight}] optionbay-text-[${fontSize}px]`}
             style={{ scrollbarWidth: "none" }}
           >
             {filteredOptions.length === 0 ? (
-              <li className="wpab-relative wpab-cursor-default wpab-select-none wpab-p-1  wpab-italic wpab-text-center wpab-rounded-[8px]">
+              <li className="optionbay-relative optionbay-cursor-default optionbay-select-none optionbay-p-1  optionbay-italic optionbay-text-center optionbay-rounded-[8px]">
                 {searchQuery ? "No results found" : "No options available"}
               </li>
             ) : (
@@ -601,22 +603,22 @@ const Select: React.FC<SelectProps> = ({
                       handleSelect(option);
                     }}
                     className={`
-                      wpab-group wpab-relative wpab-cursor-pointer wpab-select-none wpab-px-3  wpab-flex wpab-flex-nowrap wpab-justify-between wpab-min-h-[36px]wpab-font-medium wpab-transition-colors wpab-duration-150 !wpab-mb-0 wpab-border-b-[1px] wpab-border-gray-100  wpab-rounded-[8px] 
+                      optionbay-group optionbay-relative optionbay-cursor-pointer optionbay-select-none optionbay-px-3  optionbay-flex optionbay-flex-nowrap optionbay-justify-between optionbay-min-h-[36px]optionbay-font-medium optionbay-transition-colors optionbay-duration-150 !optionbay-mb-0 optionbay-border-b-[1px] optionbay-border-gray-100  optionbay-rounded-[8px] 
                       ${
                         isDisabled
-                          ? "wpab-opacity-100 !wpab-cursor-not-allowed wpab-text-gray-500 wpab-bg-gray-200"
+                          ? "optionbay-opacity-100 !optionbay-cursor-not-allowed optionbay-text-gray-500 optionbay-bg-gray-200"
                           : ""
                       }
                       ${
                         isComingSoon
-                          ? "wpab-opacity-100 !wpab-cursor-not-allowed !wpab-text-pink-500 hover:!wpab-text-pink-600 wpab-bg-gray-200"
+                          ? "optionbay-opacity-100 !optionbay-cursor-not-allowed !optionbay-text-pink-500 hover:!optionbay-text-pink-600 optionbay-bg-gray-200"
                           : ""
                       }
                       ${
                         isHighlighted && !isDisabled
-                          ? "wpab-bg-blue-600 wpab-text-white"
+                          ? "optionbay-bg-blue-600 optionbay-text-white"
                           : isDisabled
-                          ? "wpab-text-gray-400"
+                          ? "optionbay-text-gray-400"
                           : ""
                       }
                       ${
@@ -627,12 +629,12 @@ const Select: React.FC<SelectProps> = ({
                       ${classNames.option || ""}
                     `}
                   >
-                    <div className="wpab-flex wpab-items-center wpab-justify-between wpab-min-h-[36px] wpab-w-full wpab-gap-4">
+                    <div className="optionbay-flex optionbay-items-center optionbay-justify-between optionbay-min-h-[36px] optionbay-w-full optionbay-gap-4">
                       <span
-                        className={`wpab-block wpab-truncate ${
+                        className={`optionbay-block optionbay-truncate ${
                           isSelected
-                            ? "wpab-font-semibold"
-                            : "wpab-font-normal"
+                            ? "optionbay-font-semibold"
+                            : "optionbay-font-normal"
                         }`}
                       >
                         {renderOption ? renderOption(option) : option.label}
@@ -640,12 +642,12 @@ const Select: React.FC<SelectProps> = ({
 
                       {/* Lock Icon for Buy Pro */}
                       {isPro && (
-                        <LockKeyhole className="wpab-w-3.5 wpab-h-3.5 wpab-text-[#f02a74]" />
+                        <LockKeyhole className="optionbay-w-3.5 optionbay-h-3.5 optionbay-text-[#f02a74]" />
                       )}
                       {isComingSoon && (
-                        <span className="wpab-bg-pink-600 wpab-text-white wpab-p-1 wpab-px-2 wpab-rounded-full wpab-text-xs wpab-flex wpab-items-center wpab-gap-1 wpab-flex-nowrap">
-                          <Hourglass className="wpab-w-3.5 wpab-h-3.5 wpab-text-white" />
-                          <span className="wpab-whitespace-nowrap">
+                        <span className="optionbay-bg-pink-600 optionbay-text-white optionbay-p-1 optionbay-px-2 optionbay-rounded-full optionbay-text-xs optionbay-flex optionbay-items-center optionbay-gap-1 optionbay-flex-nowrap">
+                          <Hourglass className="optionbay-w-3.5 optionbay-h-3.5 optionbay-text-white" />
+                          <span className="optionbay-whitespace-nowrap">
                             Coming Soon
                           </span>
                         </span>
@@ -655,14 +657,14 @@ const Select: React.FC<SelectProps> = ({
                     {/* Checkmark for selected item */}
                     {isSelected && !isPro && !isComingSoon && (
                       <span
-                        className={`wpab-px-3 wpab-pr-0 wpab-flex-nowrap wpab-flex wpab-items-center wpab-pr-4 ${
+                        className={`optionbay-px-3 optionbay-pr-0 optionbay-flex-nowrap optionbay-flex optionbay-items-center optionbay-pr-4 ${
                           isHighlighted && !isDisabled
-                            ? "wpab-text-white"
-                            : "wpab-text-blue-600"
+                            ? "optionbay-text-white"
+                            : "optionbay-text-blue-600"
                         }`}
                       >
                         <svg
-                          className="wpab-h-5 wpab-w-5"
+                          className="optionbay-h-5 optionbay-w-5"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                           fill="currentColor"
@@ -690,7 +692,7 @@ const Select: React.FC<SelectProps> = ({
         createPortal(
           <div
             ref={tooltipRef}
-            className="wpab-fixed wpab-z-[50001] wpab-flex wpab-flex-col wpab-items-center wpab-gap-1.5 wpab-bg-gray-900 wpab-text-white wpab-text-xs wpab-p-2 wpab-min-w-[140px] wpab-rounded-md wpab-shadow-lg"
+            className="optionbay-fixed optionbay-z-[50001] optionbay-flex optionbay-flex-col optionbay-items-center optionbay-gap-1.5 optionbay-bg-gray-900 optionbay-text-white optionbay-text-xs optionbay-p-2 optionbay-min-w-[140px] optionbay-rounded-md optionbay-shadow-lg"
             style={{
               top: tooltipState.top + 5, // Adjusted to user preference
               left: tooltipState.left,
@@ -699,19 +701,19 @@ const Select: React.FC<SelectProps> = ({
             onMouseEnter={handleTooltipMouseEnter}
             onMouseLeave={handleTooltipMouseLeave}
           >
-            <span className="wpab-font-medium wpab-whitespace-nowrap">
+            <span className="optionbay-font-medium optionbay-whitespace-nowrap">
               Upgrade to unlock
             </span>
             <a
               href="#"
               target="_blank"
               onClick={(e) => e.preventDefault()}
-              className="wpab-w-full wpab-bg-[#f02a74] hover:!wpab-bg-[#e71161] wpab-text-white hover:!wpab-text-white wpab-font-bold wpab-py-1.5 wpab-px-3 wpab-transition-colors focus:wpab-outline-none focus:wpab-ring-0 wpab-cursor-pointer wpab-text-center wpab-rounded"
+              className="optionbay-w-full optionbay-bg-[#f02a74] hover:!optionbay-bg-[#e71161] optionbay-text-white hover:!optionbay-text-white optionbay-font-bold optionbay-py-1.5 optionbay-px-3 optionbay-transition-colors focus:optionbay-outline-none focus:optionbay-ring-0 optionbay-cursor-pointer optionbay-text-center optionbay-rounded"
             >
               Buy Pro
             </a>
             {/* Tooltip Arrow */}
-            <div className="wpab-absolute wpab-top-full wpab-left-1/2 -wpab-translate-x-1/2 wpab-border-4 wpab-border-transparent wpab-border-t-gray-900"></div>
+            <div className="optionbay-absolute optionbay-top-full optionbay-left-1/2 -optionbay-translate-x-1/2 optionbay-border-4 optionbay-border-transparent optionbay-border-t-gray-900"></div>
           </div>,
           document.body,
         )}

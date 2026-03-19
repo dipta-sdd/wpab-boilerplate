@@ -1,5 +1,5 @@
-import React, { useState, FC } from 'react';
-import { BookmarkCheck, CopyCheck, Paperclip } from 'lucide-react';
+import React, { useState, FC } from "react";
+import { BookmarkCheck, CopyCheck, Paperclip } from "lucide-react";
 
 // Define the interface for the component's props
 interface CopyToClipboardProps {
@@ -19,14 +19,14 @@ export const CopyToClipboard: FC<CopyToClipboardProps> = ({ text }) => {
       setTimeout(() => setCopping(false), 200); // Quick transition from check to bookmark
       setTimeout(() => setCopied(false), 2000); // Reset to original state after 2 seconds
     } catch (err) {
-      console.error('Failed to copy text: ', err);
+      console.error("Failed to copy text: ", err);
     }
   };
 
   return (
     <button
       onClick={handleCopy}
-      className="wpab-inline-flex wpab-items-center wpab-justify-center wpab-cursor-pointer"
+      className="optionbay-inline-flex optionbay-items-center optionbay-justify-center optionbay-cursor-pointer"
       aria-label={`Copy "${text}" to clipboard`}
     >
       {copied ? (

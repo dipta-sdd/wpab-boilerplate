@@ -5,7 +5,7 @@ import { Toast } from "./Toast";
 export const ToastContainer: FC = () => {
   const { toasts, removeToast } = useToast();
   return (
-    <div className="wpab-fixed wpab-top-[10px] wpab-right-[10px] wpab-z-[999999] wpab-flex wpab-flex-col wpab-gap-[10px] wpab-min-w-[200px] wpab-pointer-events-none">
+    <div className="optionbay-fixed optionbay-top-[10px] optionbay-right-[10px] optionbay-z-[999999] optionbay-flex optionbay-flex-col optionbay-gap-[10px] optionbay-min-w-[200px] optionbay-pointer-events-none">
       {toasts.map((toast) => (
         <Toast key={toast.id} toast={toast} onDismiss={removeToast} />
       ))}

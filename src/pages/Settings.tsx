@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-    import {
+import {
   ClassicSettingsTable,
   ClassicInput,
   ClassicCheckbox,
@@ -65,7 +65,7 @@ const Settings: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="wpab-p-page-default">
+      <div className="optionbay-p-page-default">
         <p>{__("Loading settings...", "optionbay")}</p>
       </div>
     );
@@ -73,25 +73,28 @@ const Settings: React.FC = () => {
 
   if (!settings) {
     return (
-      <div className="wpab-p-page-default">
+      <div className="optionbay-p-page-default">
         <p>{__("Failed to load settings.", "optionbay")}</p>
       </div>
     );
   }
 
   return (
-    <div className="wpab-p-page-default wpab-ignore-preflight">
+    <div className="optionbay-p-page-default optionbay-ignore-preflight">
       <ClassicSettingsTable
         title={__("Global Settings", "optionbay")}
         description={__(
           "Configure the main functionality of your plugin.",
-          "optionbay"
+          "optionbay",
         )}
         fields={[
           {
             id: "global_enableFeature",
             label: __("Enable Core Feature", "optionbay"),
-            tooltip: __("Toggle the main functionality of the plugin.", "optionbay"),
+            tooltip: __(
+              "Toggle the main functionality of the plugin.",
+              "optionbay",
+            ),
             render: () => (
               <ClassicCheckbox
                 checked={settings.global_enableFeature}
@@ -101,7 +104,7 @@ const Settings: React.FC = () => {
                 label={__("Enable the amazing feature", "optionbay")}
                 description={__(
                   "When enabled, the plugin will perform its core magic.",
-                  "optionbay"
+                  "optionbay",
                 )}
               />
             ),
@@ -114,11 +117,14 @@ const Settings: React.FC = () => {
               <ClassicInput
                 value={settings.global_exampleText}
                 onChange={(e) =>
-                  setSettings({ ...settings, global_exampleText: e.target.value })
+                  setSettings({
+                    ...settings,
+                    global_exampleText: e.target.value,
+                  })
                 }
                 description={__(
                   "Enter a custom welcome message for your users.",
-                  "optionbay"
+                  "optionbay",
                 )}
                 size="regular"
               />
@@ -131,7 +137,7 @@ const Settings: React.FC = () => {
         title={__("Advanced Settings", "optionbay")}
         description={__(
           "Careful! These settings affect data persistence and debugging.",
-          "optionbay"
+          "optionbay",
         )}
         fields={[
           {
@@ -146,7 +152,7 @@ const Settings: React.FC = () => {
                 label={__("Enable developer logging", "optionbay")}
                 description={__(
                   "Detailed logs will be written to the database for troubleshooting.",
-                  "optionbay"
+                  "optionbay",
                 )}
               />
             ),
@@ -166,7 +172,7 @@ const Settings: React.FC = () => {
                 label={__("Purge all plugin data", "optionbay")}
                 description={__(
                   "WARNING: Checking this will delete all plugin tables and settings when the plugin is deleted.",
-                  "optionbay"
+                  "optionbay",
                 )}
               />
             ),
@@ -174,7 +180,7 @@ const Settings: React.FC = () => {
         ]}
       />
 
-      <div className="wpab-mt-8">
+      <div className="optionbay-mt-8">
         <ClassicButton
           variant="primary"
           onClick={handleSave}

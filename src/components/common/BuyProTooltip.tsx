@@ -59,20 +59,20 @@ export const BuyProTooltip: React.FC<BuyProTooltipProps> = ({
   return (
     <>
       <div
-        className={`wpab-relative wpab-inline-block ${className}`}
+        className={`optionbay-relative optionbay-inline-block ${className}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         {children}
-        <div className="wpab-absolute wpab-right-2 wpab-top-1/2 -wpab-translate-y-1/2 wpab-pointer-events-none">
-          <LockKeyhole className="wpab-w-3.5 wpab-h-3.5 wpab-text-[#f02a74]" />
+        <div className="optionbay-absolute optionbay-right-2 optionbay-top-1/2 -optionbay-translate-y-1/2 optionbay-pointer-events-none">
+          <LockKeyhole className="optionbay-w-3.5 optionbay-h-3.5 optionbay-text-[#f02a74]" />
         </div>
       </div>
       {tooltipState?.visible &&
         createPortal(
           <div
             ref={tooltipRef}
-            className="wpab-fixed wpab-z-[50001] wpab-flex wpab-flex-col wpab-items-center wpab-gap-1.5 wpab-bg-gray-900 wpab-text-white wpab-text-xs wpab-p-2 wpab-min-w-[140px]"
+            className="optionbay-fixed optionbay-z-[50001] optionbay-flex optionbay-flex-col optionbay-items-center optionbay-gap-1.5 optionbay-bg-gray-900 optionbay-text-white optionbay-text-xs optionbay-p-2 optionbay-min-w-[140px]"
             style={{
               top: tooltipState.top + 5, // Adjusted to user preference
               left: tooltipState.left,
@@ -81,19 +81,19 @@ export const BuyProTooltip: React.FC<BuyProTooltipProps> = ({
             onMouseEnter={handleTooltipMouseEnter}
             onMouseLeave={handleTooltipMouseLeave}
           >
-            <span className="wpab-font-medium wpab-whitespace-nowrap">
+            <span className="optionbay-font-medium optionbay-whitespace-nowrap">
               {__("Upgrade to unlock", "optionbay")}
             </span>
             <a
               href={store.pluginData?.support_uri || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="wpab-w-full wpab-bg-[#f02a74] hover:!wpab-bg-[#e71161] wpab-text-white hover:!wpab-text-white wpab-font-bold wpab-py-1.5 wpab-px-3 wpab-transition-colors focus:wpab-outline-none focus:wpab-ring-0 wpab-cursor-pointer wpab-text-center wpab-no-underline"
+              className="optionbay-w-full optionbay-bg-[#f02a74] hover:!optionbay-bg-[#e71161] optionbay-text-white hover:!optionbay-text-white optionbay-font-bold optionbay-py-1.5 optionbay-px-3 optionbay-transition-colors focus:optionbay-outline-none focus:optionbay-ring-0 optionbay-cursor-pointer optionbay-text-center optionbay-no-underline"
             >
               {__("Buy Pro", "optionbay")}
             </a>
             {/* Tooltip Arrow */}
-            <div className="wpab-absolute wpab-top-full wpab-left-1/2 -wpab-translate-x-1/2 wpab-border-4 wpab-border-transparent wpab-border-t-gray-900"></div>
+            <div className="optionbay-absolute optionbay-top-full optionbay-left-1/2 -optionbay-translate-x-1/2 optionbay-border-4 optionbay-border-transparent optionbay-border-t-gray-900"></div>
           </div>,
           document.body,
         )}

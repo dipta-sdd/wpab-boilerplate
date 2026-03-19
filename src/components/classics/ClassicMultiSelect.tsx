@@ -67,7 +67,9 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState("");
   const [apiOptions, setApiOptions] = useState<MultiSelectOption[]>([]);
-  const [allSeenOptions, setAllSeenOptions] = useState<MultiSelectOption[]>(options || []);
+  const [allSeenOptions, setAllSeenOptions] = useState<MultiSelectOption[]>(
+    options || [],
+  );
   const [isLoading, setIsLoading] = useState(false);
   const initialFetchDone = useRef(false);
 
@@ -133,7 +135,9 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
       try {
         setIsLoading(true);
         const separator = endpoint.includes("?") ? "&" : "?";
-        const path = `${endpoint}${separator}search=${encodeURIComponent(searchQuery)}`;
+        const path = `${endpoint}${separator}search=${encodeURIComponent(
+          searchQuery,
+        )}`;
 
         const res: any = await apiFetch({ path, method: "GET" });
 
@@ -311,7 +315,7 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
         </label>
       )}
 
-      <div className="wpab-relative" style={{ width: explicitWidth }}>
+      <div className="optionbay-relative" style={{ width: explicitWidth }}>
         <div
           id={selectId}
           tabIndex={disabled ? -1 : 0}
@@ -390,7 +394,7 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
               onKeyDown={handleSearchKeyDown}
               placeholder={value.length === 0 ? placeholder : ""}
               disabled={disabled}
-              className="focus:wpab-outline-none focus:wpab-shadow-none"
+              className="focus:optionbay-outline-none focus:optionbay-shadow-none"
               style={{
                 border: "none",
                 outline: "none",
@@ -429,7 +433,7 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
 
         {isOpen && (
           <div
-            className={`wpab-absolute wpab-z-50 wpab-bg-white wpab-border wpab-border-[#8c8f94] wpab-rounded-[3px]`}
+            className={`optionbay-absolute optionbay-z-50 optionbay-bg-white optionbay-border optionbay-border-[#8c8f94] optionbay-rounded-[3px]`}
             style={{
               zIndex: 99999,
               boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
@@ -454,7 +458,8 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
                   gap: "8px",
                 }}
               >
-                <Hourglass size={14} className="wpab-animate-spin" /> Loading...
+                <Hourglass size={14} className="optionbay-animate-spin" />{" "}
+                Loading...
               </div>
             ) : (
               <ul
@@ -475,7 +480,7 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
                       color: "#646970",
                       fontStyle: "italic",
                       fontSize: "13px",
-                      margin: "0"
+                      margin: "0",
                     }}
                   >
                     {searchQuery ? "No results found" : "No options available"}
@@ -543,26 +548,28 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
                         >
                           <div
                             className={`
-                            wpab-flex wpab-items-center wpab-justify-center
-                            wpab-w-4 wpab-h-4 wpab-rounded wpab-border-2 wpab-transition-all wpab-duration-200
+                            optionbay-flex optionbay-items-center optionbay-justify-center
+                            optionbay-w-4 optionbay-h-4 optionbay-rounded optionbay-border-2 optionbay-transition-all optionbay-duration-200
                             ${
                               isSelected
                                 ? isHighlighted
-                                  ? "wpab-border-white wpab-bg-white"
-                                  : "wpab-border-[#2271b1] wpab-bg-[#2271b1]"
+                                  ? "optionbay-border-white optionbay-bg-white"
+                                  : "optionbay-border-[#2271b1] optionbay-bg-[#2271b1]"
                                 : isHighlighted
-                                ? "wpab-border-white wpab-bg-transparent"
-                                : "wpab-border-[#8c8f94] wpab-bg-white"
+                                ? "optionbay-border-white optionbay-bg-transparent"
+                                : "optionbay-border-[#8c8f94] optionbay-bg-white"
                             }
                           `}
                           >
                             <svg
-                              className={`wpab-w-3.5 wpab-h-3.5 wpab-transform wpab-transition-transform wpab-duration-200 ${
-                                isSelected ? "wpab-scale-100" : "wpab-scale-0"
+                              className={`optionbay-w-3.5 optionbay-h-3.5 optionbay-transform optionbay-transition-transform optionbay-duration-200 ${
+                                isSelected
+                                  ? "optionbay-scale-100"
+                                  : "optionbay-scale-0"
                               } ${
                                 isHighlighted && isSelected
-                                  ? "wpab-text-[#2271b1]"
-                                  : "wpab-text-white"
+                                  ? "optionbay-text-[#2271b1]"
+                                  : "optionbay-text-white"
                               }`}
                               viewBox="0 0 24 24"
                               fill="none"

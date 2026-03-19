@@ -130,7 +130,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   label,
   enableSearch = true,
   isError = false,
-  errorClassName = "wpab-border-danger",
+  errorClassName = "optionbay-border-danger",
   classNames = {},
   isCompact = false,
   renderOption,
@@ -231,10 +231,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
       const isInsideContainer = containerRef.current?.contains(target);
       const isInsideDropdown = dropdownRef.current?.contains(target);
 
-      if (
-        tooltipRef.current &&
-        tooltipRef.current.contains(target)
-      ) {
+      if (tooltipRef.current && tooltipRef.current.contains(target)) {
         return;
       }
 
@@ -439,14 +436,14 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
   return (
     <div
-      className={`wpab-relative wpab-w-full ${className} ${
+      className={`optionbay-relative optionbay-w-full ${className} ${
         classNames.wrapper || ""
       }`}
       ref={containerRef}
     >
       {label && (
         <label
-          className={`wpab-block wpab-text-sm wpab-font-bold wpab-text-gray-900 wpab-mb-2 ${
+          className={`optionbay-block optionbay-text-sm optionbay-font-bold optionbay-text-gray-900 optionbay-mb-2 ${
             classNames.label || ""
           }`}
         >
@@ -460,14 +457,14 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         ref={ref}
         onClick={handleTriggerClick}
         className={`
-          wpab-relative wpab-flex wpab-flex-wrap wpab-items-center wpab-gap-2 wpab-w-full wpab-px-4 wpab-text-left !wpab-cursor-text
-          wpab-transition-all wpab-duration-200 wpab-ease-in-out wpab-border wpab-rounded-[8px] wpab-bg-white
+          optionbay-relative optionbay-flex optionbay-flex-wrap optionbay-items-center optionbay-gap-2 optionbay-w-full optionbay-px-4 optionbay-text-left !optionbay-cursor-text
+          optionbay-transition-all optionbay-duration-200 optionbay-ease-in-out optionbay-border optionbay-rounded-[8px] optionbay-bg-white
           ${borderClasses}
-          ${isCompact ? "wpab-py-[4px]" : "wpab-py-[7px]"}
+          ${isCompact ? "optionbay-py-[4px]" : "optionbay-py-[7px]"}
           ${
             disabled
-              ? "wpab-bg-gray-50 wpab-cursor-not-allowed wpab-text-gray-400 wpab-border-gray-200"
-              : `hover:!wpab-border-primary`
+              ? "optionbay-bg-gray-50 optionbay-cursor-not-allowed optionbay-text-gray-400 optionbay-border-gray-200"
+              : `hover:!optionbay-border-primary`
           }
           ${isOpen ? hoverBorderClasses : ""}
           ${isError ? errorClassName : ""}
@@ -479,7 +476,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           <span
             key={option.value}
             className={`
-                wpab-inline-flex wpab-items-center wpab-gap-1 wpab-bg-gray-100 wpab-text-gray-800 wpab-px-2 wpab-py-[2px] wpab-rounded-none wpab-text-[13px] wpab-leading-[20px] wpab-font-[400]
+                optionbay-inline-flex optionbay-items-center optionbay-gap-1 optionbay-bg-gray-100 optionbay-text-gray-800 optionbay-px-2 optionbay-py-[2px] optionbay-rounded-none optionbay-text-[13px] optionbay-leading-[20px] optionbay-font-[400]
                 ${classNames.tag || ""}
             `}
           >
@@ -487,10 +484,10 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             <button
               type="button"
               onClick={(e) => handleRemove(option.value, e)}
-              className="wpab-flex wpab-items-center wpab-justify-center wpab-w-4 wpab-h-4 wpab-rounded-full hover:wpab-bg-gray-200 wpab-transition-colors wpab-text-gray-500"
+              className="optionbay-flex optionbay-items-center optionbay-justify-center optionbay-w-4 optionbay-h-4 optionbay-rounded-full hover:optionbay-bg-gray-200 optionbay-transition-colors optionbay-text-gray-500"
               aria-label={`Remove ${option.label}`}
             >
-              <X className="wpab-w-3 wpab-h-3" />
+              <X className="optionbay-w-3 optionbay-h-3" />
             </button>
           </span>
         ))}
@@ -500,7 +497,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           ref={searchInputRef}
           type="text"
           className={`
-            wpab-flex-1 wpab-min-w-[80px] wpab-bg-transparent !wpab-border-none !wpab-shadow-none wpab-outline-none wpab-px-1 wpab-py-[2px]  !wpab-text-[13px] !wpab-leading-[20px] wpab-font-[400] wpab-text-gray-900 wpab-placeholder-gray-400 !wpab-min-h-[24px]
+            optionbay-flex-1 optionbay-min-w-[80px] optionbay-bg-transparent !optionbay-border-none !optionbay-shadow-none optionbay-outline-none optionbay-px-1 optionbay-py-[2px]  !optionbay-text-[13px] !optionbay-leading-[20px] optionbay-font-[400] optionbay-text-gray-900 optionbay-placeholder-gray-400 !optionbay-min-h-[24px]
             ${classNames.search || ""}
           `}
           value={searchQuery}
@@ -516,10 +513,10 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         />
 
         {/* Chevron Icon */}
-        <span className="wpab-flex-shrink-0 wpab-ml-auto wpab-flex wpab-items-center">
+        <span className="optionbay-flex-shrink-0 optionbay-ml-auto optionbay-flex optionbay-items-center">
           <ChevronDown
-            className={`wpab-h-4 wpab-w-4 wpab-text-gray-500 wpab-transition-transform wpab-duration-200 ${
-              isOpen ? "wpab-transform wpab-rotate-180" : ""
+            className={`optionbay-h-4 optionbay-w-4 optionbay-text-gray-500 optionbay-transition-transform optionbay-duration-200 ${
+              isOpen ? "optionbay-transform optionbay-rotate-180" : ""
             }`}
           />
         </span>
@@ -530,7 +527,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         <div
           ref={dropdownRef}
           className={`
-                wpab-absolute wpab-z-[50000] wpab-w-full wpab-bg-white wpab-border wpab-border-gray-200 wpab-rounded-[12px] wpab-p-[4px] wpab-shadow-xl
+                optionbay-absolute optionbay-z-[50000] optionbay-w-full optionbay-bg-white optionbay-border optionbay-border-gray-200 optionbay-rounded-[12px] optionbay-p-[4px] optionbay-shadow-xl
                 ${classNames.dropdown || ""}
             `}
           style={{
@@ -544,15 +541,15 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             ref={listRef}
             role="listbox"
             tabIndex={-1}
-            className="wpab-max-h-[204px] wpab-overflow-auto focus:wpab-outline-none"
+            className="optionbay-max-h-[204px] optionbay-overflow-auto focus:optionbay-outline-none"
             style={{ scrollbarWidth: "none" }}
           >
             {isLoading ? (
-              <li className="wpab-px-3 wpab-py-2 wpab-text-gray-500 wpab-text-sm wpab-text-center wpab-italic !wpab-mb-0 wpab-rounded-[8px]">
+              <li className="optionbay-px-3 optionbay-py-2 optionbay-text-gray-500 optionbay-text-sm optionbay-text-center optionbay-italic !optionbay-mb-0 optionbay-rounded-[8px]">
                 Loading...
               </li>
             ) : filteredOptions.length === 0 ? (
-              <li className="wpab-px-3 wpab-py-2 wpab-text-gray-500 wpab-text-sm wpab-text-center wpab-italic !wpab-mb-0 wpab-rounded-[8px]">
+              <li className="optionbay-px-3 optionbay-py-2 optionbay-text-gray-500 optionbay-text-sm optionbay-text-center optionbay-italic !optionbay-mb-0 optionbay-rounded-[8px]">
                 {searchQuery ? "No results found" : "No more options"}
               </li>
             ) : (
@@ -576,41 +573,44 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                       handleSelect(option);
                     }}
                     className={`
-                        wpab-group wpab-relative wpab-cursor-pointer wpab-select-none wpab-px-4 wpab-py-2.5 wpab-text-sm wpab-transition-colors wpab-border-b wpab-border-gray-50 last:wpab-border-0 !wpab-mb-0 wpab-rounded-[8px]
-                        wpab-flex wpab-flex-nowrap wpab-justify-between wpab-items-center
+                        optionbay-group optionbay-relative optionbay-cursor-pointer optionbay-select-none optionbay-px-4 optionbay-py-2.5 optionbay-text-sm optionbay-transition-colors optionbay-border-b optionbay-border-gray-50 last:optionbay-border-0 !optionbay-mb-0 optionbay-rounded-[8px]
+                        optionbay-flex optionbay-flex-nowrap optionbay-justify-between optionbay-items-center
                         ${
                           isDisabled || isPro || isComingSoon
-                            ? "wpab-opacity-100 !wpab-cursor-not-allowed wpab-text-gray-500 wpab-bg-gray-100/50"
+                            ? "optionbay-opacity-100 !optionbay-cursor-not-allowed optionbay-text-gray-500 optionbay-bg-gray-100/50"
                             : ""
                         }
                         ${
-                          isHighlighted && !isDisabled && !isPro && !isComingSoon
-                            ? "wpab-bg-blue-600 wpab-text-white"
-                            : "wpab-text-gray-700"
+                          isHighlighted &&
+                          !isDisabled &&
+                          !isPro &&
+                          !isComingSoon
+                            ? "optionbay-bg-blue-600 optionbay-text-white"
+                            : "optionbay-text-gray-700"
                         }
                         ${
                           isComingSoon
-                            ? "hover:!wpab-text-pink-600 !wpab-text-pink-500"
+                            ? "hover:!optionbay-text-pink-600 !optionbay-text-pink-500"
                             : ""
                         }
                         ${option.className || ""}
                         ${classNames.option || ""}
                         `}
                   >
-                    <div className="wpab-flex wpab-items-center wpab-min-w-0 wpab-gap-4">
-                      <span className="wpab-block wpab-truncate">
+                    <div className="optionbay-flex optionbay-items-center optionbay-min-w-0 optionbay-gap-4">
+                      <span className="optionbay-block optionbay-truncate">
                         {renderOption ? renderOption(option) : option.label}
                       </span>
                     </div>
 
                     {/* Lock Icon for Buy Pro */}
                     {isPro && (
-                      <LockKeyhole className="wpab-w-3.5 wpab-h-3.5 wpab-text-[#f02a74] wpab-flex-shrink-0" />
+                      <LockKeyhole className="optionbay-w-3.5 optionbay-h-3.5 optionbay-text-[#f02a74] optionbay-flex-shrink-0" />
                     )}
                     {isComingSoon && (
-                      <span className="wpab-bg-pink-600 wpab-text-white wpab-p-1 wpab-px-2 wpab-rounded-full wpab-text-xs wpab-flex wpab-items-center wpab-gap-1 wpab-flex-nowrap wpab-flex-shrink-0">
-                        <Hourglass className="wpab-w-3.5 wpab-h-3.5 wpab-text-white" />
-                        <span className="wpab-whitespace-nowrap">
+                      <span className="optionbay-bg-pink-600 optionbay-text-white optionbay-p-1 optionbay-px-2 optionbay-rounded-full optionbay-text-xs optionbay-flex optionbay-items-center optionbay-gap-1 optionbay-flex-nowrap optionbay-flex-shrink-0">
+                        <Hourglass className="optionbay-w-3.5 optionbay-h-3.5 optionbay-text-white" />
+                        <span className="optionbay-whitespace-nowrap">
                           Coming Soon
                         </span>
                       </span>
@@ -629,7 +629,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         createPortal(
           <div
             ref={tooltipRef}
-            className="wpab-fixed wpab-z-[50001] wpab-flex wpab-flex-col wpab-items-center wpab-gap-1.5 wpab-bg-gray-900 wpab-text-white wpab-text-xs wpab-p-2 wpab-min-w-[140px] wpab-rounded-md wpab-shadow-lg"
+            className="optionbay-fixed optionbay-z-[50001] optionbay-flex optionbay-flex-col optionbay-items-center optionbay-gap-1.5 optionbay-bg-gray-900 optionbay-text-white optionbay-text-xs optionbay-p-2 optionbay-min-w-[140px] optionbay-rounded-md optionbay-shadow-lg"
             style={{
               top: tooltipState.top + 5,
               left: tooltipState.left,
@@ -638,19 +638,19 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             onMouseEnter={handleTooltipMouseEnter}
             onMouseLeave={handleTooltipMouseLeave}
           >
-            <span className="wpab-font-medium wpab-whitespace-nowrap">
+            <span className="optionbay-font-medium optionbay-whitespace-nowrap">
               Upgrade to unlock
             </span>
             <a
               href="#"
               target="_blank"
               onClick={(e) => e.preventDefault()}
-              className="wpab-w-full wpab-bg-[#f02a74] hover:!wpab-bg-[#e71161] wpab-text-white hover:!wpab-text-white wpab-font-bold wpab-py-1.5 wpab-px-3 wpab-transition-colors focus:wpab-outline-none focus:wpab-ring-0 wpab-cursor-pointer wpab-text-center wpab-rounded"
+              className="optionbay-w-full optionbay-bg-[#f02a74] hover:!optionbay-bg-[#e71161] optionbay-text-white hover:!optionbay-text-white optionbay-font-bold optionbay-py-1.5 optionbay-px-3 optionbay-transition-colors focus:optionbay-outline-none focus:optionbay-ring-0 optionbay-cursor-pointer optionbay-text-center optionbay-rounded"
             >
               Buy Pro
             </a>
             {/* Tooltip Arrow */}
-            <div className="wpab-absolute wpab-top-full wpab-left-1/2 -wpab-translate-x-1/2 wpab-border-4 wpab-border-transparent wpab-border-t-gray-900"></div>
+            <div className="optionbay-absolute optionbay-top-full optionbay-left-1/2 -optionbay-translate-x-1/2 optionbay-border-4 optionbay-border-transparent optionbay-border-t-gray-900"></div>
           </div>,
           document.body,
         )}

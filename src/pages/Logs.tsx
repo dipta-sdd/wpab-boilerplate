@@ -39,25 +39,25 @@ const Logs = () => {
 
   return (
     <div className="">
-      <div className="wpab-flex wpab-justify-between wpab-items-end wpab-mb-6">
+      <div className="optionbay-flex optionbay-justify-between optionbay-items-end optionbay-mb-6">
         <div>
-          <p className="wpab-text-sm wpab-text-gray-500">
+          <p className="optionbay-text-sm optionbay-text-gray-500">
             {__(
               "View logs stored in /wp-content/uploads/optionbay-logs/",
               "optionbay",
             )}
           </p>
         </div>
-        <div className="wpab-flex wpab-gap-2">
+        <div className="optionbay-flex optionbay-gap-2">
           <button
             onClick={fetchLogs}
-            className="wpab-px-4 wpab-py-2 wpab-bg-white wpab-border wpab-border-gray-300 wpab-rounded-md wpab-text-sm wpab-font-medium wpab-text-gray-700 hover:wpab-bg-gray-50"
+            className="optionbay-px-4 optionbay-py-2 optionbay-bg-white optionbay-border optionbay-border-gray-300 optionbay-rounded-md optionbay-text-sm optionbay-font-medium optionbay-text-gray-700 hover:optionbay-bg-gray-50"
           >
             Refresh
           </button>
           <button
             onClick={clearLogs}
-            className="wpab-px-4 wpab-py-2 wpab-bg-red-600 wpab-text-white wpab-rounded-md wpab-text-sm wpab-font-medium hover:wpab-bg-red-700"
+            className="optionbay-px-4 optionbay-py-2 optionbay-bg-red-600 optionbay-text-white optionbay-rounded-md optionbay-text-sm optionbay-font-medium hover:optionbay-bg-red-700"
           >
             Clear Logs
           </button>
@@ -65,23 +65,23 @@ const Logs = () => {
       </div>
 
       {error && (
-        <div className="wpab-bg-red-50 wpab-border wpab-border-red-200 wpab-text-red-700 wpab-px-4 wpab-py-3 wpab-rounded wpab-mb-6">
+        <div className="optionbay-bg-red-50 optionbay-border optionbay-border-red-200 optionbay-text-red-700 optionbay-px-4 optionbay-py-3 optionbay-rounded optionbay-mb-6">
           {error}
         </div>
       )}
 
       {loading ? (
-        <div className="wpab-flex wpab-justify-center wpab-py-12">
-          <span className="wpab-loading-spinner"></span>
+        <div className="optionbay-flex optionbay-justify-center optionbay-py-12">
+          <span className="optionbay-loading-spinner"></span>
         </div>
       ) : (
-        <div className="wpab-bg-gray-900 wpab-rounded-lg wpab-overflow-hidden wpab-shadow-sm">
-          <div className="wpab-p-4 wpab-bg-gray-800 wpab-border-b wpab-border-gray-700 wpab-flex wpab-justify-between wpab-items-center">
-            <span className="wpab-text-xs wpab-text-gray-400 wpab-font-mono">
+        <div className="optionbay-bg-gray-900 optionbay-rounded-lg optionbay-overflow-hidden optionbay-shadow-sm">
+          <div className="optionbay-p-4 optionbay-bg-gray-800 optionbay-border-b optionbay-border-gray-700 optionbay-flex optionbay-justify-between optionbay-items-center">
+            <span className="optionbay-text-xs optionbay-text-gray-400 optionbay-font-mono">
               debug.log
             </span>
           </div>
-          <pre className="wpab-p-4 wpab-text-gray-300 wpab-font-mono wpab-text-xs wpab-overflow-x-auto wpab-max-h-[600px] wpab-whitespace-pre-wrap">
+          <pre className="optionbay-p-4 optionbay-text-gray-300 optionbay-font-mono optionbay-text-xs optionbay-overflow-x-auto optionbay-max-h-[600px] optionbay-whitespace-pre-wrap">
             {logs}
           </pre>
         </div>

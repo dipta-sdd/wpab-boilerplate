@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { borderClasses } from './classes';
+import React, { useState, useRef, useEffect } from "react";
+import { borderClasses } from "./classes";
 
 export interface TogglerOption {
   label: React.ReactNode;
@@ -12,7 +12,7 @@ interface TogglerProps {
   onChange: (value: any) => void;
   className?: string;
   fullWidth?: boolean;
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
   disabled?: boolean;
   classNames?: {
     root?: string;
@@ -25,20 +25,23 @@ export const Toggler: React.FC<TogglerProps> = ({
   options,
   value,
   onChange,
-  className = '',
+  className = "",
   fullWidth = false,
-  size = 'medium',
+  size = "medium",
   disabled = false,
   classNames = {},
 }) => {
-  const [pillStyle, setPillStyle] = useState<{ left: number; width: number } | null>(null);
+  const [pillStyle, setPillStyle] = useState<{
+    left: number;
+    width: number;
+  } | null>(null);
   const itemsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Size configuration
   const sizeClasses = {
-    small: 'wpab-px-[8px] wpab-py-[2px] wpab-text-[11px]',
-    medium: 'wpab-px-[18px] wpab-py-[5px] wpab-text-default',
-    large: 'wpab-px-[20px] wpab-py-[12px] wpab-text-[15px]',
+    small: "optionbay-px-[8px] optionbay-py-[2px] optionbay-text-[11px]",
+    medium: "optionbay-px-[18px] optionbay-py-[5px] optionbay-text-default",
+    large: "optionbay-px-[20px] optionbay-py-[12px] optionbay-text-[15px]",
   };
 
   useEffect(() => {
@@ -58,13 +61,17 @@ export const Toggler: React.FC<TogglerProps> = ({
   return (
     <div
       className={`
-        wpab-relative wpab-inline-flex wpab-items-center
-        wpab-bg-white wpab-border ${borderClasses} wpab-rounded-[8px]
-        wpab-p-[4px] wpab-select-none
-        ${fullWidth ? 'wpab-flex wpab-w-full' : ''}
-        ${disabled ? 'wpab-opacity-50 wpab-cursor-not-allowed wpab-pointer-events-none' : ''}
+        optionbay-relative optionbay-inline-flex optionbay-items-center
+        optionbay-bg-white optionbay-border ${borderClasses} optionbay-rounded-[8px]
+        optionbay-p-[4px] optionbay-select-none
+        ${fullWidth ? "optionbay-flex optionbay-w-full" : ""}
+        ${
+          disabled
+            ? "optionbay-opacity-50 optionbay-cursor-not-allowed optionbay-pointer-events-none"
+            : ""
+        }
         ${className}
-        ${classNames.root || ''}
+        ${classNames.root || ""}
       `}
       role="group"
       aria-disabled={disabled}
@@ -72,11 +79,11 @@ export const Toggler: React.FC<TogglerProps> = ({
       {/* Sliding Background Pill */}
       <div
         className={`
-            wpab-absolute wpab-top-[4px] wpab-bottom-[4px]
-            wpab-bg-primary wpab-rounded-[6px] wpab-shadow-sm
-            wpab-transition-all wpab-duration-300 wpab-ease-[cubic-bezier(0.4,0,0.2,1)]
-            wpab-pointer-events-none
-            ${classNames.pill || ''}
+            optionbay-absolute optionbay-top-[4px] optionbay-bottom-[4px]
+            optionbay-bg-primary optionbay-rounded-[6px] optionbay-shadow-sm
+            optionbay-transition-all optionbay-duration-300 optionbay-ease-[cubic-bezier(0.4,0,0.2,1)]
+            optionbay-pointer-events-none
+            ${classNames.pill || ""}
         `}
         style={{
           left: pillStyle?.left ?? 0,
@@ -90,18 +97,24 @@ export const Toggler: React.FC<TogglerProps> = ({
         return (
           <button
             key={String(option.value)}
-            ref={(el) => { itemsRef.current[index] = el; }}
+            ref={(el) => {
+              itemsRef.current[index] = el;
+            }}
             type="button"
             disabled={disabled}
             onClick={() => !disabled && onChange(option.value)}
             className={`
-              wpab-relative wpab-z-10 wpab-flex-1
-              wpab-font-medium wpab-text-nowrap wpab-rounded-[6px]
-              wpab-transition-colors wpab-duration-300
-              focus:wpab-outline-none focus-visible:wpab-ring-2 focus-visible:wpab-ring-primary/20
+              optionbay-relative optionbay-z-10 optionbay-flex-1
+              optionbay-font-medium optionbay-text-nowrap optionbay-rounded-[6px]
+              optionbay-transition-colors optionbay-duration-300
+              focus:optionbay-outline-none focus-visible:optionbay-ring-2 focus-visible:optionbay-ring-primary/20
               ${sizeClasses[size]}
-              ${isSelected ? 'wpab-text-white' : 'wpab-text-secondary hover:wpab-text-gray-700'}
-              ${classNames.button || ''}
+              ${
+                isSelected
+                  ? "optionbay-text-white"
+                  : "optionbay-text-secondary hover:optionbay-text-gray-700"
+              }
+              ${classNames.button || ""}
             `}
             aria-pressed={isSelected}
           >

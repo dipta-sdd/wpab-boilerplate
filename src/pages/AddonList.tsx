@@ -63,7 +63,11 @@ export default function AddonList() {
   }, [fetchGroups]);
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm(__("Are you sure you want to delete this option group?", "optionbay"))) {
+    if (
+      !window.confirm(
+        __("Are you sure you want to delete this option group?", "optionbay"),
+      )
+    ) {
       return;
     }
     try {
@@ -78,16 +82,17 @@ export default function AddonList() {
   };
 
   const getAssignmentSummary = (assignments: GroupListItem["assignments"]) => {
-    if (!assignments || assignments.length === 0) return __("None", "optionbay");
+    if (!assignments || assignments.length === 0)
+      return __("None", "optionbay");
 
     const hasGlobal = assignments.some((a) => a.target_type === "global");
     if (hasGlobal) return __("All Products", "optionbay");
 
     const cats = assignments.filter(
-      (a) => a.target_type === "category" && !a.is_exclusion
+      (a) => a.target_type === "category" && !a.is_exclusion,
     ).length;
     const products = assignments.filter(
-      (a) => a.target_type === "product" && !a.is_exclusion
+      (a) => a.target_type === "product" && !a.is_exclusion,
     ).length;
     const parts: string[] = [];
     if (cats > 0) parts.push(`${cats} ${__("categories", "optionbay")}`);
@@ -96,7 +101,7 @@ export default function AddonList() {
   };
 
   return (
-    <div className="wpab-ignore-preflight">
+    <div className="optionbay-ignore-preflight">
       {/* Header */}
       <div
         style={{
@@ -106,7 +111,7 @@ export default function AddonList() {
           marginBottom: "16px",
         }}
       >
-        <p className="wpab-text-gray-600" style={{ margin: 0 }}>
+        <p className="optionbay-text-gray-600" style={{ margin: 0 }}>
           {loading
             ? __("Loading...", "optionbay")
             : `${total} ${__("option groups", "optionbay")}`}
@@ -176,8 +181,7 @@ export default function AddonList() {
                       fontSize: "12px",
                       backgroundColor:
                         group.status === "publish" ? "#dff0d8" : "#f2dede",
-                      color:
-                        group.status === "publish" ? "#3c763d" : "#a94442",
+                      color: group.status === "publish" ? "#3c763d" : "#a94442",
                     }}
                   >
                     {group.status === "publish"
@@ -211,7 +215,12 @@ export default function AddonList() {
       {totalPages > 1 && (
         <div
           className="tablenav bottom"
-          style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "16px" }}
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: "8px",
+            marginTop: "16px",
+          }}
         >
           <ClassicButton
             variant="secondary"
