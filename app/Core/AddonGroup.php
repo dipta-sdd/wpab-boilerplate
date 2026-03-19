@@ -59,6 +59,9 @@ class AddonGroup extends Base
 
 	/**
 	 * Register the ob_option_group Custom Post Type.
+	 * 
+	 * Registers a hidden CPT that isn't publicly queryable or visible
+	 * in the standard WordPress admin menu, because the React SPA manages it.
 	 *
 	 * @since 1.0.0
 	 * @return void
@@ -84,7 +87,7 @@ class AddonGroup extends Base
 			'public'              => false,
 			'show_ui'             => false, // We manage UI via the React SPA
 			'show_in_menu'        => false,
-			'show_in_rest'        => false, // We use custom REST endpoints
+			'show_in_rest'        => false, // We use custom REST endpoints instead of WP REST API
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,
 			'has_archive'         => false,
@@ -94,6 +97,7 @@ class AddonGroup extends Base
 		);
 
 		register_post_type(self::POST_TYPE, $args);
+		optionbay_log("Registered Custom Post Type: " . self::POST_TYPE, 'DEBUG');
 	}
 
 	/**
@@ -122,10 +126,11 @@ class AddonGroup extends Base
 	/**
 	 * Sanitize JSON meta values.
 	 *
-	 * Ensures the value is valid JSON. Returns empty JSON array on failure.
+	 * Ensures the value being saved to the database is an array/object
+	 * or valid JSON string. Returns empty JSON array on failure.
 	 *
 	 * @since 1.0.0
-	 * @param string $value The raw meta value.
+	 * @param string|array|object $value The raw meta value from REST API or direct save.
 	 * @return string Sanitized JSON string.
 	 */
 	public function sanitize_json_meta($value)
@@ -134,18 +139,19 @@ class AddonGroup extends Base
 			return '[]';
 		}
 
-		// If it's already an array/object, encode it
+		// If it's already an array/object (from internal WP functions), encode it
 		if (is_array($value) || is_object($value)) {
 			return wp_json_encode($value);
 		}
 
-		// Validate JSON
+		// Validate raw JSON string
 		$decoded = json_decode($value, true);
 		if (json_last_error() !== JSON_ERROR_NONE) {
+			optionbay_log("JSON validation failed in sanitize_json_meta", 'ERROR');
 			return '[]';
 		}
 
-		// Re-encode to ensure clean JSON
+		// Re-encode to ensure clean JSON without malicious injections
 		return wp_json_encode($decoded);
 	}
 

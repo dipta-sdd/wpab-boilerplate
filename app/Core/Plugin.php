@@ -84,13 +84,12 @@ class Plugin
 	{
 		// Initialize API controllers from config
 		$api_controllers = include OPTIONBAY_PATH . 'config/api.php';
-		error_log('API Controllers: ' . print_r($api_controllers, true));
+		optionbay_log('API Controllers: ' . print_r($api_controllers, true), 'DEBUG');
 		if (is_array($api_controllers)) {
 			foreach ($api_controllers as $controller) {
 				if (class_exists($controller) && method_exists($controller, 'get_instance')) {
-					error_log('Registering controller: ' . $controller);
+					optionbay_log('Registering controller: ' . $controller, 'INFO');
 					add_action('rest_api_init', function () use ($controller) {
-						error_log('Registering controller: ' . $controller);
 						$controller::get_instance()->register_routes();
 					});
 				}

@@ -13,7 +13,15 @@ if (!defined('ABSPATH')) {
  */
 class RadioField extends BaseField
 {
-	protected function render_input(): string
+	/**
+	 * Render the radio array markup.
+	 * 
+	 * Adds granular `data-*` DOM element pricing properties for each child choice.
+	 *
+	 * @since 1.0.0
+	 * @return string Safe radio group HTML fragment.
+	 */
+	protected function render_input()
 	{
 		$options = $this->get('options', array());
 		$required = $this->get('required') ? ' required="required"' : '';
@@ -52,6 +60,13 @@ class RadioField extends BaseField
 		return $html;
 	}
 
+	/**
+	 * Validates radio input safely protecting against parameter tampering.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value The selected radio button string.
+	 * @return true|\WP_Error Evaluation result.
+	 */
 	public function validate($value)
 	{
 		$result = parent::validate($value);
@@ -62,6 +77,7 @@ class RadioField extends BaseField
 		if (!$this->is_empty_value($value)) {
 			$allowed = array_column($this->get('options', array()), 'value');
 			if (!in_array($value, $allowed, true)) {
+				optionbay_log("RadioField Validation: Submited value '{$value}' not in allowed set.", 'WARNING');
 				return new \WP_Error(
 					'invalid_option',
 					sprintf(
@@ -75,7 +91,7 @@ class RadioField extends BaseField
 		return true;
 	}
 
-	public function get_display_value($value): string
+	public function get_display_value($value)
 	{
 		$options = $this->get('options', array());
 		foreach ($options as $option) {
@@ -86,7 +102,13 @@ class RadioField extends BaseField
 		return esc_html((string) $value);
 	}
 
-	public function get_weight($value): float
+	/**
+	 * Compute shipping weight based on single choice selected element.
+	 *
+	 * @param mixed $value The chosen element payload string.
+	 * @return float The localized specific weight definition.
+	 */
+	public function get_weight($value)
 	{
 		$options = $this->get('options', array());
 		foreach ($options as $option) {

@@ -23,6 +23,7 @@ if (!function_exists('optionbay_log')) {
 	 *
 	 * @param mixed  $message  The message to log.
 	 * @param string $level    The log level (e.g., 'DEBUG', 'INFO', 'ERROR').
+	 * @return void
 	 */
 	function optionbay_log($message, $level = 'INFO')
 	{

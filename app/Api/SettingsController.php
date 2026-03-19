@@ -85,6 +85,7 @@ class SettingsController extends ApiController
      */
     public function get_settings($request)
     {
+        optionbay_log('SettingsController: Fetching plugin settings.', 'DEBUG');
         $settings = Settings::get_instance()->get_settings();
 
         return new WP_REST_Response(array(
@@ -102,6 +103,7 @@ class SettingsController extends ApiController
      */
     public function update_settings($request)
     {
+        optionbay_log('SettingsController: Updating plugin settings.', 'INFO');
         $body = $request->get_json_params();
         
         $settings_instance = Settings::get_instance();

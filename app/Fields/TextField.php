@@ -13,7 +13,15 @@ if (!defined('ABSPATH')) {
  */
 class TextField extends BaseField
 {
-	protected function render_input(): string
+	/**
+	 * Construct the native HTML `<input type="text">`.
+	 *
+	 * Translates min/max length criteria directly into HTML bounds.
+	 *
+	 * @since 1.0.0
+	 * @return string Component HTML payload.
+	 */
+	protected function render_input()
 	{
 		$attrs = array(
 			'type'  => 'text',
@@ -49,6 +57,13 @@ class TextField extends BaseField
 		return '<input' . $attr_string . ' />';
 	}
 
+	/**
+	 * Perform strict length validation server-side.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value User POST data.
+	 * @return true|\WP_Error
+	 */
 	public function validate($value)
 	{
 		$result = parent::validate($value);
@@ -62,6 +77,7 @@ class TextField extends BaseField
 			$len = mb_strlen($value);
 
 			if ($max > 0 && $len > $max) {
+				optionbay_log("TextField Validation: Value length {$len} exceeds maximum {$max}.", 'WARNING');
 				return new \WP_Error(
 					'max_length',
 					sprintf(
@@ -72,6 +88,7 @@ class TextField extends BaseField
 				);
 			}
 			if ($min > 0 && $len < $min) {
+				optionbay_log("TextField Validation: Value length {$len} is less than minimum {$min}.", 'WARNING');
 				return new \WP_Error(
 					'min_length',
 					sprintf(

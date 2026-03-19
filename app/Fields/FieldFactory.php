@@ -32,7 +32,7 @@ class FieldFactory
 	 * @since 1.0.0
 	 * @return array
 	 */
-	private static function get_types(): array
+	private static function get_types()
 	{
 		if (self::$types === null) {
 			self::$types = array(
@@ -60,23 +60,28 @@ class FieldFactory
 
 	/**
 	 * Create a field instance from a schema definition.
+	 * 
+	 * Matches the string type identifier in the JSON schema map to a 
+	 * backend class and returns a newly instantiated concrete object.
 	 *
 	 * @since 1.0.0
 	 * @param int   $group_id The Option Group post ID.
 	 * @param array $schema   The field definition from JSON.
 	 * @return InterfaceField|null Field instance, or null if type unknown.
 	 */
-	public static function create(int $group_id, array $schema): ?InterfaceField
+	public static function create(int $group_id, array $schema)
 	{
 		$type = $schema['type'] ?? '';
 		$types = self::get_types();
 
 		if (!isset($types[$type])) {
+			optionbay_log("FieldFactory: Unregistered field type requested: '{$type}' in group {$group_id}", 'WARNING');
 			return null;
 		}
 
 		$class = $types[$type];
 		if (!class_exists($class)) {
+			optionbay_log("FieldFactory: Class '{$class}' for type '{$type}' does not exist.", 'ERROR');
 			return null;
 		}
 
@@ -90,7 +95,7 @@ class FieldFactory
 	 * @param string $type The field type slug.
 	 * @return bool
 	 */
-	public static function is_registered(string $type): bool
+	public static function is_registered(string $type)
 	{
 		$types = self::get_types();
 		return isset($types[$type]);

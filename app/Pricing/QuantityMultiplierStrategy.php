@@ -23,8 +23,26 @@ if (!defined('ABSPATH')) {
  */
 class QuantityMultiplierStrategy implements PricingStrategy
 {
-	public function calculate(float $base_price, float $configured_amount, $field_value, int $quantity): float
+	/**
+	 * Calculate the quantity multiplier addition.
+	 * 
+	 * Adds an amount multiplied by the quantity in the cart. This means the fee 
+	 * increases as the cart quantity increases.
+	 * 
+	 * @since 1.0.0
+	 * @param float $base_price        Product base price.
+	 * @param float $configured_amount The mapped fee per unit.
+	 * @param mixed $field_value       The submitted value.
+	 * @param int   $quantity          Cart quantity.
+	 * @return float The calculated exponential cost.
+	 */
+	public function calculate(float $base_price, float $configured_amount, $field_value, int $quantity)
 	{
-		return $configured_amount * max(1, $quantity);
+		$qty = max(1, $quantity);
+		$calculated = $configured_amount * $qty;
+		
+		optionbay_log("QuantityMultiplierStrategy: calculated {$calculated} ({$configured_amount} * {$qty})", 'DEBUG');
+
+		return $calculated;
 	}
 }

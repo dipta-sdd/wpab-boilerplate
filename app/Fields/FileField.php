@@ -16,7 +16,16 @@ if (!defined('ABSPATH')) {
  */
 class FileField extends BaseField
 {
-	protected function render_input(): string
+	/**
+	 * Render standard HTML `<input type="file">`.
+	 *
+	 * Extensively limits submission capabilities based on backend settings
+	 * by locking MIME/Extension types into HTML5 accept properties.
+	 *
+	 * @since 1.0.0
+	 * @return string File input DOM tree.
+	 */
+	protected function render_input()
 	{
 		$allowed_types = $this->get('allowed_types', '.jpg,.png,.pdf');
 		$max_file_size = absint($this->get('max_file_size', 5)); // MB
@@ -39,10 +48,18 @@ class FileField extends BaseField
 		);
 	}
 
+	/**
+	 * Verify incoming $_FILES data buffer block size and extensions.
+	 * 
+	 * @since 1.0.0
+	 * @param mixed $value PHP superglobal upload hash.
+	 * @return true|\WP_Error Results object mapping.
+	 */
 	public function validate($value)
 	{
 		// For file fields, $value is the $_FILES entry
 		if ($this->get('required') && (empty($value) || empty($value['name']))) {
+			optionbay_log("FileField Validation: Required file payload missing.", 'WARNING');
 			return new \WP_Error(
 				'required_field',
 				sprintf(
@@ -56,6 +73,7 @@ class FileField extends BaseField
 			// Check file size
 			$max_bytes = absint($this->get('max_file_size', 5)) * 1024 * 1024;
 			if ($value['size'] > $max_bytes) {
+				optionbay_log("FileField Validation: Uploaded file size {$value['size']} exceeds max bytes {$max_bytes}.", 'WARNING');
 				return new \WP_Error(
 					'file_too_large',
 					sprintf(
@@ -71,6 +89,7 @@ class FileField extends BaseField
 			$allowed_exts = array_map('trim', explode(',', $allowed));
 			$ext = '.' . strtolower(pathinfo($value['name'], PATHINFO_EXTENSION));
 			if (!in_array($ext, $allowed_exts, true)) {
+				optionbay_log("FileField Validation: Uploaded extension {$ext} not in allowed parameters ({$allowed}).", 'WARNING');
 				return new \WP_Error(
 					'invalid_file_type',
 					sprintf(
@@ -91,7 +110,14 @@ class FileField extends BaseField
 		return $value;
 	}
 
-	public function get_display_value($value): string
+	/**
+	 * Provide basic proxying functionality back to the base. 
+	 * Files are processed asynchronously.
+	 *
+	 * @param mixed $value Output location URL string or associative array metadata.
+	 * @return string Simple frontend label URL element content.
+	 */
+	public function get_display_value($value)
 	{
 		if (is_string($value)) {
 			return esc_html(basename($value));

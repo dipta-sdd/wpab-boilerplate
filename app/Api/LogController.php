@@ -107,15 +107,7 @@ class LogController extends ApiController
      */
     public function get_items($request)
     {
-        // // For testing: schedule a cron job 5 minutes later via Cron class
-        // // \OptionBay\Core\Cron::get_instance()->schedule_single(
-        // //     'test_cron',
-        // //     300,
-        // //     array( \OptionBay\Core\Cron::get_instance(), 'test_job' )
-        // // );
-        // // optionbay_log( 'Test cron job scheduled to run at ' . (time() + 300) . ' time.', 'error' );
-
-        // optionbay_log( 'Current server time is ' . time() . '.', 'error' );
+        optionbay_log('LogController: Fetching merged logs via REST API.', 'DEBUG');
 
         $content = Logger::get_merged_logs();
         return rest_ensure_response( array( 'content' => $content ) );
@@ -129,6 +121,7 @@ class LogController extends ApiController
      */
     public function delete_items($request)
     {
+        optionbay_log('LogController: Emptying all aggregated logs via REST API.', 'WARNING');
         $log_dir = Logger::get_log_dir();
 
         // Delete all log files

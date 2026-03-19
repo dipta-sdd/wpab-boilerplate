@@ -125,19 +125,22 @@ class DbManager
         );
     }
 
-    /**
-     * Insert assignment rows for a group (bulk insert).
-     *
-     * @since 1.0.0
-     * @param int   $group_id    The Option Group post ID.
-     * @param array $assignments Array of assignment arrays, each with:
-     *                           - target_type: 'global', 'product', 'category', 'tag'
-     *                           - target_id: int (0 for global)
-     *                           - is_exclusion: bool
-     *                           - priority: int (optional, defaults to 10)
-     * @return int Number of rows inserted.
-     */
-    public function insert_assignments($group_id, $assignments)
+	/**
+	 * Insert assignment rows for a group (bulk insert).
+	 * 
+	 * Adds mapping rules to the custom assignments table to link an option group
+	 * to specific global rules, products, categories, or tags.
+	 *
+	 * @since 1.0.0
+	 * @param int   $group_id    The Option Group post ID.
+	 * @param array $assignments Array of assignment arrays, each with:
+	 *                           - target_type: 'global', 'product', 'category', 'tag'
+	 *                           - target_id: int (0 for global)
+	 *                           - is_exclusion: bool
+	 *                           - priority: int (optional, defaults to 10)
+	 * @return int Number of rows safely inserted.
+	 */
+	public function insert_assignments($group_id, $assignments)
     {
         global $wpdb;
         $table_name = self::get_assignments_table();
@@ -158,8 +161,13 @@ class DbManager
 
             if ($result) {
                 $inserted++;
-            }
+            } else {
+				// Record error if insertion query fails
+				optionbay_log("Failed to insert assignment for group {$group_id} to {$assignment['target_type']}:{$assignment['target_id']}", 'ERROR');
+			}
         }
+
+		optionbay_log("Successfully inserted {$inserted} assignments for group {$group_id}", 'INFO');
 
         return $inserted;
     }
@@ -260,7 +268,7 @@ class DbManager
             ARRAY_A
         );
 
-        // Separate inclusions and exclusions
+        // Separate inclusions and exclusions by processing query results
         $included = array();
         $excluded = array();
 
@@ -273,13 +281,17 @@ class DbManager
             }
         }
 
-        // Remove excluded groups
+        // Remove excluded groups from the final inclusion list
         foreach ($excluded as $gid => $val) {
             unset($included[$gid]);
         }
 
-        // Sort by priority and return group IDs
+        // Sort by priority (ascending, where 1 > 10) and return group IDs
         asort($included);
-        return array_keys($included);
+		$final_ids = array_keys($included);
+
+		optionbay_log("Resolved " . count($final_ids) . " group(s) for product {$product_id}", 'DEBUG');
+
+        return $final_ids;
     }
 }

@@ -83,9 +83,7 @@ class Admin
 	 */
 	public function add_admin_menu()
 	{
-		if (function_exists('optionbay_log')) {
-			optionbay_log('Admin: Registering WPAB admin menu', 'info');
-		}
+		optionbay_log('Admin: Registering WPAB admin menu', 'INFO');
 		$plugin_data = $this->get_plugin_data();
 
 		// Define menu items
@@ -118,9 +116,7 @@ class Admin
 		);
 
 		foreach ($menu_items as $item) {
-			if (function_exists('optionbay_log')) {
-				optionbay_log('Admin: Adding menu page: ' . $item['menu_title'], 'debug');
-			}
+			optionbay_log('Admin: Adding menu page: ' . $item['menu_title'], 'DEBUG');
 			add_menu_page(
 				$item['page_title'],
 				$item['menu_title'],
@@ -239,9 +235,7 @@ class Admin
 			return;
 		}
 
-		if (function_exists('optionbay_log')) {
-			optionbay_log('Admin: Enqueueing admin resources for WPAB menu page', 'debug');
-		}
+		optionbay_log('Admin: Enqueueing admin resources for WPAB menu page', 'DEBUG');
 
 		$deps_file = OPTIONBAY_PATH . 'build/admin.asset.php';
 		$dependency = array('wp-i18n');
@@ -250,13 +244,9 @@ class Admin
 			$deps_file = require $deps_file;
 			$dependency = $deps_file['dependencies'];
 			$version = $deps_file['version'];
-			if (function_exists('optionbay_log')) {
-				optionbay_log('Admin: Loaded exact build dependencies: ' . wp_json_encode($dependency), 'debug');
-			}
+			optionbay_log('Admin: Loaded exact build dependencies: ' . wp_json_encode($dependency), 'DEBUG');
 		} else {
-			if (function_exists('optionbay_log')) {
-				optionbay_log('Admin: Build asset file not found; falling back to default dependencies', 'debug');
-			}
+			optionbay_log('Admin: Build asset file not found; falling back to default dependencies', 'DEBUG');
 		}
 
 		/**
@@ -332,6 +322,7 @@ class Admin
 		$actions[] = '<a href="' . esc_url(menu_page_url($this->menu_info['menu_slug'], false)) . '">' . esc_html__('Settings', 'optionbay') . '</a>';
 		return $actions;
 	}
+	
 	/**
 	 * Register the hooks for the admin area.
 	 *

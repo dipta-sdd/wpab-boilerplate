@@ -13,7 +13,15 @@ if (!defined('ABSPATH')) {
  */
 class TextareaField extends BaseField
 {
-	protected function render_input(): string
+	/**
+	 * Render the standard HTML `<textarea>`.
+	 *
+	 * Translates length configurations into HTML5 limits.
+	 *
+	 * @since 1.0.0
+	 * @return string Component HTML markup.
+	 */
+	protected function render_input()
 	{
 		$placeholder = esc_attr($this->get('placeholder'));
 		$required = $this->get('required') ? ' required="required"' : '';
@@ -30,11 +38,24 @@ class TextareaField extends BaseField
 		);
 	}
 
+	/**
+	 * Format longform text content securely.
+	 * 
+	 * @param mixed $value The string submission.
+	 * @return string Filtered textbox text.
+	 */
 	public function sanitize($value)
 	{
 		return sanitize_textarea_field($value);
 	}
 
+	/**
+	 * Run checks on length enforcement limitations.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value User inputted long string.
+	 * @return true|\WP_Error Validation array format.
+	 */
 	public function validate($value)
 	{
 		$result = parent::validate($value);
@@ -45,6 +66,7 @@ class TextareaField extends BaseField
 		if (!$this->is_empty_value($value)) {
 			$max = $this->get('max_length', 0);
 			if ($max > 0 && mb_strlen($value) > $max) {
+				optionbay_log("TextareaField Validation: Value length exceeds maximum {$max}.", 'WARNING');
 				return new \WP_Error(
 					'max_length',
 					sprintf(

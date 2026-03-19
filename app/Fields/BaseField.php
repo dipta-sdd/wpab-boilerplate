@@ -70,7 +70,7 @@ abstract class BaseField implements InterfaceField
 	 * @since 1.0.0
 	 * @return string
 	 */
-	protected function get_name(): string
+	protected function get_name()
 	{
 		return sprintf(
 			'optionbay_addons[%d][%s]',
@@ -85,25 +85,29 @@ abstract class BaseField implements InterfaceField
 	 * @since 1.0.0
 	 * @return string
 	 */
-	protected function get_html_id(): string
+	protected function get_html_id()
 	{
 		return sprintf('ob-%d-%s', $this->group_id, esc_attr($this->get('id')));
 	}
 
 	/**
 	 * Render the full field HTML (wrapper + label + input + description).
+	 * 
+	 * Builds out the container standard across all OptionBay fields, configuring 
+	 * HTML `data-*` attributes for JavaScript processing based on pricing and conditions.
+	 * Callers like AddonRenderer rely on this abstract layout instead of ad-hoc rendering.
 	 *
 	 * @since 1.0.0
-	 * @return string
+	 * @return string The escaped safe HTML ready for output buffering.
 	 */
-	public function render(): string
+	public function render()
 	{
 		$field_id   = esc_attr($this->get('id'));
 		$field_type = esc_attr($this->get('type'));
 		$conditions = $this->get('conditions', array());
 		$class_name = esc_attr($this->get('class_name'));
 
-		// Determine initial visibility from conditions
+		// Determine initial visibility from conditions to prevent sudden layout shifts
 		$is_hidden = false;
 		if (!empty($conditions['status']) && $conditions['status'] === 'active') {
 			// If action is 'show', field is hidden by default until condition is met
@@ -111,6 +115,7 @@ abstract class BaseField implements InterfaceField
 			$is_hidden = ($conditions['action'] === 'show');
 		}
 
+		// Initialize HTML container classes
 		$wrapper_classes = array('ob-field');
 		$wrapper_classes[] = 'ob-field--' . $field_type;
 		if ($is_hidden) {
@@ -120,7 +125,7 @@ abstract class BaseField implements InterfaceField
 			$wrapper_classes[] = $class_name;
 		}
 
-		// Data attributes for JS engine
+		// Build identifying data attributes for the client JS engine
 		$data_attrs = sprintf(
 			'data-field-id="%s" data-group-id="%d" data-field-type="%s"',
 			$field_id,
@@ -128,7 +133,7 @@ abstract class BaseField implements InterfaceField
 			$field_type
 		);
 
-		// Add pricing data attributes
+		// Expose pricing logic mapping strictly onto the DOM
 		$price_type = $this->get('price_type', 'none');
 		if ($price_type !== 'none') {
 			$data_attrs .= sprintf(
@@ -138,13 +143,13 @@ abstract class BaseField implements InterfaceField
 			);
 		}
 
-		// Add weight data attribute
+		// Calculate standard weight offset configuration
 		$weight = floatval($this->get('weight', 0));
 		if ($weight > 0) {
 			$data_attrs .= sprintf(' data-weight="%s"', esc_attr($weight));
 		}
 
-		// Condition status data attribute
+		// Tag conditional logic rules for the frontend client SPA event loops
 		if (!empty($conditions['status']) && $conditions['status'] === 'active') {
 			$data_attrs .= sprintf(
 				' data-condition-status="active" data-condition-action="%s"',
@@ -158,7 +163,7 @@ abstract class BaseField implements InterfaceField
 			$data_attrs
 		);
 
-		// Label
+		// Dynamically render label HTML safely escaping user settings
 		$label = $this->get('label');
 		if (!empty($label)) {
 			$required_mark = $this->get('required') ? ' <abbr class="ob-required" title="' . esc_attr__('required', 'optionbay') . '">*</abbr>' : '';
@@ -170,12 +175,12 @@ abstract class BaseField implements InterfaceField
 			);
 		}
 
-		// The actual input (implemented by subclass)
+		// Render the abstract control content handled by the concrete subclass
 		$html .= '<div class="ob-field__input">';
 		$html .= $this->render_input();
 		$html .= '</div>';
 
-		// Description
+		// Inject any custom user descriptions passed via settings
 		$description = $this->get('description');
 		if (!empty($description)) {
 			$html .= sprintf(
@@ -195,7 +200,7 @@ abstract class BaseField implements InterfaceField
 	 * @since 1.0.0
 	 * @return string HTML for the input element.
 	 */
-	abstract protected function render_input(): string;
+	abstract protected function render_input();
 
 	/**
 	 * Default validation: check required.
@@ -241,7 +246,7 @@ abstract class BaseField implements InterfaceField
 	 * @param mixed $value
 	 * @return string
 	 */
-	public function get_display_value($value): string
+	public function get_display_value($value)
 	{
 		if (is_array($value)) {
 			return implode(', ', array_map('esc_html', $value));
@@ -256,7 +261,7 @@ abstract class BaseField implements InterfaceField
 	 * @param mixed $value
 	 * @return float
 	 */
-	public function get_weight($value): float
+	public function get_weight($value)
 	{
 		if ($this->is_empty_value($value)) {
 			return 0.0;
@@ -271,7 +276,7 @@ abstract class BaseField implements InterfaceField
 	 * @param mixed $value
 	 * @return bool
 	 */
-	protected function is_empty_value($value): bool
+	protected function is_empty_value($value)
 	{
 		if (is_null($value)) {
 			return true;

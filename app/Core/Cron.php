@@ -427,7 +427,7 @@ class Cron
 	 */
 	public function test_job()
 	{
-		optionbay_log('Test cron job executed successfully.', 'error');
+		optionbay_log('Test cron job executed successfully.', 'ERROR');
 	}
 
 	// ------------------------------------------------------------------

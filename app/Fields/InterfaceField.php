@@ -25,7 +25,7 @@ interface InterfaceField
 	 * @since 1.0.0
 	 * @return string HTML output.
 	 */
-	public function render(): string;
+	public function render();
 
 	/**
 	 * Validate a submitted value.
@@ -52,7 +52,7 @@ interface InterfaceField
 	 * @param mixed $value The stored value.
 	 * @return string Display-ready string.
 	 */
-	public function get_display_value($value): string;
+	public function get_display_value($value);
 
 	/**
 	 * Get the weight adjustment for this field's value.
@@ -61,5 +61,5 @@ interface InterfaceField
 	 * @param mixed $value The stored value.
 	 * @return float Weight in shop units.
 	 */
-	public function get_weight($value): float;
+	public function get_weight($value);
 }

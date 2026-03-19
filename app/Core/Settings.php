@@ -134,12 +134,14 @@ class Settings
 	 */
 	public function update_settings($key_or_data, $val = '')
 	{
+		optionbay_log('Settings: Updating plugin settings option.', 'INFO');
 		if (is_string($key_or_data)) {
 			$options = $this->get_settings();
 			$options[$key_or_data] = $val;
 		} else {
 			$options = $key_or_data;
 		}
+		
 		update_option(OPTIONBAY_OPTION_NAME, $options);
 		$this->load_settings();
 	}

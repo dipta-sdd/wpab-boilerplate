@@ -22,36 +22,44 @@ class ConditionEvaluator
 	/**
 	 * Evaluate if a field should be visible (and thus processed/validated)
 	 * based on its conditions and the submitted form data.
+	 * 
+	 * This engine processes an array of rules configured in the admin SPA,
+	 * matching them either by ALL (AND logic) or ANY (OR logic), and returning
+	 * a boolean indicating if the field is active for the current cart addition.
 	 *
 	 * @since 1.0.0
 	 * @param array $field_schema   The schema of the field being evaluated.
 	 * @param array $submitted_data The data submitted for this group ($_POST['optionbay_addons'][$group_id]).
 	 * @return bool True if visible, false if hidden.
 	 */
-	public static function is_visible(array $field_schema, array $submitted_data): bool
+	public static function is_visible(array $field_schema, array $submitted_data)
 	{
 		$conditions = $field_schema['conditions'] ?? array();
 
-		// If conditions are not active, it's always visible
+		// If conditions are not active, it's always visible by default
 		if (empty($conditions['status']) || $conditions['status'] !== 'active') {
 			return true;
 		}
 
 		$rules = $conditions['rules'] ?? array();
 		if (empty($rules)) {
-			// If active but no rules, default to visible or hidden?
-			// Let's assume visible if action is hide, hidden if action is show.
+			// If active but no rules, default to visible if action is hide, hidden if action is show
 			return ($conditions['action'] ?? 'show') === 'hide';
 		}
 
+		optionbay_log("Evaluating conditions for field: " . ($field_schema['id'] ?? 'unknown'), 'DEBUG');
+
 		$results = array();
+		// Map over all rules and assess each one individually
 		foreach ($rules as $rule) {
-			$results[] = self::evaluate_rule($rule, $submitted_data);
+			$rule_result = self::evaluate_rule($rule, $submitted_data);
+			$results[] = $rule_result;
 		}
 
 		$match = $conditions['match'] ?? 'ALL';
 		$condition_met = false;
 
+		// Combine results based on Match Type
 		if ($match === 'ALL') {
 			$condition_met = !in_array(false, $results, true);
 		} else { // ANY
@@ -59,22 +67,31 @@ class ConditionEvaluator
 		}
 
 		$action = $conditions['action'] ?? 'show';
+		
+		// Determine final visibility based on action
 		if ($action === 'show') {
-			return $condition_met;
+			$is_visible = $condition_met;
 		} else { // hide
-			return !$condition_met;
+			$is_visible = !$condition_met;
 		}
+
+		optionbay_log("Condition result for field {$field_schema['id']}: Match met? " . ($condition_met ? 'Yes' : 'No') . ". Visible? " . ($is_visible ? 'Yes' : 'No'), 'DEBUG');
+		
+		return $is_visible;
 	}
 
 	/**
 	 * Evaluate a single rule against the submitted data.
+	 * 
+	 * Runs the chosen operator (==, !=, >, <, contains, etc) against the dynamic user
+	 * submitted target value and the static rule value.
 	 *
 	 * @since 1.0.0
-	 * @param array $rule
-	 * @param array $submitted_data
-	 * @return bool
+	 * @param array $rule The rule definition containing target_field_id, operator, and value.
+	 * @param array $submitted_data All previously processed user inputs for this group.
+	 * @return bool True if the specific rule condition is satisfied.
 	 */
-	private static function evaluate_rule(array $rule, array $submitted_data): bool
+	private static function evaluate_rule(array $rule, array $submitted_data)
 	{
 		$target_id = $rule['target_field_id'] ?? '';
 		if (empty($target_id)) {

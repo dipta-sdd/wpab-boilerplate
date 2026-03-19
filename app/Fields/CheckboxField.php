@@ -17,7 +17,17 @@ if (!defined('ABSPATH')) {
  */
 class CheckboxField extends BaseField
 {
-	protected function render_input(): string
+	/**
+	 * Render the checkbox input array or single toggle element.
+	 * 
+	 * Determines rendering logic based on whether choices were supplied
+	 * in the OptionBay schema. Adds `data-price` properties on an 
+	 * individual element basis for JS evaluation.
+	 * 
+	 * @since 1.0.0
+	 * @return string The escaped HTML markup.
+	 */
+	protected function render_input()
 	{
 		$options = $this->get('options', array());
 
@@ -68,6 +78,16 @@ class CheckboxField extends BaseField
 		return $html;
 	}
 
+	/**
+	 * Validate the submitted array of checkboxes or the single toggle value.
+	 * 
+	 * Inherits basic requirement checks from BaseField and adds security
+	 * checks against forged option values.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value The string or array of strings submitted.
+	 * @return true|\WP_Error True if validation passed, WP_Error object otherwise.
+	 */
 	public function validate($value)
 	{
 		$result = parent::validate($value);
@@ -81,6 +101,7 @@ class CheckboxField extends BaseField
 			$allowed = array_column($options, 'value');
 			foreach ($value as $v) {
 				if (!in_array($v, $allowed, true)) {
+					optionbay_log("CheckboxField Validation: Submited value '{$v}' not in allowed set.", 'WARNING');
 					return new \WP_Error(
 						'invalid_option',
 						sprintf(
@@ -95,6 +116,13 @@ class CheckboxField extends BaseField
 		return true;
 	}
 
+	/**
+	 * Sanitize an array of strings or single value based on toggle setup.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value The raw POST value.
+	 * @return mixed Sanitized strings array or string.
+	 */
 	public function sanitize($value)
 	{
 		if (is_array($value)) {
@@ -103,7 +131,7 @@ class CheckboxField extends BaseField
 		return sanitize_text_field($value);
 	}
 
-	public function get_display_value($value): string
+	public function get_display_value($value)
 	{
 		$options = $this->get('options', array());
 
@@ -126,7 +154,14 @@ class CheckboxField extends BaseField
 		return esc_html(implode(', ', $labels));
 	}
 
-	public function get_weight($value): float
+	/**
+	 * Compute cumulative shipping weight for a multi-select field.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value User selection(s).
+	 * @return float Computed aggregate weight delta.
+	 */
+	public function get_weight($value)
 	{
 		$options = $this->get('options', array());
 		if (empty($options)) {

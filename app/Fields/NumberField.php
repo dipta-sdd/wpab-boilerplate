@@ -13,7 +13,15 @@ if (!defined('ABSPATH')) {
  */
 class NumberField extends BaseField
 {
-	protected function render_input(): string
+	/**
+	 * Render the browser native `<input type="number">`.
+	 * 
+	 * Reconstructs min, max, and step boundaries into HTML5 constraints.
+	 *
+	 * @since 1.0.0
+	 * @return string HTML <input> string representation.
+	 */
+	protected function render_input()
 	{
 		$attrs = array(
 			'type'  => 'number',
@@ -52,6 +60,13 @@ class NumberField extends BaseField
 		return '<input' . $attr_string . ' />';
 	}
 
+	/**
+	 * Validate integer and step rules server-side.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value Submitted value.
+	 * @return true|\WP_Error Validation resolution metric.
+	 */
 	public function validate($value)
 	{
 		$result = parent::validate($value);
@@ -65,6 +80,7 @@ class NumberField extends BaseField
 			$max = $this->get('max_value');
 
 			if ($min !== '' && $min !== null && $num < floatval($min)) {
+				optionbay_log("NumberField Validation: Value {$num} is less than minimum {$min}.", 'WARNING');
 				return new \WP_Error(
 					'min_value',
 					sprintf(
@@ -75,6 +91,7 @@ class NumberField extends BaseField
 				);
 			}
 			if ($max !== '' && $max !== null && $num > floatval($max)) {
+				optionbay_log("NumberField Validation: Value {$num} exceeds maximum {$max}.", 'WARNING');
 				return new \WP_Error(
 					'max_value',
 					sprintf(
@@ -89,6 +106,13 @@ class NumberField extends BaseField
 		return true;
 	}
 
+	/**
+	 * Sanitize numeric content enforcing a strictly float signature.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value User POST injection.
+	 * @return float|string Sanitized float, or empty string if empty.
+	 */
 	public function sanitize($value)
 	{
 		if ($this->is_empty_value($value)) {

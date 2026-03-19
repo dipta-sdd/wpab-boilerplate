@@ -13,7 +13,16 @@ if (!defined('ABSPATH')) {
  */
 class SelectField extends BaseField
 {
-	protected function render_input(): string
+	/**
+	 * Render the HTML <select> dropdown.
+	 * 
+	 * Adds granular `data-*` pricing properties onto `<option>` elements
+	 * to allow dynamic JS re-calculation when selection changes.
+	 *
+	 * @since 1.0.0
+	 * @return string Re-usable dropdown HTML string.
+	 */
+	protected function render_input()
 	{
 		$required = $this->get('required') ? ' required="required"' : '';
 		$options = $this->get('options', array());
@@ -61,6 +70,13 @@ class SelectField extends BaseField
 		return $html;
 	}
 
+	/**
+	 * Validate against bounded allowed select options.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value The selected subset value string.
+	 * @return true|\WP_Error Validation results.
+	 */
 	public function validate($value)
 	{
 		$result = parent::validate($value);
@@ -72,6 +88,7 @@ class SelectField extends BaseField
 		if (!$this->is_empty_value($value)) {
 			$allowed = array_column($this->get('options', array()), 'value');
 			if (!in_array($value, $allowed, true)) {
+				optionbay_log("SelectField Validation: Submited value '{$value}' not in allowed options set.", 'WARNING');
 				return new \WP_Error(
 					'invalid_option',
 					sprintf(
@@ -85,7 +102,7 @@ class SelectField extends BaseField
 		return true;
 	}
 
-	public function get_display_value($value): string
+	public function get_display_value($value)
 	{
 		$options = $this->get('options', array());
 		foreach ($options as $option) {
@@ -96,7 +113,13 @@ class SelectField extends BaseField
 		return esc_html((string) $value);
 	}
 
-	public function get_weight($value): float
+	/**
+	 * Lookup and evaluate base shipping weight per configured option element.
+	 *
+	 * @param mixed $value The active selection.
+	 * @return float Option-defined weight schema string or offset.
+	 */
+	public function get_weight($value)
 	{
 		$options = $this->get('options', array());
 		foreach ($options as $option) {

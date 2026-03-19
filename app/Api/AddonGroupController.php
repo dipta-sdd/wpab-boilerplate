@@ -147,6 +147,8 @@ class AddonGroupController extends ApiController
 	 */
 	public function get_items($request)
 	{
+		optionbay_log('AddonGroupController: Fetching multiple items (GET /groups).', 'DEBUG');
+
 		$page     = $request->get_param('page');
 		$per_page = min($request->get_param('per_page'), 100);
 		$search   = $request->get_param('search');
@@ -213,6 +215,8 @@ class AddonGroupController extends ApiController
 	public function get_item($request)
 	{
 		$id = absint($request->get_param('id'));
+		optionbay_log("AddonGroupController: Fetching single item ID {$id} (GET /groups/{$id}).", 'DEBUG');
+		
 		$post = get_post($id);
 
 		if (!$post || $post->post_type !== AddonGroup::POST_TYPE) {
@@ -248,6 +252,7 @@ class AddonGroupController extends ApiController
 	 */
 	public function create_item($request)
 	{
+		optionbay_log('AddonGroupController: Creating new item (POST /groups).', 'INFO');
 		$body = $request->get_json_params();
 
 		$title = sanitize_text_field($body['title'] ?? __('Untitled Option Group', 'optionbay'));
@@ -312,6 +317,8 @@ class AddonGroupController extends ApiController
 	public function update_item($request)
 	{
 		$id = absint($request->get_param('id'));
+		optionbay_log("AddonGroupController: Updating item ID {$id} (PUT /groups/{$id}).", 'INFO');
+		
 		$post = get_post($id);
 
 		if (!$post || $post->post_type !== AddonGroup::POST_TYPE) {
@@ -380,6 +387,8 @@ class AddonGroupController extends ApiController
 	public function delete_item($request)
 	{
 		$id = absint($request->get_param('id'));
+		optionbay_log("AddonGroupController: Deleting item ID {$id} (DELETE /groups/{$id}).", 'WARNING');
+		
 		$post = get_post($id);
 
 		if (!$post || $post->post_type !== AddonGroup::POST_TYPE) {
