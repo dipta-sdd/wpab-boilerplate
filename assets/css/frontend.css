@@ -1,0 +1,159 @@
+/**
+ * OptionBay Frontend Styles
+ *
+ * Minimal CSS for the product page option fields.
+ * Uses the ob- prefix to avoid conflicts.
+ *
+ * @since 1.0.0
+ */
+
+/* ─── Options Wrapper ─────────────────────────────────────────────── */
+.ob-options-wrapper {
+    margin: 16px 0;
+    padding: 0;
+}
+
+/* ─── Group ────────────────────────────────────────────────────────── */
+.ob-group {
+    margin-bottom: 20px;
+}
+
+.ob-group__title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* ─── Field Wrapper ────────────────────────────────────────────────── */
+.ob-field {
+    margin-bottom: 16px;
+}
+
+.ob-field.ob-hidden {
+    display: none;
+}
+
+/* ─── Label ────────────────────────────────────────────────────────── */
+.ob-field__label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.ob-required {
+    color: #e2401c;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
+}
+
+/* ─── Inputs ───────────────────────────────────────────────────────── */
+.ob-input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ob-input--text,
+.ob-input--textarea,
+.ob-input--number,
+.ob-input--select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    background: #fff;
+    transition: border-color 0.2s ease;
+}
+
+.ob-input--text:focus,
+.ob-input--textarea:focus,
+.ob-input--number:focus,
+.ob-input--select:focus {
+    border-color: #007cba;
+    outline: none;
+    box-shadow: 0 0 0 1px #007cba;
+}
+
+.ob-input--textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.ob-input--number {
+    width: auto;
+    min-width: 100px;
+}
+
+.ob-input--file {
+    padding: 6px 0;
+}
+
+/* ─── Radio & Checkbox Groups ─────────────────────────────────────── */
+.ob-radio-group,
+.ob-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ob-radio-option,
+.ob-checkbox-option,
+.ob-checkbox-single {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.ob-radio-option input,
+.ob-checkbox-option input,
+.ob-checkbox-single input {
+    width: auto;
+    margin: 0;
+}
+
+/* ─── Description ──────────────────────────────────────────────────── */
+.ob-field__description {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+}
+
+.ob-field__file-info {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #999;
+}
+
+/* ─── Live Pricing ─────────────────────────────────────────────────── */
+.optionbay-live-total {
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: #f7f7f7;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.ob-total-label {
+    font-weight: 600;
+}
+
+.optionbay-live-total .amount {
+    font-weight: 700;
+    color: #77a464;
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .ob-radio-group,
+    .ob-checkbox-group {
+        gap: 8px;
+    }
+}

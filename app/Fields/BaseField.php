@@ -1,0 +1,287 @@
+<?php
+
+namespace OptionBay\Fields;
+
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+	exit;
+}
+
+/**
+ * Abstract base class for all field types.
+ *
+ * Provides the common HTML wrapper, data attribute generation,
+ * label rendering, and shared utilities. Concrete field types
+ * only need to implement render_input().
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
+abstract class BaseField implements InterfaceField
+{
+	/**
+	 * The group ID this field belongs to.
+	 *
+	 * @since 1.0.0
+	 * @var int
+	 */
+	protected $group_id;
+
+	/**
+	 * The field schema definition (decoded from JSON).
+	 *
+	 * @since 1.0.0
+	 * @var array
+	 */
+	protected $schema;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 * @param int   $group_id The Option Group post ID.
+	 * @param array $schema   The field definition from the JSON schema.
+	 */
+	public function __construct(int $group_id, array $schema)
+	{
+		$this->group_id = $group_id;
+		$this->schema = $schema;
+	}
+
+	/**
+	 * Get a schema property with a default fallback.
+	 *
+	 * @since 1.0.0
+	 * @param string $key     The property key.
+	 * @param mixed  $default Default value.
+	 * @return mixed
+	 */
+	protected function get($key, $default = '')
+	{
+		return $this->schema[$key] ?? $default;
+	}
+
+	/**
+	 * Get the HTML input name attribute.
+	 *
+	 * Format: optionbay_addons[{group_id}][{field_id}]
+	 *
+	 * @since 1.0.0
+	 * @return string
+	 */
+	protected function get_name(): string
+	{
+		return sprintf(
+			'optionbay_addons[%d][%s]',
+			$this->group_id,
+			esc_attr($this->get('id'))
+		);
+	}
+
+	/**
+	 * Get the unique HTML element ID.
+	 *
+	 * @since 1.0.0
+	 * @return string
+	 */
+	protected function get_html_id(): string
+	{
+		return sprintf('ob-%d-%s', $this->group_id, esc_attr($this->get('id')));
+	}
+
+	/**
+	 * Render the full field HTML (wrapper + label + input + description).
+	 *
+	 * @since 1.0.0
+	 * @return string
+	 */
+	public function render(): string
+	{
+		$field_id   = esc_attr($this->get('id'));
+		$field_type = esc_attr($this->get('type'));
+		$conditions = $this->get('conditions', array());
+		$class_name = esc_attr($this->get('class_name'));
+
+		// Determine initial visibility from conditions
+		$is_hidden = false;
+		if (!empty($conditions['status']) && $conditions['status'] === 'active') {
+			// If action is 'show', field is hidden by default until condition is met
+			// If action is 'hide', field is visible by default until condition is met
+			$is_hidden = ($conditions['action'] === 'show');
+		}
+
+		$wrapper_classes = array('ob-field');
+		$wrapper_classes[] = 'ob-field--' . $field_type;
+		if ($is_hidden) {
+			$wrapper_classes[] = 'ob-hidden';
+		}
+		if (!empty($class_name)) {
+			$wrapper_classes[] = $class_name;
+		}
+
+		// Data attributes for JS engine
+		$data_attrs = sprintf(
+			'data-field-id="%s" data-group-id="%d" data-field-type="%s"',
+			$field_id,
+			$this->group_id,
+			$field_type
+		);
+
+		// Add pricing data attributes
+		$price_type = $this->get('price_type', 'none');
+		if ($price_type !== 'none') {
+			$data_attrs .= sprintf(
+				' data-price-type="%s" data-price="%s"',
+				esc_attr($price_type),
+				esc_attr($this->get('price', 0))
+			);
+		}
+
+		// Add weight data attribute
+		$weight = floatval($this->get('weight', 0));
+		if ($weight > 0) {
+			$data_attrs .= sprintf(' data-weight="%s"', esc_attr($weight));
+		}
+
+		// Condition status data attribute
+		if (!empty($conditions['status']) && $conditions['status'] === 'active') {
+			$data_attrs .= sprintf(
+				' data-condition-status="active" data-condition-action="%s"',
+				esc_attr($conditions['action'] ?? 'show')
+			);
+		}
+
+		$html = sprintf(
+			'<div class="%s" %s>',
+			esc_attr(implode(' ', $wrapper_classes)),
+			$data_attrs
+		);
+
+		// Label
+		$label = $this->get('label');
+		if (!empty($label)) {
+			$required_mark = $this->get('required') ? ' <abbr class="ob-required" title="' . esc_attr__('required', 'optionbay') . '">*</abbr>' : '';
+			$html .= sprintf(
+				'<label class="ob-field__label" for="%s">%s%s</label>',
+				$this->get_html_id(),
+				esc_html($label),
+				$required_mark
+			);
+		}
+
+		// The actual input (implemented by subclass)
+		$html .= '<div class="ob-field__input">';
+		$html .= $this->render_input();
+		$html .= '</div>';
+
+		// Description
+		$description = $this->get('description');
+		if (!empty($description)) {
+			$html .= sprintf(
+				'<p class="ob-field__description">%s</p>',
+				esc_html($description)
+			);
+		}
+
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	/**
+	 * Render just the input element. Must be implemented by each field type.
+	 *
+	 * @since 1.0.0
+	 * @return string HTML for the input element.
+	 */
+	abstract protected function render_input(): string;
+
+	/**
+	 * Default validation: check required.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value The submitted value.
+	 * @return true|\WP_Error
+	 */
+	public function validate($value)
+	{
+		if ($this->get('required') && $this->is_empty_value($value)) {
+			return new \WP_Error(
+				'required_field',
+				sprintf(
+					/* translators: %s: field label */
+					__('%s is required.', 'optionbay'),
+					$this->get('label', $this->get('id'))
+				)
+			);
+		}
+		return true;
+	}
+
+	/**
+	 * Default sanitization.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public function sanitize($value)
+	{
+		if (is_array($value)) {
+			return array_map('sanitize_text_field', $value);
+		}
+		return sanitize_text_field($value);
+	}
+
+	/**
+	 * Default display value.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value
+	 * @return string
+	 */
+	public function get_display_value($value): string
+	{
+		if (is_array($value)) {
+			return implode(', ', array_map('esc_html', $value));
+		}
+		return esc_html((string) $value);
+	}
+
+	/**
+	 * Default weight calculation.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value
+	 * @return float
+	 */
+	public function get_weight($value): float
+	{
+		if ($this->is_empty_value($value)) {
+			return 0.0;
+		}
+		return floatval($this->get('weight', 0));
+	}
+
+	/**
+	 * Check if a value is considered empty.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value
+	 * @return bool
+	 */
+	protected function is_empty_value($value): bool
+	{
+		if (is_null($value)) {
+			return true;
+		}
+		if (is_string($value) && trim($value) === '') {
+			return true;
+		}
+		if (is_array($value) && empty($value)) {
+			return true;
+		}
+		return false;
+	}
+}

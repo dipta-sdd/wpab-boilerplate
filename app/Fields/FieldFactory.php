@@ -1,0 +1,98 @@
+<?php
+
+namespace OptionBay\Fields;
+
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+	exit;
+}
+
+/**
+ * Field Factory — maps JSON field type to a PHP class instance.
+ *
+ * Extensible via the `optionbay_register_field_types` filter.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
+class FieldFactory
+{
+	/**
+	 * Registry of field type => class name.
+	 *
+	 * @since 1.0.0
+	 * @var array
+	 */
+	private static $types = null;
+
+	/**
+	 * Get the registered field type classes.
+	 *
+	 * @since 1.0.0
+	 * @return array
+	 */
+	private static function get_types(): array
+	{
+		if (self::$types === null) {
+			self::$types = array(
+				'text'     => TextField::class,
+				'textarea' => TextareaField::class,
+				'select'   => SelectField::class,
+				'checkbox' => CheckboxField::class,
+				'radio'    => RadioField::class,
+				'number'   => NumberField::class,
+				'file'     => FileField::class,
+			);
+
+			/**
+			 * Filter the registered field types.
+			 *
+			 * Allows third-party plugins to add custom field types.
+			 *
+			 * @since 1.0.0
+			 * @param array $types Associative array of type => class name.
+			 */
+			self::$types = apply_filters('optionbay_register_field_types', self::$types);
+		}
+		return self::$types;
+	}
+
+	/**
+	 * Create a field instance from a schema definition.
+	 *
+	 * @since 1.0.0
+	 * @param int   $group_id The Option Group post ID.
+	 * @param array $schema   The field definition from JSON.
+	 * @return InterfaceField|null Field instance, or null if type unknown.
+	 */
+	public static function create(int $group_id, array $schema): ?InterfaceField
+	{
+		$type = $schema['type'] ?? '';
+		$types = self::get_types();
+
+		if (!isset($types[$type])) {
+			return null;
+		}
+
+		$class = $types[$type];
+		if (!class_exists($class)) {
+			return null;
+		}
+
+		return new $class($group_id, $schema);
+	}
+
+	/**
+	 * Check if a field type is registered.
+	 *
+	 * @since 1.0.0
+	 * @param string $type The field type slug.
+	 * @return bool
+	 */
+	public static function is_registered(string $type): bool
+	{
+		$types = self::get_types();
+		return isset($types[$type]);
+	}
+}
