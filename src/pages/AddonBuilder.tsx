@@ -7,7 +7,7 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { ClassicButton, ClassicInput, ClassicSelect } from "../components/classics";
+import { ClassicButton, ClassicInput, ClassicSelect, ClassicCheckbox } from "../components/classics";
 import { ClassicRepeater } from "../components/classics/ClassicRepeater";
 import {
   AddonProvider,
@@ -50,36 +50,33 @@ function OptionEditor({
   const { dispatch } = useAddonContext();
 
   return (
-    <div style={{ marginTop: "12px" }}>
-      <label style={{ fontWeight: 600, display: "block", marginBottom: "8px" }}>
+    <div className="ob-option-editor" style={{ marginTop: "15px" }}>
+      <label style={{ fontWeight: 600, display: "block", marginBottom: "10px" }}>
         {__("Choices", "optionbay")}
       </label>
       {options.map((opt, idx) => (
-        <div
-          key={idx}
-          style={{
-            display: "flex",
-            gap: "8px",
-            marginBottom: "6px",
-            alignItems: "center",
-          }}
-        >
-          <input
-            type="text"
-            className="regular-text"
+        <div key={idx} className="ob-option-row">
+          <ClassicInput
+            size="regular"
             placeholder={__("Label", "optionbay")}
             value={opt.label}
             onChange={(e) =>
               dispatch({
                 type: "UPDATE_OPTION",
-                payload: { fieldId, optionIndex: idx, updates: { label: e.target.value, value: e.target.value.toLowerCase().replace(/\s+/g, "_") } },
+                payload: {
+                  fieldId,
+                  optionIndex: idx,
+                  updates: {
+                    label: e.target.value,
+                    value: e.target.value.toLowerCase().replace(/\s+/g, "_"),
+                  },
+                },
               })
             }
-            style={{ flex: 1 }}
           />
-          <input
+          <ClassicInput
             type="number"
-            className="small-text"
+            size="small"
             placeholder={__("Price", "optionbay")}
             value={opt.price || ""}
             onChange={(e) =>
@@ -92,46 +89,39 @@ function OptionEditor({
                 },
               })
             }
-            style={{ width: "80px" }}
           />
-          <select
+          <ClassicSelect
             value={opt.price_type}
-            onChange={(e) =>
+            onChange={(val) =>
               dispatch({
                 type: "UPDATE_OPTION",
                 payload: {
                   fieldId,
                   optionIndex: idx,
-                  updates: { price_type: e.target.value },
+                  updates: { price_type: String(val) },
                 },
               })
             }
-            style={{ width: "100px" }}
-          >
-            {PRICE_TYPES.map((pt) => (
-              <option key={pt.value} value={pt.value}>
-                {pt.label}
-              </option>
-            ))}
-          </select>
+            options={PRICE_TYPES.map((pt) => ({ value: pt.value, label: pt.label }))}
+            size="short"
+          />
           <button
             type="button"
-            className="button"
+            className="ob-remove-option"
             onClick={() =>
               dispatch({
                 type: "REMOVE_OPTION",
                 payload: { fieldId, optionIndex: idx },
               })
             }
-            style={{ color: "#b32d2e" }}
+            title={__("Remove choice", "optionbay")}
           >
             ×
           </button>
         </div>
       ))}
-      <button
-        type="button"
-        className="button"
+      <ClassicButton
+        variant="secondary"
         onClick={() =>
           dispatch({
             type: "ADD_OPTION",
@@ -143,7 +133,7 @@ function OptionEditor({
         }
       >
         + {__("Add Choice", "optionbay")}
-      </button>
+      </ClassicButton>
     </div>
   );
 }
@@ -167,30 +157,27 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
 
   if (siblingFields.length === 0) {
     return (
-      <p style={{ color: "#666", fontStyle: "italic", marginTop: "12px" }}>
+      <p style={{ color: "#666", fontStyle: "italic", marginTop: "15px" }}>
         {__("Add more fields to set up conditional logic.", "optionbay")}
       </p>
     );
   }
 
   return (
-    <div style={{ marginTop: "12px", padding: "12px", backgroundColor: "#f9f9f9", border: "1px solid #ddd" }}>
-      <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "10px" }}>
-        <label>
-          <input
-            type="checkbox"
-            checked={conditions.status === "active"}
-            onChange={(e) =>
-              updateConditions({ status: e.target.checked ? "active" : "inactive" })
-            }
-          />{" "}
-          {__("Enable Conditional Logic", "optionbay")}
-        </label>
+    <div className="ob-condition-builder">
+      <div style={{ marginBottom: "15px" }}>
+        <ClassicCheckbox
+          label={__("Enable Conditional Logic", "optionbay")}
+          checked={conditions.status === "active"}
+          onChange={(checked) =>
+            updateConditions({ status: checked ? "active" : "inactive" })
+          }
+        />
       </div>
 
       {conditions.status === "active" && (
         <>
-          <div style={{ display: "flex", gap: "8px", marginBottom: "10px", alignItems: "center" }}>
+          <div className="ob-condition-row" style={{ marginBottom: "15px" }}>
             <select
               value={conditions.action}
               onChange={(e) => updateConditions({ action: e.target.value as "show" | "hide" })}
@@ -210,7 +197,7 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
           </div>
 
           {(conditions.rules || []).map((rule, idx) => (
-            <div key={idx} style={{ display: "flex", gap: "8px", marginBottom: "6px", alignItems: "center" }}>
+            <div key={idx} className="ob-condition-row">
               <select
                 value={rule.target_field_id}
                 onChange={(e) => {
@@ -234,7 +221,7 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
                   rules[idx] = { ...rules[idx], operator: e.target.value };
                   updateConditions({ rules });
                 }}
-                style={{ width: "100px" }}
+                style={{ width: "120px" }}
               >
                 <option value="==">{__("equals", "optionbay")}</option>
                 <option value="!=">{__("not equals", "optionbay")}</option>
@@ -245,9 +232,8 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
                 <option value="not_empty">{__("is not empty", "optionbay")}</option>
               </select>
               {!["empty", "not_empty"].includes(rule.operator) && (
-                <input
-                  type="text"
-                  className="regular-text"
+                <ClassicInput
+                  size="regular"
                   value={rule.value}
                   onChange={(e) => {
                     const rules = [...(conditions.rules || [])];
@@ -260,21 +246,19 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
               )}
               <button
                 type="button"
-                className="button"
+                className="ob-remove-option"
                 onClick={() => {
                   const rules = (conditions.rules || []).filter((_, i) => i !== idx);
                   updateConditions({ rules });
                 }}
-                style={{ color: "#b32d2e" }}
               >
                 ×
               </button>
             </div>
           ))}
 
-          <button
-            type="button"
-            className="button"
+          <ClassicButton
+            variant="secondary"
             onClick={() => {
               const rules = [
                 ...(conditions.rules || []),
@@ -284,7 +268,7 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
             }}
           >
             + {__("Add Rule", "optionbay")}
-          </button>
+          </ClassicButton>
         </>
       )}
     </div>
@@ -303,66 +287,57 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
 
   return (
     <Draggable draggableId={field.id} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className="postbox"
-          style={{
-            ...provided.draggableProps.style,
-            marginBottom: "12px",
-          }}
+          className={`ob-field-card ${snapshot.isDragging ? "is-dragging" : ""}`}
+          style={{ ...provided.draggableProps.style }}
         >
           {/* Header */}
-          <div
-            className="postbox-header"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "8px 12px",
-              cursor: "pointer",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div className="ob-field-card-header">
+            <div style={{ display: "flex", alignItems: "center" }}>
               <span
                 {...provided.dragHandleProps}
-                style={{ cursor: "grab", fontSize: "16px" }}
+                className="ob-drag-handle"
+                title={__("Drag to reorder", "optionbay")}
               >
                 ☰
               </span>
-              <strong>
-                {field.label || `${__("Untitled", "optionbay")} ${field.type}`}
-              </strong>
-              <span style={{ color: "#999", fontSize: "12px" }}>
-                ({field.type})
+              <span className="ob-field-label-text">
+                {field.label || __("Untitled Field", "optionbay")}
               </span>
+              <span className="ob-field-type-badge">{field.type}</span>
               {field.required && (
-                <span style={{ color: "#c00", fontSize: "12px" }}>*</span>
+                <span
+                  style={{ color: "#c00", marginLeft: "4px", fontWeight: "bold" }}
+                  title={__("Required field", "optionbay")}
+                >
+                  *
+                </span>
               )}
             </div>
-            <button
-              type="button"
-              className="button"
+            <ClassicButton
+              variant="link-delete"
               onClick={() => dispatch({ type: "REMOVE_FIELD", payload: field.id })}
-              style={{ color: "#b32d2e", fontSize: "12px" }}
+              style={{ fontSize: "12px", textDecoration: "none" }}
             >
               {__("Remove", "optionbay")}
-            </button>
+            </ClassicButton>
           </div>
 
           {/* Body */}
-          <div className="inside" style={{ padding: "12px" }}>
-            <table className="form-table" style={{ margin: 0 }}>
+          <div className="ob-field-card-body">
+            <table className="form-table">
               <tbody>
                 {/* Type */}
                 <tr>
-                  <th scope="row">{__("Type", "optionbay")}</th>
+                  <th scope="row">{__("Field Type", "optionbay")}</th>
                   <td>
-                    <select
+                    <ClassicSelect
                       value={field.type}
-                      onChange={(e) => {
-                        const newType = e.target.value;
+                      onChange={(val) => {
+                        const newType = String(val);
                         const defaults = getDefaultField(newType);
                         update({
                           type: newType,
@@ -376,13 +351,8 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                           max_file_size: defaults.max_file_size,
                         });
                       }}
-                    >
-                      {FIELD_TYPES.map((ft) => (
-                        <option key={ft.value} value={ft.value}>
-                          {ft.label}
-                        </option>
-                      ))}
-                    </select>
+                      options={FIELD_TYPES.map((ft) => ({ value: ft.value, label: ft.label }))}
+                    />
                   </td>
                 </tr>
 
@@ -390,9 +360,8 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 <tr>
                   <th scope="row">{__("Label", "optionbay")}</th>
                   <td>
-                    <input
-                      type="text"
-                      className="regular-text"
+                    <ClassicInput
+                      size="regular"
                       value={field.label}
                       onChange={(e) => update({ label: e.target.value })}
                       placeholder={__("Enter field label", "optionbay")}
@@ -416,29 +385,26 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
 
                 {/* Required */}
                 <tr>
-                  <th scope="row">{__("Required", "optionbay")}</th>
+                  <th scope="row">{__("Validation", "optionbay")}</th>
                   <td>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={field.required}
-                        onChange={(e) => update({ required: e.target.checked })}
-                      />{" "}
-                      {__("This field must be filled", "optionbay")}
-                    </label>
+                    <ClassicCheckbox
+                      label={__("Required Field", "optionbay")}
+                      checked={field.required}
+                      onChange={(checked) => update({ required: checked })}
+                    />
                   </td>
                 </tr>
 
                 {/* Placeholder (text/textarea/number) */}
-                {["text", "textarea", "number", "email"].includes(field.type) && (
+                {["text", "textarea", "number"].includes(field.type) && (
                   <tr>
                     <th scope="row">{__("Placeholder", "optionbay")}</th>
                     <td>
-                      <input
-                        type="text"
-                        className="regular-text"
+                      <ClassicInput
+                        size="regular"
                         value={field.placeholder}
                         onChange={(e) => update({ placeholder: e.target.value })}
+                        placeholder={__("Optional placeholder text", "optionbay")}
                       />
                     </td>
                   </tr>
@@ -448,32 +414,28 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 {!hasOptions && (
                   <>
                     <tr>
-                      <th scope="row">{__("Price Type", "optionbay")}</th>
+                      <th scope="row">{__("Pricing Logic", "optionbay")}</th>
                       <td>
-                        <select
+                        <ClassicSelect
                           value={field.price_type}
-                          onChange={(e) => update({ price_type: e.target.value })}
-                        >
-                          {PRICE_TYPES.map((pt) => (
-                            <option key={pt.value} value={pt.value}>
-                              {pt.label}
-                            </option>
-                          ))}
-                        </select>
+                          onChange={(val) => update({ price_type: String(val) })}
+                          options={PRICE_TYPES.map((pt) => ({ value: pt.value, label: pt.label }))}
+                        />
                       </td>
                     </tr>
                     {field.price_type !== "none" && (
                       <tr>
-                        <th scope="row">{__("Price", "optionbay")}</th>
+                        <th scope="row">{__("Price Amount", "optionbay")}</th>
                         <td>
-                          <input
+                          <ClassicInput
                             type="number"
-                            className="small-text"
+                            size="small"
                             value={field.price || ""}
                             onChange={(e) =>
                               update({ price: parseFloat(e.target.value) || 0 })
                             }
                             step="0.01"
+                            placeholder="0.00"
                           />
                         </td>
                       </tr>
@@ -484,25 +446,32 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 {/* Min/Max for text */}
                 {["text", "textarea"].includes(field.type) && (
                   <tr>
-                    <th scope="row">{__("Character Limits", "optionbay")}</th>
-                    <td style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                      <input
-                        type="number"
-                        className="small-text"
-                        value={field.min_length || ""}
-                        onChange={(e) => update({ min_length: parseInt(e.target.value) || 0 })}
-                        placeholder="Min"
-                        min={0}
-                      />
-                      <span>—</span>
-                      <input
-                        type="number"
-                        className="small-text"
-                        value={field.max_length || ""}
-                        onChange={(e) => update({ max_length: parseInt(e.target.value) || 0 })}
-                        placeholder="Max"
-                        min={0}
-                      />
+                    <th scope="row">{__("Restrictions", "optionbay")}</th>
+                    <td style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                      <label style={{ fontSize: "12px" }}>
+                        {__("Min Length:", "optionbay")}{" "}
+                        <ClassicInput
+                          type="number"
+                          size="small"
+                          value={field.min_length || ""}
+                          onChange={(e) =>
+                            update({ min_length: parseInt(e.target.value) || 0 })
+                          }
+                          min={0}
+                        />
+                      </label>
+                      <label style={{ fontSize: "12px" }}>
+                        {__("Max Length:", "optionbay")}{" "}
+                        <ClassicInput
+                          type="number"
+                          size="small"
+                          value={field.max_length || ""}
+                          onChange={(e) =>
+                            update({ max_length: parseInt(e.target.value) || 0 })
+                          }
+                          min={0}
+                        />
+                      </label>
                     </td>
                   </tr>
                 )}
@@ -510,32 +479,42 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 {/* Min/Max/Step for number */}
                 {field.type === "number" && (
                   <tr>
-                    <th scope="row">{__("Range", "optionbay")}</th>
-                    <td style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                      <input
-                        type="number"
-                        className="small-text"
-                        value={field.min_value ?? ""}
-                        onChange={(e) => update({ min_value: parseFloat(e.target.value) || 0 })}
-                        placeholder="Min"
-                      />
-                      <span>—</span>
-                      <input
-                        type="number"
-                        className="small-text"
-                        value={field.max_value ?? ""}
-                        onChange={(e) => update({ max_value: parseFloat(e.target.value) || 0 })}
-                        placeholder="Max"
-                      />
-                      <span>{__("Step:", "optionbay")}</span>
-                      <input
-                        type="number"
-                        className="small-text"
-                        value={field.step ?? ""}
-                        onChange={(e) => update({ step: parseFloat(e.target.value) || 1 })}
-                        placeholder="1"
-                        step="0.01"
-                      />
+                    <th scope="row">{__("Restrictions", "optionbay")}</th>
+                    <td>
+                      <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
+                        <label style={{ fontSize: "12px" }}>
+                          {__("Min:", "optionbay")}{" "}
+                          <ClassicInput
+                            type="number"
+                            size="small"
+                            value={field.min_value ?? ""}
+                            onChange={(e) =>
+                              update({ min_value: parseFloat(e.target.value) || 0 })
+                            }
+                          />
+                        </label>
+                        <label style={{ fontSize: "12px" }}>
+                          {__("Max:", "optionbay")}{" "}
+                          <ClassicInput
+                            type="number"
+                            size="small"
+                            value={field.max_value ?? ""}
+                            onChange={(e) =>
+                              update({ max_value: parseFloat(e.target.value) || 0 })
+                            }
+                          />
+                        </label>
+                      </div>
+                      <label style={{ fontSize: "12px" }}>
+                        {__("Step Value:", "optionbay")}{" "}
+                        <ClassicInput
+                          type="number"
+                          size="small"
+                          value={field.step ?? ""}
+                          onChange={(e) => update({ step: parseFloat(e.target.value) || 1 })}
+                          step="0.01"
+                        />
+                      </label>
                     </td>
                   </tr>
                 )}
@@ -544,27 +523,33 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 {field.type === "file" && (
                   <>
                     <tr>
-                      <th scope="row">{__("Allowed Types", "optionbay")}</th>
+                      <th scope="row">{__("File Restrictions", "optionbay")}</th>
                       <td>
-                        <input
-                          type="text"
-                          className="regular-text"
-                          value={field.allowed_types || ""}
-                          onChange={(e) => update({ allowed_types: e.target.value })}
-                          placeholder=".jpg,.png,.pdf"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">{__("Max Size (MB)", "optionbay")}</th>
-                      <td>
-                        <input
-                          type="number"
-                          className="small-text"
-                          value={field.max_file_size || ""}
-                          onChange={(e) => update({ max_file_size: parseInt(e.target.value) || 5 })}
-                          min={1}
-                        />
+                        <label style={{ display: "block", marginBottom: "8px" }}>
+                          <span style={{ fontSize: "12px", display: "block" }}>
+                            {__("Allowed Extensions (comma separated):", "optionbay")}
+                          </span>
+                          <ClassicInput
+                            size="regular"
+                            value={field.allowed_types || ""}
+                            onChange={(e) => update({ allowed_types: e.target.value })}
+                            placeholder=".jpg,.png,.pdf"
+                          />
+                        </label>
+                        <label style={{ display: "block" }}>
+                          <span style={{ fontSize: "12px", display: "block" }}>
+                            {__("Max File Size (MB):", "optionbay")}
+                          </span>
+                          <ClassicInput
+                            type="number"
+                            size="small"
+                            value={field.max_file_size || ""}
+                            onChange={(e) =>
+                              update({ max_file_size: parseInt(e.target.value) || 5 })
+                            }
+                            min={1}
+                          />
+                        </label>
                       </td>
                     </tr>
                   </>
@@ -691,17 +676,21 @@ function BuilderInner() {
 
   if (state.isLoading) {
     return (
-      <div style={{ textAlign: "center", padding: "60px" }}>
-        <p>{__("Loading option group...", "optionbay")}</p>
+      <div style={{ textAlign: "center", padding: "100px 0" }}>
+        <p className="wpab-loader-container">
+          <span className="spinner is-active" style={{ float: "none" }}></span>
+          <br />
+          {__("Loading option group...", "optionbay")}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="wpab-ignore-preflight">
+    <div className="ob-builder wpab-ignore-preflight">
       {/* Error notice */}
       {state.error && (
-        <div className="notice notice-error" style={{ marginBottom: "16px" }}>
+        <div className="notice notice-error is-dismissible" style={{ marginBottom: "20px" }}>
           <p>{state.error}</p>
         </div>
       )}
@@ -712,7 +701,11 @@ function BuilderInner() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "16px",
+          marginBottom: "24px",
+          backgroundColor: "#fff",
+          padding: "15px 20px",
+          borderRadius: "8px",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
         }}
       >
         <ClassicButton
@@ -721,16 +714,19 @@ function BuilderInner() {
         >
           ← {__("Back to List", "optionbay")}
         </ClassicButton>
-        <div style={{ display: "flex", gap: "8px" }}>
-          <select
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <span style={{ fontSize: "13px", color: "#646970" }}>{__("Status:", "optionbay")}</span>
+          <ClassicSelect
             value={state.status}
-            onChange={(e) =>
-              dispatch({ type: "SET_STATUS", payload: e.target.value as "publish" | "draft" })
+            onChange={(val) =>
+              dispatch({ type: "SET_STATUS", payload: String(val) as "publish" | "draft" })
             }
-          >
-            <option value="publish">{__("Active", "optionbay")}</option>
-            <option value="draft">{__("Draft", "optionbay")}</option>
-          </select>
+            options={[
+              { value: "publish", label: __("Active", "optionbay") },
+              { value: "draft", label: __("Draft", "optionbay") },
+            ]}
+            size="short"
+          />
           <ClassicButton
             variant="primary"
             onClick={handleSave}
@@ -746,22 +742,23 @@ function BuilderInner() {
       </div>
 
       {/* Main content: 2-column layout */}
-      <div style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
+      <div style={{ display: "flex", gap: "24px", alignItems: "flex-start" }}>
         {/* Left: Title + Fields */}
         <div style={{ flex: 1 }}>
           {/* Group Title */}
-          <div className="postbox" style={{ marginBottom: "16px" }}>
-            <div className="inside" style={{ padding: "12px" }}>
-              <input
-                type="text"
-                className="large-text"
-                value={state.title}
-                onChange={(e) =>
-                  dispatch({ type: "SET_TITLE", payload: e.target.value })
-                }
-                placeholder={__("Option Group Title", "optionbay")}
-                style={{ fontSize: "18px", padding: "8px 12px" }}
-              />
+          <div className="ob-builder-title-wrapper">
+            <div className="postbox">
+              <div className="inside" style={{ padding: "0" }}>
+                <ClassicInput
+                  className="ob-builder-title-input"
+                  size="large"
+                  value={state.title}
+                  onChange={(e) =>
+                    dispatch({ type: "SET_TITLE", payload: e.target.value })
+                  }
+                  placeholder={__("Enter Option Group Title", "optionbay")}
+                />
+              </div>
             </div>
           </div>
 
@@ -769,17 +766,25 @@ function BuilderInner() {
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="fields-list">
               {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
+                <div ref={provided.innerRef} {...provided.droppableProps} style={{ minHeight: "100px" }}>
                   {state.schema.length === 0 ? (
                     <div
                       className="postbox"
                       style={{
                         textAlign: "center",
-                        padding: "40px",
+                        padding: "60px 20px",
                         color: "#999",
+                        borderStyle: "dashed",
+                        borderColor: "#c3c4c7",
+                        borderRadius: "8px",
                       }}
                     >
-                      <p>{__("No fields yet. Add a field from the sidebar.", "optionbay")}</p>
+                      <p style={{ fontSize: "16px", marginBottom: "8px" }}>
+                        {__("Your group is empty", "optionbay")}
+                      </p>
+                      <p style={{ fontSize: "13px" }}>
+                        {__("Click the field buttons in the sidebar to start building.", "optionbay")}
+                      </p>
                     </div>
                   ) : (
                     state.schema.map((field, index) => (
@@ -798,63 +803,55 @@ function BuilderInner() {
         </div>
 
         {/* Right sidebar */}
-        <div style={{ width: "280px", flexShrink: 0 }}>
-          {/* Add Field */}
-          <div className="postbox" style={{ marginBottom: "16px" }}>
-            <h3 className="hndle" style={{ padding: "8px 12px", margin: 0 }}>
-              {__("Add Field", "optionbay")}
-            </h3>
-            <div className="inside" style={{ padding: "12px" }}>
-              {FIELD_TYPES.map((ft) => (
-                <button
-                  key={ft.value}
-                  type="button"
-                  className="button"
-                  onClick={() => addField(ft.value)}
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    marginBottom: "6px",
-                    textAlign: "left",
-                  }}
-                >
-                  + {ft.label}
-                </button>
-              ))}
+        <div style={{ width: "320px" }}>
+          {/* Add Field Section */}
+          <div className="ob-sidebar-section">
+            <div className="ob-sidebar-header">{__("Add Fields", "optionbay")}</div>
+            <div className="ob-sidebar-content">
+              <div className="ob-add-field-grid">
+                {FIELD_TYPES.map((ft) => (
+                  <ClassicButton
+                    key={ft.value}
+                    variant="secondary"
+                    onClick={() => addField(ft.value)}
+                  >
+                    + {ft.label}
+                  </ClassicButton>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Group Settings */}
-          <div className="postbox" style={{ marginBottom: "16px" }}>
-            <h3 className="hndle" style={{ padding: "8px 12px", margin: 0 }}>
-              {__("Group Settings", "optionbay")}
-            </h3>
-            <div className="inside" style={{ padding: "12px" }}>
-              <p>
-                <label>
-                  <strong>{__("Display Layout", "optionbay")}</strong>
+          {/* Group Settings Section */}
+          <div className="ob-sidebar-section">
+            <div className="ob-sidebar-header">{__("Group Settings", "optionbay")}</div>
+            <div className="ob-sidebar-content">
+              <div style={{ marginBottom: "15px" }}>
+                <label style={{ display: "block", marginBottom: "5px", fontWeight: 600 }}>
+                  {__("Display Layout", "optionbay")}
                 </label>
-                <select
+                <ClassicSelect
                   value={state.settings.layout}
-                  onChange={(e) =>
+                  onChange={(val) =>
                     dispatch({
                       type: "SET_SETTINGS",
-                      payload: { layout: e.target.value as "flat" | "accordion" },
+                      payload: { layout: String(val) as "flat" | "accordion" },
                     })
                   }
-                  style={{ width: "100%", marginTop: "4px" }}
-                >
-                  <option value="flat">{__("Flat (all fields visible)", "optionbay")}</option>
-                  <option value="accordion">{__("Accordion (collapsible)", "optionbay")}</option>
-                </select>
-              </p>
-              <p>
-                <label>
-                  <strong>{__("Priority", "optionbay")}</strong>
+                  options={[
+                    { value: "flat", label: __("Flat (Standard)", "optionbay") },
+                    { value: "accordion", label: __("Accordion", "optionbay") },
+                  ]}
+                  size="regular"
+                />
+              </div>
+              <div style={{ marginBottom: "5px" }}>
+                <label style={{ display: "block", marginBottom: "5px", fontWeight: 600 }}>
+                  {__("Priority Order", "optionbay")}
                 </label>
-                <input
+                <ClassicInput
                   type="number"
-                  className="small-text"
+                  size="small"
                   value={state.settings.priority}
                   onChange={(e) =>
                     dispatch({
@@ -862,144 +859,145 @@ function BuilderInner() {
                       payload: { priority: parseInt(e.target.value) || 10 },
                     })
                   }
-                  style={{ width: "100%", marginTop: "4px" }}
+                  style={{ width: "100%" }}
                 />
-                <span className="description">
-                  {__("Lower = displays first", "optionbay")}
-                </span>
+              </div>
+              <p className="description" style={{ margin: "5px 0 0" }}>
+                {__("Determines display order on product page.", "optionbay")}
               </p>
             </div>
           </div>
 
-          {/* Assignment Rules */}
-          <div className="postbox">
-            <h3 className="hndle" style={{ padding: "8px 12px", margin: 0 }}>
-              {__("Assignment Rules", "optionbay")}
-            </h3>
-            <div className="inside" style={{ padding: "12px" }}>
-              {/* Global toggle */}
-              <p>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={state.assignments.some((a) => a.target_type === "global")}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        dispatch({
-                          type: "SET_ASSIGNMENTS",
-                          payload: [
-                            ...state.assignments.filter((a) => a.target_type !== "global"),
-                            { target_type: "global", target_id: 0, is_exclusion: false, priority: state.settings.priority },
-                          ],
-                        });
-                      } else {
-                        dispatch({
-                          type: "SET_ASSIGNMENTS",
-                          payload: state.assignments.filter((a) => a.target_type !== "global"),
-                        });
-                      }
-                    }}
-                  />{" "}
-                  <strong>{__("All Products (Global)", "optionbay")}</strong>
-                </label>
-              </p>
+          {/* Assignment Rules Section */}
+          <div className="ob-sidebar-section">
+            <div className="ob-sidebar-header">{__("Assignment Rules", "optionbay")}</div>
+            <div className="ob-sidebar-content">
+              <div style={{ marginBottom: "15px", paddingBottom: "15px", borderBottom: "1px solid #eee" }}>
+                <ClassicCheckbox
+                  label={__("Global (All Products)", "optionbay")}
+                  checked={state.assignments.some((a) => a.target_type === "global")}
+                  onChange={(checked) => {
+                    if (checked) {
+                      dispatch({
+                        type: "SET_ASSIGNMENTS",
+                        payload: [
+                          ...state.assignments.filter((a) => a.target_type !== "global"),
+                          { target_type: "global", target_id: 0, is_exclusion: false, priority: state.settings.priority },
+                        ],
+                      });
+                    } else {
+                      dispatch({
+                        type: "SET_ASSIGNMENTS",
+                        payload: state.assignments.filter((a) => a.target_type !== "global"),
+                      });
+                    }
+                  }}
+                />
+              </div>
 
-              {/* Specific assignments */}
               {!state.assignments.some((a) => a.target_type === "global") && (
                 <>
-                  <hr />
-                  <p className="description">
-                    {__("Or assign to specific products/categories by ID:", "optionbay")}
-                  </p>
+                  <div style={{ marginBottom: "12px" }}>
+                    <p className="description" style={{ marginBottom: "12px" }}>
+                      {__("Assign to specific items or exclude them:", "optionbay")}
+                    </p>
 
-                  {state.assignments
-                    .filter((a) => a.target_type !== "global")
-                    .map((assignment, idx) => (
-                      <div key={idx} style={{ display: "flex", gap: "4px", marginBottom: "6px", alignItems: "center" }}>
-                        <select
-                          value={assignment.target_type}
-                          onChange={(e) => {
-                            const newAssignments = [...state.assignments];
-                            const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
-                            const realIdx = globalCount + idx;
-                            newAssignments[realIdx] = {
-                              ...newAssignments[realIdx],
-                              target_type: e.target.value as any,
-                            };
-                            dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
-                          }}
-                          style={{ width: "90px" }}
-                        >
-                          <option value="product">{__("Product", "optionbay")}</option>
-                          <option value="category">{__("Category", "optionbay")}</option>
-                          <option value="tag">{__("Tag", "optionbay")}</option>
-                        </select>
-                        <input
-                          type="number"
-                          className="small-text"
-                          value={assignment.target_id || ""}
-                          onChange={(e) => {
-                            const newAssignments = [...state.assignments];
-                            const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
-                            const realIdx = globalCount + idx;
-                            newAssignments[realIdx] = {
-                              ...newAssignments[realIdx],
-                              target_id: parseInt(e.target.value) || 0,
-                            };
-                            dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
-                          }}
-                          placeholder="ID"
-                          style={{ width: "60px" }}
-                        />
-                        <label style={{ fontSize: "12px" }}>
-                          <input
-                            type="checkbox"
+                    {state.assignments
+                      .filter((a) => a.target_type !== "global")
+                      .map((assignment, idx) => (
+                        <div key={idx} style={{ 
+                          display: "flex", 
+                          flexDirection: "column",
+                          gap: "8px", 
+                          marginBottom: "15px", 
+                          padding: "10px",
+                          background: "#f9f9f9",
+                          border: "1px solid #eee",
+                          borderRadius: "4px"
+                        }}>
+                          <div style={{ display: "flex", gap: "5px" }}>
+                            <select
+                              value={assignment.target_type}
+                              onChange={(e) => {
+                                const newAssignments = [...state.assignments];
+                                const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
+                                const realIdx = globalCount + idx;
+                                newAssignments[realIdx] = {
+                                  ...newAssignments[realIdx],
+                                  target_type: e.target.value as any,
+                                };
+                                dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
+                              }}
+                              style={{ flex: 1 }}
+                            >
+                              <option value="product">{__("Product", "optionbay")}</option>
+                              <option value="category">{__("Category", "optionbay")}</option>
+                              <option value="tag">{__("Tag", "optionbay")}</option>
+                            </select>
+                            <ClassicInput
+                              type="number"
+                              size="small"
+                              value={assignment.target_id || ""}
+                              onChange={(e) => {
+                                const newAssignments = [...state.assignments];
+                                const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
+                                const realIdx = globalCount + idx;
+                                newAssignments[realIdx] = {
+                                  ...newAssignments[realIdx],
+                                  target_id: parseInt(e.target.value) || 0,
+                                };
+                                dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
+                              }}
+                              placeholder="ID"
+                              style={{ width: "70px" }}
+                            />
+                            <button
+                              type="button"
+                              className="ob-remove-option"
+                              style={{ marginLeft: "5px" }}
+                              onClick={() => {
+                                const newAssignments = [...state.assignments];
+                                const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
+                                newAssignments.splice(globalCount + idx, 1);
+                                dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
+                              }}
+                            >
+                              ×
+                            </button>
+                          </div>
+                          <ClassicCheckbox
+                            label={__("Exclude this target", "optionbay")}
                             checked={assignment.is_exclusion}
-                            onChange={(e) => {
+                            onChange={(checked) => {
                               const newAssignments = [...state.assignments];
                               const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
                               const realIdx = globalCount + idx;
                               newAssignments[realIdx] = {
                                 ...newAssignments[realIdx],
-                                is_exclusion: e.target.checked,
+                                is_exclusion: checked,
                               };
                               dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
                             }}
-                          />{" "}
-                          {__("Exclude", "optionbay")}
-                        </label>
-                        <button
-                          type="button"
-                          className="button"
-                          onClick={() => {
-                            const newAssignments = [...state.assignments];
-                            const globalCount = newAssignments.filter((a) => a.target_type === "global").length;
-                            newAssignments.splice(globalCount + idx, 1);
-                            dispatch({ type: "SET_ASSIGNMENTS", payload: newAssignments });
-                          }}
-                          style={{ color: "#b32d2e" }}
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
+                          />
+                        </div>
+                      ))}
 
-                  <button
-                    type="button"
-                    className="button"
-                    onClick={() => {
-                      dispatch({
-                        type: "SET_ASSIGNMENTS",
-                        payload: [
-                          ...state.assignments,
-                          { target_type: "product", target_id: 0, is_exclusion: false, priority: state.settings.priority },
-                        ],
-                      });
-                    }}
-                    style={{ marginTop: "4px" }}
-                  >
-                    + {__("Add Assignment", "optionbay")}
-                  </button>
+                    <ClassicButton
+                      variant="secondary"
+                      style={{ width: "100%" }}
+                      onClick={() => {
+                        dispatch({
+                          type: "SET_ASSIGNMENTS",
+                          payload: [
+                            ...state.assignments,
+                            { target_type: "product", target_id: 0, is_exclusion: false, priority: state.settings.priority },
+                          ],
+                        });
+                      }}
+                    >
+                      + {__("Add Rule", "optionbay")}
+                    </ClassicButton>
+                  </div>
                 </>
               )}
             </div>
