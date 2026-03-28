@@ -103,14 +103,7 @@ export default function AddonList() {
   return (
     <div className="optionbay-ignore-preflight">
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "16px",
-        }}
-      >
+      <div className="optionbay-flex optionbay-flex-col sm:optionbay-flex-row optionbay-justify-between optionbay-items-start sm:optionbay-items-center optionbay-gap-4 optionbay-mb-4">
         <p className="optionbay-text-gray-600" style={{ margin: 0 }}>
           {loading
             ? __("Loading...", "optionbay")
@@ -125,7 +118,8 @@ export default function AddonList() {
       </div>
 
       {/* Table */}
-      <table className="wp-list-table widefat fixed striped">
+      <div className="optionbay-table-responsive">
+        <table className="wp-list-table widefat fixed striped">
         <thead>
           <tr>
             <th style={{ width: "30%" }}>{__("Title", "optionbay")}</th>
@@ -209,7 +203,8 @@ export default function AddonList() {
             ))
           )}
         </tbody>
-      </table>
+        </table>
+      </div>
 
       {/* Pagination */}
       {totalPages > 1 && (

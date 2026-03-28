@@ -445,7 +445,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                   <th scope="row">{__("Description", "optionbay")}</th>
                   <td>
                     <textarea
-                      className="large-text"
+                      className="large-text optionbay-p-1.5"
                       rows={2}
                       value={field.description}
                       onChange={(e) => update({ description: e.target.value })}
@@ -842,25 +842,14 @@ function BuilderInner() {
       )}
 
       {/* Top bar */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "24px",
-          backgroundColor: "#fff",
-          padding: "15px 20px",
-          borderRadius: "8px",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-        }}
-      >
+      <div className="optionbay-flex optionbay-flex-col sm:optionbay-flex-row optionbay-justify-between optionbay-items-start sm:optionbay-items-center optionbay-gap-4 optionbay-mb-6 optionbay-bg-white optionbay-p-[15px_20px] optionbay-rounded-lg optionbay-shadow-sm">
         <ClassicButton
           variant="secondary"
           onClick={() => navigate("/option-groups")}
         >
           ← {__("Back to List", "optionbay")}
         </ClassicButton>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+        <div className="optionbay-flex optionbay-flex-wrap optionbay-items-center optionbay-gap-3">
           <span style={{ fontSize: "13px", color: "#646970" }}>
             {__("Status:", "optionbay")}
           </span>
@@ -893,7 +882,7 @@ function BuilderInner() {
       </div>
 
       {/* Main content: 2-column layout */}
-      <div style={{ display: "flex", gap: "24px", alignItems: "flex-start" }}>
+      <div className="optionbay-flex optionbay-flex-col lg:optionbay-flex-row optionbay-gap-6 optionbay-items-start">
         {/* Left: Title + Fields */}
         <div style={{ flex: 1 }}>
           {/* Group Title */}
@@ -957,7 +946,7 @@ function BuilderInner() {
         </div>
 
         {/* Right sidebar */}
-        <div style={{ width: "320px" }}>
+        <div className="optionbay-w-full lg:optionbay-w-[320px]">
           {/* Add Field Section */}
           <div className="ob-sidebar-section">
             <div className="ob-sidebar-header">
@@ -1108,6 +1097,7 @@ function BuilderInner() {
                         </label>
                         <ClassicSelect
                           value={activeAssignmentType}
+                          differentDropdownWidth
                           onChange={(val) => {
                             setActiveAssignmentType(val as any);
                             // Clear existing non-global assignments when switching type

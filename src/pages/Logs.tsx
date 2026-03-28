@@ -39,7 +39,7 @@ const Logs = () => {
 
   return (
     <div className="">
-      <div className="optionbay-flex optionbay-justify-between optionbay-items-end optionbay-mb-6">
+      <div className="optionbay-flex optionbay-flex-col sm:optionbay-flex-row optionbay-justify-between optionbay-items-start sm:optionbay-items-center optionbay-gap-4 optionbay-mb-6">
         <div>
           <p className="optionbay-text-sm optionbay-text-gray-500">
             {__(

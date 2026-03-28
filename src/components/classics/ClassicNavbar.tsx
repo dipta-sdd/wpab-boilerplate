@@ -38,7 +38,7 @@ const ClassicNavbar: FC = () => {
   };
 
   return (
-    <nav className="optionbay-flex optionbay-items-center optionbay-gap-6 optionbay-border-b optionbay-border-gray-200 optionbay-mb-8 optionbay-ignore-preflight optionbay-p-x-page-default optionbay-bg-white">
+    <nav className="optionbay-flex optionbay-items-center optionbay-gap-6 optionbay-border-b optionbay-border-gray-200 optionbay-mb-8 optionbay-ignore-preflight optionbay-p-x-page-default optionbay-bg-white optionbay-overflow-x-auto optionbay-whitespace-nowrap optionbay-scrollbar-hide">
       {menus.map((menu) => (
         <a
           key={menu.path}
