@@ -89,9 +89,9 @@ function OptionEditor({
   const { dispatch } = useAddonContext();
 
   return (
-    <div className="ob-option-editor" style={{ marginTop: "15px" }}>
+    <div className="ob-option-editor optionbay-flex optionbay-flex-col optionbay-gap-2.5" style={{ marginTop: "15px" }}>
       <label
-        style={{ fontWeight: 600, display: "block", marginBottom: "10px" }}
+        style={{ fontWeight: 600, display: "block" }}
       >
         {__("Choices", "optionbay")}
       </label>
@@ -214,8 +214,8 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
   }
 
   return (
-    <div className="ob-condition-builder">
-      <div style={{ marginBottom: "15px" }}>
+    <div className="ob-condition-builder optionbay-flex optionbay-flex-col optionbay-gap-3">
+      <div>
         <ClassicCheckbox
           label={__("Enable Conditional Logic", "optionbay")}
           checked={conditions.status === "active"}
@@ -227,7 +227,7 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
 
       {conditions.status === "active" && (
         <>
-          <div className="ob-condition-row" style={{ marginBottom: "15px" }}>
+          <div className="ob-condition-row">
             <select
               value={conditions.action}
               onChange={(e) =>
@@ -918,7 +918,7 @@ function BuilderInner() {
       {/* Main content: 2-column layout */}
       <div className="optionbay-flex optionbay-flex-col lg:optionbay-flex-row optionbay-gap-6 optionbay-items-start">
         {/* Left: Title + Fields */}
-        <div className="optionbay-w-full">
+        <div className="optionbay-w-full optionbay-flex optionbay-flex-col optionbay-gap-6">
           {/* Group Title */}
           <div className="ob-builder-title-wrapper">
             {/* <div className="postbox"> */}
@@ -937,7 +937,7 @@ function BuilderInner() {
           </div>
 
           {/* Assignment Rules (Moved to Top) */}
-          <div className="optionbay-bg-white optionbay-p-[20px] optionbay-rounded-lg optionbay-shadow-sm optionbay-mb-6">
+          <div className="optionbay-bg-white optionbay-p-[20px] optionbay-rounded-lg optionbay-shadow-sm">
             <div className="optionbay-flex optionbay-items-center optionbay-justify-between optionbay-mb-4 optionbay-pb-3" style={{ borderBottom: "1px solid #eee" }}>
               <h2 style={{ margin: 0, fontSize: "16px", fontWeight: 600, color: "#1d2327" }}>
                 {__("Assignment Rules", "optionbay")}
@@ -1056,6 +1056,7 @@ function BuilderInner() {
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   style={{ minHeight: "100px" }}
+                  className="optionbay-flex optionbay-flex-col optionbay-gap-4"
                 >
                   {state.schema.length === 0 ? (
                     <div
@@ -1091,8 +1092,8 @@ function BuilderInner() {
           </DragDropContext>
         </div>
 
-        {/* Right sidebar */}
-        <div className="optionbay-w-full lg:optionbay-w-[320px]">
+        {/* Right: Sidebar */}
+        <div className="optionbay-w-full lg:optionbay-w-[320px] optionbay-flex optionbay-flex-col optionbay-gap-5">
           {/* Add Field Section */}
           <div className="ob-sidebar-section">
             <div className="ob-sidebar-header ">

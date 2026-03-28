@@ -806,7 +806,6 @@ video {
 
 .ob-builder {
   .ob-builder-title-wrapper {
-    margin-bottom: 24px;
     .postbox {
       margin-bottom: 0;
       border-radius: 8px;
@@ -831,7 +830,6 @@ video {
     background: #fff;
     border: 1px solid #c3c4c7;
     border-radius: 8px;
-    margin-bottom: 16px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
 
@@ -902,7 +900,6 @@ video {
     background: #fff;
     border: 1px solid #c3c4c7;
     border-radius: 8px;
-    margin-bottom: 20px;
 
     .ob-sidebar-header {
       padding: 12px 15px;
@@ -937,7 +934,6 @@ video {
   .ob-option-row {
     display: flex;
     gap: 8px;
-    margin-bottom: 8px;
     align-items: center;
 
     input[type="text"] { flex: 1; }
@@ -965,7 +961,6 @@ video {
     .ob-condition-row {
       display: flex;
       gap: 8px;
-      margin-bottom: 8px;
       align-items: center;
     }
   }
