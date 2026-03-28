@@ -25,6 +25,7 @@ import {
 } from "../store/AddonContext";
 import apiFetch from "../utils/apiFetch";
 import { MultiSelectOption } from "../components/common/MultiSelect";
+import { addonGroupSchema } from "../utils/validation";
 
 // ─── Product option rendering ────────────────────────────────────────────
 
@@ -77,6 +78,13 @@ const PRICE_TYPES = [
   { value: "quantity_multiplier", label: "× Quantity" },
 ];
 
+// ─── Helpers ─────────────────────────────────────────────────────────────
+
+const FormError = ({ message }: { message?: string }) => {
+  if (!message) return null;
+  return <div style={{ color: "#d63638", fontSize: "12px", marginTop: "4px" }}>{message}</div>;
+};
+
 // ─── Option Editor ───────────────────────────────────────────────────────
 
 function OptionEditor({
@@ -86,7 +94,7 @@ function OptionEditor({
   fieldId: string;
   options: FieldOption[];
 }) {
-  const { dispatch } = useAddonContext();
+  const { state, dispatch } = useAddonContext();
 
   return (
     <div className="ob-option-editor optionbay-flex optionbay-flex-col optionbay-gap-2.5" style={{ marginTop: "15px" }}>
@@ -97,24 +105,27 @@ function OptionEditor({
       </label>
       {options.map((opt, idx) => (
         <div key={idx} className="ob-option-row">
-          <ClassicInput
-            size="regular"
-            placeholder={__("Label", "optionbay")}
-            value={opt.label}
-            onChange={(e) =>
-              dispatch({
-                type: "UPDATE_OPTION",
-                payload: {
-                  fieldId,
-                  optionIndex: idx,
-                  updates: {
-                    label: e.target.value,
-                    value: e.target.value.toLowerCase().replace(/\s+/g, "_"),
+          <div style={{ flex: 1 }}>
+            <ClassicInput
+              size="regular"
+              placeholder={__("Label", "optionbay")}
+              value={opt.label}
+              onChange={(e) =>
+                dispatch({
+                  type: "UPDATE_OPTION",
+                  payload: {
+                    fieldId,
+                    optionIndex: idx,
+                    updates: {
+                      label: e.target.value,
+                      value: e.target.value.toLowerCase().replace(/\s+/g, "_"),
+                    },
                   },
-                },
-              })
-            }
-          />
+                })
+              }
+            />
+            <FormError message={state.errors?.[`schema.${state.schema.findIndex(f => f.id === fieldId)}.options.${idx}.label`]} />
+          </div>
           <ClassicInput
             type="number"
             size="small"
@@ -184,13 +195,14 @@ function OptionEditor({
       >
         + {__("Add Choice", "optionbay")}
       </ClassicButton>
+      <FormError message={state.errors?.[`schema.${state.schema.findIndex(f => f.id === fieldId)}.options`]} />
     </div>
   );
 }
 
 // ─── Condition Editor ────────────────────────────────────────────────────
 
-function ConditionEditor({ field }: { field: FieldDefinition }) {
+function ConditionEditor({ field, index }: { field: FieldDefinition; index: number }) {
   const { state, dispatch } = useAddonContext();
   const siblingFields = state.schema.filter((f) => f.id !== field.id);
   const conditions = field.conditions;
@@ -223,6 +235,7 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
             updateConditions({ status: checked ? "active" : "inactive" })
           }
         />
+        <FormError message={state.errors?.[`schema.${index}.conditions.rules`]} />
       </div>
 
       {conditions.status === "active" && (
@@ -339,7 +352,7 @@ function ConditionEditor({ field }: { field: FieldDefinition }) {
 // ─── Field Row ───────────────────────────────────────────────────────────
 
 function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
-  const { dispatch } = useAddonContext();
+  const { state, dispatch } = useAddonContext();
   const [isMinimized, setIsMinimized] = useState(false);
   const hasOptions = ["select", "radio", "checkbox"].includes(field.type);
 
@@ -458,6 +471,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                       onChange={(e) => update({ label: e.target.value })}
                       placeholder={__("Enter field label", "optionbay")}
                     />
+                    <FormError message={state.errors?.[`schema.${index}.label`]} />
                   </td>
                 </tr>
 
@@ -702,7 +716,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
             )}
 
             {/* Conditional Logic */}
-            <ConditionEditor field={field} />
+            <ConditionEditor field={field} index={index} />
           </div>
           )}
         </div>
@@ -785,6 +799,7 @@ function BuilderInner() {
   const handleSave = useCallback(async () => {
     dispatch({ type: "SET_SAVING", payload: true });
     dispatch({ type: "SET_ERROR", payload: null });
+    dispatch({ type: "SET_ERRORS", payload: {} });
 
     try {
       const payload = {
@@ -794,6 +809,19 @@ function BuilderInner() {
         settings: state.settings,
         assignments: state.assignments,
       };
+
+      const result = addonGroupSchema.safeParse(payload);
+      if (!result.success) {
+        const fieldErrors: Record<string, string> = {};
+        result.error.issues.forEach((issue) => {
+          const path = issue.path.join(".");
+          fieldErrors[path] = issue.message;
+        });
+        dispatch({ type: "SET_ERRORS", payload: fieldErrors });
+        dispatch({ type: "SET_ERROR", payload: __("Please fix the validation errors below.", "optionbay") });
+        dispatch({ type: "SET_SAVING", payload: false });
+        return;
+      }
 
       if (isEdit && state.id) {
         await apiFetch({
@@ -932,6 +960,7 @@ function BuilderInner() {
                   }
                   placeholder={__("Enter Option Group Title", "optionbay")}
                 />
+                <FormError message={state.errors?.title} />
               </div>
             {/* </div> */}
           </div>

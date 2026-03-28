@@ -46,7 +46,8 @@
     "@wordpress/icons": "^10.26.0",
     "@wordpress/react-i18n": "^4.26.0",
     "lucide-react": "^0.525.0",
-    "react-router-dom": "^7.6.3"
+    "react-router-dom": "^7.6.3",
+    "zod": "^4.3.6"
   },
   "wp-i18n": {
     "domain": "optionbay",

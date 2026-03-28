@@ -69,6 +69,7 @@ export interface AddonGroupState {
   isSaving: boolean;
   isDirty: boolean;
   error: string | null;
+  errors: Record<string, string>;
 }
 
 // ─── Actions ─────────────────────────────────────────────────────────────
@@ -89,6 +90,7 @@ type AddonAction =
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_SAVING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string | null }
+  | { type: "SET_ERRORS"; payload: Record<string, string> }
   | { type: "MARK_CLEAN" }
   | { type: "RESET" };
 
@@ -111,6 +113,7 @@ const initialState: AddonGroupState = {
   isSaving: false,
   isDirty: false,
   error: null,
+  errors: {},
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────
@@ -286,6 +289,9 @@ function addonReducer(
 
     case "SET_ERROR":
       return { ...state, error: action.payload };
+
+    case "SET_ERRORS":
+      return { ...state, errors: action.payload };
 
     case "MARK_CLEAN":
       return { ...state, isDirty: false };
