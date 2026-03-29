@@ -1,7 +1,14 @@
 import { useEffect, useCallback, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { __ } from "@wordpress/i18n";
-import { ChevronDown, ChevronUp, Trash2, Minus, ChevronsUpDown } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Trash2,
+  Minus,
+  ChevronsUpDown,
+  Menu,
+} from "lucide-react";
 import {
   DragDropContext,
   Droppable,
@@ -27,6 +34,7 @@ import {
 import apiFetch from "../utils/apiFetch";
 import { MultiSelectOption } from "../components/common/MultiSelect";
 import { addonGroupSchema } from "../utils/validation";
+import { Tooltip } from "../components/common/ToolTip";
 
 // ─── Product option rendering ────────────────────────────────────────────
 
@@ -330,7 +338,10 @@ function ConditionEditor({
                   { value: "<", label: __("less than", "optionbay") },
                   { value: "contains", label: __("contains", "optionbay") },
                   { value: "empty", label: __("is empty", "optionbay") },
-                  { value: "not_empty", label: __("is not empty", "optionbay") },
+                  {
+                    value: "not_empty",
+                    label: __("is not empty", "optionbay"),
+                  },
                 ]}
               />
               {!["empty", "not_empty"].includes(rule.operator) && (
@@ -412,7 +423,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 className="optionbay-cursor-grab active:optionbay-cursor-grabbing optionbay-text-[#9ca3af] optionbay-mr-[10px] optionbay-text-[18px] optionbay-flex optionbay-items-center"
                 title={__("Drag to reorder", "optionbay")}
               >
-                ☰
+                <Menu />
               </span>
               <span className="optionbay-font-semibold optionbay-text-[14px] optionbay-text-[#1d2327]">
                 {field.label || __("Untitled Field", "optionbay")}
@@ -431,36 +442,49 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
             </div>
             <div className="optionbay-flex optionbay-gap-1 optionbay-items-center">
               {/* Move Up */}
-              <button
-                type="button"
+              <Tooltip
+                content={__("Move up", "optionbay")}
                 disabled={index === 0}
-                onClick={() => dispatch({ type: "MOVE_UP", payload: index })}
-                className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-transition-colors ${
-                  index === 0
-                    ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
-                    : "optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
-                }`}
-                title={__("Move up", "optionbay")}
               >
-                <ChevronUp size={16} />
-              </button>
-
+                <button
+                  type="button"
+                  disabled={index === 0}
+                  onClick={() => dispatch({ type: "MOVE_UP", payload: index })}
+                  className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-transition-colors ${
+                    index === 0
+                      ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
+                      : "optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
+                  }`}
+                  title={__("Move up", "optionbay")}
+                >
+                  <ChevronUp size={16} />
+                </button>
+              </Tooltip>
               {/* Move Down */}
-              <button
-                type="button"
+              <Tooltip
+                content={__("Move down", "optionbay")}
                 disabled={index === state.schema.length - 1}
-                onClick={() => dispatch({ type: "MOVE_DOWN", payload: index })}
-                className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-transition-colors ${
-                  index === state.schema.length - 1
-                    ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
-                    : "optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
-                }`}
-                title={__("Move down", "optionbay")}
               >
-                <ChevronDown size={16} />
-              </button>
-
+                <button
+                  type="button"
+                  disabled={index === state.schema.length - 1}
+                  onClick={() =>
+                    dispatch({ type: "MOVE_DOWN", payload: index })
+                  }
+                  className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-transition-colors ${
+                    index === state.schema.length - 1
+                      ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
+                      : "optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
+                  }`}
+                  title={__("Move down", "optionbay")}
+                >
+                  <ChevronDown size={16} />
+                </button>
+              </Tooltip>
               {/* Minimize Toggle */}
+              <Tooltip
+                content={isMinimized ? __("Expand", "optionbay") : __("Minimize", "optionbay")}
+              >
               <button
                 type="button"
                 onClick={() => setIsMinimized(!isMinimized)}
@@ -477,8 +501,10 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                   <Minus size={18} />
                 )}
               </button>
-
+              </Tooltip>
               {/* Delete Field */}
+              <Tooltip
+                content={__("Delete field", "optionbay")} >
               <button
                 type="button"
                 onClick={() => {
@@ -498,6 +524,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
               >
                 <Trash2 size={16} />
               </button>
+              </Tooltip>
             </div>
           </div>
 
@@ -513,7 +540,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                       <ClassicSelect
                         value={field.type}
                         classNames={{
-                          innerContainer: "!optionbay-w-[120px]"
+                          innerContainer: "!optionbay-w-[120px]",
                         }}
                         onChange={(val) => {
                           const newType = String(val);
@@ -780,7 +807,6 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                     : []),
                 ]}
               />
-
 
               {/* Options editor for select/radio/checkbox */}
               {hasOptions && field.options && (
@@ -1107,7 +1133,10 @@ function BuilderInner() {
                             differentDropdownWidth
                             onChange={(val) => {
                               setActiveAssignmentType(val as any);
-                              dispatch({ type: "SET_ASSIGNMENTS", payload: [] });
+                              dispatch({
+                                type: "SET_ASSIGNMENTS",
+                                payload: [],
+                              });
                             }}
                             options={[
                               {
@@ -1219,7 +1248,14 @@ function BuilderInner() {
                 : []),
             ]}
           />
-
+          <div>
+            <h2 className="optionbay-ignore-preflight">
+              {__("Fields", "optionbay")}
+            </h2>
+            <p className="description">
+              {__("Drag and drop fields to reorder them.", "optionbay")}
+            </p>
+          </div>
           {/* Fields list with drag-and-drop */}
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="fields-list">
