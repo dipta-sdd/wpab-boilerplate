@@ -160,14 +160,13 @@ export const Tooltip: React.FC<TooltipProps> = ({
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             className={`
-            optionbay-fixed optionbay-z-[60]
+            optionbay-fixed optionbay-z-[60] optionbay-max-w-[300px]
             ${className}
             ${classNames?.root || ""}
           `}
             style={{
               top: coords.top,
               left: coords.left,
-              maxWidth: "300px",
             }}
           >
             <div

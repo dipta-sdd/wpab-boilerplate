@@ -69,8 +69,7 @@ export const ClassicCheckbox: React.FC<ClassicCheckboxProps> = ({
       </label>
       {description && (
         <p
-          className="description"
-          style={{ display: "block", marginTop: 0, paddingLeft: "24px" }}
+          className="description optionbay-block optionbay-mt-0 optionbay-pl-6"
         >
           {description}
         </p>

@@ -305,12 +305,11 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
 
   return (
     <div
-      className={`${sizeClass} ${className}`}
+      className={`${sizeClass} ${className} optionbay-align-middle`}
       ref={containerRef}
-      style={{ verticalAlign: "middle" }}
     >
       {label && (
-        <label htmlFor={selectId} style={{ display: "block", marginBottom: 4 }}>
+        <label htmlFor={selectId} className="optionbay-block optionbay-mb-1">
           {label}
         </label>
       )}
@@ -321,60 +320,17 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
           tabIndex={disabled ? -1 : 0}
           role="combobox"
           aria-expanded={isOpen}
-          onClick={() => !disabled && setIsOpen(!isOpen)}
-          onKeyDown={handleTriggerKeyDown}
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            gap: "4px",
-            cursor: disabled ? "not-allowed" : "text",
-            backgroundColor: disabled ? "#f0f0f1" : "#fff",
-            border: "1px solid #8c8f94",
-            borderRadius: "3px",
-            padding: "3px 24px 3px 6px",
-            minHeight: "30px",
-            transition: "box-shadow 0.1s linear",
-            position: "relative",
-            boxSizing: "border-box",
-            width: "100%",
-            ...(isOpen
-              ? {
-                  borderColor: "#2271b1",
-                  boxShadow: "0 0 0 1px #2271b1",
-                  outline: "2px solid transparent",
-                }
-              : {}),
-          }}
+          className={`optionbay-flex optionbay-flex-wrap optionbay-items-center optionbay-gap-1 optionbay-bg-white optionbay-border optionbay-border-[#8c8f94] optionbay-rounded-[3px] optionbay-p-[3px_24px_3px_6px] optionbay-min-h-[30px] optionbay-transition-shadow optionbay-duration-100 optionbay-relative optionbay-box-border optionbay-w-full ${disabled ? "optionbay-cursor-not-allowed optionbay-bg-[#f0f0f1]" : "optionbay-cursor-text"} ${isOpen ? "optionbay-border-[#2271b1] optionbay-shadow-[0_0_0_1px_#2271b1] optionbay-outline-none" : "optionbay-shadow-none"}`}
         >
           {selectedOptions.map((opt) => (
             <span
               key={opt.value}
-              style={{
-                backgroundColor: "#f0f0f1",
-                border: "1px solid #c3c4c7",
-                borderRadius: "3px",
-                padding: "0 4px",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                fontSize: "12px",
-                color: "#3c434a",
-                lineHeight: "20px",
-              }}
+              className="optionbay-bg-[#f0f0f1] optionbay-border optionbay-border-[#c3c4c7] optionbay-rounded-[3px] optionbay-px-1 optionbay-flex optionbay-items-center optionbay-gap-1 optionbay-text-xs optionbay-text-[#3c434a] optionbay-leading-[20px]"
             >
               {opt.label}
               <button
                 onClick={(e) => handleRemove(e, opt.value)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                  color: "#8c8f94",
-                  display: "flex",
-                  alignItems: "center",
-                }}
+                className="optionbay-bg-transparent optionbay-border-none optionbay-p-0 optionbay-cursor-pointer optionbay-text-[#8c8f94] optionbay-flex optionbay-items-center"
               >
                 <X size={12} />
               </button>
@@ -394,70 +350,31 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
               onKeyDown={handleSearchKeyDown}
               placeholder={value.length === 0 ? placeholder : ""}
               disabled={disabled}
-              className="focus:optionbay-outline-none focus:optionbay-shadow-none"
-              style={{
-                border: "none",
-                outline: "none",
-                background: "transparent",
-                minWidth: "50px",
-                flex: 1,
-                padding: 0,
-                fontSize: "13px",
-                boxShadow: "none",
-              }}
+              className="!optionbay-border-none !optionbay-outline-none !optionbay-bg-transparent !optionbay-min-w-[50px] !optionbay-flex-1 !optionbay-p-0 !optionbay-text-[13px] !optionbay-shadow-none focus:!optionbay-outline-none focus:!optionbay-shadow-none"
             />
           )}
 
           {!enableSearch && value.length === 0 && (
-            <span
-              style={{ color: "#8c8f94", fontSize: "13px", paddingLeft: "4px" }}
-            >
+            <span className="optionbay-text-[#8c8f94] optionbay-text-[13px] optionbay-pl-1">
               {placeholder}
             </span>
           )}
 
           {/* Chevron icon pointing down */}
-          <span
-            style={{
-              position: "absolute",
-              right: 6,
-              top: "50%",
-              transform: "translateY(-50%)",
-              display: "flex",
-              pointerEvents: "none",
-            }}
-          >
+          <span className="optionbay-absolute optionbay-right-1.5 optionbay-top-1/2 -optionbay-translate-y-1/2 optionbay-flex optionbay-pointer-events-none">
             <ChevronDown size={14} color="#50575e" />
           </span>
         </div>
 
         {isOpen && (
           <div
-            className={`optionbay-absolute optionbay-z-50 optionbay-bg-white optionbay-border optionbay-border-[#8c8f94] optionbay-rounded-[3px]`}
+            className="optionbay-absolute optionbay-z-[99999] optionbay-bg-white optionbay-border optionbay-border-[#8c8f94] optionbay-rounded-[3px] optionbay-shadow-[0_3px_5px_rgba(0,0,0,0.2)] optionbay-p-0 optionbay-box-border optionbay-top-full optionbay-left-0 -optionbay-mt-[1px]"
             style={{
-              zIndex: 99999,
-              boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-              padding: 0,
-              boxSizing: "border-box",
-              top: "100%",
-              left: 0,
-              marginTop: "-1px",
-              ...(differentDropdownWidth
-                ? { minWidth: "100%" }
-                : { width: "100%" }),
+              ...(differentDropdownWidth ? { minWidth: "100%" } : { width: "100%" }),
             }}
           >
             {isLoading ? (
-              <div
-                style={{
-                  padding: "8px 12px",
-                  color: "#646970",
-                  fontSize: "13px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
+              <div className="optionbay-py-2 optionbay-px-3 optionbay-text-[#646970] optionbay-text-[13px] optionbay-flex optionbay-items-center optionbay-gap-2">
                 <Hourglass size={14} className="optionbay-animate-spin" />{" "}
                 Loading...
               </div>
@@ -465,24 +382,10 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
               <ul
                 ref={listRef}
                 role="listbox"
-                style={{
-                  maxHeight: "220px",
-                  overflowY: "auto",
-                  margin: 0,
-                  padding: "0",
-                  listStyle: "none",
-                }}
+                className="optionbay-max-h-[220px] optionbay-overflow-y-auto optionbay-m-0 optionbay-p-0 optionbay-list-none"
               >
                 {filteredOptions.length === 0 ? (
-                  <li
-                    style={{
-                      padding: "6px 12px",
-                      color: "#646970",
-                      fontStyle: "italic",
-                      fontSize: "13px",
-                      margin: "0",
-                    }}
-                  >
+                    <li className="optionbay-px-3 optionbay-py-1.5 optionbay-text-[#646970] optionbay-italic optionbay-text-[13px] optionbay-m-0">
                     {searchQuery ? "No results found" : "No options available"}
                   </li>
                 ) : (
@@ -521,31 +424,9 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
                           e.stopPropagation();
                           handleSelect(opt);
                         }}
-                        style={{
-                          padding: "6px 12px",
-                          cursor: isDisabled ? "not-allowed" : "pointer",
-                          backgroundColor: isHighlighted
-                            ? "#2271b1"
-                            : "transparent",
-                          color: isHighlighted
-                            ? "#fff"
-                            : isDisabled
-                            ? "#a7aaad"
-                            : "#2c3338",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          fontSize: "13px",
-                          margin: "0",
-                        }}
+                        className={`optionbay-px-3 optionbay-py-1.5 optionbay-flex optionbay-items-center optionbay-justify-between optionbay-text-[13px] optionbay-m-0 ${isDisabled ? "optionbay-cursor-not-allowed" : "optionbay-cursor-pointer"} ${isHighlighted ? "optionbay-bg-[#2271b1] optionbay-text-white" : isDisabled ? "optionbay-bg-transparent optionbay-text-[#a7aaad]" : "optionbay-bg-transparent optionbay-text-[#2c3338]"}`}
                       >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                          }}
-                        >
+                        <div className="optionbay-flex optionbay-items-center optionbay-gap-2">
                           <div
                             className={`
                             optionbay-flex optionbay-items-center optionbay-justify-center
@@ -589,30 +470,14 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
                         {/* Icons for variants */}
                         {isPro && (
                           <span
-                            style={{
-                              color: isHighlighted ? "#fff" : "#ffb900",
-                              display: "flex",
-                            }}
+                            className={`optionbay-flex ${isHighlighted ? "optionbay-text-white" : "optionbay-text-[#ffb900]"}`}
                           >
                             <Lock size={14} />
                           </span>
                         )}
                         {isComingSoon && (
                           <span
-                            style={{
-                              fontSize: "10px",
-                              textTransform: "uppercase",
-                              backgroundColor: isHighlighted
-                                ? "rgba(255,255,255,0.2)"
-                                : "#f0f0f1",
-                              color: isHighlighted ? "#fff" : "#646970",
-                              padding: "2px 6px",
-                              borderRadius: "10px",
-                              fontWeight: 600,
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "4px",
-                            }}
+                            className={`optionbay-text-[10px] optionbay-uppercase optionbay-px-1.5 optionbay-py-0.5 optionbay-rounded-[10px] optionbay-font-semibold optionbay-flex optionbay-items-center optionbay-gap-1 ${isHighlighted ? "optionbay-bg-white/20 optionbay-text-white" : "optionbay-bg-[#f0f0f1] optionbay-text-[#646970]"}`}
                           >
                             <Hourglass size={10} />
                             Soon
@@ -628,36 +493,20 @@ export const ClassicMultiSelect: React.FC<ClassicMultiSelectProps> = ({
         )}
       </div>
 
-      {description && <p className="description">{description}</p>}
+      {description && <p className="description optionbay-mt-1">{description}</p>}
 
       {tooltipState?.visible && (
         <div
+          className="optionbay-fixed optionbay-bg-[#1d2327] optionbay-text-white optionbay-px-2.5 optionbay-py-1 optionbay-rounded-[3px] optionbay-text-[12px] optionbay-pointer-events-none optionbay-z-[100000] optionbay-whitespace-nowrap"
           style={{
-            position: "fixed",
             top: tooltipState.top - 8,
             left: tooltipState.left,
             transform: "translate(-50%, -100%)",
-            backgroundColor: "#1d2327",
-            color: "#fff",
-            padding: "5px 10px",
-            borderRadius: "3px",
-            fontSize: "12px",
-            pointerEvents: "none",
-            zIndex: 100000,
-            whiteSpace: "nowrap",
           }}
         >
           {tooltipState.text}
           <div
-            style={{
-              position: "absolute",
-              bottom: "-4px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              borderWidth: "4px 4px 0",
-              borderStyle: "solid",
-              borderColor: "#1d2327 transparent transparent transparent",
-            }}
+            className="optionbay-absolute -optionbay-bottom-1 optionbay-left-1/2 -optionbay-translate-x-1/2 optionbay-border-x-4 optionbay-border-t-4 optionbay-border-x-transparent optionbay-border-b-transparent optionbay-border-t-[#1d2327]"
           />
         </div>
       )}

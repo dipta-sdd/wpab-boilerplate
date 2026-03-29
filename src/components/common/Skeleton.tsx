@@ -15,13 +15,20 @@ const Skeleton: FC<SkeletonProps> = ({
   children,
   className,
 }) => {
+  // Helpers to handle arbitrary values safely
+  const hClass = height ? (height.includes("[") ? `optionbay-h-${height}` : `optionbay-h-[${height}]`) : "";
+  const wClass = width ? (width.includes("[") ? `optionbay-w-${width}` : `optionbay-w-[${width}]`) : "";
+  const rClass = borderRadius ? (borderRadius.includes("[") ? `optionbay-rounded-${borderRadius}` : `optionbay-rounded-[${borderRadius}]`) : "optionbay-rounded-[6px]";
+
   return (
     <div
-      className={`optionbay-skeleton ${height ? `optionbay-h-${height}` : ""} ${
-        width ? `optionbay-w-${width}` : ""
-      } ${borderRadius ? `optionbay-br-${borderRadius}` : ""} ${
-        className || ""
-      }`}
+      className={`
+        optionbay-block optionbay-bg-[#e9e9e9] optionbay-relative optionbay-overflow-hidden
+        optionbay-animate-shimmer
+        ${hClass} ${wClass} ${rClass}
+        ${className || ""}
+        [&>*]:optionbay-opacity-0
+      `}
     >
       {children}
     </div>

@@ -33,7 +33,7 @@ export const ClassicTooltip: React.FC<ClassicTooltipProps> = ({
     <>
       <span
         ref={iconRef}
-        className={`optionbay-inline-flex optionbay-items-center optionbay-justify-center optionbay-w-[16px] optionbay-h-[16px] optionbay-rounded-full optionbay-bg-[#72777c] hover:optionbay-bg-[#50575e] optionbay-text-white optionbay-transition-colors optionbay-ml-1 ${className}`}
+
         onPointerEnter={(e) => {
           updateCoords();
           setVisible(true);
@@ -49,41 +49,27 @@ export const ClassicTooltip: React.FC<ClassicTooltipProps> = ({
           setVisible(false);
         }}
         tabIndex={0}
-        style={{ cursor: "help" }}
+        className={`optionbay-cursor-help optionbay-inline-flex optionbay-items-center optionbay-justify-center optionbay-w-[16px] optionbay-h-[16px] optionbay-rounded-full optionbay-bg-[#72777c] hover:optionbay-bg-[#50575e] optionbay-text-white optionbay-transition-colors optionbay-ml-1 ${className}`}
       >
         <CircleQuestionMarkIcon />
       </span>
       {visible &&
         createPortal(
           <div
+            className="optionbay-fixed optionbay-z-[999999] optionbay-bg-[#333] optionbay-text-white optionbay-px-2 optionbay-py-1 optionbay-rounded optionbay-text-xs optionbay-leading-snug optionbay-max-w-[200px] optionbay-text-center optionbay-pointer-events-none optionbay-shadow-sm"
             style={{
-              position: "fixed",
-              zIndex: 999999,
               top: coords.top,
               left: coords.left,
               transform: "translate(-50%, -100%)",
-              backgroundColor: "#333",
-              color: "#fff",
-              padding: "5px 8px",
-              borderRadius: "3px",
-              fontSize: "12px",
-              lineHeight: "1.4",
-              maxWidth: "200px",
-              textAlign: "center",
-              pointerEvents: "none",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.2)",
             }}
           >
             {tip}
             <div
+              className="optionbay-absolute optionbay-border-[5px] optionbay-border-solid optionbay-border-t-[#333] optionbay-border-x-transparent optionbay-border-b-transparent"
               style={{
-                position: "absolute",
                 top: "100%",
                 left: "50%",
                 transform: "translateX(-50%)",
-                borderWidth: "5px",
-                borderStyle: "solid",
-                borderColor: "#333 transparent transparent transparent",
               }}
             />
           </div>,

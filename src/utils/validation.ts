@@ -25,7 +25,7 @@ export const fieldConditionsSchema = z.object({
 export const fieldOptionSchema = z.object({
   label: z.string().min(1, { message: __("Choice label is required", "optionbay") }),
   value: z.string().min(1, { message: __("Choice value is required", "optionbay") }),
-  price_type: z.string(),
+  price_type: z.string().optional(),
   price: z.number().optional(),
   weight: z.number().optional(),
 });
@@ -38,9 +38,17 @@ export const fieldDefinitionSchema = z.object({
   placeholder: z.string().optional(),
   required: z.boolean(),
   class_name: z.string().optional(),
+  price_type: z.string().optional(),
   price: z.number().optional(),
   weight: z.number().optional(),
   options: z.array(fieldOptionSchema).optional(),
+  min_length: z.number().optional(),
+  max_length: z.number().optional(),
+  min_value: z.number().optional(),
+  max_value: z.number().optional(),
+  step: z.number().optional(),
+  allowed_types: z.string().optional(),
+  max_file_size: z.number().optional(),
   conditions: fieldConditionsSchema,
 }).superRefine((data, ctx) => {
   if (["select", "radio", "checkbox"].includes(data.type)) {
@@ -54,9 +62,23 @@ export const fieldDefinitionSchema = z.object({
   }
 });
 
+export const groupSettingsSchema = z.object({
+  layout: z.enum(["flat", "accordion"]),
+  priority: z.number(),
+  active: z.boolean(),
+});
+
+export const assignmentSchema = z.object({
+  target_type: z.enum(["global", "product", "category", "tag"]),
+  target_id: z.number(),
+  is_exclusion: z.boolean(),
+  priority: z.number(),
+});
+
 export const addonGroupSchema = z.object({
   title: z.string().min(1, { message: __("Group Title is required", "optionbay") }),
   status: z.enum(["publish", "draft"]),
   schema: z.array(fieldDefinitionSchema),
-  // settings and assignments are loosely typed here as they are mostly UI driven rules without critical string lengths
+  settings: groupSettingsSchema,
+  assignments: z.array(assignmentSchema),
 });

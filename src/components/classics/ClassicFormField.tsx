@@ -32,7 +32,7 @@ export const ClassicFormField: React.FC<ClassicFormFieldProps> = ({
       {label && <label htmlFor={htmlFor}>{label}</label>}
       {children}
       {description && (
-        <p className="description" style={{ display: "block", marginTop: "4px" }}>
+        <p className="description optionbay-block optionbay-mt-1">
           {description}
         </p>
       )}

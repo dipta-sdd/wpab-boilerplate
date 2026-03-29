@@ -552,16 +552,9 @@ const Select: React.FC<SelectProps> = ({
       {/* Dropdown Panel */}
       {isOpen && (
         <div
-          className={`optionbay-absolute optionbay-z-50  optionbay-bg-white optionbay-border optionbay-border-gray-200 optionbay-rounded-b-lg ${
+          className={`optionbay-absolute optionbay-z-[50000] optionbay-bg-white optionbay-border optionbay-border-gray-200 optionbay-rounded-[12px] optionbay-shadow-[0_2px_2px_rgba(0,0,0,0.3)] -optionbay-mt-[1px] optionbay-p-1 ${
             differentDropdownWidth ? "" : "optionbay-w-full"
           } ${classNames.dropdown || ""}`}
-          style={{
-            zIndex: 50000,
-            boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.3)",
-            marginTop: "-1px",
-            borderRadius: "12px",
-            padding: "4px",
-          }}
         >
           {/* Options List */}
           <ul

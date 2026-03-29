@@ -33,23 +33,17 @@ import { addonGroupSchema } from "../utils/validation";
 function renderProductOption(option: MultiSelectOption) {
   const opt = option as any;
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div className="optionbay-flex optionbay-items-center optionbay-gap-2">
       {opt.image && (
         <img
           src={opt.image}
           alt=""
-          style={{
-            width: 32,
-            height: 32,
-            objectFit: "cover",
-            borderRadius: "4px",
-            flexShrink: 0,
-          }}
+          className="optionbay-w-8 optionbay-h-8 optionbay-object-cover optionbay-rounded optionbay-shrink-0"
         />
       )}
-      <div style={{ minWidth: 0 }}>
-        <div style={{ fontWeight: 500, lineHeight: "1.3" }}>{opt.label}</div>
-        <div style={{ fontSize: "11px", color: "#888", lineHeight: "1.3" }}>
+      <div className="optionbay-min-w-0">
+        <div className="optionbay-font-medium optionbay-leading-tight">{opt.label}</div>
+        <div className="optionbay-text-[11px] optionbay-text-[#888] optionbay-leading-tight">
           ID: {opt.value}
           {opt.sku ? ` • SKU: ${opt.sku}` : ""}
         </div>
@@ -82,7 +76,7 @@ const PRICE_TYPES = [
 
 const FormError = ({ message }: { message?: string }) => {
   if (!message) return null;
-  return <div style={{ color: "#d63638", fontSize: "12px", marginTop: "4px" }}>{message}</div>;
+  return <div className="optionbay-text-[#d63638] optionbay-text-xs optionbay-mt-1">{message}</div>;
 };
 
 // ─── Option Editor ───────────────────────────────────────────────────────
@@ -97,15 +91,15 @@ function OptionEditor({
   const { state, dispatch } = useAddonContext();
 
   return (
-    <div className="ob-option-editor optionbay-flex optionbay-flex-col optionbay-gap-2.5" style={{ marginTop: "15px" }}>
+    <div className="optionbay-flex optionbay-flex-col optionbay-gap-2.5 optionbay-mt-4">
       <label
-        style={{ fontWeight: 600, display: "block" }}
+        className="optionbay-font-semibold optionbay-block"
       >
         {__("Choices", "optionbay")}
       </label>
       {options.map((opt, idx) => (
-        <div key={idx} className="ob-option-row">
-          <div style={{ flex: 1 }}>
+        <div key={idx} className="optionbay-flex optionbay-gap-2 optionbay-items-center">
+          <div className="optionbay-flex-1">
             <ClassicInput
               size="regular"
               placeholder={__("Label", "optionbay")}
@@ -162,7 +156,7 @@ function OptionEditor({
           />
           <button
             type="button"
-            className="ob-remove-option"
+            className="optionbay-text-[#b32d2e] hover:optionbay-text-[#d63638] optionbay-border-none optionbay-bg-transparent optionbay-cursor-pointer optionbay-text-[18px] optionbay-px-1"
             onClick={() =>
               dispatch({
                 type: "REMOVE_OPTION",
@@ -219,14 +213,14 @@ function ConditionEditor({ field, index }: { field: FieldDefinition; index: numb
 
   if (siblingFields.length === 0) {
     return (
-      <p style={{ color: "#666", fontStyle: "italic", marginTop: "15px" }}>
+      <p className="optionbay-text-[#666] optionbay-italic optionbay-mt-4">
         {__("Add more fields to set up conditional logic.", "optionbay")}
       </p>
     );
   }
 
   return (
-    <div className="ob-condition-builder optionbay-flex optionbay-flex-col optionbay-gap-3">
+    <div className="optionbay-mt-[15px] optionbay-p-[15px] optionbay-bg-[#f0f6fb] optionbay-border optionbay-border-[#c8d7e1] optionbay-rounded-md optionbay-flex optionbay-flex-col optionbay-gap-3">
       <div>
         <ClassicCheckbox
           label={__("Enable Conditional Logic", "optionbay")}
@@ -240,7 +234,7 @@ function ConditionEditor({ field, index }: { field: FieldDefinition; index: numb
 
       {conditions.status === "active" && (
         <>
-          <div className="ob-condition-row">
+          <div className="optionbay-flex optionbay-gap-2 optionbay-items-center">
             <select
               value={conditions.action}
               onChange={(e) =>
@@ -264,7 +258,7 @@ function ConditionEditor({ field, index }: { field: FieldDefinition; index: numb
           </div>
 
           {(conditions.rules || []).map((rule, idx) => (
-            <div key={idx} className="ob-condition-row">
+            <div key={idx} className="optionbay-flex optionbay-gap-2 optionbay-items-center">
               <select
                 value={rule.target_field_id}
                 onChange={(e) => {
@@ -275,7 +269,7 @@ function ConditionEditor({ field, index }: { field: FieldDefinition; index: numb
                   };
                   updateConditions({ rules });
                 }}
-                style={{ flex: 1 }}
+                className="optionbay-flex-1"
               >
                 <option value="">{__("Select field...", "optionbay")}</option>
                 {siblingFields.map((sf) => (
@@ -291,7 +285,7 @@ function ConditionEditor({ field, index }: { field: FieldDefinition; index: numb
                   rules[idx] = { ...rules[idx], operator: e.target.value };
                   updateConditions({ rules });
                 }}
-                style={{ width: "120px" }}
+                className="optionbay-w-[120px]"
               >
                 <option value="==">{__("equals", "optionbay")}</option>
                 <option value="!=">{__("not equals", "optionbay")}</option>
@@ -313,12 +307,12 @@ function ConditionEditor({ field, index }: { field: FieldDefinition; index: numb
                     updateConditions({ rules });
                   }}
                   placeholder={__("Value", "optionbay")}
-                  style={{ flex: 1 }}
+                  className="optionbay-flex-1"
                 />
               )}
               <button
                 type="button"
-                className="ob-remove-option"
+                className="optionbay-text-[#b32d2e] hover:optionbay-text-[#d63638] optionbay-border-none optionbay-bg-transparent optionbay-cursor-pointer optionbay-text-[18px] optionbay-px-1"
                 onClick={() => {
                   const rules = (conditions.rules || []).filter(
                     (_, i) => i !== idx,
@@ -372,45 +366,33 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
           style={{ ...provided.draggableProps.style }}
         >
           {/* Header */}
-          <div className={`ob-field-card-header ${isMinimized ? "optionbay-rounded-[8px]" : ""}`}>
-            <div style={{ display: "flex", alignItems: "center" }}>
+          <div className={`optionbay-flex optionbay-justify-between optionbay-items-center optionbay-px-[15px] optionbay-py-[10px] optionbay-bg-[#f8f9fa] optionbay-border-b optionbay-border-[#e5e7eb] optionbay-rounded-t-[8px] optionbay-cursor-default ${isMinimized ? "optionbay-rounded-[8px]" : ""}`}>
+            <div className="optionbay-flex optionbay-items-center">
               <span
                 {...provided.dragHandleProps}
-                className="ob-drag-handle"
+                className="optionbay-cursor-grab active:optionbay-cursor-grabbing optionbay-text-[#9ca3af] optionbay-mr-[10px] optionbay-text-[18px] optionbay-flex optionbay-items-center"
                 title={__("Drag to reorder", "optionbay")}
               >
                 ☰
               </span>
-              <span className="ob-field-label-text">
+              <span className="optionbay-font-semibold optionbay-text-[14px] optionbay-text-[#1d2327]">
                 {field.label || __("Untitled Field", "optionbay")}
               </span>
-              <span className="ob-field-type-badge">{field.type}</span>
+              <span className="optionbay-text-[11px] optionbay-uppercase optionbay-bg-[#e5e7eb] optionbay-text-[#4b5563] optionbay-px-1.5 optionbay-py-0.5 optionbay-rounded optionbay-ml-2 optionbay-font-medium">{field.type}</span>
               {field.required && (
                 <span
-                  style={{
-                    color: "#c00",
-                    marginLeft: "4px",
-                    fontWeight: "bold",
-                  }}
+                  className="optionbay-text-[#c00] optionbay-ml-1 optionbay-font-bold"
                   title={__("Required field", "optionbay")}
                 >
                   *
                 </span>
               )}
             </div>
-            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+            <div className="optionbay-flex optionbay-gap-2 optionbay-items-center">
               <button
                 type="button"
                 onClick={() => setIsMinimized(!isMinimized)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "4px",
-                  display: "flex",
-                  alignItems: "center",
-                  color: "#646970"
-                }}
+                className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-text-[#646970]"
                 title={isMinimized ? __("Expand", "optionbay") : __("Minimize", "optionbay")}
               >
                 {isMinimized ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
@@ -420,7 +402,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 onClick={() =>
                   dispatch({ type: "REMOVE_FIELD", payload: field.id })
                 }
-                style={{ fontSize: "12px", textDecoration: "none", margin: 0 }}
+                className="!optionbay-text-xs !optionbay-no-underline !optionbay-m-0"
               >
                 {__("Remove", "optionbay")}
               </ClassicButton>
@@ -429,8 +411,8 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
 
           {/* Body */}
           {!isMinimized && (
-          <div className="ob-field-card-body">
-            <table className="form-table">
+          <div className="optionbay-p-[20px]">
+            <table className="form-table !optionbay-m-0 [&_th]:!optionbay-w-[150px] [&_th]:!optionbay-p-[10px_10px_10px_0] [&_th]:!optionbay-font-medium [&_th]:!optionbay-text-[#50575e] [&_td]:!optionbay-py-[10px] [&_td]:!optionbay-px-0">
               <tbody>
                 {/* Type */}
                 <tr>
@@ -567,13 +549,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                   <tr>
                     <th scope="row">{__("Restrictions", "optionbay")}</th>
                     <td
-                      style={{
-                        display: "flex",
-                        gap: "10px",
-                        alignItems: "center",
-                      }}
+                      className="optionbay-flex optionbay-gap-2.5 optionbay-items-center"
                     >
-                      <label style={{ fontSize: "12px" }}>
+                      <label className="optionbay-text-xs">
                         {__("Min Length:", "optionbay")}{" "}
                         <ClassicInput
                           type="number"
@@ -587,7 +565,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                           min={0}
                         />
                       </label>
-                      <label style={{ fontSize: "12px" }}>
+                      <label className="optionbay-text-xs">
                         {__("Max Length:", "optionbay")}{" "}
                         <ClassicInput
                           type="number"
@@ -611,14 +589,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                     <th scope="row">{__("Restrictions", "optionbay")}</th>
                     <td>
                       <div
-                        style={{
-                          display: "flex",
-                          gap: "10px",
-                          alignItems: "center",
-                          marginBottom: "8px",
-                        }}
+                        className="optionbay-flex optionbay-gap-2.5 optionbay-items-center optionbay-mb-2"
                       >
-                        <label style={{ fontSize: "12px" }}>
+                        <label className="optionbay-text-xs">
                           {__("Min:", "optionbay")}{" "}
                           <ClassicInput
                             type="number"
@@ -631,7 +604,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                             }
                           />
                         </label>
-                        <label style={{ fontSize: "12px" }}>
+                        <label className="optionbay-text-xs">
                           {__("Max:", "optionbay")}{" "}
                           <ClassicInput
                             type="number"
@@ -645,7 +618,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                           />
                         </label>
                       </div>
-                      <label style={{ fontSize: "12px" }}>
+                      <label className="optionbay-text-xs">
                         {__("Step Value:", "optionbay")}{" "}
                         <ClassicInput
                           type="number"
@@ -670,9 +643,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                       </th>
                       <td>
                         <label
-                          style={{ display: "block", marginBottom: "8px" }}
+                          className="optionbay-block optionbay-mb-2"
                         >
-                          <span style={{ fontSize: "12px", display: "block" }}>
+                          <span className="optionbay-text-xs optionbay-block">
                             {__(
                               "Allowed Extensions (comma separated):",
                               "optionbay",
@@ -687,8 +660,8 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                             placeholder=".jpg,.png,.pdf"
                           />
                         </label>
-                        <label style={{ display: "block" }}>
-                          <span style={{ fontSize: "12px", display: "block" }}>
+                        <label className="optionbay-block">
+                          <span className="optionbay-text-xs optionbay-block">
                             {__("Max File Size (MB):", "optionbay")}
                           </span>
                           <ClassicInput
@@ -869,9 +842,9 @@ function BuilderInner() {
 
   if (state.isLoading) {
     return (
-      <div style={{ textAlign: "center", padding: "100px 0" }}>
+      <div className="optionbay-text-center optionbay-py-[100px]">
         <p className="optionbay-loader-container">
-          <span className="spinner is-active" style={{ float: "none" }}></span>
+          <span className="spinner is-active optionbay-float-none"></span>
           <br />
           {__("Loading option group...", "optionbay")}
         </p>
@@ -880,12 +853,11 @@ function BuilderInner() {
   }
 
   return (
-    <div className="ob-builder optionbay-ignore-preflight">
+    <div className="optionbay-ignore-preflight">
       {/* Error notice */}
       {state.error && (
         <div
-          className="notice notice-error is-dismissible"
-          style={{ marginBottom: "20px" }}
+          className="notice notice-error is-dismissible optionbay-mb-5"
         >
           <p>{state.error}</p>
         </div>
@@ -901,7 +873,7 @@ function BuilderInner() {
         </ClassicButton>
         <div className="optionbay-flex optionbay-flex-wrap optionbay-items-center optionbay-gap-4">
           <div className="optionbay-flex optionbay-items-center optionbay-gap-2">
-            <span style={{ fontSize: "13px", color: "#646970", marginRight: "4px" }}>
+            <span className="optionbay-text-[13px] optionbay-text-[#646970] optionbay-mr-1">
               {__("Status:", "optionbay")}
             </span>
             <button
@@ -923,7 +895,7 @@ function BuilderInner() {
                 }`}
               />
             </button>
-            <span style={{ fontSize: "13px", color: state.status === "publish" ? "#1d2327" : "#646970", minWidth: "45px" }}>
+            <span className={`optionbay-text-[13px] optionbay-min-w-[45px] ${state.status === "publish" ? "optionbay-text-[#1d2327]" : "optionbay-text-[#646970]"}`}>
               {state.status === "publish" ? __("Active", "optionbay") : __("Draft", "optionbay")}
             </span>
           </div>
@@ -948,11 +920,11 @@ function BuilderInner() {
         {/* Left: Title + Fields */}
         <div className="optionbay-w-full optionbay-flex optionbay-flex-col optionbay-gap-6">
           {/* Group Title */}
-          <div className="ob-builder-title-wrapper">
+          <div className="optionbay-mb-4">
             {/* <div className="postbox"> */}
-              <div className="inside" style={{ padding: "0" }}>
+              <div className="inside !optionbay-p-0">
                 <ClassicInput
-                  className="ob-builder-title-input"
+                  className="optionbay-w-full !optionbay-text-[20px] !optionbay-font-semibold !optionbay-py-3 !optionbay-px-4 !optionbay-border !optionbay-border-[#ddd] !optionbay-rounded-md focus:!optionbay-border-[#2271b1] focus:!optionbay-shadow-[0_0_0_1px_#2271b1] focus:!optionbay-outline-none"
                   size="large"
                   value={state.title}
                   onChange={(e) =>
@@ -967,8 +939,8 @@ function BuilderInner() {
 
           {/* Assignment Rules (Moved to Top) */}
           <div className="optionbay-bg-white optionbay-p-[20px] optionbay-rounded-lg optionbay-shadow-sm">
-            <div className="optionbay-flex optionbay-items-center optionbay-justify-between optionbay-mb-4 optionbay-pb-3" style={{ borderBottom: "1px solid #eee" }}>
-              <h2 style={{ margin: 0, fontSize: "16px", fontWeight: 600, color: "#1d2327" }}>
+            <div className="optionbay-flex optionbay-items-center optionbay-justify-between optionbay-mb-4 optionbay-pb-3 optionbay-border-b optionbay-border-[#eee]">
+              <h2 className="optionbay-m-0 optionbay-text-base optionbay-font-semibold optionbay-text-[#1d2327]">
                 {__("Assignment Rules", "optionbay")}
               </h2>
               <ClassicCheckbox
@@ -992,8 +964,8 @@ function BuilderInner() {
 
             {!state.assignments.some((a) => a.target_type === "global") && (
               <div className="optionbay-flex optionbay-flex-col sm:optionbay-flex-row optionbay-gap-6">
-                <div style={{ minWidth: "200px" }}>
-                  <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
+                <div className="optionbay-min-w-[200px]">
+                  <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold optionbay-text-[13px]">
                     {__("Assign By", "optionbay")}
                   </label>
                   <ClassicSelect
@@ -1011,10 +983,10 @@ function BuilderInner() {
                   />
                 </div>
 
-                <div style={{ flex: 1 }}>
+                <div className="optionbay-flex-1">
                   {activeAssignmentType === "product" && (
                     <div>
-                      <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
+                      <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold optionbay-text-[13px]">
                         {__("Select Products", "optionbay")}
                       </label>
                       <ClassicMultiSelect
@@ -1035,7 +1007,7 @@ function BuilderInner() {
 
                   {activeAssignmentType === "category" && (
                     <div>
-                      <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
+                      <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold optionbay-text-[13px]">
                         {__("Select Categories", "optionbay")}
                       </label>
                       <ClassicMultiSelect
@@ -1055,7 +1027,7 @@ function BuilderInner() {
 
                   {activeAssignmentType === "tag" && (
                     <div>
-                      <label style={{ display: "block", marginBottom: "5px", fontWeight: 600, fontSize: "13px" }}>
+                      <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold optionbay-text-[13px]">
                         {__("Select Tags", "optionbay")}
                       </label>
                       <ClassicMultiSelect
@@ -1084,25 +1056,16 @@ function BuilderInner() {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  style={{ minHeight: "100px" }}
-                  className="optionbay-flex optionbay-flex-col optionbay-gap-4"
+                  className="optionbay-flex optionbay-flex-col optionbay-gap-4 optionbay-min-h-[100px]"
                 >
                   {state.schema.length === 0 ? (
                     <div
-                      className="postbox"
-                      style={{
-                        textAlign: "center",
-                        padding: "60px 20px",
-                        color: "#999",
-                        borderStyle: "dashed",
-                        borderColor: "#c3c4c7",
-                        borderRadius: "8px",
-                      }}
+                      className="postbox optionbay-text-center optionbay-px-5 optionbay-py-[60px] optionbay-text-[#999] optionbay-border-dashed optionbay-border-[#c3c4c7] optionbay-rounded-lg"
                     >
-                      <p style={{ fontSize: "16px", marginBottom: "8px" }}>
+                      <p className="optionbay-text-base optionbay-mb-2">
                         {__("Your group is empty", "optionbay")}
                       </p>
-                      <p style={{ fontSize: "13px" }}>
+                      <p className="optionbay-text-[13px]">
                         {__(
                           "Click the field buttons in the sidebar to start building.",
                           "optionbay",
@@ -1124,17 +1087,18 @@ function BuilderInner() {
         {/* Right: Sidebar */}
         <div className="optionbay-w-full lg:optionbay-w-[320px] optionbay-flex optionbay-flex-col optionbay-gap-5">
           {/* Add Field Section */}
-          <div className="ob-sidebar-section">
-            <div className="ob-sidebar-header ">
+          <div className="optionbay-bg-white optionbay-border optionbay-border-[#c3c4c7] optionbay-rounded-[8px]">
+            <div className="optionbay-px-[15px] optionbay-py-[12px] optionbay-bg-[#f8f9fa] optionbay-border-b optionbay-border-[#e5e7eb] optionbay-font-semibold optionbay-text-[14px] optionbay-rounded-t-[8px]">
               {__("Add Fields", "optionbay")}
             </div>
-            <div className="ob-sidebar-content">
-              <div className="ob-add-field-grid">
+            <div className="optionbay-p-[15px]">
+              <div className="optionbay-grid optionbay-grid-cols-2 optionbay-gap-2">
                 {FIELD_TYPES.map((ft) => (
                   <ClassicButton
                     key={ft.value}
                     variant="secondary"
                     onClick={() => addField(ft.value)}
+                    className="!optionbay-justify-center !optionbay-text-center !optionbay-px-1 !optionbay-py-1.5 !optionbay-h-auto !optionbay-text-xs"
                   >
                     + {ft.label}
                   </ClassicButton>
@@ -1144,18 +1108,14 @@ function BuilderInner() {
           </div>
 
           {/* Group Settings Section */}
-          <div className="ob-sidebar-section">
-            <div className="ob-sidebar-header">
+          <div className="optionbay-bg-white optionbay-border optionbay-border-[#c3c4c7] optionbay-rounded-[8px] optionbay-mt-4">
+            <div className="optionbay-px-[15px] optionbay-py-[12px] optionbay-bg-[#f8f9fa] optionbay-border-b optionbay-border-[#e5e7eb] optionbay-font-semibold optionbay-text-[14px] optionbay-rounded-t-[8px]">
               {__("Group Settings", "optionbay")}
             </div>
-            <div className="ob-sidebar-content">
-              <div style={{ marginBottom: "15px" }}>
+            <div className="optionbay-p-[15px]">
+              <div className="optionbay-mb-4">
                 <label
-                  style={{
-                    display: "block",
-                    marginBottom: "5px",
-                    fontWeight: 600,
-                  }}
+                  className="optionbay-block optionbay-mb-1 optionbay-font-semibold"
                 >
                   {__("Display Layout", "optionbay")}
                 </label>
@@ -1177,13 +1137,9 @@ function BuilderInner() {
                   size="regular"
                 />
               </div>
-              <div style={{ marginBottom: "5px" }}>
+              <div className="optionbay-mb-1">
                 <label
-                  style={{
-                    display: "block",
-                    marginBottom: "5px",
-                    fontWeight: 600,
-                  }}
+                  className="optionbay-block optionbay-mb-1 optionbay-font-semibold"
                 >
                   {__("Priority Order", "optionbay")}
                 </label>
@@ -1197,10 +1153,10 @@ function BuilderInner() {
                       payload: { priority: parseInt(e.target.value) || 10 },
                     })
                   }
-                  style={{ width: "100%" }}
+                  className="optionbay-w-full"
                 />
               </div>
-              <p className="description" style={{ margin: "5px 0 0" }}>
+              <p className="description optionbay-mt-1 optionbay-mb-0">
                 {__("Determines display order on product page.", "optionbay")}
               </p>
             </div>

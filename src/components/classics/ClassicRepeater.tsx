@@ -51,9 +51,8 @@ export function ClassicRepeater<T extends ClassicRepeaterItem>({
               className={`wc-metabox ${isOpen ? "" : "closed"}`}
             >
               <h3
-                className="optionbay-ignore-preflight"
+                className="optionbay-ignore-preflight optionbay-cursor-pointer"
                 onClick={() => toggle(item.id)}
-                style={{ cursor: "pointer" }}
               >
                 <div className="handlediv" title="Click to toggle" />
                 <strong>{item.title}</strong>

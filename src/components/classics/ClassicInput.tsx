@@ -43,7 +43,7 @@ export const ClassicInput: React.FC<ClassicInputProps> = ({
         {...props}
       />
       {description && (
-        <p className="description" style={{ display: "block", marginTop: "4px" }}>
+        <p className="description optionbay-block optionbay-mt-1">
           {description}
         </p>
       )}

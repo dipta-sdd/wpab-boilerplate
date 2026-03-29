@@ -221,13 +221,9 @@ const ClassicShowcase: React.FC = () => {
                     renderOption={(opt) => (
                       <>
                         <span
+                          className="optionbay-inline-block optionbay-w-2.5 optionbay-h-2.5 optionbay-mr-2 optionbay-rounded-full"
                           style={{
-                            display: "inline-block",
-                            width: 10,
-                            height: 10,
                             backgroundColor: opt.value as string,
-                            marginRight: 8,
-                            borderRadius: "50%",
                           }}
                         />
                         {opt.label}
@@ -272,7 +268,7 @@ const ClassicShowcase: React.FC = () => {
                     value={multiVal}
                     onChange={(val) => setMultiVal(val)}
                     renderOption={(opt) => (
-                      <span style={{ fontWeight: "bold", color: "#3858e9" }}>
+                      <span className="optionbay-font-bold optionbay-text-[#3858e9]">
                         🚀 {opt.label}
                       </span>
                     )}
@@ -346,7 +342,7 @@ const ClassicShowcase: React.FC = () => {
             }
             addLabel="Add Add‑on Group"
             renderItem={(item) => (
-              <table className="form-table" style={{ margin: 0 }}>
+              <table className="form-table !optionbay-m-0">
                 <tbody>
                   <tr>
                     <th scope="row">Name</th>
@@ -390,9 +386,7 @@ const ClassicShowcase: React.FC = () => {
               if (key === "status") {
                 return (
                   <span
-                    style={{
-                      color: item.status === "Active" ? "green" : "#999",
-                    }}
+                    className={item.status === "Active" ? "optionbay-text-green-600" : "optionbay-text-[#999]"}
                   >
                     {item.status}
                   </span>

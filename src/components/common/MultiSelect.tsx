@@ -527,15 +527,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         <div
           ref={dropdownRef}
           className={`
-                optionbay-absolute optionbay-z-[50000] optionbay-w-full optionbay-bg-white optionbay-border optionbay-border-gray-200 optionbay-rounded-[12px] optionbay-p-[4px] optionbay-shadow-xl
+                optionbay-absolute optionbay-z-[50000] optionbay-w-full optionbay-bg-white optionbay-border optionbay-border-gray-200 optionbay-rounded-[12px] optionbay-p-[4px] optionbay-shadow-[0_4px_12px_rgba(0,0,0,0.1)] optionbay-top-full optionbay-left-0 -optionbay-mt-[1px]
                 ${classNames.dropdown || ""}
             `}
-          style={{
-            top: "100%",
-            left: 0,
-            marginTop: "-1px",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-          }}
         >
           <ul
             ref={listRef}

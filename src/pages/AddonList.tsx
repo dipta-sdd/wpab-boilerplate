@@ -104,7 +104,7 @@ export default function AddonList() {
     <div className="optionbay-ignore-preflight">
       {/* Header */}
       <div className="optionbay-flex optionbay-flex-col sm:optionbay-flex-row optionbay-justify-between optionbay-items-start sm:optionbay-items-center optionbay-gap-4 optionbay-mb-4">
-        <p className="optionbay-text-gray-600" style={{ margin: 0 }}>
+        <p className="optionbay-text-gray-600 optionbay-m-0">
           {loading
             ? __("Loading...", "optionbay")
             : `${total} ${__("option groups", "optionbay")}`}
@@ -122,28 +122,28 @@ export default function AddonList() {
         <table className="wp-list-table widefat fixed striped">
         <thead>
           <tr>
-            <th style={{ width: "30%" }}>{__("Title", "optionbay")}</th>
+            <th className="optionbay-w-[30%]">{__("Title", "optionbay")}</th>
             <th>{__("Fields", "optionbay")}</th>
             <th>{__("Assigned To", "optionbay")}</th>
             <th>{__("Status", "optionbay")}</th>
-            <th style={{ width: "15%" }}>{__("Actions", "optionbay")}</th>
+            <th className="optionbay-w-[15%]">{__("Actions", "optionbay")}</th>
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan={5} style={{ textAlign: "center", padding: "40px" }}>
+              <td colSpan={5} className="optionbay-text-center optionbay-p-10">
                 {__("Loading option groups...", "optionbay")}
               </td>
             </tr>
           ) : groups.length === 0 ? (
             <tr>
-              <td colSpan={5} style={{ textAlign: "center", padding: "40px" }}>
+              <td colSpan={5} className="optionbay-text-center optionbay-p-10">
                 <p>{__("No option groups found.", "optionbay")}</p>
                 <ClassicButton
                   variant="primary"
                   onClick={() => navigate("/option-groups/new")}
-                  style={{ marginTop: "8px" }}
+                  className="optionbay-mt-2"
                 >
                   {__("Create your first option group", "optionbay")}
                 </ClassicButton>
@@ -159,7 +159,7 @@ export default function AddonList() {
                       e.preventDefault();
                       navigate(`/option-groups/${group.id}`);
                     }}
-                    style={{ fontWeight: 600 }}
+                    className="optionbay-font-semibold"
                   >
                     {group.title || __("(Untitled)", "optionbay")}
                   </a>
@@ -168,15 +168,11 @@ export default function AddonList() {
                 <td>{getAssignmentSummary(group.assignments)}</td>
                 <td>
                   <span
-                    style={{
-                      display: "inline-block",
-                      padding: "2px 8px",
-                      borderRadius: "3px",
-                      fontSize: "12px",
-                      backgroundColor:
-                        group.status === "publish" ? "#dff0d8" : "#f2dede",
-                      color: group.status === "publish" ? "#3c763d" : "#a94442",
-                    }}
+                    className={`optionbay-inline-block optionbay-px-2 optionbay-py-0.5 optionbay-rounded optionbay-text-xs ${
+                      group.status === "publish"
+                        ? "optionbay-bg-[#dff0d8] optionbay-text-[#3c763d]"
+                        : "optionbay-bg-[#f2dede] optionbay-text-[#a94442]"
+                    }`}
                   >
                     {group.status === "publish"
                       ? __("Active", "optionbay")
@@ -187,14 +183,14 @@ export default function AddonList() {
                   <ClassicButton
                     variant="secondary"
                     onClick={() => navigate(`/option-groups/${group.id}`)}
-                    style={{ marginRight: "4px" }}
+                    className="optionbay-mr-1"
                   >
                     {__("Edit", "optionbay")}
                   </ClassicButton>
                   <ClassicButton
                     variant="link"
                     onClick={() => handleDelete(group.id)}
-                    style={{ color: "#b32d2e" }}
+                    className="optionbay-text-[#b32d2e]"
                   >
                     {__("Delete", "optionbay")}
                   </ClassicButton>
@@ -209,13 +205,7 @@ export default function AddonList() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div
-          className="tablenav bottom"
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: "8px",
-            marginTop: "16px",
-          }}
+          className="tablenav bottom optionbay-flex optionbay-justify-end optionbay-gap-2 optionbay-mt-4"
         >
           <ClassicButton
             variant="secondary"
@@ -224,7 +214,7 @@ export default function AddonList() {
           >
             {__("← Previous", "optionbay")}
           </ClassicButton>
-          <span style={{ lineHeight: "30px" }}>
+          <span className="optionbay-leading-[30px]">
             {__("Page", "optionbay")} {page} / {totalPages}
           </span>
           <ClassicButton
