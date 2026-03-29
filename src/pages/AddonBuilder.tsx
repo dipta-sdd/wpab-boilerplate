@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { __ } from "@wordpress/i18n";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2, Minus, ChevronsUpDown } from "lucide-react";
 import {
   DragDropContext,
   Droppable,
@@ -429,11 +429,42 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 </span>
               )}
             </div>
-            <div className="optionbay-flex optionbay-gap-2 optionbay-items-center">
+            <div className="optionbay-flex optionbay-gap-1 optionbay-items-center">
+              {/* Move Up */}
+              <button
+                type="button"
+                disabled={index === 0}
+                onClick={() => dispatch({ type: "MOVE_UP", payload: index })}
+                className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-transition-colors ${
+                  index === 0
+                    ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
+                    : "optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
+                }`}
+                title={__("Move up", "optionbay")}
+              >
+                <ChevronUp size={16} />
+              </button>
+
+              {/* Move Down */}
+              <button
+                type="button"
+                disabled={index === state.schema.length - 1}
+                onClick={() => dispatch({ type: "MOVE_DOWN", payload: index })}
+                className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-transition-colors ${
+                  index === state.schema.length - 1
+                    ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
+                    : "optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
+                }`}
+                title={__("Move down", "optionbay")}
+              >
+                <ChevronDown size={16} />
+              </button>
+
+              {/* Minimize Toggle */}
               <button
                 type="button"
                 onClick={() => setIsMinimized(!isMinimized)}
-                className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-text-[#646970]"
+                className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-text-[#646970] hover:optionbay-text-[#2271b1] optionbay-transition-colors"
                 title={
                   isMinimized
                     ? __("Expand", "optionbay")
@@ -441,20 +472,32 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 }
               >
                 {isMinimized ? (
-                  <ChevronDown size={16} />
+                  <ChevronsUpDown className="optionbay-rotate-45" size={18} />
                 ) : (
-                  <ChevronUp size={16} />
+                  <Minus size={18} />
                 )}
               </button>
-              <ClassicButton
-                variant="link-delete"
-                onClick={() =>
-                  dispatch({ type: "REMOVE_FIELD", payload: field.id })
-                }
-                className="!optionbay-text-xs !optionbay-no-underline !optionbay-m-0"
+
+              {/* Delete Field */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (
+                    confirm(
+                      __(
+                        "Are you sure you want to remove this field?",
+                        "optionbay",
+                      ),
+                    )
+                  ) {
+                    dispatch({ type: "REMOVE_FIELD", payload: field.id });
+                  }
+                }}
+                className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] optionbay-ml-1 optionbay-transition-colors"
+                title={__("Remove field", "optionbay")}
               >
-                {__("Remove", "optionbay")}
-              </ClassicButton>
+                <Trash2 size={16} />
+              </button>
             </div>
           </div>
 

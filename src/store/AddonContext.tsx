@@ -84,6 +84,8 @@ type AddonAction =
   | { type: "REMOVE_FIELD"; payload: string }
   | { type: "UPDATE_FIELD"; payload: { id: string; updates: Partial<FieldDefinition> } }
   | { type: "REORDER_FIELDS"; payload: FieldDefinition[] }
+  | { type: "MOVE_UP"; payload: number }
+  | { type: "MOVE_DOWN"; payload: number }
   | { type: "ADD_OPTION"; payload: { fieldId: string; option: FieldOption } }
   | { type: "REMOVE_OPTION"; payload: { fieldId: string; optionIndex: number } }
   | { type: "UPDATE_OPTION"; payload: { fieldId: string; optionIndex: number; updates: Partial<FieldOption> } }
@@ -232,6 +234,24 @@ function addonReducer(
         schema: action.payload,
         isDirty: true,
       };
+
+    case "MOVE_UP": {
+      const idx = action.payload;
+      if (idx <= 0) return state;
+      const newSchema = [...state.schema];
+      const [moved] = newSchema.splice(idx, 1);
+      newSchema.splice(idx - 1, 0, moved);
+      return { ...state, schema: newSchema, isDirty: true };
+    }
+
+    case "MOVE_DOWN": {
+      const idx = action.payload;
+      if (idx >= state.schema.length - 1) return state;
+      const newSchema = [...state.schema];
+      const [moved] = newSchema.splice(idx, 1);
+      newSchema.splice(idx + 1, 0, moved);
+      return { ...state, schema: newSchema, isDirty: true };
+    }
 
     case "ADD_OPTION": {
       return {
