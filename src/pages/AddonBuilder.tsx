@@ -15,6 +15,7 @@ import {
   ClassicCheckbox,
   ClassicMultiSelect,
 } from "../components/classics";
+import { ClassicSettingsTable } from "../components/classics/ClassicSettingsTable";
 import { ClassicRepeater } from "../components/classics/ClassicRepeater";
 import {
   AddonProvider,
@@ -42,7 +43,9 @@ function renderProductOption(option: MultiSelectOption) {
         />
       )}
       <div className="optionbay-min-w-0">
-        <div className="optionbay-font-medium optionbay-leading-tight">{opt.label}</div>
+        <div className="optionbay-font-medium optionbay-leading-tight">
+          {opt.label}
+        </div>
         <div className="optionbay-text-[11px] optionbay-text-[#888] optionbay-leading-tight">
           ID: {opt.value}
           {opt.sku ? ` • SKU: ${opt.sku}` : ""}
@@ -76,7 +79,11 @@ const PRICE_TYPES = [
 
 const FormError = ({ message }: { message?: string }) => {
   if (!message) return null;
-  return <div className="optionbay-text-[#d63638] optionbay-text-xs optionbay-mt-1">{message}</div>;
+  return (
+    <div className="optionbay-text-[#d63638] optionbay-text-xs optionbay-mt-1">
+      {message}
+    </div>
+  );
 };
 
 // ─── Option Editor ───────────────────────────────────────────────────────
@@ -92,13 +99,14 @@ function OptionEditor({
 
   return (
     <div className="optionbay-flex optionbay-flex-col optionbay-gap-2.5 optionbay-mt-4">
-      <label
-        className="optionbay-font-semibold optionbay-block"
-      >
+      <label className="optionbay-font-semibold optionbay-block">
         {__("Choices", "optionbay")}
       </label>
       {options.map((opt, idx) => (
-        <div key={idx} className="optionbay-flex optionbay-gap-2 optionbay-items-center">
+        <div
+          key={idx}
+          className="optionbay-flex optionbay-gap-2 optionbay-items-center"
+        >
           <div className="optionbay-flex-1">
             <ClassicInput
               size="regular"
@@ -118,7 +126,15 @@ function OptionEditor({
                 })
               }
             />
-            <FormError message={state.errors?.[`schema.${state.schema.findIndex(f => f.id === fieldId)}.options.${idx}.label`]} />
+            <FormError
+              message={
+                state.errors?.[
+                  `schema.${state.schema.findIndex(
+                    (f) => f.id === fieldId,
+                  )}.options.${idx}.label`
+                ]
+              }
+            />
           </div>
           <ClassicInput
             type="number"
@@ -189,14 +205,26 @@ function OptionEditor({
       >
         + {__("Add Choice", "optionbay")}
       </ClassicButton>
-      <FormError message={state.errors?.[`schema.${state.schema.findIndex(f => f.id === fieldId)}.options`]} />
+      <FormError
+        message={
+          state.errors?.[
+            `schema.${state.schema.findIndex((f) => f.id === fieldId)}.options`
+          ]
+        }
+      />
     </div>
   );
 }
 
 // ─── Condition Editor ────────────────────────────────────────────────────
 
-function ConditionEditor({ field, index }: { field: FieldDefinition; index: number }) {
+function ConditionEditor({
+  field,
+  index,
+}: {
+  field: FieldDefinition;
+  index: number;
+}) {
   const { state, dispatch } = useAddonContext();
   const siblingFields = state.schema.filter((f) => f.id !== field.id);
   const conditions = field.conditions;
@@ -229,7 +257,9 @@ function ConditionEditor({ field, index }: { field: FieldDefinition; index: numb
             updateConditions({ status: checked ? "active" : "inactive" })
           }
         />
-        <FormError message={state.errors?.[`schema.${index}.conditions.rules`]} />
+        <FormError
+          message={state.errors?.[`schema.${index}.conditions.rules`]}
+        />
       </div>
 
       {conditions.status === "active" && (
@@ -258,7 +288,10 @@ function ConditionEditor({ field, index }: { field: FieldDefinition; index: numb
           </div>
 
           {(conditions.rules || []).map((rule, idx) => (
-            <div key={idx} className="optionbay-flex optionbay-gap-2 optionbay-items-center">
+            <div
+              key={idx}
+              className="optionbay-flex optionbay-gap-2 optionbay-items-center"
+            >
               <select
                 value={rule.target_field_id}
                 onChange={(e) => {
@@ -366,7 +399,11 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
           style={{ ...provided.draggableProps.style }}
         >
           {/* Header */}
-          <div className={`optionbay-flex optionbay-justify-between optionbay-items-center optionbay-px-[15px] optionbay-py-[10px] optionbay-bg-[#f8f9fa] optionbay-border-b optionbay-border-[#e5e7eb] optionbay-rounded-t-[8px] optionbay-cursor-default ${isMinimized ? "optionbay-rounded-[8px]" : ""}`}>
+          <div
+            className={`optionbay-flex optionbay-justify-between optionbay-items-center optionbay-px-[15px] optionbay-py-[10px] optionbay-bg-[#f8f9fa] optionbay-border-b optionbay-border-[#e5e7eb] optionbay-rounded-t-[8px] optionbay-cursor-default ${
+              isMinimized ? "optionbay-rounded-[8px]" : ""
+            }`}
+          >
             <div className="optionbay-flex optionbay-items-center">
               <span
                 {...provided.dragHandleProps}
@@ -378,7 +415,9 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
               <span className="optionbay-font-semibold optionbay-text-[14px] optionbay-text-[#1d2327]">
                 {field.label || __("Untitled Field", "optionbay")}
               </span>
-              <span className="optionbay-text-[11px] optionbay-uppercase optionbay-bg-[#e5e7eb] optionbay-text-[#4b5563] optionbay-px-1.5 optionbay-py-0.5 optionbay-rounded optionbay-ml-2 optionbay-font-medium">{field.type}</span>
+              <span className="optionbay-text-[11px] optionbay-uppercase optionbay-bg-[#e5e7eb] optionbay-text-[#4b5563] optionbay-px-1.5 optionbay-py-0.5 optionbay-rounded optionbay-ml-2 optionbay-font-medium">
+                {field.type}
+              </span>
               {field.required && (
                 <span
                   className="optionbay-text-[#c00] optionbay-ml-1 optionbay-font-bold"
@@ -393,9 +432,17 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                 type="button"
                 onClick={() => setIsMinimized(!isMinimized)}
                 className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-text-[#646970]"
-                title={isMinimized ? __("Expand", "optionbay") : __("Minimize", "optionbay")}
+                title={
+                  isMinimized
+                    ? __("Expand", "optionbay")
+                    : __("Minimize", "optionbay")
+                }
               >
-                {isMinimized ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+                {isMinimized ? (
+                  <ChevronDown size={16} />
+                ) : (
+                  <ChevronUp size={16} />
+                )}
               </button>
               <ClassicButton
                 variant="link-delete"
@@ -411,286 +458,286 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
 
           {/* Body */}
           {!isMinimized && (
-          <div className="optionbay-p-[20px]">
-            <table className="form-table !optionbay-m-0 [&_th]:!optionbay-w-[150px] [&_th]:!optionbay-p-[10px_10px_10px_0] [&_th]:!optionbay-font-medium [&_th]:!optionbay-text-[#50575e] [&_td]:!optionbay-py-[10px] [&_td]:!optionbay-px-0">
-              <tbody>
-                {/* Type */}
-                <tr>
-                  <th scope="row">{__("Field Type", "optionbay")}</th>
-                  <td>
-                    <ClassicSelect
-                      value={field.type}
-                      onChange={(val) => {
-                        const newType = String(val);
-                        const defaults = getDefaultField(newType);
-                        update({
-                          type: newType,
-                          options: defaults.options,
-                          min_length: defaults.min_length,
-                          max_length: defaults.max_length,
-                          min_value: defaults.min_value,
-                          max_value: defaults.max_value,
-                          step: defaults.step,
-                          allowed_types: defaults.allowed_types,
-                          max_file_size: defaults.max_file_size,
-                        });
-                      }}
-                      options={FIELD_TYPES.map((ft) => ({
-                        value: ft.value,
-                        label: ft.label,
-                      }))}
-                    />
-                  </td>
-                </tr>
-
-                {/* Label */}
-                <tr>
-                  <th scope="row">{__("Label", "optionbay")}</th>
-                  <td>
-                    <ClassicInput
-                      size="regular"
-                      value={field.label}
-                      onChange={(e) => update({ label: e.target.value })}
-                      placeholder={__("Enter field label", "optionbay")}
-                    />
-                    <FormError message={state.errors?.[`schema.${index}.label`]} />
-                  </td>
-                </tr>
-
-                {/* Description */}
-                <tr>
-                  <th scope="row">{__("Description", "optionbay")}</th>
-                  <td>
-                    <textarea
-                      className="large-text optionbay-p-1.5"
-                      rows={2}
-                      value={field.description}
-                      onChange={(e) => update({ description: e.target.value })}
-                      placeholder={__(
-                        "Help text shown below the field",
-                        "optionbay",
-                      )}
-                    />
-                  </td>
-                </tr>
-
-                {/* Required */}
-                <tr>
-                  <th scope="row">{__("Validation", "optionbay")}</th>
-                  <td>
-                    <ClassicCheckbox
-                      label={__("Required Field", "optionbay")}
-                      checked={field.required}
-                      onChange={(checked) => update({ required: checked })}
-                    />
-                  </td>
-                </tr>
-
-                {/* Placeholder (text/textarea/number) */}
-                {["text", "textarea", "number"].includes(field.type) && (
+            <div className="optionbay-p-[20px]">
+              <table className="form-table !optionbay-m-0 [&_th]:!optionbay-w-[150px] [&_th]:!optionbay-p-[10px_10px_10px_0] [&_th]:!optionbay-font-medium [&_th]:!optionbay-text-[#50575e] [&_td]:!optionbay-py-[10px] [&_td]:!optionbay-px-0">
+                <tbody>
+                  {/* Type */}
                   <tr>
-                    <th scope="row">{__("Placeholder", "optionbay")}</th>
+                    <th scope="row">{__("Field Type", "optionbay")}</th>
+                    <td>
+                      <ClassicSelect
+                        value={field.type}
+                        onChange={(val) => {
+                          const newType = String(val);
+                          const defaults = getDefaultField(newType);
+                          update({
+                            type: newType,
+                            options: defaults.options,
+                            min_length: defaults.min_length,
+                            max_length: defaults.max_length,
+                            min_value: defaults.min_value,
+                            max_value: defaults.max_value,
+                            step: defaults.step,
+                            allowed_types: defaults.allowed_types,
+                            max_file_size: defaults.max_file_size,
+                          });
+                        }}
+                        options={FIELD_TYPES.map((ft) => ({
+                          value: ft.value,
+                          label: ft.label,
+                        }))}
+                      />
+                    </td>
+                  </tr>
+
+                  {/* Label */}
+                  <tr>
+                    <th scope="row">{__("Label", "optionbay")}</th>
                     <td>
                       <ClassicInput
                         size="regular"
-                        value={field.placeholder}
+                        value={field.label}
+                        onChange={(e) => update({ label: e.target.value })}
+                        placeholder={__("Enter field label", "optionbay")}
+                      />
+                      <FormError
+                        message={state.errors?.[`schema.${index}.label`]}
+                      />
+                    </td>
+                  </tr>
+
+                  {/* Description */}
+                  <tr>
+                    <th scope="row">{__("Description", "optionbay")}</th>
+                    <td>
+                      <textarea
+                        className="large-text optionbay-p-1.5"
+                        rows={2}
+                        value={field.description}
                         onChange={(e) =>
-                          update({ placeholder: e.target.value })
+                          update({ description: e.target.value })
                         }
                         placeholder={__(
-                          "Optional placeholder text",
+                          "Help text shown below the field",
                           "optionbay",
                         )}
                       />
                     </td>
                   </tr>
-                )}
 
-                {/* Pricing (for field-level pricing on non-option fields) */}
-                {!hasOptions && (
-                  <>
+                  {/* Required */}
+                  <tr>
+                    <th scope="row">{__("Validation", "optionbay")}</th>
+                    <td>
+                      <ClassicCheckbox
+                        label={__("Required Field", "optionbay")}
+                        checked={field.required}
+                        onChange={(checked) => update({ required: checked })}
+                      />
+                    </td>
+                  </tr>
+
+                  {/* Placeholder (text/textarea/number) */}
+                  {["text", "textarea", "number"].includes(field.type) && (
                     <tr>
-                      <th scope="row">{__("Pricing Logic", "optionbay")}</th>
+                      <th scope="row">{__("Placeholder", "optionbay")}</th>
                       <td>
-                        <ClassicSelect
-                          value={field.price_type}
-                          onChange={(val) =>
-                            update({ price_type: String(val) })
+                        <ClassicInput
+                          size="regular"
+                          value={field.placeholder}
+                          onChange={(e) =>
+                            update({ placeholder: e.target.value })
                           }
-                          options={PRICE_TYPES.map((pt) => ({
-                            value: pt.value,
-                            label: pt.label,
-                          }))}
+                          placeholder={__(
+                            "Optional placeholder text",
+                            "optionbay",
+                          )}
                         />
                       </td>
                     </tr>
-                    {field.price_type !== "none" && (
+                  )}
+
+                  {/* Pricing (for field-level pricing on non-option fields) */}
+                  {!hasOptions && (
+                    <>
                       <tr>
-                        <th scope="row">{__("Price Amount", "optionbay")}</th>
+                        <th scope="row">{__("Pricing Logic", "optionbay")}</th>
                         <td>
-                          <ClassicInput
-                            type="number"
-                            size="small"
-                            value={field.price || ""}
-                            onChange={(e) =>
-                              update({ price: parseFloat(e.target.value) || 0 })
+                          <ClassicSelect
+                            value={field.price_type}
+                            onChange={(val) =>
+                              update({ price_type: String(val) })
                             }
-                            step="0.01"
-                            placeholder="0.00"
+                            options={PRICE_TYPES.map((pt) => ({
+                              value: pt.value,
+                              label: pt.label,
+                            }))}
                           />
                         </td>
                       </tr>
-                    )}
-                  </>
-                )}
+                      {field.price_type !== "none" && (
+                        <tr>
+                          <th scope="row">{__("Price Amount", "optionbay")}</th>
+                          <td>
+                            <ClassicInput
+                              type="number"
+                              size="small"
+                              value={field.price || ""}
+                              onChange={(e) =>
+                                update({
+                                  price: parseFloat(e.target.value) || 0,
+                                })
+                              }
+                              step="0.01"
+                              placeholder="0.00"
+                            />
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  )}
 
-                {/* Min/Max for text */}
-                {["text", "textarea"].includes(field.type) && (
-                  <tr>
-                    <th scope="row">{__("Restrictions", "optionbay")}</th>
-                    <td
-                      className="optionbay-flex optionbay-gap-2.5 optionbay-items-center"
-                    >
-                      <label className="optionbay-text-xs">
-                        {__("Min Length:", "optionbay")}{" "}
-                        <ClassicInput
-                          type="number"
-                          size="small"
-                          value={field.min_length || ""}
-                          onChange={(e) =>
-                            update({
-                              min_length: parseInt(e.target.value) || 0,
-                            })
-                          }
-                          min={0}
-                        />
-                      </label>
-                      <label className="optionbay-text-xs">
-                        {__("Max Length:", "optionbay")}{" "}
-                        <ClassicInput
-                          type="number"
-                          size="small"
-                          value={field.max_length || ""}
-                          onChange={(e) =>
-                            update({
-                              max_length: parseInt(e.target.value) || 0,
-                            })
-                          }
-                          min={0}
-                        />
-                      </label>
-                    </td>
-                  </tr>
-                )}
-
-                {/* Min/Max/Step for number */}
-                {field.type === "number" && (
-                  <tr>
-                    <th scope="row">{__("Restrictions", "optionbay")}</th>
-                    <td>
-                      <div
-                        className="optionbay-flex optionbay-gap-2.5 optionbay-items-center optionbay-mb-2"
-                      >
-                        <label className="optionbay-text-xs">
-                          {__("Min:", "optionbay")}{" "}
-                          <ClassicInput
-                            type="number"
-                            size="small"
-                            value={field.min_value ?? ""}
-                            onChange={(e) =>
-                              update({
-                                min_value: parseFloat(e.target.value) || 0,
-                              })
-                            }
-                          />
-                        </label>
-                        <label className="optionbay-text-xs">
-                          {__("Max:", "optionbay")}{" "}
-                          <ClassicInput
-                            type="number"
-                            size="small"
-                            value={field.max_value ?? ""}
-                            onChange={(e) =>
-                              update({
-                                max_value: parseFloat(e.target.value) || 0,
-                              })
-                            }
-                          />
-                        </label>
-                      </div>
-                      <label className="optionbay-text-xs">
-                        {__("Step Value:", "optionbay")}{" "}
-                        <ClassicInput
-                          type="number"
-                          size="small"
-                          value={field.step ?? ""}
-                          onChange={(e) =>
-                            update({ step: parseFloat(e.target.value) || 1 })
-                          }
-                          step="0.01"
-                        />
-                      </label>
-                    </td>
-                  </tr>
-                )}
-
-                {/* File settings */}
-                {field.type === "file" && (
-                  <>
+                  {/* Min/Max for text */}
+                  {["text", "textarea"].includes(field.type) && (
                     <tr>
-                      <th scope="row">
-                        {__("File Restrictions", "optionbay")}
-                      </th>
-                      <td>
-                        <label
-                          className="optionbay-block optionbay-mb-2"
-                        >
-                          <span className="optionbay-text-xs optionbay-block">
-                            {__(
-                              "Allowed Extensions (comma separated):",
-                              "optionbay",
-                            )}
-                          </span>
-                          <ClassicInput
-                            size="regular"
-                            value={field.allowed_types || ""}
-                            onChange={(e) =>
-                              update({ allowed_types: e.target.value })
-                            }
-                            placeholder=".jpg,.png,.pdf"
-                          />
-                        </label>
-                        <label className="optionbay-block">
-                          <span className="optionbay-text-xs optionbay-block">
-                            {__("Max File Size (MB):", "optionbay")}
-                          </span>
+                      <th scope="row">{__("Restrictions", "optionbay")}</th>
+                      <td className="optionbay-flex optionbay-gap-2.5 optionbay-items-center">
+                        <label className="optionbay-text-xs">
+                          {__("Min Length:", "optionbay")}{" "}
                           <ClassicInput
                             type="number"
                             size="small"
-                            value={field.max_file_size || ""}
+                            value={field.min_length || ""}
                             onChange={(e) =>
                               update({
-                                max_file_size: parseInt(e.target.value) || 5,
+                                min_length: parseInt(e.target.value) || 0,
                               })
                             }
-                            min={1}
+                            min={0}
+                          />
+                        </label>
+                        <label className="optionbay-text-xs">
+                          {__("Max Length:", "optionbay")}{" "}
+                          <ClassicInput
+                            type="number"
+                            size="small"
+                            value={field.max_length || ""}
+                            onChange={(e) =>
+                              update({
+                                max_length: parseInt(e.target.value) || 0,
+                              })
+                            }
+                            min={0}
                           />
                         </label>
                       </td>
                     </tr>
-                  </>
-                )}
-              </tbody>
-            </table>
+                  )}
 
-            {/* Options editor for select/radio/checkbox */}
-            {hasOptions && field.options && (
-              <OptionEditor fieldId={field.id} options={field.options} />
-            )}
+                  {/* Min/Max/Step for number */}
+                  {field.type === "number" && (
+                    <tr>
+                      <th scope="row">{__("Restrictions", "optionbay")}</th>
+                      <td>
+                        <div className="optionbay-flex optionbay-gap-2.5 optionbay-items-center optionbay-mb-2">
+                          <label className="optionbay-text-xs">
+                            {__("Min:", "optionbay")}{" "}
+                            <ClassicInput
+                              type="number"
+                              size="small"
+                              value={field.min_value ?? ""}
+                              onChange={(e) =>
+                                update({
+                                  min_value: parseFloat(e.target.value) || 0,
+                                })
+                              }
+                            />
+                          </label>
+                          <label className="optionbay-text-xs">
+                            {__("Max:", "optionbay")}{" "}
+                            <ClassicInput
+                              type="number"
+                              size="small"
+                              value={field.max_value ?? ""}
+                              onChange={(e) =>
+                                update({
+                                  max_value: parseFloat(e.target.value) || 0,
+                                })
+                              }
+                            />
+                          </label>
+                        </div>
+                        <label className="optionbay-text-xs">
+                          {__("Step Value:", "optionbay")}{" "}
+                          <ClassicInput
+                            type="number"
+                            size="small"
+                            value={field.step ?? ""}
+                            onChange={(e) =>
+                              update({ step: parseFloat(e.target.value) || 1 })
+                            }
+                            step="0.01"
+                          />
+                        </label>
+                      </td>
+                    </tr>
+                  )}
 
-            {/* Conditional Logic */}
-            <ConditionEditor field={field} index={index} />
-          </div>
+                  {/* File settings */}
+                  {field.type === "file" && (
+                    <>
+                      <tr>
+                        <th scope="row">
+                          {__("File Restrictions", "optionbay")}
+                        </th>
+                        <td>
+                          <label className="optionbay-block optionbay-mb-2">
+                            <span className="optionbay-text-xs optionbay-block">
+                              {__(
+                                "Allowed Extensions (comma separated):",
+                                "optionbay",
+                              )}
+                            </span>
+                            <ClassicInput
+                              size="regular"
+                              value={field.allowed_types || ""}
+                              onChange={(e) =>
+                                update({ allowed_types: e.target.value })
+                              }
+                              placeholder=".jpg,.png,.pdf"
+                            />
+                          </label>
+                          <label className="optionbay-block">
+                            <span className="optionbay-text-xs optionbay-block">
+                              {__("Max File Size (MB):", "optionbay")}
+                            </span>
+                            <ClassicInput
+                              type="number"
+                              size="small"
+                              value={field.max_file_size || ""}
+                              onChange={(e) =>
+                                update({
+                                  max_file_size: parseInt(e.target.value) || 5,
+                                })
+                              }
+                              min={1}
+                            />
+                          </label>
+                        </td>
+                      </tr>
+                    </>
+                  )}
+                </tbody>
+              </table>
+
+              {/* Options editor for select/radio/checkbox */}
+              {hasOptions && field.options && (
+                <OptionEditor fieldId={field.id} options={field.options} />
+              )}
+
+              {/* Conditional Logic */}
+              <ConditionEditor field={field} index={index} />
+            </div>
           )}
         </div>
       )}
@@ -791,7 +838,10 @@ function BuilderInner() {
           fieldErrors[path] = issue.message;
         });
         dispatch({ type: "SET_ERRORS", payload: fieldErrors });
-        dispatch({ type: "SET_ERROR", payload: __("Please fix the validation errors below.", "optionbay") });
+        dispatch({
+          type: "SET_ERROR",
+          payload: __("Please fix the validation errors below.", "optionbay"),
+        });
         dispatch({ type: "SET_SAVING", payload: false });
         return;
       }
@@ -856,9 +906,7 @@ function BuilderInner() {
     <div className="optionbay-ignore-preflight">
       {/* Error notice */}
       {state.error && (
-        <div
-          className="notice notice-error is-dismissible optionbay-mb-5"
-        >
+        <div className="notice notice-error is-dismissible optionbay-mb-5">
           <p>{state.error}</p>
         </div>
       )}
@@ -885,18 +933,34 @@ function BuilderInner() {
                 })
               }
               className={`optionbay-relative optionbay-inline-flex optionbay-h-5 optionbay-w-10 optionbay-items-center optionbay-rounded-full optionbay-transition-colors focus:optionbay-outline-none ${
-                state.status === "publish" ? "optionbay-bg-blue-600" : "optionbay-bg-gray-400"
+                state.status === "publish"
+                  ? "optionbay-bg-blue-600"
+                  : "optionbay-bg-gray-400"
               }`}
-              title={state.status === "publish" ? __("Active", "optionbay") : __("Draft", "optionbay")}
+              title={
+                state.status === "publish"
+                  ? __("Active", "optionbay")
+                  : __("Draft", "optionbay")
+              }
             >
               <span
                 className={`optionbay-inline-block optionbay-h-3.5 optionbay-w-3.5 optionbay-transform optionbay-rounded-full optionbay-bg-white optionbay-transition-transform ${
-                  state.status === "publish" ? "optionbay-translate-x-5" : "optionbay-translate-x-1"
+                  state.status === "publish"
+                    ? "optionbay-translate-x-5"
+                    : "optionbay-translate-x-1"
                 }`}
               />
             </button>
-            <span className={`optionbay-text-[13px] optionbay-min-w-[45px] ${state.status === "publish" ? "optionbay-text-[#1d2327]" : "optionbay-text-[#646970]"}`}>
-              {state.status === "publish" ? __("Active", "optionbay") : __("Draft", "optionbay")}
+            <span
+              className={`optionbay-text-[13px] optionbay-min-w-[45px] ${
+                state.status === "publish"
+                  ? "optionbay-text-[#1d2327]"
+                  : "optionbay-text-[#646970]"
+              }`}
+            >
+              {state.status === "publish"
+                ? __("Active", "optionbay")
+                : __("Draft", "optionbay")}
             </span>
           </div>
           <ClassicButton
@@ -913,141 +977,196 @@ function BuilderInner() {
         </div>
       </div>
 
-
-
       {/* Main content: 2-column layout */}
       <div className="optionbay-flex optionbay-flex-col lg:optionbay-flex-row optionbay-gap-6 optionbay-items-start">
         {/* Left: Title + Fields */}
         <div className="optionbay-w-full optionbay-flex optionbay-flex-col optionbay-gap-6">
           {/* Group Title */}
-          <div className="optionbay-mb-4">
+          <div>
             {/* <div className="postbox"> */}
-              <div className="inside !optionbay-p-0">
-                <ClassicInput
-                  className="optionbay-w-full !optionbay-text-[20px] !optionbay-font-semibold !optionbay-py-3 !optionbay-px-4 !optionbay-border !optionbay-border-[#ddd] !optionbay-rounded-md focus:!optionbay-border-[#2271b1] focus:!optionbay-shadow-[0_0_0_1px_#2271b1] focus:!optionbay-outline-none"
-                  size="large"
-                  value={state.title}
-                  onChange={(e) =>
-                    dispatch({ type: "SET_TITLE", payload: e.target.value })
-                  }
-                  placeholder={__("Enter Option Group Title", "optionbay")}
-                />
-                <FormError message={state.errors?.title} />
-              </div>
+            <div className="inside !optionbay-p-0">
+              <ClassicInput
+                className="optionbay-w-full !optionbay-text-[20px] !optionbay-font-semibold !optionbay-py-3 !optionbay-px-4 !optionbay-border !optionbay-border-[#ddd] !optionbay-rounded-md focus:!optionbay-border-[#2271b1] focus:!optionbay-shadow-[0_0_0_1px_#2271b1] focus:!optionbay-outline-none"
+                size="large"
+                value={state.title}
+                onChange={(e) =>
+                  dispatch({ type: "SET_TITLE", payload: e.target.value })
+                }
+                placeholder={__("Enter Option Group Title", "optionbay")}
+              />
+              <FormError message={state.errors?.title} />
+            </div>
             {/* </div> */}
           </div>
 
-          {/* Assignment Rules (Moved to Top) */}
-          <div className="optionbay-bg-white optionbay-p-[20px] optionbay-rounded-lg optionbay-shadow-sm">
-            <div className="optionbay-flex optionbay-items-center optionbay-justify-between optionbay-mb-4 optionbay-pb-3 optionbay-border-b optionbay-border-[#eee]">
-              <h2 className="optionbay-m-0 optionbay-text-base optionbay-font-semibold optionbay-text-[#1d2327]">
-                {__("Assignment Rules", "optionbay")}
-              </h2>
-              <ClassicCheckbox
-                label={__("Global (All Products)", "optionbay")}
-                checked={state.assignments.some((a) => a.target_type === "global")}
-                onChange={(checked) => {
-                  if (checked) {
-                    dispatch({
-                      type: "SET_ASSIGNMENTS",
-                      payload: [{ target_type: "global", target_id: 0, is_exclusion: false, priority: state.settings.priority }],
-                    });
-                  } else {
-                    dispatch({
-                      type: "SET_ASSIGNMENTS",
-                      payload: state.assignments.filter((a) => a.target_type !== "global"),
-                    });
-                  }
-                }}
-              />
-            </div>
-
-            {!state.assignments.some((a) => a.target_type === "global") && (
-              <div className="optionbay-flex optionbay-flex-col sm:optionbay-flex-row optionbay-gap-6">
-                <div className="optionbay-min-w-[200px]">
-                  <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold optionbay-text-[13px]">
-                    {__("Assign By", "optionbay")}
-                  </label>
-                  <ClassicSelect
-                    value={activeAssignmentType}
-                    differentDropdownWidth
-                    onChange={(val) => {
-                      setActiveAssignmentType(val as any);
-                      dispatch({ type: "SET_ASSIGNMENTS", payload: [] });
-                    }}
-                    options={[
-                      { value: "product", label: __("Products", "optionbay") },
-                      { value: "category", label: __("Categories", "optionbay") },
-                      { value: "tag", label: __("Tags", "optionbay") },
-                    ]}
-                  />
-                </div>
-
-                <div className="optionbay-flex-1">
-                  {activeAssignmentType === "product" && (
-                    <div>
-                      <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold optionbay-text-[13px]">
-                        {__("Select Products", "optionbay")}
-                      </label>
-                      <ClassicMultiSelect
-                        value={state.assignments.filter((a) => a.target_type === "product").map((a) => a.target_id)}
-                        onChange={(ids) => {
-                          const productAssignments = (ids as number[]).map((id) => ({
-                            target_type: "product" as const, target_id: id, is_exclusion: false, priority: state.settings.priority
-                          }));
-                          dispatch({ type: "SET_ASSIGNMENTS", payload: productAssignments });
-                        }}
-                        endpoint="/optionbay/v1/resources/products"
-                        placeholder={__("Search products by name, ID, or SKU...", "optionbay")}
-                        renderOption={renderProductOption}
-                        size="regular"
-                      />
-                    </div>
-                  )}
-
-                  {activeAssignmentType === "category" && (
-                    <div>
-                      <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold optionbay-text-[13px]">
-                        {__("Select Categories", "optionbay")}
-                      </label>
-                      <ClassicMultiSelect
-                        value={state.assignments.filter((a) => a.target_type === "category").map((a) => a.target_id)}
-                        onChange={(ids) => {
-                          const categoryAssignments = (ids as number[]).map((id) => ({
-                            target_type: "category" as const, target_id: id, is_exclusion: false, priority: state.settings.priority
-                          }));
-                          dispatch({ type: "SET_ASSIGNMENTS", payload: categoryAssignments });
-                        }}
-                        endpoint="/optionbay/v1/resources/categories"
-                        placeholder={__("Search categories...", "optionbay")}
-                        size="regular"
-                      />
-                    </div>
-                  )}
-
-                  {activeAssignmentType === "tag" && (
-                    <div>
-                      <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold optionbay-text-[13px]">
-                        {__("Select Tags", "optionbay")}
-                      </label>
-                      <ClassicMultiSelect
-                        value={state.assignments.filter((a) => a.target_type === "tag").map((a) => a.target_id)}
-                        onChange={(ids) => {
-                          const tagAssignments = (ids as number[]).map((id) => ({
-                            target_type: "tag" as const, target_id: id, is_exclusion: false, priority: state.settings.priority
-                          }));
-                          dispatch({ type: "SET_ASSIGNMENTS", payload: tagAssignments });
-                        }}
-                        endpoint="/optionbay/v1/resources/tags"
-                        placeholder={__("Search tags...", "optionbay")}
-                        size="regular"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
+          {/* Assignment Rules */}
+          <ClassicSettingsTable
+            title={__("Assignment Rules", "optionbay")}
+            description={__(
+              "Choose where this option group should be displayed.",
+              "optionbay",
             )}
-          </div>
+            fields={[
+              {
+                label: __("Global Assignment", "optionbay"),
+                tooltip: __(
+                  "If enabled, these options will appear on every product in your store.",
+                  "optionbay",
+                ),
+                render: () => (
+                  <ClassicCheckbox
+                    label={__("Enable for all products", "optionbay")}
+                    checked={state.assignments.some(
+                      (a) => a.target_type === "global",
+                    )}
+                    onChange={(checked) => {
+                      if (checked) {
+                        dispatch({
+                          type: "SET_ASSIGNMENTS",
+                          payload: [
+                            {
+                              target_type: "global",
+                              target_id: 0,
+                              is_exclusion: false,
+                              priority: state.settings.priority,
+                            },
+                          ],
+                        });
+                      } else {
+                        dispatch({
+                          type: "SET_ASSIGNMENTS",
+                          payload: state.assignments.filter(
+                            (a) => a.target_type !== "global",
+                          ),
+                        });
+                      }
+                    }}
+                  />
+                ),
+              },
+              ...(!state.assignments.some((a) => a.target_type === "global")
+                ? [
+                    {
+                      label: __("Assign By", "optionbay"),
+                      render: () => (
+                        <div className="optionbay-max-w-[300px]">
+                          <ClassicSelect
+                            value={activeAssignmentType}
+                            differentDropdownWidth
+                            onChange={(val) => {
+                              setActiveAssignmentType(val as any);
+                              dispatch({ type: "SET_ASSIGNMENTS", payload: [] });
+                            }}
+                            options={[
+                              {
+                                value: "product",
+                                label: __("Products", "optionbay"),
+                              },
+                              {
+                                value: "category",
+                                label: __("Categories", "optionbay"),
+                              },
+                              { value: "tag", label: __("Tags", "optionbay") },
+                            ]}
+                          />
+                        </div>
+                      ),
+                    },
+                    {
+                      label:
+                        activeAssignmentType === "product"
+                          ? __("Select Products", "optionbay")
+                          : activeAssignmentType === "category"
+                          ? __("Select Categories", "optionbay")
+                          : __("Select Tags", "optionbay"),
+                      render: () => (
+                        <div className="optionbay-max-w-[600px]">
+                          {activeAssignmentType === "product" && (
+                            <ClassicMultiSelect
+                              value={state.assignments
+                                .filter((a) => a.target_type === "product")
+                                .map((a) => a.target_id)}
+                              onChange={(ids) => {
+                                const prodAssignments = (ids as number[]).map(
+                                  (id) => ({
+                                    target_type: "product" as const,
+                                    target_id: id,
+                                    is_exclusion: false,
+                                    priority: state.settings.priority,
+                                  }),
+                                );
+                                dispatch({
+                                  type: "SET_ASSIGNMENTS",
+                                  payload: prodAssignments,
+                                });
+                              }}
+                              endpoint="/optionbay/v1/resources/products"
+                              placeholder={__(
+                                "Search products...",
+                                "optionbay",
+                              )}
+                              renderOption={renderProductOption}
+                              size="regular"
+                            />
+                          )}
+                          {activeAssignmentType === "category" && (
+                            <ClassicMultiSelect
+                              value={state.assignments
+                                .filter((a) => a.target_type === "category")
+                                .map((a) => a.target_id)}
+                              onChange={(ids) => {
+                                const catAssignments = (ids as number[]).map(
+                                  (id) => ({
+                                    target_type: "category" as const,
+                                    target_id: id,
+                                    is_exclusion: false,
+                                    priority: state.settings.priority,
+                                  }),
+                                );
+                                dispatch({
+                                  type: "SET_ASSIGNMENTS",
+                                  payload: catAssignments,
+                                });
+                              }}
+                              endpoint="/optionbay/v1/resources/categories"
+                              placeholder={__(
+                                "Search categories...",
+                                "optionbay",
+                              )}
+                              size="regular"
+                            />
+                          )}
+                          {activeAssignmentType === "tag" && (
+                            <ClassicMultiSelect
+                              value={state.assignments
+                                .filter((a) => a.target_type === "tag")
+                                .map((a) => a.target_id)}
+                              onChange={(ids) => {
+                                const tagAssignments = (ids as number[]).map(
+                                  (id) => ({
+                                    target_type: "tag" as const,
+                                    target_id: id,
+                                    is_exclusion: false,
+                                    priority: state.settings.priority,
+                                  }),
+                                );
+                                dispatch({
+                                  type: "SET_ASSIGNMENTS",
+                                  payload: tagAssignments,
+                                });
+                              }}
+                              endpoint="/optionbay/v1/resources/tags"
+                              placeholder={__("Search tags...", "optionbay")}
+                              size="regular"
+                            />
+                          )}
+                        </div>
+                      ),
+                    },
+                  ]
+                : []),
+            ]}
+          />
 
           {/* Fields list with drag-and-drop */}
           <DragDropContext onDragEnd={handleDragEnd}>
@@ -1059,9 +1178,7 @@ function BuilderInner() {
                   className="optionbay-flex optionbay-flex-col optionbay-gap-4 optionbay-min-h-[100px]"
                 >
                   {state.schema.length === 0 ? (
-                    <div
-                      className="postbox optionbay-text-center optionbay-px-5 optionbay-py-[60px] optionbay-text-[#999] optionbay-border-dashed optionbay-border-[#c3c4c7] optionbay-rounded-lg"
-                    >
+                    <div className="postbox optionbay-text-center optionbay-px-5 optionbay-py-[60px] optionbay-text-[#999] optionbay-border-dashed optionbay-border-[#c3c4c7] optionbay-rounded-lg">
                       <p className="optionbay-text-base optionbay-mb-2">
                         {__("Your group is empty", "optionbay")}
                       </p>
@@ -1114,9 +1231,7 @@ function BuilderInner() {
             </div>
             <div className="optionbay-p-[15px]">
               <div className="optionbay-mb-4">
-                <label
-                  className="optionbay-block optionbay-mb-1 optionbay-font-semibold"
-                >
+                <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold">
                   {__("Display Layout", "optionbay")}
                 </label>
                 <ClassicSelect
@@ -1138,9 +1253,7 @@ function BuilderInner() {
                 />
               </div>
               <div className="optionbay-mb-1">
-                <label
-                  className="optionbay-block optionbay-mb-1 optionbay-font-semibold"
-                >
+                <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold">
                   {__("Priority Order", "optionbay")}
                 </label>
                 <ClassicInput
@@ -1161,8 +1274,6 @@ function BuilderInner() {
               </p>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
