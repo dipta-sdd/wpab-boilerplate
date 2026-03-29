@@ -265,25 +265,29 @@ function ConditionEditor({
       {conditions.status === "active" && (
         <>
           <div className="optionbay-flex optionbay-gap-2 optionbay-items-center">
-            <select
+            <ClassicSelect
               value={conditions.action}
-              onChange={(e) =>
-                updateConditions({ action: e.target.value as "show" | "hide" })
+              classNames={{ innerContainer: "!optionbay-w-[85px]" }}
+              onChange={(val) =>
+                updateConditions({ action: val as "show" | "hide" })
               }
-            >
-              <option value="show">{__("Show", "optionbay")}</option>
-              <option value="hide">{__("Hide", "optionbay")}</option>
-            </select>
+              options={[
+                { value: "show", label: __("Show", "optionbay") },
+                { value: "hide", label: __("Hide", "optionbay") },
+              ]}
+            />
             <span>{__("this field if", "optionbay")}</span>
-            <select
+            <ClassicSelect
               value={conditions.match}
-              onChange={(e) =>
-                updateConditions({ match: e.target.value as "ALL" | "ANY" })
+              classNames={{ innerContainer: "!optionbay-w-[85px]" }}
+              onChange={(val) =>
+                updateConditions({ match: val as "ALL" | "ANY" })
               }
-            >
-              <option value="ALL">{__("ALL", "optionbay")}</option>
-              <option value="ANY">{__("ANY", "optionbay")}</option>
-            </select>
+              options={[
+                { value: "ALL", label: __("ALL", "optionbay") },
+                { value: "ANY", label: __("ANY", "optionbay") },
+              ]}
+            />
             <span>{__("of these rules match:", "optionbay")}</span>
           </div>
 
@@ -292,44 +296,43 @@ function ConditionEditor({
               key={idx}
               className="optionbay-flex optionbay-gap-2 optionbay-items-center"
             >
-              <select
+              <ClassicSelect
                 value={rule.target_field_id}
-                onChange={(e) => {
+                onChange={(val) => {
                   const rules = [...(conditions.rules || [])];
                   rules[idx] = {
                     ...rules[idx],
-                    target_field_id: e.target.value,
+                    target_field_id: String(val),
                   };
                   updateConditions({ rules });
                 }}
                 className="optionbay-flex-1"
-              >
-                <option value="">{__("Select field...", "optionbay")}</option>
-                {siblingFields.map((sf) => (
-                  <option key={sf.id} value={sf.id}>
-                    {sf.label || sf.id}
-                  </option>
-                ))}
-              </select>
-              <select
+                options={[
+                  { value: "", label: __("Select field...", "optionbay") },
+                  ...siblingFields.map((sf) => ({
+                    value: sf.id,
+                    label: sf.label || sf.id,
+                  })),
+                ]}
+              />
+              <ClassicSelect
                 value={rule.operator}
-                onChange={(e) => {
+                onChange={(val) => {
                   const rules = [...(conditions.rules || [])];
-                  rules[idx] = { ...rules[idx], operator: e.target.value };
+                  rules[idx] = { ...rules[idx], operator: String(val) };
                   updateConditions({ rules });
                 }}
-                className="optionbay-w-[120px]"
-              >
-                <option value="==">{__("equals", "optionbay")}</option>
-                <option value="!=">{__("not equals", "optionbay")}</option>
-                <option value=">">{__("greater than", "optionbay")}</option>
-                <option value="<">{__("less than", "optionbay")}</option>
-                <option value="contains">{__("contains", "optionbay")}</option>
-                <option value="empty">{__("is empty", "optionbay")}</option>
-                <option value="not_empty">
-                  {__("is not empty", "optionbay")}
-                </option>
-              </select>
+                classNames={{ innerContainer: "!optionbay-w-[140px]" }}
+                options={[
+                  { value: "==", label: __("equals", "optionbay") },
+                  { value: "!=", label: __("not equals", "optionbay") },
+                  { value: ">", label: __("greater than", "optionbay") },
+                  { value: "<", label: __("less than", "optionbay") },
+                  { value: "contains", label: __("contains", "optionbay") },
+                  { value: "empty", label: __("is empty", "optionbay") },
+                  { value: "not_empty", label: __("is not empty", "optionbay") },
+                ]}
+              />
               {!["empty", "not_empty"].includes(rule.operator) && (
                 <ClassicInput
                   size="regular"
@@ -345,13 +348,14 @@ function ConditionEditor({
               )}
               <button
                 type="button"
-                className="optionbay-text-[#b32d2e] hover:optionbay-text-[#d63638] optionbay-border-none optionbay-bg-transparent optionbay-cursor-pointer optionbay-text-[18px] optionbay-px-1"
+                className="optionbay-text-[#b32d2e] hover:optionbay-bg-[#f1f1f1] optionbay-rounded optionbay-border-none optionbay-bg-transparent optionbay-cursor-pointer optionbay-text-[18px] optionbay-w-8 optionbay-h-8 optionbay-flex optionbay-items-center optionbay-justify-center"
                 onClick={() => {
                   const rules = (conditions.rules || []).filter(
                     (_, i) => i !== idx,
                   );
                   updateConditions({ rules });
                 }}
+                title={__("Remove rule", "optionbay")}
               >
                 ×
               </button>
@@ -400,9 +404,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
         >
           {/* Header */}
           <div
-            className={`optionbay-flex optionbay-justify-between optionbay-items-center optionbay-px-[15px] optionbay-py-[10px] optionbay-bg-[#f8f9fa] optionbay-border-b optionbay-border-[#e5e7eb] optionbay-rounded-t-[8px] optionbay-cursor-default ${
-              isMinimized ? "optionbay-rounded-[8px]" : ""
-            }`}
+            className={`optionbay-flex optionbay-justify-between optionbay-items-center optionbay-py-[10px] optionbay-cursor-default`}
           >
             <div className="optionbay-flex optionbay-items-center">
               <span
@@ -458,7 +460,7 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
 
           {/* Body */}
           {!isMinimized && (
-            <div className="optionbay-p-[20px]">
+            <div className="optionbay-pl-4">
               <ClassicSettingsTable
                 className=""
                 fields={[
@@ -1182,7 +1184,7 @@ function BuilderInner() {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="optionbay-flex optionbay-flex-col optionbay-gap-4 optionbay-min-h-[100px]"
+                  className="optionbay-flex optionbay-flex-col optionbay-gap-6 optionbay-min-h-[100px]"
                 >
                   {state.schema.length === 0 ? (
                     <div className="postbox optionbay-text-center optionbay-px-5 optionbay-py-[60px] optionbay-text-[#999] optionbay-border-dashed optionbay-border-[#c3c4c7] optionbay-rounded-lg">

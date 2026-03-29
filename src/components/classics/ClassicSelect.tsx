@@ -303,7 +303,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
             } 
             ${
               isOpen
-                ? `optionbay-border-[#2271b1] optionbay-shadow-[0_0_0_1px_#2271b1] optionbay-outline-none ${classNames?.triggerOpen || ""}`
+                ? `!optionbay-border-[#2271b1] optionbay-shadow-[0_0_0_1px_#2271b1] optionbay-outline-none ${classNames?.triggerOpen || ""}`
                 : "optionbay-shadow-none"
             } 
             ${classNames?.trigger || ""}
@@ -330,7 +330,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
         {/* Dropdown Menu */}
         {isOpen && (
           <div
-            className={`optionbay-absolute optionbay-z-[99999] optionbay-bg-white optionbay-border-2 optionbay-border-[#2271b1] optionbay-border-t-0 optionbay-rounded-b-[3px] optionbay-shadow-[0_3px_5px_rgba(0,0,0,0.2)] optionbay-p-0 optionbay-box-border optionbay-top-full optionbay-left-[-1px] optionbay-mt-[-2px] ${classNames?.dropdown || ""}`.trim()}
+            className={`optionbay-absolute optionbay-z-[99999] optionbay-bg-white optionbay-border-2 optionbay-border-[#2271b1] optionbay-border-t-0 optionbay-rounded-b-[3px] optionbay-shadow-[0_3px_5px_rgba(0,0,0,0.2)] optionbay-p-0 optionbay-box-border optionbay-top-full optionbay-left-[-1px] optionbay-mt-[-3px] ${classNames?.dropdown || ""}`.trim()}
             style={{
               ...(differentDropdownWidth
                 ? { minWidth: "calc(100% + 2px)" }

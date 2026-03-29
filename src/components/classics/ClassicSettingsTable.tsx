@@ -28,7 +28,7 @@ export const ClassicSettingsTable: React.FC<ClassicSettingsTableProps> = ({
 }) => {
   return (
     <div
-      className={`optionbay-settings-section optionbay-mb-8 last:optionbay-mb-0 ${className}`}
+      className={`optionbay-settings-section ${className}`}
     >
       {title && <h2 className="optionbay-ignore-preflight">{title}</h2>}
       {description && <p className="description ">{description}</p>}
