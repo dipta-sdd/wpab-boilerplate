@@ -29,6 +29,24 @@ function useClickOutside(
   }, [ref, handler]);
 }
 
+export interface ClassicSelectClassNames {
+  container?: string;
+  label?: string;
+  innerContainer?: string;
+  trigger?: string;
+  triggerOpen?: string;
+  triggerDisabled?: string;
+  value?: string;
+  dropdown?: string;
+  searchContainer?: string;
+  searchInput?: string;
+  list?: string;
+  option?: string;
+  optionHighlighted?: string;
+  optionSelected?: string;
+  description?: string;
+}
+
 interface ClassicSelectProps {
   id?: string;
   value: SelectOption["value"] | null;
@@ -37,6 +55,7 @@ interface ClassicSelectProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  classNames?: ClassicSelectClassNames;
   label?: string;
   description?: string;
   enableSearch?: boolean;
@@ -53,6 +72,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
   placeholder = "Select an option...",
   disabled = false,
   className = "",
+  classNames,
   label,
   description,
   enableSearch = false,
@@ -245,22 +265,23 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
   const selectId =
     id || `classic-select-${Math.random().toString(36).slice(2, 9)}`;
   const sizeClass = size === "short" ? "min-content" : "";
-  const explicitWidth =
-    size === "short" ? "min-content" : size === "regular" ? "auto" : "100%";
-  size === "short" ? "250px" : size === "regular" ? "25em" : "100%";
+  const explicitWidth = size === "short" ? "min-content" : size === "regular" ? "auto" : "100%";
 
   return (
     <div
-      className={`${sizeClass} ${className} optionbay-align-middle`}
+      className={`${sizeClass} ${className} ${classNames?.container || ""} optionbay-align-middle`.trim()}
       ref={containerRef}
     >
       {label && (
-        <label htmlFor={selectId} className="optionbay-block optionbay-mb-1">
+        <label
+          htmlFor={selectId}
+          className={`optionbay-block optionbay-mb-1 ${classNames?.label || ""}`.trim()}
+        >
           {label}
         </label>
       )}
 
-      <div className="optionbay-relative" style={{ width: explicitWidth }}>
+      <div className={`optionbay-relative ${classNames?.innerContainer}`} style={{ width: explicitWidth }}>
         {/* Trigger that looks like WP native select */}
         <div
           id={selectId}
@@ -269,10 +290,27 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
           aria-expanded={isOpen}
           onClick={() => !disabled && setIsOpen(!isOpen)}
           onKeyDown={handleTriggerKeyDown}
-          className={`optionbay-flex optionbay-items-center optionbay-justify-between optionbay-appearance-none optionbay-border optionbay-border-[#8c8f94] optionbay-rounded-[3px] optionbay-px-2 optionbay-pr-6 optionbay-min-h-[30px] optionbay-leading-loose optionbay-transition-shadow optionbay-duration-100 optionbay-select-none optionbay-relative optionbay-box-border optionbay-w-full ${disabled ? "optionbay-cursor-not-allowed optionbay-bg-[#f0f0f1] optionbay-text-[#a7aaad]" : "optionbay-cursor-pointer optionbay-bg-white optionbay-text-[#2c3338]"} ${isOpen ? "optionbay-border-[#2271b1] optionbay-shadow-[0_0_0_1px_#2271b1] optionbay-outline-none" : "optionbay-shadow-none"}`}
+          className={`
+            optionbay-flex optionbay-items-center optionbay-justify-between 
+            optionbay-appearance-none optionbay-border optionbay-border-[#8c8f94] 
+            optionbay-rounded-[3px] optionbay-px-2 optionbay-pr-6 optionbay-min-h-[30px] 
+            optionbay-leading-loose optionbay-transition-all optionbay-duration-100 
+            optionbay-select-none optionbay-relative optionbay-box-border optionbay-w-full 
+            ${
+              disabled
+                ? `optionbay-cursor-not-allowed optionbay-bg-[#f0f0f1] optionbay-text-[#a7aaad] ${classNames?.triggerDisabled || ""}`
+                : `optionbay-cursor-pointer optionbay-bg-white optionbay-text-[#2c3338]`
+            } 
+            ${
+              isOpen
+                ? `optionbay-border-[#2271b1] optionbay-shadow-[0_0_0_1px_#2271b1] optionbay-outline-none ${classNames?.triggerOpen || ""}`
+                : "optionbay-shadow-none"
+            } 
+            ${classNames?.trigger || ""}
+          `.trim()}
         >
           <span
-            className="optionbay-overflow-hidden optionbay-text-ellipsis optionbay-whitespace-nowrap optionbay-flex-1"
+            className={`optionbay-overflow-hidden optionbay-text-ellipsis optionbay-whitespace-nowrap optionbay-flex-1 ${classNames?.value || ""}`.trim()}
           >
             {selectedOption
               ? renderOption
@@ -292,7 +330,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
         {/* Dropdown Menu */}
         {isOpen && (
           <div
-            className="optionbay-absolute optionbay-z-[99999] optionbay-bg-white optionbay-border-2 optionbay-border-[#2271b1] optionbay-border-t-0 optionbay-rounded-b-[3px] optionbay-shadow-[0_3px_5px_rgba(0,0,0,0.2)] optionbay-p-0 optionbay-box-border optionbay-top-full optionbay-left-[-1px] optionbay-mt-[-2px]"
+            className={`optionbay-absolute optionbay-z-[99999] optionbay-bg-white optionbay-border-2 optionbay-border-[#2271b1] optionbay-border-t-0 optionbay-rounded-b-[3px] optionbay-shadow-[0_3px_5px_rgba(0,0,0,0.2)] optionbay-p-0 optionbay-box-border optionbay-top-full optionbay-left-[-1px] optionbay-mt-[-2px] ${classNames?.dropdown || ""}`.trim()}
             style={{
               ...(differentDropdownWidth
                 ? { minWidth: "calc(100% + 2px)" }
@@ -300,7 +338,9 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
             }}
           >
             {enableSearch && (
-              <div className="optionbay-p-1.5">
+              <div
+                className={`optionbay-p-1.5 ${classNames?.searchContainer || ""}`.trim()}
+              >
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -312,7 +352,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
                   onKeyDown={handleSearchKeyDown}
                   onClick={(e) => e.stopPropagation()}
                   placeholder="Search..."
-                  className="optionbay-w-full optionbay-px-2 optionbay-leading-loose optionbay-min-h-[26px] optionbay-border optionbay-border-[#aaaaaa] optionbay-bg-[#fcfcfc] optionbay-rounded-[3px] optionbay-box-border optionbay-text-[13px] focus:optionbay-outline-none focus:optionbay-shadow-none"
+                  className={`optionbay-w-full optionbay-px-2 optionbay-leading-loose optionbay-min-h-[26px] optionbay-border optionbay-border-[#aaaaaa] optionbay-bg-[#fcfcfc] optionbay-rounded-[3px] optionbay-box-border optionbay-text-[13px] focus:optionbay-outline-none focus:optionbay-shadow-none ${classNames?.searchInput || ""}`.trim()}
                 />
               </div>
             )}
@@ -320,7 +360,7 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
             <ul
               ref={listRef}
               role="listbox"
-              className="optionbay-max-h-[220px] optionbay-overflow-y-auto optionbay-m-0 optionbay-p-0 optionbay-list-none"
+              className={`optionbay-max-h-[220px] optionbay-overflow-y-auto optionbay-m-0 optionbay-p-0 optionbay-list-none ${classNames?.list || ""}`.trim()}
             >
               {filteredOptions.length === 0 ? (
                 <li className="optionbay-px-3 optionbay-py-1.5 optionbay-text-[#646970] optionbay-italic optionbay-text-[13px] optionbay-m-0">
@@ -350,7 +390,24 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
                         e.stopPropagation();
                         handleSelect(opt);
                       }}
-                      className={`optionbay-px-3 optionbay-py-1.5 optionbay-flex optionbay-items-center optionbay-justify-between optionbay-text-[13px] optionbay-m-0 ${isDisabled ? "optionbay-cursor-not-allowed" : "optionbay-cursor-pointer"} ${isHighlighted ? "optionbay-bg-[#2271b1] optionbay-text-white" : isDisabled ? "optionbay-bg-transparent optionbay-text-[#a7aaad]" : "optionbay-bg-transparent optionbay-text-[#2c3338]"}`}
+                      className={`
+                        optionbay-px-3 optionbay-py-1.5 optionbay-flex optionbay-items-center 
+                        optionbay-justify-between optionbay-text-[13px] optionbay-m-0 
+                        ${
+                          isDisabled
+                            ? "optionbay-cursor-not-allowed"
+                            : "optionbay-cursor-pointer"
+                        } 
+                        ${
+                          isHighlighted
+                            ? `optionbay-bg-[#2271b1] optionbay-text-white ${classNames?.optionHighlighted || ""}`
+                            : isDisabled
+                            ? "optionbay-bg-transparent optionbay-text-[#a7aaad]"
+                            : `optionbay-bg-transparent optionbay-text-[#2c3338]`
+                        } 
+                        ${isSelected ? classNames?.optionSelected || "" : ""}
+                        ${classNames?.option || ""}
+                      `.trim()}
                     >
                       <span
                         className="optionbay-flex optionbay-items-center optionbay-gap-2 optionbay-overflow-hidden optionbay-text-ellipsis optionbay-whitespace-nowrap"
@@ -383,7 +440,11 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
         )}
       </div>
 
-      {description && <p className="description optionbay-mt-1">{description}</p>}
+      {description && (
+        <p className={`description optionbay-mt-1 ${classNames?.description || ""}`.trim()}>
+          {description}
+        </p>
+      )}
 
       {/* Portal Tooltip or absolute Tooltip for variants */}
       {tooltipState?.visible && (

@@ -459,14 +459,17 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
           {/* Body */}
           {!isMinimized && (
             <div className="optionbay-p-[20px]">
-              <table className="form-table !optionbay-m-0 [&_th]:!optionbay-w-[150px] [&_th]:!optionbay-p-[10px_10px_10px_0] [&_th]:!optionbay-font-medium [&_th]:!optionbay-text-[#50575e] [&_td]:!optionbay-py-[10px] [&_td]:!optionbay-px-0">
-                <tbody>
-                  {/* Type */}
-                  <tr>
-                    <th scope="row">{__("Field Type", "optionbay")}</th>
-                    <td>
+              <ClassicSettingsTable
+                className=""
+                fields={[
+                  {
+                    label: __("Field Type", "optionbay"),
+                    render: () => (
                       <ClassicSelect
                         value={field.type}
+                        classNames={{
+                          innerContainer: "!optionbay-w-[120px]"
+                        }}
                         onChange={(val) => {
                           const newType = String(val);
                           const defaults = getDefaultField(newType);
@@ -487,29 +490,27 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                           label: ft.label,
                         }))}
                       />
-                    </td>
-                  </tr>
-
-                  {/* Label */}
-                  <tr>
-                    <th scope="row">{__("Label", "optionbay")}</th>
-                    <td>
-                      <ClassicInput
-                        size="regular"
-                        value={field.label}
-                        onChange={(e) => update({ label: e.target.value })}
-                        placeholder={__("Enter field label", "optionbay")}
-                      />
-                      <FormError
-                        message={state.errors?.[`schema.${index}.label`]}
-                      />
-                    </td>
-                  </tr>
-
-                  {/* Description */}
-                  <tr>
-                    <th scope="row">{__("Description", "optionbay")}</th>
-                    <td>
+                    ),
+                  },
+                  {
+                    label: __("Label", "optionbay"),
+                    render: () => (
+                      <>
+                        <ClassicInput
+                          size="regular"
+                          value={field.label}
+                          onChange={(e) => update({ label: e.target.value })}
+                          placeholder={__("Enter field label", "optionbay")}
+                        />
+                        <FormError
+                          message={state.errors?.[`schema.${index}.label`]}
+                        />
+                      </>
+                    ),
+                  },
+                  {
+                    label: __("Description", "optionbay"),
+                    render: () => (
                       <textarea
                         className="large-text optionbay-p-1.5"
                         rows={2}
@@ -522,213 +523,219 @@ function FieldRow({ field, index }: { field: FieldDefinition; index: number }) {
                           "optionbay",
                         )}
                       />
-                    </td>
-                  </tr>
-
-                  {/* Required */}
-                  <tr>
-                    <th scope="row">{__("Validation", "optionbay")}</th>
-                    <td>
+                    ),
+                  },
+                  {
+                    label: __("Validation", "optionbay"),
+                    render: () => (
                       <ClassicCheckbox
                         label={__("Required Field", "optionbay")}
                         checked={field.required}
                         onChange={(checked) => update({ required: checked })}
                       />
-                    </td>
-                  </tr>
-
-                  {/* Placeholder (text/textarea/number) */}
-                  {["text", "textarea", "number"].includes(field.type) && (
-                    <tr>
-                      <th scope="row">{__("Placeholder", "optionbay")}</th>
-                      <td>
-                        <ClassicInput
-                          size="regular"
-                          value={field.placeholder}
-                          onChange={(e) =>
-                            update({ placeholder: e.target.value })
-                          }
-                          placeholder={__(
-                            "Optional placeholder text",
-                            "optionbay",
-                          )}
-                        />
-                      </td>
-                    </tr>
-                  )}
-
-                  {/* Pricing (for field-level pricing on non-option fields) */}
-                  {!hasOptions && (
-                    <>
-                      <tr>
-                        <th scope="row">{__("Pricing Logic", "optionbay")}</th>
-                        <td>
-                          <ClassicSelect
-                            value={field.price_type}
-                            onChange={(val) =>
-                              update({ price_type: String(val) })
-                            }
-                            options={PRICE_TYPES.map((pt) => ({
-                              value: pt.value,
-                              label: pt.label,
-                            }))}
-                          />
-                        </td>
-                      </tr>
-                      {field.price_type !== "none" && (
-                        <tr>
-                          <th scope="row">{__("Price Amount", "optionbay")}</th>
-                          <td>
-                            <ClassicInput
-                              type="number"
-                              size="small"
-                              value={field.price || ""}
-                              onChange={(e) =>
-                                update({
-                                  price: parseFloat(e.target.value) || 0,
-                                })
-                              }
-                              step="0.01"
-                              placeholder="0.00"
-                            />
-                          </td>
-                        </tr>
-                      )}
-                    </>
-                  )}
-
-                  {/* Min/Max for text */}
-                  {["text", "textarea"].includes(field.type) && (
-                    <tr>
-                      <th scope="row">{__("Restrictions", "optionbay")}</th>
-                      <td className="optionbay-flex optionbay-gap-2.5 optionbay-items-center">
-                        <label className="optionbay-text-xs">
-                          {__("Min Length:", "optionbay")}{" "}
-                          <ClassicInput
-                            type="number"
-                            size="small"
-                            value={field.min_length || ""}
-                            onChange={(e) =>
-                              update({
-                                min_length: parseInt(e.target.value) || 0,
-                              })
-                            }
-                            min={0}
-                          />
-                        </label>
-                        <label className="optionbay-text-xs">
-                          {__("Max Length:", "optionbay")}{" "}
-                          <ClassicInput
-                            type="number"
-                            size="small"
-                            value={field.max_length || ""}
-                            onChange={(e) =>
-                              update({
-                                max_length: parseInt(e.target.value) || 0,
-                              })
-                            }
-                            min={0}
-                          />
-                        </label>
-                      </td>
-                    </tr>
-                  )}
-
-                  {/* Min/Max/Step for number */}
-                  {field.type === "number" && (
-                    <tr>
-                      <th scope="row">{__("Restrictions", "optionbay")}</th>
-                      <td>
-                        <div className="optionbay-flex optionbay-gap-2.5 optionbay-items-center optionbay-mb-2">
-                          <label className="optionbay-text-xs">
-                            {__("Min:", "optionbay")}{" "}
-                            <ClassicInput
-                              type="number"
-                              size="small"
-                              value={field.min_value ?? ""}
-                              onChange={(e) =>
-                                update({
-                                  min_value: parseFloat(e.target.value) || 0,
-                                })
-                              }
-                            />
-                          </label>
-                          <label className="optionbay-text-xs">
-                            {__("Max:", "optionbay")}{" "}
-                            <ClassicInput
-                              type="number"
-                              size="small"
-                              value={field.max_value ?? ""}
-                              onChange={(e) =>
-                                update({
-                                  max_value: parseFloat(e.target.value) || 0,
-                                })
-                              }
-                            />
-                          </label>
-                        </div>
-                        <label className="optionbay-text-xs">
-                          {__("Step Value:", "optionbay")}{" "}
-                          <ClassicInput
-                            type="number"
-                            size="small"
-                            value={field.step ?? ""}
-                            onChange={(e) =>
-                              update({ step: parseFloat(e.target.value) || 1 })
-                            }
-                            step="0.01"
-                          />
-                        </label>
-                      </td>
-                    </tr>
-                  )}
-
-                  {/* File settings */}
-                  {field.type === "file" && (
-                    <>
-                      <tr>
-                        <th scope="row">
-                          {__("File Restrictions", "optionbay")}
-                        </th>
-                        <td>
-                          <label className="optionbay-block optionbay-mb-2">
-                            <span className="optionbay-text-xs optionbay-block">
-                              {__(
-                                "Allowed Extensions (comma separated):",
-                                "optionbay",
-                              )}
-                            </span>
+                    ),
+                  },
+                  ...(["text", "textarea", "number"].includes(field.type)
+                    ? [
+                        {
+                          label: __("Placeholder", "optionbay"),
+                          render: () => (
                             <ClassicInput
                               size="regular"
-                              value={field.allowed_types || ""}
+                              value={field.placeholder}
                               onChange={(e) =>
-                                update({ allowed_types: e.target.value })
+                                update({ placeholder: e.target.value })
                               }
-                              placeholder=".jpg,.png,.pdf"
+                              placeholder={__(
+                                "Optional placeholder text",
+                                "optionbay",
+                              )}
                             />
-                          </label>
-                          <label className="optionbay-block">
-                            <span className="optionbay-text-xs optionbay-block">
-                              {__("Max File Size (MB):", "optionbay")}
-                            </span>
-                            <ClassicInput
-                              type="number"
-                              size="small"
-                              value={field.max_file_size || ""}
-                              onChange={(e) =>
-                                update({
-                                  max_file_size: parseInt(e.target.value) || 5,
-                                })
+                          ),
+                        },
+                      ]
+                    : []),
+                  ...(!hasOptions
+                    ? [
+                        {
+                          label: __("Pricing Logic", "optionbay"),
+                          render: () => (
+                            <ClassicSelect
+                              value={field.price_type}
+                              onChange={(val) =>
+                                update({ price_type: String(val) })
                               }
-                              min={1}
+                              options={PRICE_TYPES.map((pt) => ({
+                                value: pt.value,
+                                label: pt.label,
+                              }))}
                             />
-                          </label>
-                        </td>
-                      </tr>
-                    </>
-                  )}
-                </tbody>
-              </table>
+                          ),
+                        },
+                        ...(field.price_type !== "none"
+                          ? [
+                              {
+                                label: __("Price Amount", "optionbay"),
+                                render: () => (
+                                  <ClassicInput
+                                    type="number"
+                                    size="small"
+                                    value={field.price || ""}
+                                    onChange={(e) =>
+                                      update({
+                                        price: parseFloat(e.target.value) || 0,
+                                      })
+                                    }
+                                    step="0.01"
+                                    placeholder="0.00"
+                                  />
+                                ),
+                              },
+                            ]
+                          : []),
+                      ]
+                    : []),
+                  ...(["text", "textarea"].includes(field.type)
+                    ? [
+                        {
+                          label: __("Restrictions", "optionbay"),
+                          render: () => (
+                            <div className="optionbay-flex optionbay-gap-2.5 optionbay-items-center">
+                              <label className="optionbay-text-xs">
+                                {__("Min Length:", "optionbay")}{" "}
+                                <ClassicInput
+                                  type="number"
+                                  size="small"
+                                  value={field.min_length || ""}
+                                  onChange={(e) =>
+                                    update({
+                                      min_length: parseInt(e.target.value) || 0,
+                                    })
+                                  }
+                                  min={0}
+                                />
+                              </label>
+                              <label className="optionbay-text-xs">
+                                {__("Max Length:", "optionbay")}{" "}
+                                <ClassicInput
+                                  type="number"
+                                  size="small"
+                                  value={field.max_length || ""}
+                                  onChange={(e) =>
+                                    update({
+                                      max_length: parseInt(e.target.value) || 0,
+                                    })
+                                  }
+                                  min={0}
+                                />
+                              </label>
+                            </div>
+                          ),
+                        },
+                      ]
+                    : []),
+                  ...(field.type === "number"
+                    ? [
+                        {
+                          label: __("Restrictions", "optionbay"),
+                          render: () => (
+                            <>
+                              <div className="optionbay-flex optionbay-gap-2.5 optionbay-items-center optionbay-mb-2">
+                                <label className="optionbay-text-xs">
+                                  {__("Min:", "optionbay")}{" "}
+                                  <ClassicInput
+                                    type="number"
+                                    size="small"
+                                    value={field.min_value ?? ""}
+                                    onChange={(e) =>
+                                      update({
+                                        min_value:
+                                          parseFloat(e.target.value) || 0,
+                                      })
+                                    }
+                                  />
+                                </label>
+                                <label className="optionbay-text-xs">
+                                  {__("Max:", "optionbay")}{" "}
+                                  <ClassicInput
+                                    type="number"
+                                    size="small"
+                                    value={field.max_value ?? ""}
+                                    onChange={(e) =>
+                                      update({
+                                        max_value:
+                                          parseFloat(e.target.value) || 0,
+                                      })
+                                    }
+                                  />
+                                </label>
+                              </div>
+                              <label className="optionbay-text-xs">
+                                {__("Step Value:", "optionbay")}{" "}
+                                <ClassicInput
+                                  type="number"
+                                  size="small"
+                                  value={field.step ?? ""}
+                                  onChange={(e) =>
+                                    update({
+                                      step: parseFloat(e.target.value) || 1,
+                                    })
+                                  }
+                                  step="0.01"
+                                />
+                              </label>
+                            </>
+                          ),
+                        },
+                      ]
+                    : []),
+                  ...(field.type === "file"
+                    ? [
+                        {
+                          label: __("File Restrictions", "optionbay"),
+                          render: () => (
+                            <>
+                              <label className="optionbay-block optionbay-mb-2">
+                                <span className="optionbay-text-xs optionbay-block">
+                                  {__(
+                                    "Allowed Extensions (comma separated):",
+                                    "optionbay",
+                                  )}
+                                </span>
+                                <ClassicInput
+                                  size="regular"
+                                  value={field.allowed_types || ""}
+                                  onChange={(e) =>
+                                    update({ allowed_types: e.target.value })
+                                  }
+                                  placeholder=".jpg,.png,.pdf"
+                                />
+                              </label>
+                              <label className="optionbay-block">
+                                <span className="optionbay-text-xs optionbay-block">
+                                  {__("Max File Size (MB):", "optionbay")}
+                                </span>
+                                <ClassicInput
+                                  type="number"
+                                  size="small"
+                                  value={field.max_file_size || ""}
+                                  onChange={(e) =>
+                                    update({
+                                      max_file_size:
+                                        parseInt(e.target.value) || 5,
+                                    })
+                                  }
+                                  min={1}
+                                />
+                              </label>
+                            </>
+                          ),
+                        },
+                      ]
+                    : []),
+                ]}
+              />
+
 
               {/* Options editor for select/radio/checkbox */}
               {hasOptions && field.options && (
