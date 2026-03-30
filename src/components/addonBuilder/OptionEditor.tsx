@@ -12,19 +12,27 @@ import { FormError } from "./FormError";
 interface OptionEditorProps {
   fieldId: string;
   options: FieldOption[];
+  hideLabel?: boolean;
 }
 
 export const OptionEditor: React.FC<OptionEditorProps> = ({
   fieldId,
   options,
+  hideLabel = false,
 }) => {
   const { state, dispatch } = useAddonContext();
 
   return (
-    <div className="optionbay-flex optionbay-flex-col optionbay-gap-2.5 optionbay-mt-4">
-      <label className="optionbay-font-semibold optionbay-block">
-        {__("Choices", "optionbay")}
-      </label>
+    <div
+      className={`optionbay-flex optionbay-flex-col optionbay-gap-2.5 ${
+        !hideLabel ? "optionbay-mt-4" : ""
+      }`}
+    >
+      {!hideLabel && (
+        <label className="optionbay-font-semibold optionbay-block">
+          {__("Choices", "optionbay")}
+        </label>
+      )}
       {options.map((opt, idx) => (
         <div
           key={idx}

@@ -12,11 +12,13 @@ import { FormError } from "./FormError";
 interface ConditionEditorProps {
   field: FieldDefinition;
   index: number;
+  hideLabel?: boolean;
 }
 
 export const ConditionEditor: React.FC<ConditionEditorProps> = ({
   field,
   index,
+  hideLabel = false,
 }) => {
   const { state, dispatch } = useAddonContext();
   const siblingFields = state.schema.filter((f) => f.id !== field.id);
@@ -34,15 +36,19 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
 
   if (siblingFields.length === 0) {
     return (
-      <p className="optionbay-text-[#666] optionbay-italic optionbay-mt-4">
+      <p
+        className={`optionbay-text-[#666] optionbay-italic ${
+          !hideLabel ? "optionbay-mt-4" : ""
+        }`}
+      >
         {__("Add more fields to set up conditional logic.", "optionbay")}
       </p>
     );
   }
 
   return (
-    <div className="optionbay-mt-[15px] optionbay-p-[15px] optionbay-bg-[#f0f6fb] optionbay-border optionbay-border-[#c8d7e1] optionbay-rounded-md optionbay-flex optionbay-flex-col optionbay-gap-3">
-      <div>
+    <>
+      <div className="optionbay-mt-[5px]">
         <ClassicCheckbox
           label={__("Enable Conditional Logic", "optionbay")}
           checked={conditions.status === "active"}
@@ -56,7 +62,9 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
       </div>
 
       {conditions.status === "active" && (
-        <>
+        <div
+          className={`optionbay-mt-[15px]  optionbay-p-[15px] optionbay-bg-[#f0f6fb] optionbay-border optionbay-border-[#c8d7e1] optionbay-rounded-md optionbay-flex optionbay-flex-col optionbay-gap-3 optionbay-transition-all optionbay-duration-300 optionbay-ease-in-out`}
+        >
           <div className="optionbay-flex optionbay-gap-2 optionbay-items-center">
             <div className="optionbay-flex-col">
               <ClassicSelect
@@ -113,7 +121,10 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
                     }}
                     className="optionbay-flex-1"
                     options={[
-                      { value: "", label: __("Select field...", "optionbay") },
+                      {
+                        value: "",
+                        label: __("Select field...", "optionbay"),
+                      },
                       ...siblingFields.map((sf) => ({
                         value: sf.id,
                         label: sf.label || sf.id,
@@ -142,7 +153,10 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
                       { value: "!=", label: __("not equals", "optionbay") },
                       { value: ">", label: __("greater than", "optionbay") },
                       { value: "<", label: __("less than", "optionbay") },
-                      { value: "contains", label: __("contains", "optionbay") },
+                      {
+                        value: "contains",
+                        label: __("contains", "optionbay"),
+                      },
                       { value: "empty", label: __("is empty", "optionbay") },
                       {
                         value: "not_empty",
@@ -209,8 +223,8 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
           >
             + {__("Add Rule", "optionbay")}
           </ClassicButton>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };

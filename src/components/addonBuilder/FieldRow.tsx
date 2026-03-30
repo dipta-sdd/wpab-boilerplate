@@ -522,16 +522,32 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                         },
                       ]
                     : []),
+                  ...(hasOptions && field.options
+                    ? [
+                        {
+                          label: __("Choices", "optionbay"),
+                          render: () => (
+                            <OptionEditor
+                              fieldId={field.id}
+                              options={field.options!}
+                              hideLabel
+                            />
+                          ),
+                        },
+                      ]
+                    : []),
+                  {
+                    label: __("Conditional Logic", "optionbay"),
+                    render: () => (
+                      <ConditionEditor
+                        field={field}
+                        index={index}
+                        hideLabel
+                      />
+                    ),
+                  },
                 ]}
               />
-
-              {/* Options editor for select/radio/checkbox */}
-              {hasOptions && field.options && (
-                <OptionEditor fieldId={field.id} options={field.options} />
-              )}
-
-              {/* Conditional Logic */}
-              <ConditionEditor field={field} index={index} />
             </div>
           )}
         </div>
