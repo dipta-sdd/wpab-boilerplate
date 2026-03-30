@@ -11,6 +11,7 @@ use WP_Error;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
+use Rakit\Validation\Validator;
 
 /**
  * The parent class of all API controllers for this plugin.
@@ -166,5 +167,43 @@ class ApiController extends WP_REST_Controller
 		}
 
 		return true;
+	}
+
+	/**
+	 * Laravel-style request validation.
+	 *
+	 * @since 1.0.0
+	 * @param WP_REST_Request $request The incoming WP API request.
+	 * @param array           $rules   The validation rules.
+	 * @return array|WP_Error Returns the validated data array, or a WP_Error if validation fails.
+	 */
+	protected function validate(WP_REST_Request $request, array $rules)
+	{
+		$validator = new Validator();
+
+		// Get all parameters (GET, POST, JSON body)
+		$inputs = $request->get_params();
+
+		// Run the validation
+		$validation = $validator->make($inputs, $rules);
+		$validation->validate();
+
+		if ($validation->fails()) {
+			// Get the first error message for each field
+			$errors = $validation->errors()->firstOfAll();
+
+			// Return a standard WordPress REST error with a 422 Unprocessable Entity status
+			return new WP_Error(
+				'validation_failed',
+				__('Invalid data provided.', 'optionbay'),
+				array(
+					'status' => 422,
+					'errors' => $errors,
+				)
+			);
+		}
+
+		// Return only the safely validated data!
+		return $validation->getValidData();
 	}
 }

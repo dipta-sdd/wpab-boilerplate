@@ -253,22 +253,26 @@ class AddonGroupController extends ApiController
 	public function create_item($request)
 	{
 		optionbay_log('AddonGroupController: Creating new item (POST /groups).', 'INFO');
-		$body = $request->get_json_params();
 
-		$title = sanitize_text_field($body['title'] ?? __('Untitled Option Group', 'optionbay'));
-		$schema = $body['schema'] ?? array();
-		$settings = $body['settings'] ?? AddonGroup::get_default_settings();
-		$assignments = $body['assignments'] ?? array();
-		$status = sanitize_text_field($body['status'] ?? 'publish');
+		$validated = $this->validate($request, array(
+			'title'              => 'required|min:3|max:255',
+			'status'             => 'required|in:publish,draft',
+			'schema'             => 'required|array',
+			'settings'           => 'required|array',
+			'assignments'        => 'array',
+			'assignments.*.target_type' => 'required|in:product,category,tag,global',
+			'assignments.*.target_id'   => 'required|numeric',
+		));
 
-		// Validate schema is an array
-		if (!is_array($schema)) {
-			return new WP_Error(
-				'invalid_schema',
-				__('Schema must be an array of field definitions.', 'optionbay'),
-				array('status' => 400)
-			);
+		if (is_wp_error($validated)) {
+			return $validated;
 		}
+
+		$title       = $validated['title'];
+		$schema      = $validated['schema'];
+		$settings    = $validated['settings'];
+		$assignments = $validated['assignments'] ?? array();
+		$status      = $validated['status'];
 
 		// Sanitize the schema fields
 		$schema = $this->sanitize_schema($schema);
@@ -277,7 +281,7 @@ class AddonGroupController extends ApiController
 		$post_id = wp_insert_post(array(
 			'post_type'   => AddonGroup::POST_TYPE,
 			'post_title'  => $title,
-			'post_status' => in_array($status, array('publish', 'draft'), true) ? $status : 'publish',
+			'post_status' => $status,
 		), true);
 
 		if (is_wp_error($post_id)) {
@@ -293,7 +297,7 @@ class AddonGroupController extends ApiController
 		update_post_meta($post_id, AddonGroup::META_SETTINGS, wp_json_encode($settings));
 
 		// Sync assignments
-		if (!empty($assignments) && is_array($assignments)) {
+		if (!empty($assignments)) {
 			DbManager::get_instance()->sync_assignments($post_id, $assignments);
 		}
 
@@ -318,7 +322,7 @@ class AddonGroupController extends ApiController
 	{
 		$id = absint($request->get_param('id'));
 		optionbay_log("AddonGroupController: Updating item ID {$id} (PUT /groups/{$id}).", 'INFO');
-		
+
 		$post = get_post($id);
 
 		if (!$post || $post->post_type !== AddonGroup::POST_TYPE) {
@@ -329,41 +333,50 @@ class AddonGroupController extends ApiController
 			);
 		}
 
-		$body = $request->get_json_params();
+		$validated = $this->validate($request, array(
+			'title'       => 'min:3|max:255',
+			'status'      => 'in:publish,draft',
+			'schema'      => 'array',
+			'settings'    => 'array',
+			'assignments' => 'array',
+			'assignments.*.target_type' => 'required|in:product,category,tag,global',
+			'assignments.*.target_id'   => 'required|numeric',
+		));
+
+		if (is_wp_error($validated)) {
+			return $validated;
+		}
 
 		// Update title if provided
-		if (isset($body['title'])) {
+		if (isset($validated['title'])) {
 			wp_update_post(array(
 				'ID'         => $id,
-				'post_title' => sanitize_text_field($body['title']),
+				'post_title' => $validated['title'],
 			));
 		}
 
 		// Update status if provided
-		if (isset($body['status'])) {
-			$new_status = sanitize_text_field($body['status']);
-			if (in_array($new_status, array('publish', 'draft'), true)) {
-				wp_update_post(array(
-					'ID'          => $id,
-					'post_status' => $new_status,
-				));
-			}
+		if (isset($validated['status'])) {
+			wp_update_post(array(
+				'ID'          => $id,
+				'post_status' => $validated['status'],
+			));
 		}
 
 		// Update schema if provided
-		if (isset($body['schema']) && is_array($body['schema'])) {
-			$schema = $this->sanitize_schema($body['schema']);
+		if (isset($validated['schema'])) {
+			$schema = $this->sanitize_schema($validated['schema']);
 			update_post_meta($id, AddonGroup::META_SCHEMA, wp_json_encode($schema));
 		}
 
 		// Update settings if provided
-		if (isset($body['settings'])) {
-			update_post_meta($id, AddonGroup::META_SETTINGS, wp_json_encode($body['settings']));
+		if (isset($validated['settings'])) {
+			update_post_meta($id, AddonGroup::META_SETTINGS, wp_json_encode($validated['settings']));
 		}
 
 		// Sync assignments (delete & re-insert)
-		if (isset($body['assignments']) && is_array($body['assignments'])) {
-			DbManager::get_instance()->sync_assignments($id, $body['assignments']);
+		if (isset($validated['assignments'])) {
+			DbManager::get_instance()->sync_assignments($id, $validated['assignments']);
 		}
 
 		// Invalidate cache

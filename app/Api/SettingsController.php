@@ -104,13 +104,20 @@ class SettingsController extends ApiController
     public function update_settings($request)
     {
         optionbay_log('SettingsController: Updating plugin settings.', 'INFO');
-        $body = $request->get_json_params();
         
+        $validated = $this->validate($request, array(
+            'global_enableFeature'          => 'required|boolean',
+            'global_exampleText'            => 'required|min:1|max:255',
+            'advanced_deleteAllOnUninstall' => 'required|boolean',
+            'debug_enableMode'              => 'required|boolean',
+        ));
+
+        if (is_wp_error($validated)) {
+            return $validated;
+        }
+
         $settings_instance = Settings::get_instance();
-        // Since Settings class sanitizes input via sanitize_settings_object, 
-        // we can pass the body directly or re-sanitize it.
-        $sanitized_body = $settings_instance->sanitize_settings_object($body);
-        $settings_instance->update_settings($sanitized_body);
+        $settings_instance->update_settings($validated);
 
         return new WP_REST_Response(array(
             'success' => true,
