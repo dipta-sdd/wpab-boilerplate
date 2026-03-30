@@ -173,11 +173,13 @@ class ApiController extends WP_REST_Controller
 	 * Laravel-style request validation.
 	 *
 	 * @since 1.0.0
-	 * @param WP_REST_Request $request The incoming WP API request.
-	 * @param array           $rules   The validation rules.
+	 * @param WP_REST_Request $request  The incoming WP API request.
+	 * @param array           $rules    The validation rules.
+	 * @param array           $messages Optional custom error messages.
+	 * @param array           $aliases  Optional custom attribute aliases.
 	 * @return array|WP_Error Returns the validated data array, or a WP_Error if validation fails.
 	 */
-	protected function validate(WP_REST_Request $request, array $rules)
+	protected function validate(WP_REST_Request $request, array $rules, array $messages = [], array $aliases = [])
 	{
 		$validator = new Validator();
 
@@ -185,7 +187,12 @@ class ApiController extends WP_REST_Controller
 		$inputs = $request->get_params();
 
 		// Run the validation
-		$validation = $validator->make($inputs, $rules);
+		$validation = $validator->make($inputs, $rules, $messages);
+		
+		if (!empty($aliases)) {
+			$validation->setAliases($aliases);
+		}
+
 		$validation->validate();
 
 		if ($validation->fails()) {
