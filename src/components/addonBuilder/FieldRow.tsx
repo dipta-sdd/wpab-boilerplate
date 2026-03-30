@@ -225,28 +225,40 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                   {
                     label: __("Description", "optionbay"),
                     render: () => (
-                      <textarea
-                        className="large-text optionbay-p-1.5"
-                        rows={2}
-                        value={field.description}
-                        onChange={(e) =>
-                          update({ description: e.target.value })
-                        }
-                        placeholder={__(
-                          "Help text shown below the field",
-                          "optionbay",
-                        )}
-                      />
+                      <>
+                        <textarea
+                          className="large-text optionbay-p-1.5"
+                          rows={2}
+                          value={field.description}
+                          onChange={(e) =>
+                            update({ description: e.target.value })
+                          }
+                          placeholder={__(
+                            "Help text shown below the field",
+                            "optionbay",
+                          )}
+                        />
+                        <FormError
+                          message={
+                            state.errors?.[`schema.${index}.description`]
+                          }
+                        />
+                      </>
                     ),
                   },
                   {
                     label: __("Validation", "optionbay"),
                     render: () => (
-                      <ClassicCheckbox
-                        label={__("Required Field", "optionbay")}
-                        checked={field.required}
-                        onChange={(checked) => update({ required: checked })}
-                      />
+                      <>
+                        <ClassicCheckbox
+                          label={__("Required Field", "optionbay")}
+                          checked={field.required}
+                          onChange={(checked) => update({ required: checked })}
+                        />
+                        <FormError
+                          message={state.errors?.[`schema.${index}.required`]}
+                        />
+                      </>
                     ),
                   },
                   ...(["text", "textarea", "number"].includes(field.type)
@@ -254,17 +266,24 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                         {
                           label: __("Placeholder", "optionbay"),
                           render: () => (
-                            <ClassicInput
-                              size="regular"
-                              value={field.placeholder}
-                              onChange={(e) =>
-                                update({ placeholder: e.target.value })
-                              }
-                              placeholder={__(
-                                "Optional placeholder text",
-                                "optionbay",
-                              )}
-                            />
+                            <>
+                              <ClassicInput
+                                size="regular"
+                                value={field.placeholder}
+                                onChange={(e) =>
+                                  update({ placeholder: e.target.value })
+                                }
+                                placeholder={__(
+                                  "Optional placeholder text",
+                                  "optionbay",
+                                )}
+                              />
+                              <FormError
+                                message={
+                                  state.errors?.[`schema.${index}.placeholder`]
+                                }
+                              />
+                            </>
                           ),
                         },
                       ]
@@ -274,16 +293,23 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                         {
                           label: __("Pricing Logic", "optionbay"),
                           render: () => (
-                            <ClassicSelect
-                              value={field.price_type}
-                              onChange={(val) =>
-                                update({ price_type: String(val) })
-                              }
-                              options={PRICE_TYPES.map((pt) => ({
-                                value: pt.value,
-                                label: pt.label,
-                              }))}
-                            />
+                            <>
+                              <ClassicSelect
+                                value={field.price_type}
+                                onChange={(val) =>
+                                  update({ price_type: String(val) })
+                                }
+                                options={PRICE_TYPES.map((pt) => ({
+                                  value: pt.value,
+                                  label: pt.label,
+                                }))}
+                              />
+                              <FormError
+                                message={
+                                  state.errors?.[`schema.${index}.price_type`]
+                                }
+                              />
+                            </>
                           ),
                         },
                         ...(field.price_type !== "none"
@@ -291,18 +317,26 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                               {
                                 label: __("Price Amount", "optionbay"),
                                 render: () => (
-                                  <ClassicInput
-                                    type="number"
-                                    size="small"
-                                    value={field.price || ""}
-                                    onChange={(e) =>
-                                      update({
-                                        price: parseFloat(e.target.value) || 0,
-                                      })
-                                    }
-                                    step="0.01"
-                                    placeholder="0.00"
-                                  />
+                                  <>
+                                    <ClassicInput
+                                      type="number"
+                                      size="small"
+                                      value={field.price || ""}
+                                      onChange={(e) =>
+                                        update({
+                                          price:
+                                            parseFloat(e.target.value) || 0,
+                                        })
+                                      }
+                                      step="0.01"
+                                      placeholder="0.00"
+                                    />
+                                    <FormError
+                                      message={
+                                        state.errors?.[`schema.${index}.price`]
+                                      }
+                                    />
+                                  </>
                                 ),
                               },
                             ]
@@ -314,35 +348,49 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                         {
                           label: __("Restrictions", "optionbay"),
                           render: () => (
-                            <div className="optionbay-flex optionbay-gap-2.5 optionbay-items-center">
-                              <label className="optionbay-text-xs">
-                                {__("Min Length:", "optionbay")}{" "}
-                                <ClassicInput
-                                  type="number"
-                                  size="small"
-                                  value={field.min_length || ""}
-                                  onChange={(e) =>
-                                    update({
-                                      min_length: parseInt(e.target.value) || 0,
-                                    })
-                                  }
-                                  min={0}
-                                />
-                              </label>
-                              <label className="optionbay-text-xs">
-                                {__("Max Length:", "optionbay")}{" "}
-                                <ClassicInput
-                                  type="number"
-                                  size="small"
-                                  value={field.max_length || ""}
-                                  onChange={(e) =>
-                                    update({
-                                      max_length: parseInt(e.target.value) || 0,
-                                    })
-                                  }
-                                  min={0}
-                                />
-                              </label>
+                            <div className="optionbay-flex optionbay-flex-col optionbay-gap-1">
+                              <div className="optionbay-flex optionbay-gap-2.5 optionbay-items-center">
+                                <label className="optionbay-text-xs">
+                                  {__("Min Length:", "optionbay")}{" "}
+                                  <ClassicInput
+                                    type="number"
+                                    size="small"
+                                    value={field.min_length || ""}
+                                    onChange={(e) =>
+                                      update({
+                                        min_length:
+                                          parseInt(e.target.value) || 0,
+                                      })
+                                    }
+                                    min={0}
+                                  />
+                                </label>
+                                <label className="optionbay-text-xs">
+                                  {__("Max Length:", "optionbay")}{" "}
+                                  <ClassicInput
+                                    type="number"
+                                    size="small"
+                                    value={field.max_length || ""}
+                                    onChange={(e) =>
+                                      update({
+                                        max_length:
+                                          parseInt(e.target.value) || 0,
+                                      })
+                                    }
+                                    min={0}
+                                  />
+                                </label>
+                              </div>
+                              <FormError
+                                message={
+                                  state.errors?.[`schema.${index}.min_length`]
+                                }
+                              />
+                              <FormError
+                                message={
+                                  state.errors?.[`schema.${index}.max_length`]
+                                }
+                              />
                             </div>
                           ),
                         },
@@ -353,7 +401,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                         {
                           label: __("Restrictions", "optionbay"),
                           render: () => (
-                            <>
+                            <div className="optionbay-flex optionbay-flex-col optionbay-gap-1">
                               <div className="optionbay-flex optionbay-gap-2.5 optionbay-items-center optionbay-mb-2">
                                 <label className="optionbay-text-xs">
                                   {__("Min:", "optionbay")}{" "}
@@ -398,7 +446,20 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                                   step="0.01"
                                 />
                               </label>
-                            </>
+                              <FormError
+                                message={
+                                  state.errors?.[`schema.${index}.min_value`]
+                                }
+                              />
+                              <FormError
+                                message={
+                                  state.errors?.[`schema.${index}.max_value`]
+                                }
+                              />
+                              <FormError
+                                message={state.errors?.[`schema.${index}.step`]}
+                              />
+                            </div>
                           ),
                         },
                       ]
@@ -408,8 +469,8 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                         {
                           label: __("File Restrictions", "optionbay"),
                           render: () => (
-                            <>
-                              <label className="optionbay-block optionbay-mb-2">
+                            <div className="optionbay-flex optionbay-flex-col optionbay-gap-2">
+                              <label className="optionbay-block">
                                 <span className="optionbay-text-xs optionbay-block">
                                   {__(
                                     "Allowed Extensions (comma separated):",
@@ -423,6 +484,13 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                                     update({ allowed_types: e.target.value })
                                   }
                                   placeholder=".jpg,.png,.pdf"
+                                />
+                                <FormError
+                                  message={
+                                    state.errors?.[
+                                      `schema.${index}.allowed_types`
+                                    ]
+                                  }
                                 />
                               </label>
                               <label className="optionbay-block">
@@ -441,8 +509,15 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                                   }
                                   min={1}
                                 />
+                                <FormError
+                                  message={
+                                    state.errors?.[
+                                      `schema.${index}.max_file_size`
+                                    ]
+                                  }
+                                />
                               </label>
-                            </>
+                            </div>
                           ),
                         },
                       ]

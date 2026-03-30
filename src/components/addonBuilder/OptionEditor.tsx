@@ -59,40 +59,62 @@ export const OptionEditor: React.FC<OptionEditorProps> = ({
               }
             />
           </div>
-          <ClassicInput
-            type="number"
-            size="small"
-            placeholder={__("Price", "optionbay")}
-            value={opt.price || ""}
-            onChange={(e) =>
-              dispatch({
-                type: "UPDATE_OPTION",
-                payload: {
-                  fieldId,
-                  optionIndex: idx,
-                  updates: { price: parseFloat(e.target.value) || 0 },
-                },
-              })
-            }
-          />
-          <ClassicSelect
-            value={opt.price_type}
-            onChange={(val) =>
-              dispatch({
-                type: "UPDATE_OPTION",
-                payload: {
-                  fieldId,
-                  optionIndex: idx,
-                  updates: { price_type: String(val) },
-                },
-              })
-            }
-            options={PRICE_TYPES.map((pt) => ({
-              value: pt.value,
-              label: pt.label,
-            }))}
-            size="short"
-          />
+          <div className="optionbay-w-[80px]">
+            <ClassicInput
+              type="number"
+              size="small"
+              placeholder={__("Price", "optionbay")}
+              value={opt.price || ""}
+              onChange={(e) =>
+                dispatch({
+                  type: "UPDATE_OPTION",
+                  payload: {
+                    fieldId,
+                    optionIndex: idx,
+                    updates: { price: parseFloat(e.target.value) || 0 },
+                  },
+                })
+              }
+            />
+            <FormError
+              message={
+                state.errors?.[
+                  `schema.${state.schema.findIndex(
+                    (f) => f.id === fieldId,
+                  )}.options.${idx}.price`
+                ]
+              }
+            />
+          </div>
+          <div className="optionbay-w-[100px]">
+            <ClassicSelect
+              value={opt.price_type}
+              onChange={(val) =>
+                dispatch({
+                  type: "UPDATE_OPTION",
+                  payload: {
+                    fieldId,
+                    optionIndex: idx,
+                    updates: { price_type: String(val) },
+                  },
+                })
+              }
+              options={PRICE_TYPES.map((pt) => ({
+                value: pt.value,
+                label: pt.label,
+              }))}
+              size="short"
+            />
+            <FormError
+              message={
+                state.errors?.[
+                  `schema.${state.schema.findIndex(
+                    (f) => f.id === fieldId,
+                  )}.options.${idx}.price_type`
+                ]
+              }
+            />
+          </div>
           <button
             type="button"
             className="optionbay-text-[#b32d2e] hover:optionbay-text-[#d63638] optionbay-border-none optionbay-bg-transparent optionbay-cursor-pointer optionbay-text-[18px] optionbay-px-1"
