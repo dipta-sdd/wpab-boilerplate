@@ -10,6 +10,7 @@ import {
 } from "../store/AddonContext";
 import apiFetch from "../utils/apiFetch";
 import { addonGroupSchema } from "../utils/validation";
+import { flattenErrors } from "../utils/errorUtils";
 
 // Components
 import { BuilderHeader } from "../components/addonBuilder/BuilderHeader";
@@ -138,11 +139,20 @@ function BuilderInner() {
         }
       }
     } catch (err: any) {
-      dispatch({
-        type: "SET_ERROR",
-        payload:
-          err?.message || __("Failed to save option group.", "optionbay"),
-      });
+      if (err?.data?.status === 422 && err.data.errors) {
+        const flattened = flattenErrors(err.data.errors);
+        dispatch({ type: "SET_ERRORS", payload: flattened });
+        dispatch({
+          type: "SET_ERROR",
+          payload: __("Please fix the validation errors reported by the server.", "optionbay"),
+        });
+      } else {
+        dispatch({
+          type: "SET_ERROR",
+          payload:
+            err?.message || __("Failed to save option group.", "optionbay"),
+        });
+      }
     } finally {
       dispatch({ type: "SET_SAVING", payload: false });
     }

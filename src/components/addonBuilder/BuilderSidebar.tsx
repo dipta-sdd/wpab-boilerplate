@@ -3,6 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { ClassicButton, ClassicSelect, ClassicInput } from "../classics";
 import { useAddonContext, getDefaultField } from "../../store/AddonContext";
 import { FIELD_TYPES } from "./constants";
+import { FormError } from "./FormError";
 
 export const BuilderSidebar: React.FC = () => {
   const { state, dispatch } = useAddonContext();
@@ -62,6 +63,7 @@ export const BuilderSidebar: React.FC = () => {
               ]}
               size="regular"
             />
+            <FormError message={state.errors?.["settings.layout"]} />
           </div>
           <div className="optionbay-mb-1">
             <label className="optionbay-block optionbay-mb-1 optionbay-font-semibold">
@@ -79,6 +81,7 @@ export const BuilderSidebar: React.FC = () => {
               }
               className="optionbay-w-full"
             />
+            <FormError message={state.errors?.["settings.priority"]} />
           </div>
           <p className="description optionbay-mt-1 optionbay-mb-0">
             {__("Determines display order on product page.", "optionbay")}

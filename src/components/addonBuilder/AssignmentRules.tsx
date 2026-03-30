@@ -8,6 +8,7 @@ import {
 import { ClassicSettingsTable } from "../classics/ClassicSettingsTable";
 import { useAddonContext } from "../../store/AddonContext";
 import { renderProductOption } from "./utils";
+import { FormError } from "./FormError";
 
 interface AssignmentRulesProps {
   activeAssignmentType: "product" | "category" | "tag";
@@ -176,6 +177,8 @@ export const AssignmentRules: React.FC<AssignmentRulesProps> = ({
                         size="regular"
                       />
                     )}
+                    <FormError message={state.errors?.["assignments"]} />
+                    <FormError message={state.errors?.["assignments.0.target_id"]} />
                   </div>
                 ),
               },
