@@ -1,13 +1,11 @@
 import React from "react";
 import { __ } from "@wordpress/i18n";
-import {
-  ClassicInput,
-  ClassicSelect,
-  ClassicButton,
-} from "../classics";
+import { ClassicInput, ClassicSelect, ClassicButton } from "../classics";
 import { useAddonContext, FieldOption } from "../../store/AddonContext";
 import { PRICE_TYPES } from "./constants";
 import { FormError } from "./FormError";
+import { close, Icon } from "@wordpress/icons";
+import { CirclePlus, Delete } from "lucide-react";
 
 interface OptionEditorProps {
   fieldId: string;
@@ -67,34 +65,36 @@ export const OptionEditor: React.FC<OptionEditorProps> = ({
               }
             />
           </div>
-          <div className="optionbay-w-[80px]">
-            <ClassicInput
-              type="number"
-              size="small"
-              placeholder={__("Price", "optionbay")}
-              value={opt.price || ""}
-              onChange={(e) =>
-                dispatch({
-                  type: "UPDATE_OPTION",
-                  payload: {
-                    fieldId,
-                    optionIndex: idx,
-                    updates: { price: parseFloat(e.target.value) || 0 },
-                  },
-                })
-              }
-            />
-            <FormError
-              message={
-                state.errors?.[
-                  `schema.${state.schema.findIndex(
-                    (f) => f.id === fieldId,
-                  )}.options.${idx}.price`
-                ]
-              }
-            />
-          </div>
-          <div className="optionbay-w-[100px]">
+          {opt.price_type !== "none" && (
+            <div className="optionbay-w-[80px]">
+              <ClassicInput
+                type="number"
+                size="small"
+                placeholder={__("Price", "optionbay")}
+                value={opt.price || ""}
+                onChange={(e) =>
+                  dispatch({
+                    type: "UPDATE_OPTION",
+                    payload: {
+                      fieldId,
+                      optionIndex: idx,
+                      updates: { price: parseFloat(e.target.value) || 0 },
+                    },
+                  })
+                }
+              />
+              <FormError
+                message={
+                  state.errors?.[
+                    `schema.${state.schema.findIndex(
+                      (f) => f.id === fieldId,
+                    )}.options.${idx}.price`
+                  ]
+                }
+              />
+            </div>
+          )}
+          <div className="optionbay-w-[150px]">
             <ClassicSelect
               value={opt.price_type}
               onChange={(val) =>
@@ -123,9 +123,8 @@ export const OptionEditor: React.FC<OptionEditorProps> = ({
               }
             />
           </div>
-          <button
-            type="button"
-            className="optionbay-text-[#b32d2e] hover:optionbay-text-[#d63638] optionbay-border-none optionbay-bg-transparent optionbay-cursor-pointer optionbay-text-[18px] optionbay-px-1"
+          <ClassicButton
+            variant="link-delete"
             onClick={() =>
               dispatch({
                 type: "REMOVE_OPTION",
@@ -134,30 +133,32 @@ export const OptionEditor: React.FC<OptionEditorProps> = ({
             }
             title={__("Remove choice", "optionbay")}
           >
-            ×
-          </button>
+            <Delete className="optionbay-size-5" />
+          </ClassicButton>
         </div>
       ))}
-      <ClassicButton
-        variant="secondary"
-        onClick={() =>
-          dispatch({
-            type: "ADD_OPTION",
-            payload: {
-              fieldId,
-              option: {
-                label: "",
-                value: "",
-                price_type: "flat",
-                price: 0,
-                weight: 0,
+      <div className="optionbay-flex optionbay-justify-end">
+        <ClassicButton
+          variant="secondary"
+          onClick={() =>
+            dispatch({
+              type: "ADD_OPTION",
+              payload: {
+                fieldId,
+                option: {
+                  label: "",
+                  value: "",
+                  price_type: "none",
+                  price: 0,
+                  weight: 0,
+                },
               },
-            },
-          })
-        }
-      >
-        + {__("Add Choice", "optionbay")}
-      </ClassicButton>
+            })
+          }
+        >
+          <CirclePlus className="optionbay-size-4" /> {__("Add Choice", "optionbay")}
+        </ClassicButton>
+      </div>
       <FormError
         message={
           state.errors?.[

@@ -8,6 +8,8 @@ import {
 } from "../classics";
 import { useAddonContext, FieldDefinition } from "../../store/AddonContext";
 import { FormError } from "./FormError";
+import { close, Icon } from "@wordpress/icons";
+import { CirclePlus, Delete } from "lucide-react";
 
 interface ConditionEditorProps {
   field: FieldDefinition;
@@ -48,22 +50,39 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
 
   return (
     <>
-      <div className="optionbay-mt-[5px]">
-        <ClassicCheckbox
-          label={__("Enable Conditional Logic", "optionbay")}
-          checked={conditions.status === "active"}
-          onChange={(checked) =>
-            updateConditions({ status: checked ? "active" : "inactive" })
-          }
-        />
-        <FormError
-          message={state.errors?.[`schema.${index}.conditions.rules`]}
-        />
+      <div className="optionbay-flex optionbay-justify-between optionbay-mt-[5px]">
+        <div className="">
+          <ClassicCheckbox
+            label={__("Enable Conditional Logic", "optionbay")}
+            checked={conditions.status === "active"}
+            onChange={(checked) =>
+              updateConditions({ status: checked ? "active" : "inactive" })
+            }
+          />
+          <FormError
+            message={state.errors?.[`schema.${index}.conditions.rules`]}
+          />
+        </div>
+        {conditions.status === "active" ? (
+          <ClassicButton
+            variant="secondary"
+            onClick={() => {
+              const rules = [
+                ...(conditions.rules || []),
+                { target_field_id: "", operator: "==", value: "" },
+              ];
+              updateConditions({ rules });
+            }}
+          >
+            <CirclePlus className="optionbay-size-4" />{" "}
+            {__("Add Rule", "optionbay")}
+          </ClassicButton>
+        ) : null}
       </div>
 
-      {conditions.status === "active" && (
+      {conditions.status === "active" ? (
         <div
-          className={`optionbay-mt-[15px]  optionbay-p-[15px] optionbay-bg-[#f0f6fb] optionbay-border optionbay-border-[#c8d7e1] optionbay-rounded-md optionbay-flex optionbay-flex-col optionbay-gap-3 optionbay-transition-all optionbay-duration-300 optionbay-ease-in-out`}
+          className={`optionbay-mt-2 optionbay-flex optionbay-flex-col optionbay-gap-3 optionbay-transition-all optionbay-duration-300 optionbay-ease-in-out`}
         >
           <div className="optionbay-flex optionbay-gap-2 optionbay-items-center">
             <div className="optionbay-flex-col">
@@ -105,7 +124,7 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
           {(conditions.rules || []).map((rule, idx) => (
             <div
               key={idx}
-              className="optionbay-flex optionbay-flex-col optionbay-gap-1"
+              className="optionbay-flex optionbay-justify-between optionbay-gap-2"
             >
               <div className="optionbay-flex optionbay-gap-2 optionbay-items-center">
                 <div className="optionbay-flex-1">
@@ -194,37 +213,23 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
                     />
                   </div>
                 )}
-                <button
-                  type="button"
-                  className="optionbay-text-[#b32d2e] hover:optionbay-bg-[#f1f1f1] optionbay-rounded optionbay-border-none optionbay-bg-transparent optionbay-cursor-pointer optionbay-text-[18px] optionbay-w-8 optionbay-h-8 optionbay-flex optionbay-items-center optionbay-justify-center"
-                  onClick={() => {
-                    const rules = (conditions.rules || []).filter(
-                      (_, i) => i !== idx,
-                    );
-                    updateConditions({ rules });
-                  }}
-                  title={__("Remove rule", "optionbay")}
-                >
-                  ×
-                </button>
               </div>
+              <ClassicButton
+                variant="link-delete"
+                onClick={() => {
+                  const rules = (conditions.rules || []).filter(
+                    (_, i) => i !== idx,
+                  );
+                  updateConditions({ rules });
+                }}
+                title={__("Remove rule", "optionbay")}
+              >
+                <Delete className="optionbay-size-5" />
+              </ClassicButton>
             </div>
           ))}
-
-          <ClassicButton
-            variant="secondary"
-            onClick={() => {
-              const rules = [
-                ...(conditions.rules || []),
-                { target_field_id: "", operator: "==", value: "" },
-              ];
-              updateConditions({ rules });
-            }}
-          >
-            + {__("Add Rule", "optionbay")}
-          </ClassicButton>
         </div>
-      )}
+      ) : null}
     </>
   );
 };
