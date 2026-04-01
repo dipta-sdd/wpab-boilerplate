@@ -152,6 +152,27 @@ class AddonGroupController extends ApiController
 				),
 			),
 		));
+
+		// POST /groups/bulk
+		register_rest_route($namespace, '/groups/bulk', array(
+			array(
+				'methods'             => 'POST',
+				'callback'            => array($this, 'bulk_action'),
+				'permission_callback' => array($this, 'update_item_permissions_check'),
+				'args'                => array(
+					'action' => array(
+						'required'          => true,
+						'type'              => 'string',
+						'enum'              => array('delete', 'activate', 'draft'),
+					),
+					'ids' => array(
+						'required'          => true,
+						'type'              => 'array',
+						'items'             => array('type' => 'integer'),
+					),
+				),
+			),
+		));
 	}
 
 	/**
@@ -588,6 +609,89 @@ class AddonGroupController extends ApiController
 			'id'      => $new_id,
 			'message' => __('Option group duplicated successfully.', 'optionbay'),
 		), 201);
+	}
+
+	/**
+	 * Process a bulk action on option groups.
+	 *
+	 * Supports 'delete', 'activate', and 'draft' actions.
+	 *
+	 * @since 1.0.0
+	 * @param WP_REST_Request $request
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function bulk_action($request)
+	{
+		$action = $request->get_param('action');
+		$ids    = $request->get_param('ids');
+
+		if (!is_array($ids) || empty($ids)) {
+			return new WP_Error(
+				'invalid_ids',
+				__('No option group IDs provided.', 'optionbay'),
+				array('status' => 400)
+			);
+		}
+
+		$processed = 0;
+		$failed    = 0;
+
+		$db = DbManager::get_instance();
+
+		foreach ($ids as $id) {
+			$id = absint($id);
+			if (!$id) {
+				continue;
+			}
+
+			$post = get_post($id);
+			if (!$post || $post->post_type !== AddonGroup::POST_TYPE) {
+				$failed++;
+				continue;
+			}
+
+			switch ($action) {
+				case 'delete':
+					// Delete assignments from lookup table first
+					$db->delete_assignments_for_group($id);
+					// Delete the post and its meta
+					if (wp_delete_post($id, true)) {
+						$processed++;
+						$this->invalidate_cache($id);
+					} else {
+						$failed++;
+					}
+					break;
+
+				case 'activate':
+				case 'draft':
+					$status = ($action === 'activate') ? 'publish' : 'draft';
+					$result = wp_update_post(array(
+						'ID'          => $id,
+						'post_status' => $status,
+					), true);
+
+					if (!is_wp_error($result)) {
+						$processed++;
+						$this->invalidate_cache($id);
+					} else {
+						$failed++;
+					}
+					break;
+			}
+		}
+
+		return new WP_REST_Response(array(
+			'success'   => $processed > 0,
+			'processed' => $processed,
+			'failed'    => $failed,
+			'message'   => sprintf(
+				__('Bulk action "%1$s" completed. Success: %2$d, Failed: %3$d.', 'optionbay'),
+				sanitize_text_field($action),
+				$processed,
+				$failed
+			),
+		), 200);
 	}
 
 	/**
