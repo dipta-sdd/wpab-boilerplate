@@ -569,11 +569,13 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     label: __("Conditional Logic", "optionbay"),
                     tooltip: FIELD_TOOLTIPS.conditional_logic,
                     render: () => (
-                      <ConditionEditor
-                        field={field}
-                        index={index}
-                        hideLabel
-                      />
+                      <div className="optionbay-border-t optionbay-border-[#dcdcde] optionbay-pt-4">
+                        <ConditionEditor
+                          field={field}
+                          index={index}
+                          hideLabel
+                        />
+                      </div>
                     ),
                   },
                 ]}

@@ -105,7 +105,7 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
 
           <table className="optionbay-w-full optionbay-border-collapse optionbay-text-left optionbay-text-[13px]">
             <thead>
-              <tr className="optionbay-border-b optionbay-border-[#e5e7eb]">
+              <tr className="optionbay-border-b optionbay-border-[#dcdcde]">
                 <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327]">
                   {__("Field", "optionbay")}
                 </th>
@@ -119,113 +119,124 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
               </tr>
             </thead>
             <tbody>
-              {(conditions.rules || []).map((rule, idx) => (
-                <tr
-                  key={idx}
-                  className="optionbay-border-b optionbay-border-[#f0f0f1] last:optionbay-border-none"
-                >
-                  <td className="optionbay-py-2 optionbay-pr-2">
-                    <ClassicSelect
-                      value={rule.target_field_id}
-                      onChange={(val) => {
-                        const rules = [...(conditions.rules || [])];
-                        rules[idx] = {
-                          ...rules[idx],
-                          target_field_id: String(val),
-                        };
-                        updateConditions({ rules });
-                      }}
-                      options={[
-                        {
-                          value: "",
-                          label: __("Select field...", "optionbay"),
-                        },
-                        ...siblingFields.map((sf) => ({
-                          value: sf.id,
-                          label: sf.label || sf.id,
-                        })),
-                      ]}
-                    />
-                    <FormError
-                      message={
-                        state.errors?.[
-                          `schema.${index}.conditions.rules.${idx}.target_field_id`
-                        ]
-                      }
-                    />
-                  </td>
-                  <td className="optionbay-py-2 optionbay-pr-2">
-                    <ClassicSelect
-                      value={rule.operator}
-                      onChange={(val) => {
-                        const rules = [...(conditions.rules || [])];
-                        rules[idx] = { ...rules[idx], operator: String(val) };
-                        updateConditions({ rules });
-                      }}
-                      options={[
-                        { value: "==", label: __("equals", "optionbay") },
-                        { value: "!=", label: __("not equals", "optionbay") },
-                        { value: ">", label: __("greater than", "optionbay") },
-                        { value: "<", label: __("less than", "optionbay") },
-                        {
-                          value: "contains",
-                          label: __("contains", "optionbay"),
-                        },
-                        { value: "empty", label: __("is empty", "optionbay") },
-                        {
-                          value: "not_empty",
-                          label: __("is not empty", "optionbay"),
-                        },
-                      ]}
-                    />
-                    <FormError
-                      message={
-                        state.errors?.[
-                          `schema.${index}.conditions.rules.${idx}.operator`
-                        ]
-                      }
-                    />
-                  </td>
-                  <td className="optionbay-py-2 optionbay-pr-2">
-                    {!["empty", "not_empty"].includes(rule.operator) && (
-                      <>
-                        <ClassicInput
-                          size="regular"
-                          value={rule.value}
-                          onChange={(e) => {
-                            const rules = [...(conditions.rules || [])];
-                            rules[idx] = { ...rules[idx], value: e.target.value };
-                            updateConditions({ rules });
-                          }}
-                          placeholder={__("Value", "optionbay")}
-                        />
-                        <FormError
-                          message={
-                            state.errors?.[
-                              `schema.${index}.conditions.rules.${idx}.value`
-                            ]
-                          }
-                        />
-                      </>
-                    )}
-                  </td>
-                  <td className="optionbay-py-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const rules = (conditions.rules || []).filter(
-                          (_, i) => i !== idx,
-                        );
-                        updateConditions({ rules });
-                      }}
-                      className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] optionbay-transition-colors"
-                      title={__("Remove rule", "optionbay")}
-                    >
-                      <Trash2 className="optionbay-size-4" />
-                    </button>
+              {conditions.rules && conditions.rules.length > 0 ? (
+                conditions.rules.map((rule, idx) => (
+                  <tr
+                    key={idx}
+                    className="optionbay-border-b optionbay-border-[#dcdcde] last:optionbay-border-none"
+                  >
+                    <td className="optionbay-py-2 optionbay-pr-2">
+                      <ClassicSelect
+                        value={rule.target_field_id}
+                        onChange={(val) => {
+                          const rules = [...(conditions.rules || [])];
+                          rules[idx] = {
+                            ...rules[idx],
+                            target_field_id: String(val),
+                          };
+                          updateConditions({ rules });
+                        }}
+                        options={[
+                          {
+                            value: "",
+                            label: __("Select field...", "optionbay"),
+                          },
+                          ...siblingFields.map((sf) => ({
+                            value: sf.id,
+                            label: sf.label || sf.id,
+                          })),
+                        ]}
+                      />
+                      <FormError
+                        message={
+                          state.errors?.[
+                            `schema.${index}.conditions.rules.${idx}.target_field_id`
+                          ]
+                        }
+                      />
+                    </td>
+                    <td className="optionbay-py-2 optionbay-pr-2">
+                      <ClassicSelect
+                        value={rule.operator}
+                        onChange={(val) => {
+                          const rules = [...(conditions.rules || [])];
+                          rules[idx] = { ...rules[idx], operator: String(val) };
+                          updateConditions({ rules });
+                        }}
+                        options={[
+                          { value: "==", label: __("equals", "optionbay") },
+                          { value: "!=", label: __("not equals", "optionbay") },
+                          { value: ">", label: __("greater than", "optionbay") },
+                          { value: "<", label: __("less than", "optionbay") },
+                          {
+                            value: "contains",
+                            label: __("contains", "optionbay"),
+                          },
+                          { value: "empty", label: __("is empty", "optionbay") },
+                          {
+                            value: "not_empty",
+                            label: __("is not empty", "optionbay"),
+                          },
+                        ]}
+                      />
+                      <FormError
+                        message={
+                          state.errors?.[
+                            `schema.${index}.conditions.rules.${idx}.operator`
+                          ]
+                        }
+                      />
+                    </td>
+                    <td className="optionbay-py-2 optionbay-pr-2">
+                      {!["empty", "not_empty"].includes(rule.operator) && (
+                        <>
+                          <ClassicInput
+                            size="regular"
+                            value={rule.value}
+                            onChange={(e) => {
+                              const rules = [...(conditions.rules || [])];
+                              rules[idx] = { ...rules[idx], value: e.target.value };
+                              updateConditions({ rules });
+                            }}
+                            placeholder={__("Value", "optionbay")}
+                          />
+                          <FormError
+                            message={
+                              state.errors?.[
+                                `schema.${index}.conditions.rules.${idx}.value`
+                              ]
+                            }
+                          />
+                        </>
+                      )}
+                    </td>
+                    <td className="optionbay-py-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const rules = (conditions.rules || []).filter(
+                            (_, i) => i !== idx,
+                          );
+                          updateConditions({ rules });
+                        }}
+                        className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] optionbay-transition-colors"
+                        title={__("Remove rule", "optionbay")}
+                      >
+                        <Trash2 className="optionbay-size-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="optionbay-py-6 optionbay-text-center optionbay-text-[#94a3b8] optionbay-italic"
+                  >
+                    {__("No rules added yet.", "optionbay")}
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

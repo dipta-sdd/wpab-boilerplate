@@ -34,7 +34,7 @@ export const OptionEditor: React.FC<OptionEditorProps> = ({
 
       <table className="optionbay-w-full optionbay-border-collapse optionbay-text-left optionbay-text-[13px]">
         <thead>
-          <tr className="optionbay-border-b optionbay-border-[#e5e7eb]">
+          <tr className="optionbay-border-b optionbay-border-[#dcdcde]">
             <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327]">
               {__("Label", "optionbay")}
             </th>
@@ -52,119 +52,130 @@ export const OptionEditor: React.FC<OptionEditorProps> = ({
           </tr>
         </thead>
         <tbody>
-          {options.map((opt, idx) => (
-            <tr
-              key={idx}
-              className="optionbay-border-b optionbay-border-[#f0f0f1] last:optionbay-border-none"
-            >
-              <td className="optionbay-py-2 optionbay-pr-2">
-                <ClassicInput
-                  size="regular"
-                  placeholder={__("Label", "optionbay")}
-                  value={opt.label}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "UPDATE_OPTION",
-                      payload: {
-                        fieldId,
-                        optionIndex: idx,
-                        updates: {
-                          label: e.target.value,
-                          value: e.target.value
-                            .toLowerCase()
-                            .replace(/\s+/g, "_"),
-                        },
-                      },
-                    })
-                  }
-                />
-                <FormError
-                  message={state.errors?.[`schema.${fieldIndex}.options.${idx}.label`]}
-                />
-              </td>
-              <td className="optionbay-py-2 optionbay-pr-2">
-                {opt.price_type !== "none" && (
-                  <>
-                    <ClassicInput
-                      type="number"
-                      size="small"
-                      placeholder={__("Price", "optionbay")}
-                      value={opt.price || ""}
-                      onChange={(e) =>
-                        dispatch({
-                          type: "UPDATE_OPTION",
-                          payload: {
-                            fieldId,
-                            optionIndex: idx,
-                            updates: { price: parseFloat(e.target.value) || 0 },
+          {options.length > 0 ? (
+            options.map((opt, idx) => (
+              <tr
+                key={idx}
+                className="optionbay-border-b optionbay-border-[#dcdcde] last:optionbay-border-none"
+              >
+                <td className="optionbay-py-2 optionbay-pr-2">
+                  <ClassicInput
+                    size="regular"
+                    placeholder={__("Label", "optionbay")}
+                    value={opt.label}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "UPDATE_OPTION",
+                        payload: {
+                          fieldId,
+                          optionIndex: idx,
+                          updates: {
+                            label: e.target.value,
+                            value: e.target.value
+                              .toLowerCase()
+                              .replace(/\s+/g, "_"),
                           },
-                        })
-                      }
-                    />
-                    <FormError
-                      message={state.errors?.[`schema.${fieldIndex}.options.${idx}.price`]}
-                    />
-                  </>
-                )}
-              </td>
-              <td className="optionbay-py-2 optionbay-pr-2">
-                <ClassicSelect
-                  value={opt.price_type}
-                  onChange={(val) =>
-                    dispatch({
-                      type: "UPDATE_OPTION",
-                      payload: {
-                        fieldId,
-                        optionIndex: idx,
-                        updates: { price_type: String(val) },
-                      },
-                    })
-                  }
-                  options={PRICE_TYPES.map((pt) => ({
-                    value: pt.value,
-                    label: pt.label,
-                  }))}
-                  size="short"
-                />
-                <FormError
-                  message={state.errors?.[`schema.${fieldIndex}.options.${idx}.price_type`]}
-                />
-              </td>
-              <td className="optionbay-py-2 optionbay-pr-2">
-                <ClassicInput
-                  type="number"
-                  size="small"
-                  placeholder={__("Weight", "optionbay")}
-                  value={opt.weight || ""}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "UPDATE_OPTION",
-                      payload: {
-                        fieldId,
-                        optionIndex: idx,
-                        updates: { weight: parseFloat(e.target.value) || 0 },
-                      },
-                    })
-                  }
-                />
-              </td>
-              <td className="optionbay-py-2">
-                <button
-                  type="button"
-                  onClick={() =>
-                    dispatch({
-                      type: "REMOVE_OPTION",
-                      payload: { fieldId, optionIndex: idx },
-                    })
-                  }
-                  className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] optionbay-transition-colors"
-                  title={__("Remove choice", "optionbay")}
-                >
-                  <Trash2 className="optionbay-size-4" />
-                </button>
+                        },
+                      })
+                    }
+                  />
+                  <FormError
+                    message={state.errors?.[`schema.${fieldIndex}.options.${idx}.label`]}
+                  />
+                </td>
+                <td className="optionbay-py-2 optionbay-pr-2">
+                  {opt.price_type !== "none" && (
+                    <>
+                      <ClassicInput
+                        type="number"
+                        size="small"
+                        placeholder={__("Price", "optionbay")}
+                        value={opt.price || ""}
+                        onChange={(e) =>
+                          dispatch({
+                            type: "UPDATE_OPTION",
+                            payload: {
+                              fieldId,
+                              optionIndex: idx,
+                              updates: { price: parseFloat(e.target.value) || 0 },
+                            },
+                          })
+                        }
+                      />
+                      <FormError
+                        message={state.errors?.[`schema.${fieldIndex}.options.${idx}.price`]}
+                      />
+                    </>
+                  )}
+                </td>
+                <td className="optionbay-py-2 optionbay-pr-2">
+                  <ClassicSelect
+                    value={opt.price_type}
+                    onChange={(val) =>
+                      dispatch({
+                        type: "UPDATE_OPTION",
+                        payload: {
+                          fieldId,
+                          optionIndex: idx,
+                          updates: { price_type: String(val) },
+                        },
+                      })
+                    }
+                    options={PRICE_TYPES.map((pt) => ({
+                      value: pt.value,
+                      label: pt.label,
+                    }))}
+                    size="short"
+                  />
+                  <FormError
+                    message={state.errors?.[`schema.${fieldIndex}.options.${idx}.price_type`]}
+                  />
+                </td>
+                <td className="optionbay-py-2 optionbay-pr-2">
+                  <ClassicInput
+                    type="number"
+                    size="small"
+                    placeholder={__("Weight", "optionbay")}
+                    value={opt.weight || ""}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "UPDATE_OPTION",
+                        payload: {
+                          fieldId,
+                          optionIndex: idx,
+                          updates: { weight: parseFloat(e.target.value) || 0 },
+                        },
+                      })
+                    }
+                  />
+                </td>
+                <td className="optionbay-py-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      dispatch({
+                        type: "REMOVE_OPTION",
+                        payload: { fieldId, optionIndex: idx },
+                      })
+                    }
+                    className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] optionbay-transition-colors"
+                    title={__("Remove choice", "optionbay")}
+                  >
+                    <Trash2 className="optionbay-size-4" />
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan={5}
+                className="optionbay-py-6 optionbay-text-center optionbay-text-[#94a3b8] optionbay-italic"
+              >
+                {__("No choices added yet.", "optionbay")}
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
