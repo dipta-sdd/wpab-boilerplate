@@ -23,6 +23,7 @@ import {
 } from "../../store/AddonContext";
 import { Tooltip } from "../common/ToolTip";
 import { FIELD_TYPES, PRICE_TYPES } from "./constants";
+import { FIELD_TOOLTIPS } from "./tooltips";
 import { FormError } from "./FormError";
 import { OptionEditor } from "./OptionEditor";
 import { ConditionEditor } from "./ConditionEditor";
@@ -178,6 +179,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                 fields={[
                   {
                     label: __("Field Type", "optionbay"),
+                    tooltip: FIELD_TOOLTIPS.type,
                     render: () => (
                       <ClassicSelect
                         value={field.type}
@@ -208,6 +210,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                   },
                   {
                     label: __("Label", "optionbay"),
+                    tooltip: FIELD_TOOLTIPS.label,
                     render: () => (
                       <>
                         <ClassicInput
@@ -224,6 +227,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                   },
                   {
                     label: __("Description", "optionbay"),
+                    tooltip: FIELD_TOOLTIPS.description,
                     render: () => (
                       <>
                         <textarea
@@ -248,6 +252,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                   },
                   {
                     label: __("Validation", "optionbay"),
+                    tooltip: FIELD_TOOLTIPS.required,
                     render: () => (
                       <>
                         <ClassicCheckbox
@@ -265,6 +270,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     ? [
                         {
                           label: __("Placeholder", "optionbay"),
+                          tooltip: FIELD_TOOLTIPS.placeholder,
                           render: () => (
                             <>
                               <ClassicInput
@@ -292,6 +298,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     ? [
                         {
                           label: __("Pricing Logic", "optionbay"),
+                          tooltip: FIELD_TOOLTIPS.price_type,
                           render: () => (
                             <>
                               <ClassicSelect
@@ -316,6 +323,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                           ? [
                               {
                                 label: __("Price Amount", "optionbay"),
+                                tooltip: FIELD_TOOLTIPS.price,
                                 render: () => (
                                   <>
                                     <ClassicInput
@@ -347,6 +355,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     ? [
                         {
                           label: __("Restrictions", "optionbay"),
+                          tooltip: FIELD_TOOLTIPS.restrictions,
                           render: () => (
                             <div className="optionbay-flex optionbay-flex-col optionbay-gap-1">
                               <div className="optionbay-flex optionbay-gap-2.5 optionbay-items-center">
@@ -400,6 +409,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     ? [
                         {
                           label: __("Restrictions", "optionbay"),
+                          tooltip: FIELD_TOOLTIPS.restrictions,
                           render: () => (
                             <div className="optionbay-flex optionbay-flex-col optionbay-gap-1">
                               <div className="optionbay-flex optionbay-gap-2.5 optionbay-items-center optionbay-mb-2">
@@ -468,6 +478,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     ? [
                         {
                           label: __("File Restrictions", "optionbay"),
+                          tooltip: FIELD_TOOLTIPS.file_restrictions,
                           render: () => (
                             <div className="optionbay-flex optionbay-flex-col optionbay-gap-2">
                               <label className="optionbay-block">
@@ -526,6 +537,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     ? [
                         {
                           label: __("Choices", "optionbay"),
+                          tooltip: FIELD_TOOLTIPS.choices,
                           render: () => (
                             <OptionEditor
                               fieldId={field.id}
@@ -538,6 +550,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     : []),
                   {
                     label: __("Conditional Logic", "optionbay"),
+                    tooltip: FIELD_TOOLTIPS.conditional_logic,
                     render: () => (
                       <ConditionEditor
                         field={field}
