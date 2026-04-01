@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { __ } from "@wordpress/i18n";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
@@ -26,10 +26,6 @@ function BuilderInner() {
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
   const isEdit = !!params.id;
-
-  const [activeAssignmentType, setActiveAssignmentType] = useState<
-    "product" | "category" | "tag"
-  >("product");
 
   // Load existing group
   useEffect(() => {
@@ -76,18 +72,6 @@ function BuilderInner() {
     loadGroup();
   }, [isEdit, params.id, dispatch]);
 
-  // Sync initial assignment type when loading an existing group
-  useEffect(() => {
-    const nonGlobal = state.assignments.filter(
-      (a) => a.target_type !== "global",
-    );
-    if (nonGlobal.length > 0) {
-      setActiveAssignmentType(
-        nonGlobal[0].target_type as "product" | "category" | "tag",
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.settings?.priority]); // Just need to trigger once on load, priority is decent proxy since it's in the payload
 
   // Save handler
   const handleSave = useCallback(async () => {
@@ -212,10 +196,7 @@ function BuilderInner() {
           </div>
 
           {/* Assignment Rules */}
-          <AssignmentRules
-            activeAssignmentType={activeAssignmentType}
-            setActiveAssignmentType={setActiveAssignmentType}
-          />
+          <AssignmentRules />
 
           <div>
             <h2 className="optionbay-ignore-preflight">
