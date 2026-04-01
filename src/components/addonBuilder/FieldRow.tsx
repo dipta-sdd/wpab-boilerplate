@@ -48,17 +48,22 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className="optionbay-w-full"
+          className="optionbay-w-full optionbay-border-b optionbay-border-[#dcdcde]"
           style={{ ...provided.draggableProps.style }}
         >
-          {/* Header (The "Table Row" part) */}
           <div
-            className={`optionbay-flex optionbay-items-center optionbay-py-3 optionbay-px-4 optionbay-border-b optionbay-border-[#dcdcde] optionbay-bg-white hover:optionbay-bg-[#f9f9f9] optionbay-transition-colors ${
+            onClick={() =>
+              dispatch({ type: "TOGGLE_EXPAND_FIELD", payload: field.id })
+            }
+            className={`optionbay-flex optionbay-items-center optionbay-py-3 optionbay-px-4 optionbay-bg-white hover:optionbay-bg-[#f9f9f9] optionbay-transition-colors optionbay-cursor-pointer ${
               snapshot.isDragging ? "optionbay-shadow-md" : ""
             }`}
           >
             {/* Col 1: Drag Handle */}
-            <div className="optionbay-w-10">
+            <div
+              className="optionbay-w-10"
+              onClick={(e) => e.stopPropagation()}
+            >
               <span
                 {...provided.dragHandleProps}
                 className="optionbay-cursor-grab active:optionbay-cursor-grabbing optionbay-text-[#9ca3af] optionbay-text-[18px] optionbay-flex optionbay-items-center"
@@ -70,18 +75,12 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
 
             {/* Col 2: Name (Label) */}
             <div className="optionbay-flex-1">
-              <button
-                type="button"
-                onClick={() =>
-                  dispatch({ type: "TOGGLE_EXPAND_FIELD", payload: field.id })
-                }
-                className="optionbay-bg-transparent optionbay-border-none optionbay-p-0 optionbay-text-[#2271b1] hover:optionbay-text-[#135e96] optionbay-font-semibold optionbay-text-[14px] optionbay-cursor-pointer optionbay-text-left"
-              >
+              <span className="optionbay-text-[#2271b1] hover:optionbay-text-[#135e96] optionbay-font-semibold optionbay-text-[14px]">
                 {field.label || __("(No name)", "optionbay")}
                 {field.required && (
                   <span className="optionbay-text-[#c00] optionbay-ml-1">*</span>
                 )}
-              </button>
+              </span>
             </div>
 
             {/* Col 3: Type */}
@@ -102,7 +101,10 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                 <button
                   type="button"
                   disabled={index === 0}
-                  onClick={() => dispatch({ type: "MOVE_UP", payload: index })}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch({ type: "MOVE_UP", payload: index });
+                  }}
                   className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-transition-colors ${
                     index === 0
                       ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
@@ -121,9 +123,10 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                 <button
                   type="button"
                   disabled={index === state.schema.length - 1}
-                  onClick={() =>
-                    dispatch({ type: "MOVE_DOWN", payload: index })
-                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch({ type: "MOVE_DOWN", payload: index });
+                  }}
                   className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-transition-colors ${
                     index === state.schema.length - 1
                       ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
@@ -138,7 +141,8 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
               <Tooltip content={__("Delete field", "optionbay")}>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (
                       confirm(
                         __(
@@ -155,18 +159,6 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                   <Trash2 size={16} />
                 </button>
               </Tooltip>
-
-              {/* <button
-                type="button"
-                onClick={() => dispatch({ type: "TOGGLE_EXPAND_FIELD", payload: field.id })}
-                className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
-              >
-                {isExpanded ? (
-                  <Minus size={16} />
-                ) : (
-                  <ChevronsUpDown className="optionbay-rotate-45" size={16} />
-                )}
-              </button> */}
             </div>
           </div>
 

@@ -227,7 +227,7 @@ function BuilderInner() {
           </div>
 
           {/* Fields list mit header and table layout */}
-          <div className="postbox !optionbay-m-0">
+          <div className="optionbay-border-y optionbay-border-[#dcdcde] !optionbay-m-0">
             {/* Table Header */}
             <div className="optionbay-flex optionbay-items-center optionbay-bg-[#f6f7f7] optionbay-border-b optionbay-border-[#dcdcde] optionbay-px-4 optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327]">
               <div className="optionbay-w-10">
@@ -270,7 +270,7 @@ function BuilderInner() {
             </DragDropContext>
 
             {/* Table Footer */}
-            <div className="optionbay-p-3 optionbay-bg-[#f6f7f7] optionbay-border-t optionbay-border-[#dcdcde]">
+            <div className="optionbay-p-3 optionbay-bg-[#f6f7f7]">
               <button
                 type="button"
                 className="button button-secondary"
