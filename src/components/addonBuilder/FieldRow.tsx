@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { __ } from "@wordpress/i18n";
 import { Draggable } from "@hello-pangea/dnd";
 import {
@@ -35,7 +35,7 @@ interface FieldRowProps {
 
 export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
   const { state, dispatch } = useAddonContext();
-  const [isMinimized, setIsMinimized] = useState(false);
+  const isExpanded = state.expandedFieldId === field.id;
   const hasOptions = ["select", "radio", "checkbox"].includes(field.type);
 
   const update = (updates: Partial<FieldDefinition>) => {
@@ -72,7 +72,9 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
             <div className="optionbay-flex-1">
               <button
                 type="button"
-                onClick={() => setIsMinimized(!isMinimized)}
+                onClick={() =>
+                  dispatch({ type: "TOGGLE_EXPAND_FIELD", payload: field.id })
+                }
                 className="optionbay-bg-transparent optionbay-border-none optionbay-p-0 optionbay-text-[#2271b1] hover:optionbay-text-[#135e96] optionbay-font-semibold optionbay-text-[14px] optionbay-cursor-pointer optionbay-text-left"
               >
                 {field.label || __("(No name)", "optionbay")}
@@ -156,20 +158,20 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
 
               {/* <button
                 type="button"
-                onClick={() => setIsMinimized(!isMinimized)}
+                onClick={() => dispatch({ type: "TOGGLE_EXPAND_FIELD", payload: field.id })}
                 className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
               >
-                {isMinimized ? (
-                  <ChevronsUpDown className="optionbay-rotate-45" size={16} />
-                ) : (
+                {isExpanded ? (
                   <Minus size={16} />
+                ) : (
+                  <ChevronsUpDown className="optionbay-rotate-45" size={16} />
                 )}
               </button> */}
             </div>
           </div>
 
           {/* Body */}
-          {!isMinimized && (
+          {isExpanded && (
             <div className="optionbay-pl-4">
               <ClassicSettingsTable
                 className=""

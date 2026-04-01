@@ -70,6 +70,7 @@ export interface AddonGroupState {
   isDirty: boolean;
   error: string | null;
   errors: Record<string, string>;
+  expandedFieldId: string | null;
 }
 
 // ─── Actions ─────────────────────────────────────────────────────────────
@@ -94,6 +95,7 @@ type AddonAction =
   | { type: "SET_ERROR"; payload: string | null }
   | { type: "SET_ERRORS"; payload: Record<string, string> }
   | { type: "MARK_CLEAN" }
+  | { type: "TOGGLE_EXPAND_FIELD"; payload: string | null }
   | { type: "RESET" };
 
 // ─── Defaults ────────────────────────────────────────────────────────────
@@ -116,6 +118,7 @@ const initialState: AddonGroupState = {
   isDirty: false,
   error: null,
   errors: {},
+  expandedFieldId: null,
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────
@@ -209,6 +212,7 @@ function addonReducer(
       return {
         ...state,
         schema: [...state.schema, action.payload],
+        expandedFieldId: action.payload.id,
         isDirty: true,
       };
 
@@ -315,6 +319,13 @@ function addonReducer(
 
     case "MARK_CLEAN":
       return { ...state, isDirty: false };
+
+    case "TOGGLE_EXPAND_FIELD":
+      return {
+        ...state,
+        expandedFieldId:
+          state.expandedFieldId === action.payload ? null : action.payload,
+      };
 
     case "RESET":
       return { ...initialState };
