@@ -81,6 +81,18 @@ export default function AddonList() {
     }
   };
 
+  const handleDuplicate = async (id: number) => {
+    try {
+      await apiFetch({
+        path: `optionbay/v1/groups/${id}/duplicate`,
+        method: "POST",
+      });
+      fetchGroups();
+    } catch (err) {
+      console.error("Failed to duplicate group:", err);
+    }
+  };
+
   const getAssignmentSummary = (assignments: GroupListItem["assignments"]) => {
     if (!assignments || assignments.length === 0)
       return __("None", "optionbay");
@@ -122,11 +134,10 @@ export default function AddonList() {
         <table className="wp-list-table widefat fixed striped">
         <thead>
           <tr>
-            <th className="optionbay-w-[30%]">{__("Title", "optionbay")}</th>
+            <th className="optionbay-w-[40%]">{__("Title", "optionbay")}</th>
             <th>{__("Fields", "optionbay")}</th>
             <th>{__("Assigned To", "optionbay")}</th>
             <th>{__("Status", "optionbay")}</th>
-            <th className="optionbay-w-[15%]">{__("Actions", "optionbay")}</th>
           </tr>
         </thead>
         <tbody>
@@ -152,17 +163,32 @@ export default function AddonList() {
           ) : (
             groups.map((group) => (
               <tr key={group.id}>
-                <td>
+                <td className="optionbay-group">
                   <a
                     href={`#/option-groups/${group.id}`}
                     onClick={(e) => {
                       e.preventDefault();
                       navigate(`/option-groups/${group.id}`);
                     }}
-                    className="optionbay-font-semibold"
+                    className="optionbay-font-semibold optionbay-text-[#2271b1] hover:optionbay-text-[#135e96]"
                   >
                     {group.title || __("(Untitled)", "optionbay")}
                   </a>
+
+                  {/* Hover Actions */}
+                  <div className="optionbay-row-actions optionbay-text-[12px] optionbay-flex optionbay-gap-1 optionbay-opacity-0 group-hover:optionbay-opacity-100 optionbay-transition-opacity optionbay-mt-1">
+                    <span className="optionbay-text-[#2271b1] hover:optionbay-underline optionbay-cursor-pointer" onClick={() => navigate(`/option-groups/${group.id}`)}>
+                      {__("Edit", "optionbay")}
+                    </span>
+                    <span className="optionbay-text-[#ddd]">|</span>
+                    <span className="optionbay-text-[#2271b1] hover:optionbay-underline optionbay-cursor-pointer" onClick={() => handleDuplicate(group.id)}>
+                      {__("Duplicate", "optionbay")}
+                    </span>
+                    <span className="optionbay-text-[#ddd]">|</span>
+                    <span className="optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] hover:optionbay-underline optionbay-cursor-pointer" onClick={() => handleDelete(group.id)}>
+                      {__("Trash", "optionbay")}
+                    </span>
+                  </div>
                 </td>
                 <td>{group.field_count}</td>
                 <td>{getAssignmentSummary(group.assignments)}</td>
@@ -178,22 +204,6 @@ export default function AddonList() {
                       ? __("Active", "optionbay")
                       : __("Draft", "optionbay")}
                   </span>
-                </td>
-                <td>
-                  <ClassicButton
-                    variant="secondary"
-                    onClick={() => navigate(`/option-groups/${group.id}`)}
-                    className="optionbay-mr-1"
-                  >
-                    {__("Edit", "optionbay")}
-                  </ClassicButton>
-                  <ClassicButton
-                    variant="link"
-                    onClick={() => handleDelete(group.id)}
-                    className="optionbay-text-[#b32d2e]"
-                  >
-                    {__("Delete", "optionbay")}
-                  </ClassicButton>
                 </td>
               </tr>
             ))

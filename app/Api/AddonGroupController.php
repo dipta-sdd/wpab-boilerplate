@@ -136,6 +136,22 @@ class AddonGroupController extends ApiController
 				),
 			),
 		));
+
+		// POST /groups/{id}/duplicate
+		register_rest_route($namespace, "/groups/(?P<id>\\d+)/duplicate", array(
+			array(
+				"methods"             => "POST",
+				"callback"            => array($this, "duplicate_item"),
+				"permission_callback" => array($this, "update_item_permissions_check"),
+				"args"                => array(
+					"id" => array(
+						"validate_callback" => function ($param) {
+							return is_numeric($param) && $param > 0;
+						},
+					),
+				),
+			),
+		));
 	}
 
 	/**
@@ -494,15 +510,6 @@ class AddonGroupController extends ApiController
 		optionbay_log("AddonGroupController: Deleting item ID {$id} (DELETE /groups/{$id}).", 'WARNING');
 		
 		$post = get_post($id);
-
-		if (!$post || $post->post_type !== AddonGroup::POST_TYPE) {
-			return new WP_Error(
-				'not_found',
-				__('Option group not found.', 'optionbay'),
-				array('status' => 404)
-			);
-		}
-
 		// Delete assignments from lookup table
 		DbManager::get_instance()->delete_assignments_for_group($id);
 
@@ -516,6 +523,71 @@ class AddonGroupController extends ApiController
 			'success' => true,
 			'message' => __('Option group deleted successfully.', 'optionbay'),
 		), 200);
+	}
+
+	/**
+	 * Duplicate an existing option group.
+	 *
+	 * Copies the post, its meta (schema, settings), and its assignments.
+	 *
+	 * @since 1.0.0
+	 * @param WP_REST_Request $request
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function duplicate_item($request)
+	{
+		$id = absint($request->get_param('id'));
+		optionbay_log("AddonGroupController: Duplicating item ID {$id} (POST /groups/{$id}/duplicate).", 'INFO');
+
+		$post = get_post($id);
+
+		if (!$post || $post->post_type !== AddonGroup::POST_TYPE) {
+			return new WP_Error(
+				'not_found',
+				__('Option group not found.', 'optionbay'),
+				array('status' => 404)
+			);
+		}
+
+		// Prepare duplicate data
+		$new_title = $post->post_title . ' ' . __('(Copy)', 'optionbay');
+		$schema    = get_post_meta($id, AddonGroup::META_SCHEMA, true);
+		$settings  = get_post_meta($id, AddonGroup::META_SETTINGS, true);
+		$assignments = DbManager::get_instance()->get_assignments_for_group($id);
+
+		// Insert new post
+		$new_id = wp_insert_post(array(
+			'post_type'   => AddonGroup::POST_TYPE,
+			'post_title'  => $new_title,
+			'post_status' => $post->post_status,
+		), true);
+
+		if (is_wp_error($new_id)) {
+			return new WP_Error(
+				'duplicate_failed',
+				__('Failed to duplicate option group.', 'optionbay'),
+				array('status' => 500)
+			);
+		}
+
+		// Copy meta
+		if (!empty($schema)) {
+			update_post_meta($new_id, AddonGroup::META_SCHEMA, $schema);
+		}
+		if (!empty($settings)) {
+			update_post_meta($new_id, AddonGroup::META_SETTINGS, $settings);
+		}
+
+		// Copy assignments
+		if (!empty($assignments)) {
+			DbManager::get_instance()->insert_assignments($new_id, $assignments);
+		}
+
+		return new WP_REST_Response(array(
+			'success' => true,
+			'id'      => $new_id,
+			'message' => __('Option group duplicated successfully.', 'optionbay'),
+		), 201);
 	}
 
 	/**

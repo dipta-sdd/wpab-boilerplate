@@ -55,7 +55,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
             onClick={() =>
               dispatch({ type: "TOGGLE_EXPAND_FIELD", payload: field.id })
             }
-            className={`optionbay-flex optionbay-items-center optionbay-py-3 optionbay-px-4 optionbay-bg-white hover:optionbay-bg-[#f9f9f9] optionbay-transition-colors optionbay-cursor-pointer ${
+            className={`optionbay-flex optionbay-items-center optionbay-py-3 optionbay-px-4 optionbay-bg-white hover:optionbay-bg-[#f9f9f9] optionbay-transition-colors optionbay-cursor-pointer optionbay-group ${
               snapshot.isDragging ? "optionbay-shadow-md" : ""
             }`}
           >
@@ -81,6 +81,32 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                   <span className="optionbay-text-[#c00] optionbay-ml-1">*</span>
                 )}
               </span>
+
+              {/* Hover Actions (WordPress style) */}
+              <div className="optionbay-row-actions optionbay-text-[12px] optionbay-flex optionbay-gap-1 optionbay-opacity-0 group-hover:optionbay-opacity-100 optionbay-transition-opacity">
+                <span className="optionbay-text-[#2271b1] hover:optionbay-underline" onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch({ type: "TOGGLE_EXPAND_FIELD", payload: field.id });
+                }}>
+                  {__("Edit field", "optionbay")}
+                </span>
+                <span className="optionbay-text-[#ddd]">|</span>
+                <span className="optionbay-text-[#2271b1] hover:optionbay-underline" onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch({ type: "DUPLICATE_FIELD", payload: field.id });
+                }}>
+                  {__("Duplicate", "optionbay")}
+                </span>
+                <span className="optionbay-text-[#ddd]">|</span>
+                <span className="optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] hover:optionbay-underline" onClick={(e) => {
+                  e.stopPropagation();
+                  if (confirm(__("Are you sure you want to remove this field?", "optionbay"))) {
+                    dispatch({ type: "REMOVE_FIELD", payload: field.id });
+                  }
+                }}>
+                  {__("Delete", "optionbay")}
+                </span>
+              </div>
             </div>
 
             {/* Col 3: Type */}

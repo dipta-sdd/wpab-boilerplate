@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from "react";
+import { __ } from "@wordpress/i18n";
 
 // ─── Types ───────────────────────────────────────────────────────────────
 
@@ -96,6 +97,7 @@ type AddonAction =
   | { type: "SET_ERRORS"; payload: Record<string, string> }
   | { type: "MARK_CLEAN" }
   | { type: "TOGGLE_EXPAND_FIELD"; payload: string | null }
+  | { type: "DUPLICATE_FIELD"; payload: string }
   | { type: "RESET" };
 
 // ─── Defaults ────────────────────────────────────────────────────────────
@@ -246,6 +248,28 @@ function addonReducer(
       const [moved] = newSchema.splice(idx, 1);
       newSchema.splice(idx - 1, 0, moved);
       return { ...state, schema: newSchema, isDirty: true };
+    }
+
+    case "DUPLICATE_FIELD": {
+      const fieldIndex = state.schema.findIndex((f) => f.id === action.payload);
+      if (fieldIndex === -1) return state;
+
+      const originalField = state.schema[fieldIndex];
+      const newField = {
+        ...JSON.parse(JSON.stringify(originalField)), // Deep clone
+        id: generateFieldId(),
+        label: (originalField.label || "") + " " + __("(Copy)", "optionbay"),
+      };
+
+      const newSchema = [...state.schema];
+      newSchema.splice(fieldIndex + 1, 0, newField);
+
+      return {
+        ...state,
+        schema: newSchema,
+        isDirty: true,
+        expandedFieldId: newField.id, // Auto expand the new field
+      };
     }
 
     case "MOVE_DOWN": {
