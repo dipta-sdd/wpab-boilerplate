@@ -208,7 +208,6 @@ export default function AddonList() {
   );
 
   const renderPagination = (position: "top" | "bottom") => {
-    if (totalPages <= 1) return null;
     return (
       <div className={`tablenav-pages optionbay-flex optionbay-items-center optionbay-gap-2 ${position === "bottom" ? "optionbay-mt-4" : ""}`}>
         <span className="displaying-num optionbay-text-[13px] optionbay-mr-2">
