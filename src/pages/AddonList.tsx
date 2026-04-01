@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { __, sprintf } from "@wordpress/i18n";
-import { ClassicButton } from "../components/classics";
+import { ClassicButton, ClassicCheckbox } from "../components/classics";
 import { useWpabStore } from "../store/wpabStore";
 import apiFetch from "../utils/apiFetch";
 
@@ -91,16 +91,13 @@ export default function AddonList() {
       bulkAction === "delete"
         ? __("move to trash", "optionbay")
         : bulkAction === "activate"
-          ? __("activate", "optionbay")
-          : __("draft", "optionbay");
+        ? __("activate", "optionbay")
+        : __("draft", "optionbay");
 
     if (
       !window.confirm(
         sprintf(
-          __(
-            "Are you sure you want to %s %d selected items?",
-            "optionbay",
-          ),
+          __("Are you sure you want to %s %d selected items?", "optionbay"),
           actionText,
           selectedGroups.length,
         ),
@@ -177,7 +174,13 @@ export default function AddonList() {
   };
 
   const renderBulkActions = (position: "top" | "bottom") => (
-    <div className={`alignleft actions bulkactions optionbay-flex optionbay-items-center optionbay-gap-2 ${position === "bottom" ? "optionbay-mt-4" : "optionbay-mt-4 sm:optionbay-mt-0"}`}>
+    <div
+      className={`alignleft actions bulkactions optionbay-flex optionbay-items-center optionbay-gap-2 ${
+        position === "bottom"
+          ? "optionbay-mt-4"
+          : "optionbay-mt-4 sm:optionbay-mt-0"
+      }`}
+    >
       <select
         value={position === "bottom" ? "" : bulkAction} // Only bind value to top to prevent double selection issues
         onChange={(e) => setBulkAction(e.target.value)}
@@ -209,7 +212,11 @@ export default function AddonList() {
 
   const renderPagination = (position: "top" | "bottom") => {
     return (
-      <div className={`tablenav-pages optionbay-flex optionbay-items-center optionbay-gap-2 ${position === "bottom" ? "optionbay-mt-4" : ""}`}>
+      <div
+        className={`tablenav-pages optionbay-flex optionbay-items-center optionbay-gap-2 ${
+          position === "bottom" ? "optionbay-mt-4" : ""
+        }`}
+      >
         <span className="displaying-num optionbay-text-[13px] optionbay-mr-2">
           {total} {__("items", "optionbay")}
         </span>
@@ -252,7 +259,7 @@ export default function AddonList() {
       </div>
 
       {/* Top Controls */}
-      <div className="tablenav top optionbay-flex optionbay-justify-between optionbay-flex-wrap optionbay-mb-2">
+      <div className="optionbay-flex optionbay-justify-between optionbay-flex-wrap optionbay-mb-2">
         {renderBulkActions("top")}
         {renderPagination("top")}
       </div>
@@ -260,106 +267,125 @@ export default function AddonList() {
       {/* Table */}
       <div className="optionbay-table-responsive">
         <table className="wp-list-table widefat fixed striped">
-        <thead>
-          <tr>
-            <td className="manage-column column-cb check-column !optionbay-w-[2.2em]">
-              <input
-                type="checkbox"
-                checked={groups.length > 0 && selectedGroups.length === groups.length}
-                onChange={(e) => toggleSelectAll(e.target.checked)}
-                className="optionbay-mt-0"
-              />
-            </td>
-            <th className="optionbay-w-[40%]">{__("Title", "optionbay")}</th>
-            <th>{__("Fields", "optionbay")}</th>
-            <th>{__("Assigned To", "optionbay")}</th>
-            <th>{__("Status", "optionbay")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
+          <thead>
             <tr>
-              <td colSpan={5} className="optionbay-text-center optionbay-p-10">
-                {__("Loading option groups...", "optionbay")}
+              <td className="!optionbay-w-[2.2em]">
+                <ClassicCheckbox
+                  checked={
+                    groups.length > 0 && selectedGroups.length === groups.length
+                  }
+                  onChange={(e) => toggleSelectAll(e)}
+                />
               </td>
+              <th className="optionbay-w-[40%]">{__("Title", "optionbay")}</th>
+              <th>{__("Fields", "optionbay")}</th>
+              <th>{__("Assigned To", "optionbay")}</th>
+              <th>{__("Status", "optionbay")}</th>
             </tr>
-          ) : groups.length === 0 ? (
-            <tr>
-              <td colSpan={5} className="optionbay-text-center optionbay-p-10">
-                <p>{__("No option groups found.", "optionbay")}</p>
-                <ClassicButton
-                  variant="primary"
-                  onClick={() => navigate("/option-groups/new")}
-                  className="optionbay-mt-2"
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="optionbay-text-center optionbay-p-10"
                 >
-                  {__("Create your first option group", "optionbay")}
-                </ClassicButton>
-              </td>
-            </tr>
-          ) : (
-            groups.map((group) => (
-              <tr key={group.id}>
-                <th scope="row" className="check-column">
-                  <input
-                    type="checkbox"
-                    name="post[]"
-                    value={group.id}
-                    checked={selectedGroups.includes(group.id)}
-                    onChange={(e) => toggleSelectGroup(group.id, e.target.checked)}
-                    className="optionbay-mt-0"
-                  />
-                </th>
-                <td className="optionbay-group">
-                  <a
-                    href={`#/option-groups/${group.id}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate(`/option-groups/${group.id}`);
-                    }}
-                    className="optionbay-font-semibold optionbay-text-[#2271b1] hover:optionbay-text-[#135e96]"
-                  >
-                    {group.title || __("(Untitled)", "optionbay")}
-                  </a>
-
-                  {/* Hover Actions */}
-                  <div className="optionbay-row-actions optionbay-text-[12px] optionbay-flex optionbay-gap-1 optionbay-opacity-0 group-hover:optionbay-opacity-100 optionbay-transition-opacity optionbay-mt-1">
-                    <span className="optionbay-text-[#2271b1] hover:optionbay-underline optionbay-cursor-pointer" onClick={() => navigate(`/option-groups/${group.id}`)}>
-                      {__("Edit", "optionbay")}
-                    </span>
-                    <span className="optionbay-text-[#ddd]">|</span>
-                    <span className="optionbay-text-[#2271b1] hover:optionbay-underline optionbay-cursor-pointer" onClick={() => handleDuplicate(group.id)}>
-                      {__("Duplicate", "optionbay")}
-                    </span>
-                    <span className="optionbay-text-[#ddd]">|</span>
-                    <span className="optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] hover:optionbay-underline optionbay-cursor-pointer" onClick={() => handleDelete(group.id)}>
-                      {__("Trash", "optionbay")}
-                    </span>
-                  </div>
-                </td>
-                <td>{group.field_count}</td>
-                <td>{getAssignmentSummary(group.assignments)}</td>
-                <td>
-                  <span
-                    className={`optionbay-inline-block optionbay-px-2 optionbay-py-0.5 optionbay-rounded optionbay-text-xs ${
-                      group.status === "publish"
-                        ? "optionbay-bg-[#dff0d8] optionbay-text-[#3c763d]"
-                        : "optionbay-bg-[#f2dede] optionbay-text-[#a94442]"
-                    }`}
-                  >
-                    {group.status === "publish"
-                      ? __("Active", "optionbay")
-                      : __("Draft", "optionbay")}
-                  </span>
+                  {__("Loading option groups...", "optionbay")}
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
+            ) : groups.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="optionbay-text-center optionbay-p-10"
+                >
+                  <p>{__("No option groups found.", "optionbay")}</p>
+                  <ClassicButton
+                    variant="primary"
+                    onClick={() => navigate("/option-groups/new")}
+                    className="optionbay-mt-2"
+                  >
+                    {__("Create your first option group", "optionbay")}
+                  </ClassicButton>
+                </td>
+              </tr>
+            ) : (
+              groups.map((group) => (
+                <tr key={group.id}>
+                  <th
+                    scope="row"
+                    className="optionbay-flex optionbay-justify-start optionbay-mt-[1px]"
+                  >
+                    <ClassicCheckbox
+                      checked={selectedGroups.includes(group.id)}
+                      onChange={(e) => toggleSelectGroup(group.id, e)}
+                      className="optionbay-mt-0"
+                    />
+                  </th>
+                  <td className="optionbay-group">
+                    <a
+                      href={`#/option-groups/${group.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(`/option-groups/${group.id}`);
+                      }}
+                      className="optionbay-font-semibold optionbay-text-[#2271b1] hover:optionbay-text-[#135e96]"
+                    >
+                      {group.title || __("(Untitled)", "optionbay")}
+                    </a>
+
+                    {/* Hover Actions */}
+                    <div className="optionbay-row-actions optionbay-text-[12px] optionbay-flex optionbay-gap-1 optionbay-opacity-0 group-hover:optionbay-opacity-100 optionbay-transition-opacity optionbay-mt-1">
+                      <span className="optionbay-text-[#999]">
+                        ID: {group.id}
+                      </span>
+                      <span className="optionbay-text-[#ddd]">|</span>
+                      <a
+                        className="optionbay-text-[#2271b1] hover:optionbay-underline optionbay-cursor-pointer"
+                        href={`#/option-groups/${group.id}`}
+                      >
+                        {__("Edit", "optionbay")}
+                      </a>
+                      <span className="optionbay-text-[#ddd]">|</span>
+                      <span
+                        className="optionbay-text-[#2271b1] hover:optionbay-underline optionbay-cursor-pointer"
+                        onClick={() => handleDuplicate(group.id)}
+                      >
+                        {__("Duplicate", "optionbay")}
+                      </span>
+                      <span className="optionbay-text-[#ddd]">|</span>
+                      <span
+                        className="optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] hover:optionbay-underline optionbay-cursor-pointer"
+                        onClick={() => handleDelete(group.id)}
+                      >
+                        {__("Trash", "optionbay")}
+                      </span>
+                    </div>
+                  </td>
+                  <td>{group.field_count}</td>
+                  <td>{getAssignmentSummary(group.assignments)}</td>
+                  <td>
+                    <span
+                      className={`optionbay-inline-block optionbay-px-2 optionbay-py-0.5 optionbay-rounded optionbay-text-xs ${
+                        group.status === "publish"
+                          ? "optionbay-bg-[#dff0d8] optionbay-text-[#3c763d]"
+                          : "optionbay-bg-[#f2dede] optionbay-text-[#a94442]"
+                      }`}
+                    >
+                      {group.status === "publish"
+                        ? __("Active", "optionbay")
+                        : __("Draft", "optionbay")}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
         </table>
       </div>
 
       {/* Bottom Controls */}
-      <div className="tablenav bottom optionbay-flex optionbay-justify-between optionbay-flex-wrap optionbay-mt-2">
+      <div className="optionbay-flex optionbay-justify-between optionbay-flex-wrap">
         {renderBulkActions("bottom")}
         {renderPagination("bottom")}
       </div>

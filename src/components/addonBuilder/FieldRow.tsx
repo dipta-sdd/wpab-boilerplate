@@ -199,6 +199,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     tooltip: FIELD_TOOLTIPS.type,
                     render: () => (
                       <ClassicSelect
+                      differentDropdownWidth
                         value={field.type}
                         classNames={{
                           innerContainer: "!optionbay-w-[120px]",
@@ -319,6 +320,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                           render: () => (
                             <>
                               <ClassicSelect
+                              differentDropdownWidth
                                 value={field.price_type}
                                 onChange={(val) =>
                                   update({ price_type: String(val) })
@@ -569,7 +571,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                     label: __("Conditional Logic", "optionbay"),
                     tooltip: FIELD_TOOLTIPS.conditional_logic,
                     render: () => (
-                      <div className="optionbay-border-t optionbay-border-[#dcdcde] optionbay-pt-4">
+                      <div className="">
                         <ConditionEditor
                           field={field}
                           index={index}

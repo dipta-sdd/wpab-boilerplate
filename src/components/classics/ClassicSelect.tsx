@@ -330,7 +330,8 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
         {/* Dropdown Menu */}
         {isOpen && (
           <div
-            className={`optionbay-absolute optionbay-z-[99999] optionbay-bg-white optionbay-border-2 optionbay-border-[#2271b1] optionbay-border-t-0 optionbay-rounded-b-[3px] optionbay-shadow-[0_3px_5px_rgba(0,0,0,0.2)] optionbay-p-0 optionbay-box-border optionbay-top-full optionbay-left-[-1px] optionbay-mt-[-3px] ${classNames?.dropdown || ""}`.trim()}
+            className={`optionbay-absolute optionbay-z-[99999] optionbay-bg-white optionbay-border-2 optionbay-border-[#2271b1]   ${differentDropdownWidth ? "optionbay-rounded-[3px]" : "optionbay-border-t-0  optionbay-mt-[-3px] optionbay-rounded-b-[3px]"} 
+              optionbay-rounded-b-[3px] optionbay-shadow-[0_3px_5px_rgba(0,0,0,0.2)] optionbay-p-0 optionbay-box-border optionbay-top-full optionbay-left-[-1px] ${classNames?.dropdown || ""}`.trim()}
             style={{
               ...(differentDropdownWidth
                 ? { minWidth: "calc(100% + 2px)" }
@@ -361,6 +362,9 @@ export const ClassicSelect: React.FC<ClassicSelectProps> = ({
               ref={listRef}
               role="listbox"
               className={`optionbay-max-h-[220px] optionbay-overflow-y-auto optionbay-m-0 optionbay-p-0 optionbay-list-none ${classNames?.list || ""}`.trim()}
+              style={{
+                scrollbarWidth: "thin"
+              }}
             >
               {filteredOptions.length === 0 ? (
                 <li className="optionbay-px-3 optionbay-py-1.5 optionbay-text-[#646970] optionbay-italic optionbay-text-[13px] optionbay-m-0">

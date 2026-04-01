@@ -48,7 +48,7 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
   }
 
   return (
-    <div className="optionbay-mt-2">
+    <div className="">
       <div className="optionbay-flex optionbay-justify-between optionbay-items-center">
         <ClassicCheckbox
           label={__("Enable Conditional Logic", "optionbay")}
@@ -106,16 +106,16 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
           <table className="optionbay-w-full optionbay-border-collapse optionbay-text-left optionbay-text-[13px]">
             <thead>
               <tr className="optionbay-border-b optionbay-border-[#dcdcde]">
-                <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327]">
+                <th className="!optionbay-py-[15px] !optionbay-px-[10px] optionbay-font-semibold optionbay-text-[#1d2327]">
                   {__("Field", "optionbay")}
                 </th>
-                <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[150px]">
+                <th className="!optionbay-py-[15px] !optionbay-px-[10px] optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[150px]">
                   {__("Operator", "optionbay")}
                 </th>
-                <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327]">
+                <th className="!optionbay-py-[15px] !optionbay-px-[10px] optionbay-font-semibold optionbay-text-[#1d2327]">
                   {__("Value", "optionbay")}
                 </th>
-                <th className="optionbay-py-2 optionbay-w-[40px]"></th>
+                <th className="!optionbay-py-[15px] !optionbay-px-[10px] optionbay-w-[40px]"></th>
               </tr>
             </thead>
             <tbody>
@@ -128,6 +128,7 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
                     <td className="optionbay-py-2 optionbay-pr-2">
                       <ClassicSelect
                         value={rule.target_field_id}
+                        differentDropdownWidth
                         onChange={(val) => {
                           const rules = [...(conditions.rules || [])];
                           rules[idx] = {
@@ -157,6 +158,7 @@ export const ConditionEditor: React.FC<ConditionEditorProps> = ({
                     </td>
                     <td className="optionbay-py-2 optionbay-pr-2">
                       <ClassicSelect
+                      differentDropdownWidth
                         value={rule.operator}
                         onChange={(val) => {
                           const rules = [...(conditions.rules || [])];

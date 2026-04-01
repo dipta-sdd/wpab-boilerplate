@@ -35,20 +35,20 @@ export const OptionEditor: React.FC<OptionEditorProps> = ({
       <table className="optionbay-w-full optionbay-border-collapse optionbay-text-left optionbay-text-[13px]">
         <thead>
           <tr className="optionbay-border-b optionbay-border-[#dcdcde]">
-            <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327]">
+            <th className="!optionbay-py-[15px] !optionbay-px-[10px] optionbay-font-semibold optionbay-text-[#1d2327]">
               {__("Label", "optionbay")}
             </th>
-            <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[100px]">
+            <th className="!optionbay-py-[15px] !optionbay-px-[10px] optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[100px]">
               {__("Price", "optionbay")}
             </th>
-            <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[160px]">
+            <th className="!optionbay-py-[15px] !optionbay-px-[10px] optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[160px]">
               {__("Price Type", "optionbay")}
             </th>
             {/* Optional Weight column if needed */}
-            <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[80px]">
+            <th className="!optionbay-py-[15px] !optionbay-px-[10px] optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[80px]">
               {__("Weight", "optionbay")}
             </th>
-            <th className="optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[40px]"></th>
+            <th className="!optionbay-py-[15px] !optionbay-px-[10px] optionbay-font-semibold optionbay-text-[#1d2327] optionbay-w-[40px]"></th>
           </tr>
         </thead>
         <tbody>
@@ -111,6 +111,7 @@ export const OptionEditor: React.FC<OptionEditorProps> = ({
                 <td className="optionbay-py-2 optionbay-pr-2">
                   <ClassicSelect
                     value={opt.price_type}
+                    differentDropdownWidth
                     onChange={(val) =>
                       dispatch({
                         type: "UPDATE_OPTION",
