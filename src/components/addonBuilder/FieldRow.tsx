@@ -48,39 +48,50 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className={`ob-field-card ${
-            snapshot.isDragging ? "is-dragging" : ""
-          }`}
+          className="optionbay-w-full"
           style={{ ...provided.draggableProps.style }}
         >
-          {/* Header */}
+          {/* Header (The "Table Row" part) */}
           <div
-            className={`optionbay-flex optionbay-justify-between optionbay-items-center optionbay-py-[10px] optionbay-cursor-default`}
+            className={`optionbay-flex optionbay-items-center optionbay-py-3 optionbay-px-4 optionbay-border-b optionbay-border-[#dcdcde] optionbay-bg-white hover:optionbay-bg-[#f9f9f9] optionbay-transition-colors ${
+              snapshot.isDragging ? "optionbay-shadow-md" : ""
+            }`}
           >
-            <div className="optionbay-flex optionbay-items-center">
+            {/* Col 1: Drag Handle */}
+            <div className="optionbay-w-10">
               <span
                 {...provided.dragHandleProps}
-                className="optionbay-cursor-grab active:optionbay-cursor-grabbing optionbay-text-[#9ca3af] optionbay-mr-[10px] optionbay-text-[18px] optionbay-flex optionbay-items-center"
+                className="optionbay-cursor-grab active:optionbay-cursor-grabbing optionbay-text-[#9ca3af] optionbay-text-[18px] optionbay-flex optionbay-items-center"
                 title={__("Drag to reorder", "optionbay")}
               >
-                <Menu />
+                <Menu size={18} />
               </span>
-              <span className="optionbay-font-semibold optionbay-text-[14px] optionbay-text-[#1d2327]">
-                {field.label || __("Untitled Field", "optionbay")}
-              </span>
-              <span className="optionbay-text-[11px] optionbay-uppercase optionbay-bg-[#e5e7eb] optionbay-text-[#4b5563] optionbay-px-1.5 optionbay-py-0.5 optionbay-rounded optionbay-ml-2 optionbay-font-medium">
-                {field.type}
-              </span>
-              {field.required && (
-                <span
-                  className="optionbay-text-[#c00] optionbay-ml-1 optionbay-font-bold"
-                  title={__("Required field", "optionbay")}
-                >
-                  *
-                </span>
-              )}
             </div>
-            <div className="optionbay-flex optionbay-gap-1 optionbay-items-center">
+
+            {/* Col 2: Name (Label) */}
+            <div className="optionbay-flex-1">
+              <button
+                type="button"
+                onClick={() => setIsMinimized(!isMinimized)}
+                className="optionbay-bg-transparent optionbay-border-none optionbay-p-0 optionbay-text-[#2271b1] hover:optionbay-text-[#135e96] optionbay-font-semibold optionbay-text-[14px] optionbay-cursor-pointer optionbay-text-left"
+              >
+                {field.label || __("(No name)", "optionbay")}
+                {field.required && (
+                  <span className="optionbay-text-[#c00] optionbay-ml-1">*</span>
+                )}
+              </button>
+            </div>
+
+            {/* Col 3: Type */}
+            <div className="optionbay-w-1/3">
+              <span className="optionbay-text-[#646970] optionbay-text-[13px]">
+                {FIELD_TYPES.find((t) => t.value === field.type)?.label ||
+                  field.type}
+              </span>
+            </div>
+
+            {/* Col 4: Actions */}
+            <div className="optionbay-w-32 optionbay-flex optionbay-justify-end optionbay-gap-1 optionbay-items-center">
               {/* Move Up */}
               <Tooltip
                 content={__("Move up", "optionbay")}
@@ -90,16 +101,16 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                   type="button"
                   disabled={index === 0}
                   onClick={() => dispatch({ type: "MOVE_UP", payload: index })}
-                  className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-transition-colors ${
+                  className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-transition-colors ${
                     index === 0
                       ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
                       : "optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
                   }`}
-                  title={__("Move up", "optionbay")}
                 >
                   <ChevronUp size={16} />
                 </button>
               </Tooltip>
+
               {/* Move Down */}
               <Tooltip
                 content={__("Move down", "optionbay")}
@@ -111,41 +122,16 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                   onClick={() =>
                     dispatch({ type: "MOVE_DOWN", payload: index })
                   }
-                  className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-transition-colors ${
+                  className={`optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-transition-colors ${
                     index === state.schema.length - 1
                       ? "optionbay-text-[#ccd0d4] optionbay-cursor-not-allowed"
                       : "optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
                   }`}
-                  title={__("Move down", "optionbay")}
                 >
                   <ChevronDown size={16} />
                 </button>
               </Tooltip>
-              {/* Minimize Toggle */}
-              <Tooltip
-                content={
-                  isMinimized
-                    ? __("Expand", "optionbay")
-                    : __("Minimize", "optionbay")
-                }
-              >
-                <button
-                  type="button"
-                  onClick={() => setIsMinimized(!isMinimized)}
-                  className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-text-[#646970] hover:optionbay-text-[#2271b1] optionbay-transition-colors"
-                  title={
-                    isMinimized
-                      ? __("Expand", "optionbay")
-                      : __("Minimize", "optionbay")
-                  }
-                >
-                  {isMinimized ? (
-                    <ChevronsUpDown className="optionbay-rotate-45" size={18} />
-                  ) : (
-                    <Minus size={18} />
-                  )}
-                </button>
-              </Tooltip>
+
               {/* Delete Field */}
               <Tooltip content={__("Delete field", "optionbay")}>
                 <button
@@ -162,12 +148,23 @@ export const FieldRow: React.FC<FieldRowProps> = ({ field, index }) => {
                       dispatch({ type: "REMOVE_FIELD", payload: field.id });
                     }
                   }}
-                  className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1.5 optionbay-flex optionbay-items-center optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] optionbay-ml-1 optionbay-transition-colors"
-                  title={__("Remove field", "optionbay")}
+                  className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-text-[#d63638] hover:optionbay-text-[#b32d2e] optionbay-transition-colors"
                 >
                   <Trash2 size={16} />
                 </button>
               </Tooltip>
+
+              {/* <button
+                type="button"
+                onClick={() => setIsMinimized(!isMinimized)}
+                className="optionbay-bg-transparent optionbay-border-none optionbay-cursor-pointer optionbay-p-1 optionbay-flex optionbay-items-center optionbay-text-[#646970] hover:optionbay-text-[#2271b1]"
+              >
+                {isMinimized ? (
+                  <ChevronsUpDown className="optionbay-rotate-45" size={16} />
+                ) : (
+                  <Minus size={16} />
+                )}
+              </button> */}
             </div>
           </div>
 

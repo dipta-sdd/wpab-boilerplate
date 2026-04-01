@@ -226,37 +226,69 @@ function BuilderInner() {
             </p>
           </div>
 
-          {/* Fields list with drag-and-drop */}
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId="fields-list">
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className="optionbay-flex optionbay-flex-col optionbay-gap-6 optionbay-min-h-[100px]"
-                >
-                  {state.schema.length === 0 ? (
-                    <div className="postbox optionbay-text-center optionbay-px-5 optionbay-py-[60px] optionbay-text-[#999] optionbay-border-dashed optionbay-border-[#c3c4c7] optionbay-rounded-lg">
-                      <p className="optionbay-text-base optionbay-mb-2">
-                        {__("Your group is empty", "optionbay")}
-                      </p>
-                      <p className="optionbay-text-[13px]">
-                        {__(
-                          "Click the field buttons in the sidebar to start building.",
-                          "optionbay",
-                        )}
-                      </p>
-                    </div>
-                  ) : (
-                    state.schema.map((field, index) => (
-                      <FieldRow key={field.id} field={field} index={index} />
-                    ))
-                  )}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+          {/* Fields list mit header and table layout */}
+          <div className="postbox !optionbay-m-0">
+            {/* Table Header */}
+            <div className="optionbay-flex optionbay-items-center optionbay-bg-[#f6f7f7] optionbay-border-b optionbay-border-[#dcdcde] optionbay-px-4 optionbay-py-2 optionbay-font-semibold optionbay-text-[#1d2327]">
+              <div className="optionbay-w-10">
+                <span className="dashicons dashicons-editor-help optionbay-text-[#9ca3af] !optionbay-flex !optionbay-items-center !optionbay-w-full !optionbay-h-full"></span>
+              </div>
+              <div className="optionbay-flex-1">{__("Name", "optionbay")}</div>
+              <div className="optionbay-w-1/3">{__("Type", "optionbay")}</div>
+              <div className="optionbay-w-32 optionbay-text-right"></div>
+            </div>
+
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable droppableId="fields-list">
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="optionbay-flex optionbay-flex-col optionbay-min-h-[50px]"
+                  >
+                    {state.schema.length === 0 ? (
+                      <div className="optionbay-text-center optionbay-px-5 optionbay-py-[60px] optionbay-text-[#999] optionbay-border-dashed optionbay-border-[#c3c4c7] optionbay-m-4 optionbay-rounded-lg">
+                        <p className="optionbay-text-base optionbay-mb-2">
+                          {__("Your group is empty", "optionbay")}
+                        </p>
+                        <p className="optionbay-text-[13px]">
+                          {__(
+                            "Click the field buttons in the sidebar to start building.",
+                            "optionbay",
+                          )}
+                        </p>
+                      </div>
+                    ) : (
+                      state.schema.map((field, index) => (
+                        <FieldRow key={field.id} field={field} index={index} />
+                      ))
+                    )}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+
+            {/* Table Footer */}
+            <div className="optionbay-p-3 optionbay-bg-[#f6f7f7] optionbay-border-t optionbay-border-[#dcdcde]">
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() => {
+                  // This will just open the sidebar if it was closed, 
+                  // but usually we add a default field or similar.
+                  // For now, let's just use the existing sidebar logic
+                  // but we could also trigger adding a field here.
+                  dispatch({
+                    type: "ADD_FIELD",
+                    payload: getDefaultField("text"),
+                  });
+                }}
+              >
+                {__("Add field", "optionbay")}
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Right: Sidebar */}

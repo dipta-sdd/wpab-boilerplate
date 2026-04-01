@@ -1,13 +1,16 @@
 import { __ } from "@wordpress/i18n";
 
 export const FIELD_TYPES = [
-  { value: "text", label: __("Text", "optionbay") },
+  { value: "text", label: __("Text Input", "optionbay") },
   { value: "textarea", label: __("Textarea", "optionbay") },
   { value: "select", label: __("Dropdown", "optionbay") },
-  { value: "checkbox", label: __("Checkbox", "optionbay") },
+  { value: "checkbox", label: __("Checkboxes", "optionbay") },
   { value: "radio", label: __("Radio Buttons", "optionbay") },
   { value: "number", label: __("Number", "optionbay") },
-  { value: "file", label: __("File Upload", "optionbay") },
+  { value: "file", label: __("File upload", "optionbay") },
+  { value: "email", label: __("Email", "optionbay") },
+  { value: "date", label: __("Date", "optionbay") },
+  { value: "time", label: __("Time", "optionbay") },
 ];
 
 export const PRICE_TYPES = [
