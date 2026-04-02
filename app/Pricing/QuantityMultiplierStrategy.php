@@ -3,7 +3,7 @@
 namespace OptionBay\Pricing;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -21,14 +21,14 @@ if (!defined('ABSPATH')) {
  * @package    OptionBay
  * @subpackage OptionBay/Pricing
  */
-class QuantityMultiplierStrategy implements PricingStrategy
-{
+class QuantityMultiplierStrategy implements PricingStrategy {
+
 	/**
 	 * Calculate the quantity multiplier addition.
-	 * 
-	 * Adds an amount multiplied by the quantity in the cart. This means the fee 
+	 *
+	 * Adds an amount multiplied by the quantity in the cart. This means the fee
 	 * increases as the cart quantity increases.
-	 * 
+	 *
 	 * @since 1.0.0
 	 * @param float $base_price        Product base price.
 	 * @param float $configured_amount The mapped fee per unit.
@@ -36,12 +36,11 @@ class QuantityMultiplierStrategy implements PricingStrategy
 	 * @param int   $quantity          Cart quantity.
 	 * @return float The calculated exponential cost.
 	 */
-	public function calculate(float $base_price, float $configured_amount, $field_value, int $quantity)
-	{
-		$qty = max(1, $quantity);
+	public function calculate( float $base_price, float $configured_amount, $field_value, int $quantity ) {
+		$qty        = max( 1, $quantity );
 		$calculated = $configured_amount * $qty;
-		
-		optionbay_log("QuantityMultiplierStrategy: calculated {$calculated} ({$configured_amount} * {$qty})", 'DEBUG');
+
+		optionbay_log( "QuantityMultiplierStrategy: calculated {$calculated} ({$configured_amount} * {$qty})", 'DEBUG' );
 
 		return $calculated;
 	}

@@ -9,8 +9,8 @@
  */
 
 return array(
-    \OptionBay\Api\SettingsController::class,
-    \OptionBay\Api\LogController::class,
-    \OptionBay\Api\AddonGroupController::class,
-    \OptionBay\Api\ResourceController::class,
+	\OptionBay\Api\SettingsController::class,
+	\OptionBay\Api\LogController::class,
+	\OptionBay\Api\AddonGroupController::class,
+	\OptionBay\Api\ResourceController::class,
 );

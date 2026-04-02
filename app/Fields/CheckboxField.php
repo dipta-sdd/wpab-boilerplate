@@ -2,7 +2,7 @@
 
 namespace OptionBay\Fields;
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -15,31 +15,30 @@ if (!defined('ABSPATH')) {
  *
  * @since 1.0.0
  */
-class CheckboxField extends BaseField
-{
+class CheckboxField extends BaseField {
+
 	/**
 	 * Render the checkbox input array or single toggle element.
-	 * 
+	 *
 	 * Determines rendering logic based on whether choices were supplied
-	 * in the OptionBay schema. Adds `data-price` properties on an 
+	 * in the OptionBay schema. Adds `data-price` properties on an
 	 * individual element basis for JS evaluation.
-	 * 
+	 *
 	 * @since 1.0.0
 	 * @return string The escaped HTML markup.
 	 */
-	protected function render_input()
-	{
-		$options = $this->get('options', array());
+	protected function render_input() {
+		$options = $this->get( 'options', array() );
 
 		// Single toggle checkbox (no options)
-		if (empty($options)) {
-			$required = $this->get('required') ? ' required="required"' : '';
+		if ( empty( $options ) ) {
+			$required = $this->get( 'required' ) ? ' required="required"' : '';
 			return sprintf(
 				'<label class="ob-checkbox-single"><input type="checkbox" id="%s" name="%s" value="1" class="ob-input ob-input--checkbox"%s /> %s</label>',
 				$this->get_html_id(),
 				$this->get_name(),
 				$required,
-				esc_html($this->get('label'))
+				esc_html( $this->get( 'label' ) )
 			);
 		}
 
@@ -47,20 +46,20 @@ class CheckboxField extends BaseField
 		$html = '<div class="ob-checkbox-group">';
 		$name = $this->get_name() . '[]'; // Array name for multi-select
 
-		foreach ($options as $i => $option) {
-			$option_id = $this->get_html_id() . '-' . $i;
+		foreach ( $options as $i => $option ) {
+			$option_id  = $this->get_html_id() . '-' . $i;
 			$price_attr = '';
-			$price = floatval($option['price'] ?? 0);
-			if ($price > 0) {
+			$price      = floatval( $option['price'] ?? 0 );
+			if ( $price > 0 ) {
 				$price_attr = sprintf(
 					' data-price-type="%s" data-price="%s"',
-					esc_attr($option['price_type'] ?? 'flat'),
-					esc_attr($price)
+					esc_attr( $option['price_type'] ?? 'flat' ),
+					esc_attr( $price )
 				);
 			}
-			$weight = floatval($option['weight'] ?? 0);
-			if ($weight > 0) {
-				$price_attr .= sprintf(' data-weight="%s"', esc_attr($weight));
+			$weight = floatval( $option['weight'] ?? 0 );
+			if ( $weight > 0 ) {
+				$price_attr .= sprintf( ' data-weight="%s"', esc_attr( $weight ) );
 			}
 
 			$html .= sprintf(
@@ -68,9 +67,9 @@ class CheckboxField extends BaseField
 				$option_id,
 				$option_id,
 				$name,
-				esc_attr($option['value'] ?? ''),
+				esc_attr( $option['value'] ?? '' ),
 				$price_attr,
-				esc_html($option['label'] ?? '')
+				esc_html( $option['label'] ?? '' )
 			);
 		}
 
@@ -80,7 +79,7 @@ class CheckboxField extends BaseField
 
 	/**
 	 * Validate the submitted array of checkboxes or the single toggle value.
-	 * 
+	 *
 	 * Inherits basic requirement checks from BaseField and adds security
 	 * checks against forged option values.
 	 *
@@ -88,25 +87,24 @@ class CheckboxField extends BaseField
 	 * @param mixed $value The string or array of strings submitted.
 	 * @return true|\WP_Error True if validation passed, WP_Error object otherwise.
 	 */
-	public function validate($value)
-	{
-		$result = parent::validate($value);
-		if (is_wp_error($result)) {
+	public function validate( $value ) {
+		$result = parent::validate( $value );
+		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
 
 		// Validate multi-checkbox against allowed options
-		$options = $this->get('options', array());
-		if (!empty($options) && is_array($value)) {
-			$allowed = array_column($options, 'value');
-			foreach ($value as $v) {
-				if (!in_array($v, $allowed, true)) {
-					optionbay_log("CheckboxField Validation: Submited value '{$v}' not in allowed set.", 'WARNING');
+		$options = $this->get( 'options', array() );
+		if ( ! empty( $options ) && is_array( $value ) ) {
+			$allowed = array_column( $options, 'value' );
+			foreach ( $value as $v ) {
+				if ( ! in_array( $v, $allowed, true ) ) {
+					optionbay_log( "CheckboxField Validation: Submited value '{$v}' not in allowed set.", 'WARNING' );
 					return new \WP_Error(
 						'invalid_option',
 						sprintf(
-							__('Invalid selection for %s.', 'optionbay'),
-							$this->get('label', $this->get('id'))
+							__( 'Invalid selection for %s.', 'optionbay' ),
+							$this->get( 'label', $this->get( 'id' ) )
 						)
 					);
 				}
@@ -123,35 +121,33 @@ class CheckboxField extends BaseField
 	 * @param mixed $value The raw POST value.
 	 * @return mixed Sanitized strings array or string.
 	 */
-	public function sanitize($value)
-	{
-		if (is_array($value)) {
-			return array_map('sanitize_text_field', $value);
+	public function sanitize( $value ) {
+		if ( is_array( $value ) ) {
+			return array_map( 'sanitize_text_field', $value );
 		}
-		return sanitize_text_field($value);
+		return sanitize_text_field( $value );
 	}
 
-	public function get_display_value($value)
-	{
-		$options = $this->get('options', array());
+	public function get_display_value( $value ) {
+		$options = $this->get( 'options', array() );
 
 		// Single toggle
-		if (empty($options)) {
-			return $value ? __('Yes', 'optionbay') : __('No', 'optionbay');
+		if ( empty( $options ) ) {
+			return $value ? __( 'Yes', 'optionbay' ) : __( 'No', 'optionbay' );
 		}
 
 		// Multi-checkbox
-		if (!is_array($value)) {
-			$value = array($value);
+		if ( ! is_array( $value ) ) {
+			$value = array( $value );
 		}
 
 		$labels = array();
-		foreach ($options as $option) {
-			if (in_array($option['value'] ?? '', $value, true)) {
+		foreach ( $options as $option ) {
+			if ( in_array( $option['value'] ?? '', $value, true ) ) {
 				$labels[] = $option['label'] ?? $option['value'];
 			}
 		}
-		return esc_html(implode(', ', $labels));
+		return esc_html( implode( ', ', $labels ) );
 	}
 
 	/**
@@ -161,21 +157,20 @@ class CheckboxField extends BaseField
 	 * @param mixed $value User selection(s).
 	 * @return float Computed aggregate weight delta.
 	 */
-	public function get_weight($value)
-	{
-		$options = $this->get('options', array());
-		if (empty($options)) {
-			return $value ? floatval($this->get('weight', 0)) : 0.0;
+	public function get_weight( $value ) {
+		$options = $this->get( 'options', array() );
+		if ( empty( $options ) ) {
+			return $value ? floatval( $this->get( 'weight', 0 ) ) : 0.0;
 		}
 
-		if (!is_array($value)) {
-			$value = array($value);
+		if ( ! is_array( $value ) ) {
+			$value = array( $value );
 		}
 
 		$total = 0.0;
-		foreach ($options as $option) {
-			if (in_array($option['value'] ?? '', $value, true)) {
-				$total += floatval($option['weight'] ?? 0);
+		foreach ( $options as $option ) {
+			if ( in_array( $option['value'] ?? '', $value, true ) ) {
+				$total += floatval( $option['weight'] ?? 0 );
 			}
 		}
 		return $total;

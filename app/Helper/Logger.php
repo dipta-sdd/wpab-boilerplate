@@ -3,7 +3,7 @@
 namespace OptionBay\Helper;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,8 +20,8 @@ use OptionBay\Core\Cron;
  * @subpackage WPAB_Boilerplate/Helper
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
-class Logger
-{
+class Logger {
+
 	/**
 	 * The instance of the Logger class.
 	 *
@@ -38,9 +38,8 @@ class Logger
 	 * @access public
 	 * @return Logger
 	 */
-	public static function get_instance()
-	{
-		if (null === self::$instance) {
+	public static function get_instance() {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -66,13 +65,12 @@ class Logger
 	 * @param array  $context  Optional. An associative array of contextual data to store.
 	 * @return void
 	 */
-	public function log($log_type, $message, $context = array())
-	{
+	public function log( $log_type, $message, $context = array() ) {
 		$level = $log_type;
-		if (!empty($context)) {
-			$message .= ' ' . wp_json_encode($context);
+		if ( ! empty( $context ) ) {
+			$message .= ' ' . wp_json_encode( $context );
 		}
-		optionbay_log($message, $level);
+		optionbay_log( $message, $level );
 	}
 
 	/**
@@ -82,8 +80,7 @@ class Logger
 	 * @access public
 	 * @return string
 	 */
-	public static function get_log_dir()
-	{
+	public static function get_log_dir() {
 		$upload_dir = wp_upload_dir();
 		return $upload_dir['basedir'] . '/' . OPTIONBAY_TEXT_DOMAIN . '-logs/';
 	}
@@ -96,10 +93,9 @@ class Logger
 	 * @param string $date Date in Y-m-d format. Defaults to today.
 	 * @return string
 	 */
-	public static function get_log_file_for_date($date = '')
-	{
-		if (empty($date)) {
-			$date = gmdate('Y-m-d');
+	public static function get_log_file_for_date( $date = '' ) {
+		if ( empty( $date ) ) {
+			$date = gmdate( 'Y-m-d' );
 		}
 		return self::get_log_dir() . 'plugin-log-' . $date . '.log';
 	}
@@ -114,8 +110,7 @@ class Logger
 	 * @access public
 	 * @return string
 	 */
-	public static function get_merged_logs()
-	{
+	public static function get_merged_logs() {
 		return Cron::get_instance()->get_merged_logs();
 	}
 
@@ -128,8 +123,7 @@ class Logger
 	 * @access public
 	 * @return void
 	 */
-	public static function purge_old_logs()
-	{
+	public static function purge_old_logs() {
 		Cron::get_instance()->purge_old_logs();
 	}
 
@@ -142,8 +136,7 @@ class Logger
 	 * @access public
 	 * @return void
 	 */
-	public static function rebuild_cache()
-	{
+	public static function rebuild_cache() {
 		Cron::get_instance()->rebuild_log_cache();
 	}
 }

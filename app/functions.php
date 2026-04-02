@@ -9,7 +9,7 @@
  */
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 
 
 
-if (!function_exists('optionbay_log')) {
+if ( ! function_exists( 'optionbay_log' ) ) {
 	/**
 	 * Log messages to the debug log file.
 	 *
@@ -25,41 +25,40 @@ if (!function_exists('optionbay_log')) {
 	 * @param string $level    The log level (e.g., 'DEBUG', 'INFO', 'ERROR').
 	 * @return void
 	 */
-	function optionbay_log($message, $level = 'INFO')
-	{
-		$enable_logging = OptionBay\Core\Settings::get_instance()->get_settings('debug_enableMode');
-		if (!$enable_logging && ($level !== 'ERROR' && $level !== 'error')) {
+	function optionbay_log( $message, $level = 'INFO' ) {
+		$enable_logging = OptionBay\Core\Settings::get_instance()->get_settings( 'debug_enableMode' );
+		if ( ! $enable_logging && ( $level !== 'ERROR' && $level !== 'error' ) ) {
 			return;
 		}
 		$upload_dir = wp_upload_dir();
-		$log_dir = $upload_dir['basedir'] . '/' . OPTIONBAY_TEXT_DOMAIN . '-logs/';
+		$log_dir    = $upload_dir['basedir'] . '/' . OPTIONBAY_TEXT_DOMAIN . '-logs/';
 
-		if (!is_dir($log_dir)) {
-			wp_mkdir_p($log_dir);
+		if ( ! is_dir( $log_dir ) ) {
+			wp_mkdir_p( $log_dir );
 		}
 
-		$log_file = $log_dir . 'plugin-log-' . gmdate('Y-m-d') . '.log';
+		$log_file = $log_dir . 'plugin-log-' . gmdate( 'Y-m-d' ) . '.log';
 
 		$formatted_message = '';
-		if (is_array($message) || is_object($message)) {
-			$formatted_message = json_encode($message);
+		if ( is_array( $message ) || is_object( $message ) ) {
+			$formatted_message = json_encode( $message );
 		} else {
 			$formatted_message = $message;
 		}
 
-		$log_level = is_string($level) ? strtoupper($level) : (is_array($level) || is_object($level) ? print_r($level, true) : '');
+		$log_level = is_string( $level ) ? strtoupper( $level ) : ( is_array( $level ) || is_object( $level ) ? print_r( $level, true ) : '' );
 		$log_entry = sprintf(
 			"[%s] [%s]: %s\n",
-			current_time('mysql'),
+			current_time( 'mysql' ),
 			$log_level,
 			$formatted_message
 		);
-		file_put_contents($log_file, $log_entry, FILE_APPEND | LOCK_EX);
+		file_put_contents( $log_file, $log_entry, FILE_APPEND | LOCK_EX );
 	}
 }
 
 
-if (!function_exists('optionbay_get_value')) {
+if ( ! function_exists( 'optionbay_get_value' ) ) {
 	/**
 	 * Safely retrieve a value from a nested array or object using dot notation.
 	 * Returns default if key is missing OR if value is an empty string.
@@ -70,25 +69,24 @@ if (!function_exists('optionbay_get_value')) {
 	 * @param mixed        $default The default value if key is not found.
 	 * @return mixed
 	 */
-	function optionbay_get_value($target, $key, $default = null)
-	{
-		if (is_null($key) || trim($key) == '') {
+	function optionbay_get_value( $target, $key, $default = null ) {
+		if ( is_null( $key ) || trim( $key ) == '' ) {
 			return $target;
 		}
 
-		$keys = is_array($key) ? $key : explode('.', $key);
+		$keys = is_array( $key ) ? $key : explode( '.', $key );
 
-		foreach ($keys as $segment) {
-			if (is_array($target) && isset($target[$segment])) {
-				$target = $target[$segment];
-			} elseif (is_object($target) && isset($target->{$segment})) {
+		foreach ( $keys as $segment ) {
+			if ( is_array( $target ) && isset( $target[ $segment ] ) ) {
+				$target = $target[ $segment ];
+			} elseif ( is_object( $target ) && isset( $target->{$segment} ) ) {
 				$target = $target->{$segment};
 			} else {
 				return $default;
 			}
 		}
 
-		if ($target === '') {
+		if ( $target === '' ) {
 			return $default;
 		}
 

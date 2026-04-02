@@ -3,7 +3,7 @@
 namespace OptionBay\Api;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -21,8 +21,8 @@ use WP_REST_Server;
  * @package    OptionBay
  * @subpackage OptionBay/Api
  */
-class ResourceController extends ApiController
-{
+class ResourceController extends ApiController {
+
 	/**
 	 * The single instance of the class.
 	 *
@@ -43,11 +43,10 @@ class ResourceController extends ApiController
 	 *
 	 * @since 1.0.0
 	 */
-	public function run()
-	{
+	public function run() {
 		$this->type = 'optionbay_api_resources';
 
-		add_action('rest_api_init', array($this, 'register_routes'));
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 	}
 
 	/**
@@ -55,8 +54,7 @@ class ResourceController extends ApiController
 	 *
 	 * @since 1.0.0
 	 */
-	public function register_routes()
-	{
+	public function register_routes() {
 		$namespace = $this->namespace . $this->version;
 
 		// Products endpoint
@@ -66,8 +64,8 @@ class ResourceController extends ApiController
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array($this, 'get_products'),
-					'permission_callback' => array($this, 'get_item_permissions_check'),
+					'callback'            => array( $this, 'get_products' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
 				),
 			)
 		);
@@ -79,8 +77,8 @@ class ResourceController extends ApiController
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array($this, 'get_categories'),
-					'permission_callback' => array($this, 'get_item_permissions_check'),
+					'callback'            => array( $this, 'get_categories' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
 				),
 			)
 		);
@@ -92,8 +90,8 @@ class ResourceController extends ApiController
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array($this, 'get_tags'),
-					'permission_callback' => array($this, 'get_item_permissions_check'),
+					'callback'            => array( $this, 'get_tags' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
 				),
 			)
 		);
@@ -110,44 +108,43 @@ class ResourceController extends ApiController
 	 * @param WP_REST_Request $request The REST request object.
 	 * @return WP_REST_Response
 	 */
-	public function get_products($request)
-	{
-		$search = $request->get_param('search');
-		$search = !empty($search) ? sanitize_text_field($search) : '';
-		$ids = $request->get_param('ids');
+	public function get_products( $request ) {
+		$search = $request->get_param( 'search' );
+		$search = ! empty( $search ) ? sanitize_text_field( $search ) : '';
+		$ids    = $request->get_param( 'ids' );
 
-		optionbay_log('ResourceController: Searching products with term: ' . $search, 'DEBUG');
+		optionbay_log( 'ResourceController: Searching products with term: ' . $search, 'DEBUG' );
 
 		// If specific IDs requested, return only those (for resolving pre-selected values)
-		if (!empty($ids)) {
-			$id_list = array_map('absint', explode(',', sanitize_text_field($ids)));
+		if ( ! empty( $ids ) ) {
+			$id_list  = array_map( 'absint', explode( ',', sanitize_text_field( $ids ) ) );
 			$products = array();
-			foreach ($id_list as $pid) {
-				$product = wc_get_product($pid);
-				if ($product) {
-					$products[] = $this->format_product($product);
+			foreach ( $id_list as $pid ) {
+				$product = wc_get_product( $pid );
+				if ( $product ) {
+					$products[] = $this->format_product( $product );
 				}
 			}
-			return rest_ensure_response($products);
+			return rest_ensure_response( $products );
 		}
 
 		$products = array();
 
 		// Check if search term is a numeric ID
-		if (!empty($search) && is_numeric($search)) {
-			$product_by_id = wc_get_product(absint($search));
-			if ($product_by_id && $product_by_id->get_status() === 'publish') {
-				$products[] = $this->format_product($product_by_id);
+		if ( ! empty( $search ) && is_numeric( $search ) ) {
+			$product_by_id = wc_get_product( absint( $search ) );
+			if ( $product_by_id && $product_by_id->get_status() === 'publish' ) {
+				$products[] = $this->format_product( $product_by_id );
 			}
 		}
 
 		// Search by SKU
-		if (!empty($search)) {
-			$sku_product_id = wc_get_product_id_by_sku($search);
-			if ($sku_product_id && !$this->product_exists_in_array($products, $sku_product_id)) {
-				$sku_product = wc_get_product($sku_product_id);
-				if ($sku_product && $sku_product->get_status() === 'publish') {
-					$products[] = $this->format_product($sku_product);
+		if ( ! empty( $search ) ) {
+			$sku_product_id = wc_get_product_id_by_sku( $search );
+			if ( $sku_product_id && ! $this->product_exists_in_array( $products, $sku_product_id ) ) {
+				$sku_product = wc_get_product( $sku_product_id );
+				if ( $sku_product && $sku_product->get_status() === 'publish' ) {
+					$products[] = $this->format_product( $sku_product );
 				}
 			}
 		}
@@ -158,27 +155,27 @@ class ResourceController extends ApiController
 			'limit'   => 50,
 			'orderby' => 'title',
 			'order'   => 'ASC',
-			'type'    => array('simple', 'variable'),
+			'type'    => array( 'simple', 'variable' ),
 		);
 
-		if (!empty($search)) {
+		if ( ! empty( $search ) ) {
 			$args['s'] = $search;
 		}
 
-		$wc_products = wc_get_products($args);
+		$wc_products = wc_get_products( $args );
 
-		foreach ($wc_products as $wc_product) {
+		foreach ( $wc_products as $wc_product ) {
 			// Skip if already added via ID or SKU search
-			if ($this->product_exists_in_array($products, $wc_product->get_id())) {
+			if ( $this->product_exists_in_array( $products, $wc_product->get_id() ) ) {
 				continue;
 			}
 
-			$products[] = $this->format_product($wc_product);
+			$products[] = $this->format_product( $wc_product );
 		}
 
-		optionbay_log('ResourceController: Found ' . count($products) . ' products', 'DEBUG');
+		optionbay_log( 'ResourceController: Found ' . count( $products ) . ' products', 'DEBUG' );
 
-		return rest_ensure_response($products);
+		return rest_ensure_response( $products );
 	}
 
 	/**
@@ -191,12 +188,11 @@ class ResourceController extends ApiController
 	 * @param \WC_Product $product The WooCommerce product object.
 	 * @return array Formatted product data.
 	 */
-	private function format_product($product)
-	{
+	private function format_product( $product ) {
 		$thumbnail_id = $product->get_image_id();
-		$image_url = $thumbnail_id
-			? wp_get_attachment_image_url($thumbnail_id, 'thumbnail')
-			: wc_placeholder_img_src('thumbnail');
+		$image_url    = $thumbnail_id
+			? wp_get_attachment_image_url( $thumbnail_id, 'thumbnail' )
+			: wc_placeholder_img_src( 'thumbnail' );
 
 		$formatted = array(
 			'value'    => $product->get_id(),
@@ -207,11 +203,11 @@ class ResourceController extends ApiController
 		);
 
 		// Include variants for variable products
-		if ($product->is_type('variable')) {
+		if ( $product->is_type( 'variable' ) ) {
 			$variation_ids = $product->get_children();
-			foreach ($variation_ids as $variation_id) {
-				$variation = wc_get_product($variation_id);
-				if ($variation && $variation->get_status() === 'publish') {
+			foreach ( $variation_ids as $variation_id ) {
+				$variation = wc_get_product( $variation_id );
+				if ( $variation && $variation->get_status() === 'publish' ) {
 					$formatted['variants'][] = array(
 						'value' => $variation->get_id(),
 						'label' => $variation->get_name(),
@@ -231,10 +227,9 @@ class ResourceController extends ApiController
 	 * @param int   $product_id The product ID to check.
 	 * @return bool
 	 */
-	private function product_exists_in_array($products, $product_id)
-	{
-		foreach ($products as $p) {
-			if ($p['value'] === $product_id) {
+	private function product_exists_in_array( $products, $product_id ) {
+		foreach ( $products as $p ) {
+			if ( $p['value'] === $product_id ) {
 				return true;
 			}
 		}
@@ -250,22 +245,23 @@ class ResourceController extends ApiController
 	 * @param WP_REST_Request $request The REST request object.
 	 * @return WP_REST_Response
 	 */
-	public function get_categories($request)
-	{
-		$search = $request->get_param('search');
-		$ids = $request->get_param('ids');
+	public function get_categories( $request ) {
+		$search = $request->get_param( 'search' );
+		$ids    = $request->get_param( 'ids' );
 
 		// If specific IDs requested, return only those
-		if (!empty($ids)) {
-			$id_list = array_map('absint', explode(',', sanitize_text_field($ids)));
-			$terms = get_terms(array(
-				'taxonomy'   => 'product_cat',
-				'include'    => $id_list,
-				'hide_empty' => false,
-			));
+		if ( ! empty( $ids ) ) {
+			$id_list    = array_map( 'absint', explode( ',', sanitize_text_field( $ids ) ) );
+			$terms      = get_terms(
+				array(
+					'taxonomy'   => 'product_cat',
+					'include'    => $id_list,
+					'hide_empty' => false,
+				)
+			);
 			$categories = array();
-			if (!is_wp_error($terms)) {
-				foreach ($terms as $term) {
+			if ( ! is_wp_error( $terms ) ) {
+				foreach ( $terms as $term ) {
 					$categories[] = array(
 						'value' => $term->term_id,
 						'label' => $term->name . ' (' . $term->count . ')',
@@ -273,7 +269,7 @@ class ResourceController extends ApiController
 					);
 				}
 			}
-			return rest_ensure_response($categories);
+			return rest_ensure_response( $categories );
 		}
 
 		$args = array(
@@ -284,15 +280,15 @@ class ResourceController extends ApiController
 			'number'     => 50,
 		);
 
-		if (!empty($search)) {
-			$args['search'] = sanitize_text_field($search);
+		if ( ! empty( $search ) ) {
+			$args['search'] = sanitize_text_field( $search );
 		}
 
-		$terms = get_terms($args);
+		$terms      = get_terms( $args );
 		$categories = array();
 
-		if (!is_wp_error($terms)) {
-			foreach ($terms as $term) {
+		if ( ! is_wp_error( $terms ) ) {
+			foreach ( $terms as $term ) {
 				$categories[] = array(
 					'value' => $term->term_id,
 					'label' => $term->name . ' (' . $term->count . ')',
@@ -301,9 +297,9 @@ class ResourceController extends ApiController
 			}
 		}
 
-		optionbay_log('ResourceController: Found ' . count($categories) . ' categories', 'DEBUG');
+		optionbay_log( 'ResourceController: Found ' . count( $categories ) . ' categories', 'DEBUG' );
 
-		return rest_ensure_response($categories);
+		return rest_ensure_response( $categories );
 	}
 
 	/**
@@ -315,22 +311,23 @@ class ResourceController extends ApiController
 	 * @param WP_REST_Request $request The REST request object.
 	 * @return WP_REST_Response
 	 */
-	public function get_tags($request)
-	{
-		$search = $request->get_param('search');
-		$ids = $request->get_param('ids');
+	public function get_tags( $request ) {
+		$search = $request->get_param( 'search' );
+		$ids    = $request->get_param( 'ids' );
 
 		// If specific IDs requested, return only those
-		if (!empty($ids)) {
-			$id_list = array_map('absint', explode(',', sanitize_text_field($ids)));
-			$terms = get_terms(array(
-				'taxonomy'   => 'product_tag',
-				'include'    => $id_list,
-				'hide_empty' => false,
-			));
-			$tags = array();
-			if (!is_wp_error($terms)) {
-				foreach ($terms as $term) {
+		if ( ! empty( $ids ) ) {
+			$id_list = array_map( 'absint', explode( ',', sanitize_text_field( $ids ) ) );
+			$terms   = get_terms(
+				array(
+					'taxonomy'   => 'product_tag',
+					'include'    => $id_list,
+					'hide_empty' => false,
+				)
+			);
+			$tags    = array();
+			if ( ! is_wp_error( $terms ) ) {
+				foreach ( $terms as $term ) {
 					$tags[] = array(
 						'value' => $term->term_id,
 						'label' => $term->name . ' (' . $term->count . ')',
@@ -338,7 +335,7 @@ class ResourceController extends ApiController
 					);
 				}
 			}
-			return rest_ensure_response($tags);
+			return rest_ensure_response( $tags );
 		}
 
 		$args = array(
@@ -349,15 +346,15 @@ class ResourceController extends ApiController
 			'number'     => 50,
 		);
 
-		if (!empty($search)) {
-			$args['search'] = sanitize_text_field($search);
+		if ( ! empty( $search ) ) {
+			$args['search'] = sanitize_text_field( $search );
 		}
 
-		$terms = get_terms($args);
-		$tags = array();
+		$terms = get_terms( $args );
+		$tags  = array();
 
-		if (!is_wp_error($terms)) {
-			foreach ($terms as $term) {
+		if ( ! is_wp_error( $terms ) ) {
+			foreach ( $terms as $term ) {
 				$tags[] = array(
 					'value' => $term->term_id,
 					'label' => $term->name . ' (' . $term->count . ')',
@@ -366,9 +363,9 @@ class ResourceController extends ApiController
 			}
 		}
 
-		optionbay_log('ResourceController: Found ' . count($tags) . ' tags', 'DEBUG');
+		optionbay_log( 'ResourceController: Found ' . count( $tags ) . ' tags', 'DEBUG' );
 
-		return rest_ensure_response($tags);
+		return rest_ensure_response( $tags );
 	}
 
 	/**
@@ -377,10 +374,9 @@ class ResourceController extends ApiController
 	 * @since 1.0.0
 	 * @return ResourceController
 	 */
-	public static function get_instance()
-	{
+	public static function get_instance() {
 		static $instance = null;
-		if (null === self::$instance) {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;

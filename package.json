@@ -9,7 +9,10 @@
     "build:legacy": "cross-env BUILD_TARGET=legacy wp-scripts build",
     "start:legacy": "cross-env BUILD_TARGET=legacy wp-scripts start",
     "makepot": "wp i18n make-pot . languages/optionbay.pot --domain=optionbay --slug=optionbay --exclude='node_modules,vendor,src'",
-    "make-json": "wp i18n make-json languages --no-purge"
+    "make-json": "wp i18n make-json languages --no-purge",
+    "lint": "phpcs --standard=phpcs.xml.dist",
+    "lint-stat": "phpcs --standard=phpcs.xml.dist --report=summary",
+    "lint-fix": "phpcbf --standard=phpcs.xml.dist"
   },
   "author": "WPAnchorBay",
   "license": "GPLv2 or later",

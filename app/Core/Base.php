@@ -15,12 +15,12 @@ namespace OptionBay\Core;
  */
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-abstract class Base
-{
+abstract class Base {
+
 	/**
 	 * An array of instances of the extending classes.
 	 *
@@ -47,13 +47,12 @@ abstract class Base
 	 * @since 1.0.0
 	 * @return object The single instance of the calling class.
 	 */
-	public static function get_instance()
-	{
+	public static function get_instance() {
 		$class = static::class;
-		if (!isset(self::$instances[$class])) {
-			self::$instances[$class] = new static();
+		if ( ! isset( self::$instances[ $class ] ) ) {
+			self::$instances[ $class ] = new static();
 		}
-		return self::$instances[$class];
+		return self::$instances[ $class ];
 	}
 
 	/**
@@ -69,9 +68,8 @@ abstract class Base
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function add_action($hook, $callback, $priority = 10, $accepted_args = 1)
-	{
-		$this->add_hook('action', $hook, $callback, $priority, $accepted_args);
+	protected function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
+		$this->add_hook( 'action', $hook, $callback, $priority, $accepted_args );
 	}
 
 	/**
@@ -80,9 +78,8 @@ abstract class Base
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function add_filter($hook, $callback, $priority = 10, $accepted_args = 2)
-	{
-		$this->add_hook('filter', $hook, $callback, $priority, $accepted_args);
+	protected function add_filter( $hook, $callback, $priority = 10, $accepted_args = 2 ) {
+		$this->add_hook( 'filter', $hook, $callback, $priority, $accepted_args );
 	}
 
 	/**
@@ -91,14 +88,13 @@ abstract class Base
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function add_hook($type, $hook, $callback, $priority, $accepted_args)
-	{
+	protected function add_hook( $type, $hook, $callback, $priority, $accepted_args ) {
 		$this->hooks[] = array(
-			'type' => $type,
-			'hook' => $hook,
-			'component' => $this,
-			'callback' => $callback,
-			'priority' => $priority,
+			'type'          => $type,
+			'hook'          => $hook,
+			'component'     => $this,
+			'callback'      => $callback,
+			'priority'      => $priority,
 			'accepted_args' => $accepted_args,
 		);
 	}
@@ -110,8 +106,7 @@ abstract class Base
 	 * @access public
 	 * @return array
 	 */
-	public function get_hooks()
-	{
+	public function get_hooks() {
 		return $this->hooks;
 	}
 

@@ -8,12 +8,12 @@
  */
 
 // If uninstall not called from WordPress, then exit.
-if (! defined('WP_UNINSTALL_PLUGIN')) {
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-define('OPTIONBAY_OPTION_NAME', 'optionbay');
-define('OPTIONBAY_TEXT_DOMAIN', 'optionbay');
+define( 'OPTIONBAY_OPTION_NAME', 'optionbay' );
+define( 'OPTIONBAY_TEXT_DOMAIN', 'optionbay' );
 
 optionbay_run_uninstall();
 
@@ -22,12 +22,11 @@ optionbay_run_uninstall();
  *
  * @since 1.0.0
  */
-function optionbay_run_uninstall()
-{
-	$options = get_option(OPTIONBAY_OPTION_NAME);
+function optionbay_run_uninstall() {
+	$options = get_option( OPTIONBAY_OPTION_NAME );
 
 	// Only proceed if user opted in to delete all data.
-	if (! empty($options['advanced_deleteAllOnUninstall']) && true === $options['advanced_deleteAllOnUninstall']) {
+	if ( ! empty( $options['advanced_deleteAllOnUninstall'] ) && true === $options['advanced_deleteAllOnUninstall'] ) {
 		optionbay_drop_custom_tables();
 		optionbay_delete_plugin_options();
 		optionbay_remove_capabilities();
@@ -39,15 +38,14 @@ function optionbay_run_uninstall()
  *
  * @since 1.0.0
  */
-function optionbay_drop_custom_tables()
-{
+function optionbay_drop_custom_tables() {
 	global $wpdb;
 
 	$tables = array(
 		$wpdb->prefix . 'optionbay_items',
 	);
 
-	foreach ($tables as $table) {
+	foreach ( $tables as $table ) {
 		$wpdb->query("DROP TABLE IF EXISTS {$table}"); // phpcs:ignore
 	}
 }
@@ -57,9 +55,8 @@ function optionbay_drop_custom_tables()
  *
  * @since 1.0.0
  */
-function optionbay_delete_plugin_options()
-{
-	delete_option(OPTIONBAY_OPTION_NAME);
+function optionbay_delete_plugin_options() {
+	delete_option( OPTIONBAY_OPTION_NAME );
 }
 
 /**
@@ -67,14 +64,13 @@ function optionbay_delete_plugin_options()
  *
  * @since 1.0.0
  */
-function optionbay_remove_capabilities()
-{
+function optionbay_remove_capabilities() {
 	$editable_roles = get_editable_roles();
 
-	foreach ($editable_roles as $role_name => $role_info) {
-		$role = get_role($role_name);
-		if ($role && $role->has_cap('manage_optionbay')) {
-			$role->remove_cap('manage_optionbay');
+	foreach ( $editable_roles as $role_name => $role_info ) {
+		$role = get_role( $role_name );
+		if ( $role && $role->has_cap( 'manage_optionbay' ) ) {
+			$role->remove_cap( 'manage_optionbay' );
 		}
 	}
 }

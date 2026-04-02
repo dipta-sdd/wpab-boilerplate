@@ -3,7 +3,7 @@
 namespace OptionBay\Api;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -21,8 +21,8 @@ use Rakit\Validation\Validator;
  * @subpackage WPAB_Boilerplate/Api
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
-class ApiController extends WP_REST_Controller
-{
+class ApiController extends WP_REST_Controller {
+
 	/**
 	 * The single instance of the class.
 	 *
@@ -52,7 +52,7 @@ class ApiController extends WP_REST_Controller
 	 * @since 1.0.0
 	 * @var array
 	 */
-	protected $allow_batch = array('v1' => true);
+	protected $allow_batch = array( 'v1' => true );
 
 	/**
 	 * Constructor
@@ -64,9 +64,8 @@ class ApiController extends WP_REST_Controller
 	/**
 	 * Initialize the class — registers REST routes.
 	 */
-	public function run()
-	{
-		add_action('rest_api_init', array($this, 'register_routes'));
+	public function run() {
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 	}
 
 	/**
@@ -77,10 +76,9 @@ class ApiController extends WP_REST_Controller
 	 * @return object
 	 * @since 1.0.0
 	 */
-	public static function get_instance()
-	{
+	public static function get_instance() {
 		static $instance = null;
-		if (null === self::$instance) {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -93,9 +91,8 @@ class ApiController extends WP_REST_Controller
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function __clone()
-	{
-		_doing_it_wrong(__FUNCTION__, esc_html__('Cloning is not allowed.', 'optionbay'), '1.0.0');
+	public function __clone() {
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cloning is not allowed.', 'optionbay' ), '1.0.0' );
 	}
 
 	/**
@@ -105,9 +102,8 @@ class ApiController extends WP_REST_Controller
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function __wakeup()
-	{
-		_doing_it_wrong(__FUNCTION__, esc_html__('Unserializing is not allowed.', 'optionbay'), '1.0.0');
+	public function __wakeup() {
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Unserializing is not allowed.', 'optionbay' ), '1.0.0' );
 	}
 
 	/**
@@ -117,19 +113,18 @@ class ApiController extends WP_REST_Controller
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True if the request has read access, WP_Error otherwise.
 	 */
-	public function get_item_permissions_check($request)
-	{
-		if (!current_user_can('manage_optionbay')) {
+	public function get_item_permissions_check( $request ) {
+		if ( ! current_user_can( 'manage_optionbay' ) ) {
 			return new WP_Error(
 				'rest_forbidden',
-				__('Sorry, you are not allowed to access this resource.', 'optionbay'),
-				array('status' => rest_authorization_required_code())
+				__( 'Sorry, you are not allowed to access this resource.', 'optionbay' ),
+				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 
-		$nonce = $request->get_header('X-WP-Nonce');
-		if (!$nonce || !wp_verify_nonce($nonce, 'wp_rest')) {
-			return new WP_Error('rest_nonce_invalid', __('The security token is invalid.', 'optionbay'), array('status' => 403));
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new WP_Error( 'rest_nonce_invalid', __( 'The security token is invalid.', 'optionbay' ), array( 'status' => 403 ) );
 		}
 
 		return true;
@@ -142,27 +137,26 @@ class ApiController extends WP_REST_Controller
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True if the request has update access, WP_Error otherwise.
 	 */
-	public function update_item_permissions_check($request)
-	{
-		if (!current_user_can('manage_optionbay')) {
+	public function update_item_permissions_check( $request ) {
+		if ( ! current_user_can( 'manage_optionbay' ) ) {
 			return new WP_Error(
 				'rest_forbidden',
-				__('Sorry, you are not allowed to access this resource.', 'optionbay'),
-				array('status' => rest_authorization_required_code())
+				__( 'Sorry, you are not allowed to access this resource.', 'optionbay' ),
+				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 
-		$nonce = $request->get_header('X-WP-Nonce');
+		$nonce = $request->get_header( 'X-WP-Nonce' );
 
-		if (!$nonce) {
-			$nonce = isset($_REQUEST['_wpnonce']) ? sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])) : '';
+		if ( ! $nonce ) {
+			$nonce = isset( $_REQUEST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
 		}
 
-		if (!wp_verify_nonce($nonce, 'wp_rest')) {
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
 			return new WP_Error(
 				'rest_invalid_nonce',
-				__('Invalid or missing nonce.', 'optionbay'),
-				array('status' => 403)
+				__( 'Invalid or missing nonce.', 'optionbay' ),
+				array( 'status' => 403 )
 			);
 		}
 
@@ -179,30 +173,29 @@ class ApiController extends WP_REST_Controller
 	 * @param array           $aliases  Optional custom attribute aliases.
 	 * @return array|WP_Error Returns the validated data array, or a WP_Error if validation fails.
 	 */
-	protected function validate(WP_REST_Request $request, array $rules, array $messages = [], array $aliases = [])
-	{
+	protected function validate( WP_REST_Request $request, array $rules, array $messages = array(), array $aliases = array() ) {
 		$validator = new Validator();
 
 		// Get all parameters (GET, POST, JSON body)
 		$inputs = $request->get_params();
 
 		// Run the validation
-		$validation = $validator->make($inputs, $rules, $messages);
-		
-		if (!empty($aliases)) {
-			$validation->setAliases($aliases);
+		$validation = $validator->make( $inputs, $rules, $messages );
+
+		if ( ! empty( $aliases ) ) {
+			$validation->setAliases( $aliases );
 		}
 
 		$validation->validate();
 
-		if ($validation->fails()) {
+		if ( $validation->fails() ) {
 			// Get the first error message for each field
 			$errors = $validation->errors()->firstOfAll();
 
 			// Return a standard WordPress REST error with a 422 Unprocessable Entity status
 			return new WP_Error(
 				'validation_failed',
-				__('Invalid data provided.', 'optionbay'),
+				__( 'Invalid data provided.', 'optionbay' ),
 				array(
 					'status' => 422,
 					'errors' => $errors,

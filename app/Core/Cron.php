@@ -3,7 +3,7 @@
 namespace OptionBay\Core;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,8 +20,8 @@ if (!defined('ABSPATH')) {
  * @subpackage WPAB_Boilerplate/Core
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
-class Cron
-{
+class Cron {
+
 	/**
 	 * The single instance of the class.
 	 *
@@ -90,9 +90,8 @@ class Cron
 	 * @access public
 	 * @return Cron
 	 */
-	public static function get_instance()
-	{
-		if (null === self::$instance) {
+	public static function get_instance() {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -116,8 +115,7 @@ class Cron
 	 * @access public
 	 * @return array
 	 */
-	public function get_jobs()
-	{
+	public function get_jobs() {
 		/**
 		 * Filters the list of cron jobs registered by the plugin.
 		 *
@@ -126,18 +124,21 @@ class Cron
 		 * @param array $jobs The array of cron job definitions.
 		 * @return array
 		 */
-		return apply_filters('optionbay_cron_jobs', array(
+		return apply_filters(
+			'optionbay_cron_jobs',
 			array(
-				'hook'     => self::HOOK_PREFIX . 'purge_old_logs',
-				'interval' => 'daily',
-				'callback' => 'purge_old_logs',
-			),
-			array(
-				'hook'     => self::HOOK_PREFIX . 'rebuild_log_cache',
-				'interval' => 'daily',
-				'callback' => 'rebuild_log_cache',
-			),
-		));
+				array(
+					'hook'     => self::HOOK_PREFIX . 'purge_old_logs',
+					'interval' => 'daily',
+					'callback' => 'purge_old_logs',
+				),
+				array(
+					'hook'     => self::HOOK_PREFIX . 'rebuild_log_cache',
+					'interval' => 'daily',
+					'callback' => 'rebuild_log_cache',
+				),
+			)
+		);
 	}
 
 	/**
@@ -147,12 +148,11 @@ class Cron
 	 * @access public
 	 * @return void
 	 */
-	public function schedule_events()
-	{
+	public function schedule_events() {
 		$jobs = $this->get_jobs();
-		foreach ($jobs as $job) {
-			if (!wp_next_scheduled($job['hook'])) {
-				wp_schedule_event(time(), $job['interval'], $job['hook']);
+		foreach ( $jobs as $job ) {
+			if ( ! wp_next_scheduled( $job['hook'] ) ) {
+				wp_schedule_event( time(), $job['interval'], $job['hook'] );
 			}
 		}
 	}
@@ -168,8 +168,7 @@ class Cron
 	 * @access public
 	 * @return void
 	 */
-	public function maybe_run_missed()
-	{
+	public function maybe_run_missed() {
 		$crons = _get_cron_array();
 		if ( ! is_array( $crons ) ) {
 			return;
@@ -229,8 +228,7 @@ class Cron
 	 * @param array    $args     Optional args to pass to the callback.
 	 * @return bool Whether the event was newly scheduled.
 	 */
-	public function schedule_single( $hook, $delay, $callback, $args = array() )
-	{
+	public function schedule_single( $hook, $delay, $callback, $args = array() ) {
 		$hook = $this->maybe_prefix_hook( $hook );
 
 		// Register the callback so WP (and our fallback) can execute it.
@@ -260,8 +258,7 @@ class Cron
 	 * @param array    $args     Optional args to pass to the callback.
 	 * @return bool Whether the event was newly scheduled.
 	 */
-	public function schedule_recurring( $hook, $interval, $callback, $args = array() )
-	{
+	public function schedule_recurring( $hook, $interval, $callback, $args = array() ) {
 		$hook = $this->maybe_prefix_hook( $hook );
 
 		if ( ! has_action( $hook ) ) {
@@ -287,8 +284,7 @@ class Cron
 	 * @param array  $args Optional args that were used when scheduling.
 	 * @return void
 	 */
-	public function unschedule( $hook, $args = array() )
-	{
+	public function unschedule( $hook, $args = array() ) {
 		$hook      = $this->maybe_prefix_hook( $hook );
 		$timestamp = wp_next_scheduled( $hook, $args );
 		if ( $timestamp ) {
@@ -305,8 +301,7 @@ class Cron
 	 * @param string $hook The hook name.
 	 * @return string
 	 */
-	private function maybe_prefix_hook( $hook )
-	{
+	private function maybe_prefix_hook( $hook ) {
 		if ( strpos( $hook, 'optionbay_' ) !== 0 ) {
 			$hook = 'optionbay_' . $hook;
 		}
@@ -322,13 +317,12 @@ class Cron
 	 * @access public
 	 * @return void
 	 */
-	public function unschedule_all()
-	{
+	public function unschedule_all() {
 		$jobs = $this->get_jobs();
-		foreach ($jobs as $job) {
-			$timestamp = wp_next_scheduled($job['hook']);
-			if ($timestamp) {
-				wp_unschedule_event($timestamp, $job['hook']);
+		foreach ( $jobs as $job ) {
+			$timestamp = wp_next_scheduled( $job['hook'] );
+			if ( $timestamp ) {
+				wp_unschedule_event( $timestamp, $job['hook'] );
 			}
 		}
 
@@ -341,8 +335,8 @@ class Cron
 		}
 		$this->dynamic_callbacks = array();
 
-		delete_option(self::LAST_RUN_OPTION);
-		delete_transient(self::LOG_CACHE_KEY);
+		delete_option( self::LAST_RUN_OPTION );
+		delete_transient( self::LOG_CACHE_KEY );
 	}
 
 	// ------------------------------------------------------------------
@@ -356,33 +350,32 @@ class Cron
 	 * @access public
 	 * @return void
 	 */
-	public function purge_old_logs()
-	{
+	public function purge_old_logs() {
 		$log_dir = $this->get_log_dir();
-		if (!is_dir($log_dir)) {
-			$this->record_last_run('purge_old_logs');
+		if ( ! is_dir( $log_dir ) ) {
+			$this->record_last_run( 'purge_old_logs' );
 			return;
 		}
 
-		$files = glob($log_dir . 'plugin-log-*.log');
-		if (empty($files)) {
-			$this->record_last_run('purge_old_logs');
+		$files = glob( $log_dir . 'plugin-log-*.log' );
+		if ( empty( $files ) ) {
+			$this->record_last_run( 'purge_old_logs' );
 			return;
 		}
 
-		$cutoff = gmdate('Y-m-d', strtotime('-' . self::LOG_RETENTION_DAYS . ' days'));
+		$cutoff = gmdate( 'Y-m-d', strtotime( '-' . self::LOG_RETENTION_DAYS . ' days' ) );
 
-		foreach ($files as $file) {
+		foreach ( $files as $file ) {
 			// Extract the date from the filename: plugin-log-YYYY-MM-DD.log
-			$basename = basename($file, '.log');
-			$date     = str_replace('plugin-log-', '', $basename);
+			$basename = basename( $file, '.log' );
+			$date     = str_replace( 'plugin-log-', '', $basename );
 
-			if ($date < $cutoff) {
-				wp_delete_file($file);
+			if ( $date < $cutoff ) {
+				wp_delete_file( $file );
 			}
 		}
 
-		$this->record_last_run('purge_old_logs');
+		$this->record_last_run( 'purge_old_logs' );
 	}
 
 	/**
@@ -396,26 +389,25 @@ class Cron
 	 * @access public
 	 * @return void
 	 */
-	public function rebuild_log_cache()
-	{
+	public function rebuild_log_cache() {
 		$log_dir = $this->get_log_dir();
 		$merged  = '';
 
 		// Go from oldest (29 days ago) to yesterday.
-		for ($i = self::LOG_RETENTION_DAYS - 1; $i >= 1; $i--) {
-			$date = gmdate('Y-m-d', strtotime('-' . $i . ' days'));
+		for ( $i = self::LOG_RETENTION_DAYS - 1; $i >= 1; $i-- ) {
+			$date = gmdate( 'Y-m-d', strtotime( '-' . $i . ' days' ) );
 			$file = $log_dir . 'plugin-log-' . $date . '.log';
 
-			if (file_exists($file)) {
+			if ( file_exists( $file ) ) {
 				$content = file_get_contents($file); // phpcs:ignore
-				if (!empty($content)) {
+				if ( ! empty( $content ) ) {
 					$merged .= $content;
 				}
 			}
 		}
 
-		set_transient(self::LOG_CACHE_KEY, $merged, DAY_IN_SECONDS);
-		$this->record_last_run('rebuild_log_cache');
+		set_transient( self::LOG_CACHE_KEY, $merged, DAY_IN_SECONDS );
+		$this->record_last_run( 'rebuild_log_cache' );
 	}
 
 	/**
@@ -425,9 +417,8 @@ class Cron
 	 * @access public
 	 * @return void
 	 */
-	public function test_job()
-	{
-		optionbay_log('Test cron job executed successfully.', 'ERROR');
+	public function test_job() {
+		optionbay_log( 'Test cron job executed successfully.', 'ERROR' );
 	}
 
 	// ------------------------------------------------------------------
@@ -441,8 +432,7 @@ class Cron
 	 * @access public
 	 * @return string
 	 */
-	public function get_log_dir()
-	{
+	public function get_log_dir() {
 		$upload_dir = wp_upload_dir();
 		return $upload_dir['basedir'] . '/' . OPTIONBAY_TEXT_DOMAIN . '-logs/';
 	}
@@ -457,23 +447,22 @@ class Cron
 	 * @access public
 	 * @return string
 	 */
-	public function get_merged_logs()
-	{
-		$cached = get_transient(self::LOG_CACHE_KEY);
+	public function get_merged_logs() {
+		$cached = get_transient( self::LOG_CACHE_KEY );
 
 		// If cache is missing, rebuild it on-demand.
-		if (false === $cached) {
+		if ( false === $cached ) {
 			$this->rebuild_log_cache();
-			$cached = get_transient(self::LOG_CACHE_KEY);
-			if (false === $cached) {
+			$cached = get_transient( self::LOG_CACHE_KEY );
+			if ( false === $cached ) {
 				$cached = '';
 			}
 		}
 
 		// Append today's log.
-		$today_file = $this->get_log_dir() . 'plugin-log-' . gmdate('Y-m-d') . '.log';
+		$today_file = $this->get_log_dir() . 'plugin-log-' . gmdate( 'Y-m-d' ) . '.log';
 		$today_log  = '';
-		if (file_exists($today_file)) {
+		if ( file_exists( $today_file ) ) {
 			$today_log = file_get_contents($today_file); // phpcs:ignore
 		}
 
@@ -488,11 +477,10 @@ class Cron
 	 * @param string $job_name The callback name of the job.
 	 * @return void
 	 */
-	private function record_last_run($job_name)
-	{
-		$last_runs = get_option(self::LAST_RUN_OPTION, array());
-		$last_runs[$job_name] = time();
-		update_option(self::LAST_RUN_OPTION, $last_runs);
+	private function record_last_run( $job_name ) {
+		$last_runs              = get_option( self::LAST_RUN_OPTION, array() );
+		$last_runs[ $job_name ] = time();
+		update_option( self::LAST_RUN_OPTION, $last_runs );
 	}
 
 	/**
@@ -502,23 +490,22 @@ class Cron
 	 * @param \OptionBay\Core\Plugin $plugin The Plugin instance.
 	 * @return void
 	 */
-	public function run($plugin)
-	{
+	public function run( $plugin ) {
 		$loader = $plugin->get_loader();
 
 		// Schedule events on init.
-		$loader->add_action('init', $this, 'schedule_events');
+		$loader->add_action( 'init', $this, 'schedule_events' );
 
 		// Self-healing: check for missed events on every request.
-		$loader->add_action('init', $this, 'maybe_run_missed', 20);
+		$loader->add_action( 'init', $this, 'maybe_run_missed', 20 );
 
 		// Register the actual cron callbacks.
 		$jobs = $this->get_jobs();
-		foreach ($jobs as $job) {
-			add_action($job['hook'], array($this, $job['callback']));
+		foreach ( $jobs as $job ) {
+			add_action( $job['hook'], array( $this, $job['callback'] ) );
 		}
 
 		// Register the test cron callback.
-		add_action('optionbay_test_cron', array($this, 'test_job'));
+		add_action( 'optionbay_test_cron', array( $this, 'test_job' ) );
 	}
 }

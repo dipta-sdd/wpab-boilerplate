@@ -2,7 +2,7 @@
 
 namespace OptionBay\Fields;
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -11,8 +11,8 @@ if (!defined('ABSPATH')) {
  *
  * @since 1.0.0
  */
-class TextField extends BaseField
-{
+class TextField extends BaseField {
+
 	/**
 	 * Construct the native HTML `<input type="text">`.
 	 *
@@ -21,8 +21,7 @@ class TextField extends BaseField
 	 * @since 1.0.0
 	 * @return string Component HTML payload.
 	 */
-	protected function render_input()
-	{
+	protected function render_input() {
 		$attrs = array(
 			'type'  => 'text',
 			'id'    => $this->get_html_id(),
@@ -30,28 +29,28 @@ class TextField extends BaseField
 			'class' => 'ob-input ob-input--text',
 		);
 
-		$placeholder = $this->get('placeholder');
-		if (!empty($placeholder)) {
-			$attrs['placeholder'] = esc_attr($placeholder);
+		$placeholder = $this->get( 'placeholder' );
+		if ( ! empty( $placeholder ) ) {
+			$attrs['placeholder'] = esc_attr( $placeholder );
 		}
 
-		if ($this->get('required')) {
+		if ( $this->get( 'required' ) ) {
 			$attrs['required'] = 'required';
 		}
 
-		$max_length = $this->get('max_length', 0);
-		if ($max_length > 0) {
-			$attrs['maxlength'] = absint($max_length);
+		$max_length = $this->get( 'max_length', 0 );
+		if ( $max_length > 0 ) {
+			$attrs['maxlength'] = absint( $max_length );
 		}
 
-		$min_length = $this->get('min_length', 0);
-		if ($min_length > 0) {
-			$attrs['minlength'] = absint($min_length);
+		$min_length = $this->get( 'min_length', 0 );
+		if ( $min_length > 0 ) {
+			$attrs['minlength'] = absint( $min_length );
 		}
 
 		$attr_string = '';
-		foreach ($attrs as $key => $val) {
-			$attr_string .= sprintf(' %s="%s"', esc_attr($key), esc_attr($val));
+		foreach ( $attrs as $key => $val ) {
+			$attr_string .= sprintf( ' %s="%s"', esc_attr( $key ), esc_attr( $val ) );
 		}
 
 		return '<input' . $attr_string . ' />';
@@ -64,36 +63,35 @@ class TextField extends BaseField
 	 * @param mixed $value User POST data.
 	 * @return true|\WP_Error
 	 */
-	public function validate($value)
-	{
-		$result = parent::validate($value);
-		if (is_wp_error($result)) {
+	public function validate( $value ) {
+		$result = parent::validate( $value );
+		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
 
-		if (!$this->is_empty_value($value)) {
-			$max = $this->get('max_length', 0);
-			$min = $this->get('min_length', 0);
-			$len = mb_strlen($value);
+		if ( ! $this->is_empty_value( $value ) ) {
+			$max = $this->get( 'max_length', 0 );
+			$min = $this->get( 'min_length', 0 );
+			$len = mb_strlen( $value );
 
-			if ($max > 0 && $len > $max) {
-				optionbay_log("TextField Validation: Value length {$len} exceeds maximum {$max}.", 'WARNING');
+			if ( $max > 0 && $len > $max ) {
+				optionbay_log( "TextField Validation: Value length {$len} exceeds maximum {$max}.", 'WARNING' );
 				return new \WP_Error(
 					'max_length',
 					sprintf(
-						__('%s must be at most %d characters.', 'optionbay'),
-						$this->get('label', $this->get('id')),
+						__( '%1$s must be at most %2$d characters.', 'optionbay' ),
+						$this->get( 'label', $this->get( 'id' ) ),
 						$max
 					)
 				);
 			}
-			if ($min > 0 && $len < $min) {
-				optionbay_log("TextField Validation: Value length {$len} is less than minimum {$min}.", 'WARNING');
+			if ( $min > 0 && $len < $min ) {
+				optionbay_log( "TextField Validation: Value length {$len} is less than minimum {$min}.", 'WARNING' );
 				return new \WP_Error(
 					'min_length',
 					sprintf(
-						__('%s must be at least %d characters.', 'optionbay'),
-						$this->get('label', $this->get('id')),
+						__( '%1$s must be at least %2$d characters.', 'optionbay' ),
+						$this->get( 'label', $this->get( 'id' ) ),
 						$min
 					)
 				);

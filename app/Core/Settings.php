@@ -3,7 +3,7 @@
 namespace OptionBay\Core;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -15,8 +15,8 @@ if (!defined('ABSPATH')) {
  * @subpackage WPAB_Boilerplate/Core
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
-class Settings
-{
+class Settings {
+
 	/**
 	 * The single instance of the class.
 	 *
@@ -36,17 +36,19 @@ class Settings
 	 * @var   array
 	 */
 	private $default_settings = array(
-		/*==================================================
+		/*
+		==================================================
 		* Global Settings
 		==================================================*/
-		'global_enableFeature' => true,
-		'global_exampleText'   => 'Hello from OptionBay!',
+		'global_enableFeature'          => true,
+		'global_exampleText'            => 'Hello from OptionBay!',
 
-		/*==================================================
+		/*
+		==================================================
 		* Advanced Settings
 		==================================================*/
 		'advanced_deleteAllOnUninstall' => false,
-		'debug_enableMode'             => false,
+		'debug_enableMode'              => false,
 	);
 
 	/**
@@ -65,10 +67,9 @@ class Settings
 	 * @return Settings
 	 * @since 1.0.0
 	 */
-	public static function get_instance()
-	{
+	public static function get_instance() {
 		static $instance = null;
-		if (null === self::$instance) {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -82,13 +83,12 @@ class Settings
 	 * @param string $key optional meta key.
 	 * @return array|mixed|null
 	 */
-	public function get_settings($key = '')
-	{
-		if (!$this->settings) {
+	public function get_settings( $key = '' ) {
+		if ( ! $this->settings ) {
 			$this->load_settings();
 		}
-		if (!empty($key)) {
-			return isset($this->settings[$key]) ? $this->settings[$key] : false;
+		if ( ! empty( $key ) ) {
+			return isset( $this->settings[ $key ] ) ? $this->settings[ $key ] : false;
 		}
 		return $this->settings;
 	}
@@ -100,8 +100,7 @@ class Settings
 	 * @access public
 	 * @return array
 	 */
-	public function get_default_settings()
-	{
+	public function get_default_settings() {
 		return $this->default_settings;
 	}
 
@@ -112,15 +111,14 @@ class Settings
 	 * @access public
 	 * @return void
 	 */
-	public function load_settings()
-	{
-		$options = get_option(OPTIONBAY_OPTION_NAME);
-		if (!is_array($options)) {
+	public function load_settings() {
+		$options = get_option( OPTIONBAY_OPTION_NAME );
+		if ( ! is_array( $options ) ) {
 			$options = array();
 		}
 		$default_settings = $this->get_default_settings();
-		$settings = array_merge($default_settings, $options);
-		$this->settings = $settings;
+		$settings         = array_merge( $default_settings, $options );
+		$this->settings   = $settings;
 	}
 
 	/**
@@ -132,17 +130,16 @@ class Settings
 	 * @param string       $val         The value to update.
 	 * @return void
 	 */
-	public function update_settings($key_or_data, $val = '')
-	{
-		optionbay_log('Settings: Updating plugin settings option.', 'INFO');
-		if (is_string($key_or_data)) {
-			$options = $this->get_settings();
-			$options[$key_or_data] = $val;
+	public function update_settings( $key_or_data, $val = '' ) {
+		optionbay_log( 'Settings: Updating plugin settings option.', 'INFO' );
+		if ( is_string( $key_or_data ) ) {
+			$options                 = $this->get_settings();
+			$options[ $key_or_data ] = $val;
 		} else {
 			$options = $key_or_data;
 		}
-		
-		update_option(OPTIONBAY_OPTION_NAME, $options);
+
+		update_option( OPTIONBAY_OPTION_NAME, $options );
 		$this->load_settings();
 	}
 
@@ -153,20 +150,19 @@ class Settings
 	 * @access public
 	 * @return void
 	 */
-	public function register()
-	{
+	public function register() {
 		$defaults = $this->get_default_settings();
 
 		register_setting(
 			'optionbay_settings_group',
 			OPTIONBAY_OPTION_NAME,
 			array(
-				'type'    => 'object',
-				'default' => $defaults,
-				'show_in_rest' => array(
+				'type'              => 'object',
+				'default'           => $defaults,
+				'show_in_rest'      => array(
 					'schema' => $this->get_settings_schema(),
 				),
-				'sanitize_callback' => array($this, 'sanitize_settings_object'),
+				'sanitize_callback' => array( $this, 'sanitize_settings_object' ),
 			)
 		);
 	}
@@ -178,8 +174,7 @@ class Settings
 	 * @access public
 	 * @return array settings schema for this plugin.
 	 */
-	public function get_settings_schema()
-	{
+	public function get_settings_schema() {
 		/**
 		 * Filters the settings schema for the plugin.
 		 *
@@ -191,16 +186,16 @@ class Settings
 		$setting_properties = apply_filters(
 			'optionbay_options_properties',
 			array(
-				'global_enableFeature' => array(
+				'global_enableFeature'          => array(
 					'type'    => 'boolean',
 					'default' => true,
 				),
-				'global_exampleText' => array(
+				'global_exampleText'            => array(
 					'type'              => 'string',
 					'sanitize_callback' => 'sanitize_text_field',
 					'default'           => 'Hello from OptionBay!',
 				),
-				'debug_enableMode' => array(
+				'debug_enableMode'              => array(
 					'type'    => 'boolean',
 					'default' => false,
 				),
@@ -225,33 +220,32 @@ class Settings
 	 * @param array $input The raw array of settings data submitted for saving.
 	 * @return array The sanitized array of settings data.
 	 */
-	public function sanitize_settings_object($input)
-	{
-		$schema = $this->get_settings_schema();
-		$properties = $schema['properties'] ?? array();
-		$default_options = $this->get_default_settings();
-		$sanitized_output = get_option(OPTIONBAY_OPTION_NAME, $default_options);
+	public function sanitize_settings_object( $input ) {
+		$schema           = $this->get_settings_schema();
+		$properties       = $schema['properties'] ?? array();
+		$default_options  = $this->get_default_settings();
+		$sanitized_output = get_option( OPTIONBAY_OPTION_NAME, $default_options );
 
-		foreach ($properties as $key => $details) {
-			if (!isset($input[$key])) {
+		foreach ( $properties as $key => $details ) {
+			if ( ! isset( $input[ $key ] ) ) {
 				continue;
 			}
 
-			$value = $input[$key];
-			$type = $details['type'] ?? 'string';
+			$value = $input[ $key ];
+			$type  = $details['type'] ?? 'string';
 
-			switch ($type) {
+			switch ( $type ) {
 				case 'boolean':
-					$sanitized_output[$key] = (bool) $value;
+					$sanitized_output[ $key ] = (bool) $value;
 					break;
 				case 'integer':
-					$sanitized_output[$key] = absint($value);
+					$sanitized_output[ $key ] = absint( $value );
 					break;
 				case 'string':
-					$sanitized_output[$key] = sanitize_text_field($value);
+					$sanitized_output[ $key ] = sanitize_text_field( $value );
 					break;
 				default:
-					$sanitized_output[$key] = sanitize_text_field($value);
+					$sanitized_output[ $key ] = sanitize_text_field( $value );
 					break;
 			}
 		}
@@ -265,10 +259,9 @@ class Settings
 	 * @param    \OptionBay\Core\Plugin $plugin The Plugin instance.
 	 * @return   void
 	 */
-	public function run($plugin)
-	{
+	public function run( $plugin ) {
 		$loader = $plugin->get_loader();
-		$loader->add_action('rest_api_init', $this, 'register');
-		$loader->add_action('admin_init', $this, 'register');
+		$loader->add_action( 'rest_api_init', $this, 'register' );
+		$loader->add_action( 'admin_init', $this, 'register' );
 	}
 }

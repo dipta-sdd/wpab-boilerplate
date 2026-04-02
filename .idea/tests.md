@@ -6,7 +6,7 @@ Each test is designed to verify the frontend product page behavior, the backend 
 
 ---
 
-## Part 1: Field Types & Pricing Logic Matrices
+## Part 1: [Field Types & Pricing Logic Matrices](file:///home/sdd/Documents/campaign-bay-testing/plugin/optionbay/.idea/Tests_Fields.md)
 
 This section tests every field type against every possible `price_type`: `None`, `Flat`, `Percentage`, `Character Count`, `Quantity Multiplier`, and `Formula`.
 
@@ -61,7 +61,7 @@ This section tests every field type against every possible `price_type`: `None`,
 
 ---
 
-## Part 2: Conditional Logic Combinations
+## Part 2: [Conditional Logic Combinations](file:///home/sdd/Documents/campaign-bay-testing/plugin/optionbay/.idea/Tests_Logic.md)
 
 This section ensures that fields dynamically show/hide based on the operator and value of target fields. `Target Field` is the field that the user interacts with, which triggers the visibility of the `Dependent Field`.
 
@@ -110,7 +110,7 @@ This section ensures that fields dynamically show/hide based on the operator and
 
 ---
 
-## Part 3: Nested Conditional Chains
+## Part 3: [Nested Conditional Chains](file:///home/sdd/Documents/campaign-bay-testing/plugin/optionbay/.idea/Tests_Logic.md#part-3-nested-conditional-chains)
 Testing multiple layers of dependencies.
 
 | Chain Level | Trigger | Expected Outcome | Status |
@@ -122,7 +122,7 @@ Testing multiple layers of dependencies.
 
 ---
 
-## Part 4: Assignment Rules (Reach & Exceptions)
+## Part 4: [Assignment Rules (Reach & Exceptions)](file:///home/sdd/Documents/campaign-bay-testing/plugin/optionbay/.idea/Tests_Assignments.md)
 Verifying that the backend lookup logic correctly places the Option Group on the frontend.
 
 | Rule Configuration | Test Page Visited | Expected Outcome | Status |
@@ -139,7 +139,7 @@ Verifying that the backend lookup logic correctly places the Option Group on the
 
 ---
 
-## Part 5: Cart & Order Submission
+## Part 5: [Cart & Order Submission](file:///home/sdd/Documents/campaign-bay-testing/plugin/optionbay/.idea/Tests_Cart_Order.md)
 Crucial end-to-end testing to ensure calculated totals are passed to WooCommerce properly.
 
 | Scenario | Verification | Status |

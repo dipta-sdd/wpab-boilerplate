@@ -3,7 +3,7 @@
 namespace OptionBay\Core;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -17,8 +17,8 @@ if (!defined('ABSPATH')) {
  * @package    OptionBay
  * @subpackage OptionBay/Core
  */
-class AddonGroup extends Base
-{
+class AddonGroup extends Base {
+
 	/**
 	 * The Custom Post Type slug.
 	 *
@@ -50,36 +50,34 @@ class AddonGroup extends Base
 	 * @param Plugin $plugin The Plugin instance.
 	 * @return void
 	 */
-	public function run($plugin)
-	{
+	public function run( $plugin ) {
 		$loader = $plugin->get_loader();
-		$loader->add_action('init', $this, 'register_post_type');
-		$loader->add_action('init', $this, 'register_meta');
+		$loader->add_action( 'init', $this, 'register_post_type' );
+		$loader->add_action( 'init', $this, 'register_meta' );
 	}
 
 	/**
 	 * Register the ob_option_group Custom Post Type.
-	 * 
+	 *
 	 * Registers a hidden CPT that isn't publicly queryable or visible
 	 * in the standard WordPress admin menu, because the React SPA manages it.
 	 *
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function register_post_type()
-	{
+	public function register_post_type() {
 		$labels = array(
-			'name'               => _x('Option Groups', 'Post type general name', 'optionbay'),
-			'singular_name'      => _x('Option Group', 'Post type singular name', 'optionbay'),
-			'menu_name'          => _x('Option Groups', 'Admin Menu text', 'optionbay'),
-			'add_new'            => __('Add New', 'optionbay'),
-			'add_new_item'       => __('Add New Option Group', 'optionbay'),
-			'edit_item'          => __('Edit Option Group', 'optionbay'),
-			'new_item'           => __('New Option Group', 'optionbay'),
-			'view_item'          => __('View Option Group', 'optionbay'),
-			'search_items'       => __('Search Option Groups', 'optionbay'),
-			'not_found'          => __('No option groups found', 'optionbay'),
-			'not_found_in_trash' => __('No option groups found in Trash', 'optionbay'),
+			'name'               => _x( 'Option Groups', 'Post type general name', 'optionbay' ),
+			'singular_name'      => _x( 'Option Group', 'Post type singular name', 'optionbay' ),
+			'menu_name'          => _x( 'Option Groups', 'Admin Menu text', 'optionbay' ),
+			'add_new'            => __( 'Add New', 'optionbay' ),
+			'add_new_item'       => __( 'Add New Option Group', 'optionbay' ),
+			'edit_item'          => __( 'Edit Option Group', 'optionbay' ),
+			'new_item'           => __( 'New Option Group', 'optionbay' ),
+			'view_item'          => __( 'View Option Group', 'optionbay' ),
+			'search_items'       => __( 'Search Option Groups', 'optionbay' ),
+			'not_found'          => __( 'No option groups found', 'optionbay' ),
+			'not_found_in_trash' => __( 'No option groups found in Trash', 'optionbay' ),
 		);
 
 		$args = array(
@@ -91,13 +89,13 @@ class AddonGroup extends Base
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,
 			'has_archive'         => false,
-			'supports'            => array('title'),
+			'supports'            => array( 'title' ),
 			'capability_type'     => 'post',
 			'map_meta_cap'        => true,
 		);
 
-		register_post_type(self::POST_TYPE, $args);
-		optionbay_log("Registered Custom Post Type: " . self::POST_TYPE, 'DEBUG');
+		register_post_type( self::POST_TYPE, $args );
+		optionbay_log( 'Registered Custom Post Type: ' . self::POST_TYPE, 'DEBUG' );
 	}
 
 	/**
@@ -106,21 +104,28 @@ class AddonGroup extends Base
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function register_meta()
-	{
-		register_post_meta(self::POST_TYPE, self::META_SCHEMA, array(
-			'type'              => 'string',
-			'single'            => true,
-			'show_in_rest'      => false,
-			'sanitize_callback' => array($this, 'sanitize_json_meta'),
-		));
+	public function register_meta() {
+		register_post_meta(
+			self::POST_TYPE,
+			self::META_SCHEMA,
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'show_in_rest'      => false,
+				'sanitize_callback' => array( $this, 'sanitize_json_meta' ),
+			)
+		);
 
-		register_post_meta(self::POST_TYPE, self::META_SETTINGS, array(
-			'type'              => 'string',
-			'single'            => true,
-			'show_in_rest'      => false,
-			'sanitize_callback' => array($this, 'sanitize_json_meta'),
-		));
+		register_post_meta(
+			self::POST_TYPE,
+			self::META_SETTINGS,
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'show_in_rest'      => false,
+				'sanitize_callback' => array( $this, 'sanitize_json_meta' ),
+			)
+		);
 	}
 
 	/**
@@ -133,26 +138,25 @@ class AddonGroup extends Base
 	 * @param string|array|object $value The raw meta value from REST API or direct save.
 	 * @return string Sanitized JSON string.
 	 */
-	public function sanitize_json_meta($value)
-	{
-		if (empty($value)) {
+	public function sanitize_json_meta( $value ) {
+		if ( empty( $value ) ) {
 			return '[]';
 		}
 
 		// If it's already an array/object (from internal WP functions), encode it
-		if (is_array($value) || is_object($value)) {
-			return wp_json_encode($value);
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return wp_json_encode( $value );
 		}
 
 		// Validate raw JSON string
-		$decoded = json_decode($value, true);
-		if (json_last_error() !== JSON_ERROR_NONE) {
-			optionbay_log("JSON validation failed in sanitize_json_meta", 'ERROR');
+		$decoded = json_decode( $value, true );
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			optionbay_log( 'JSON validation failed in sanitize_json_meta', 'ERROR' );
 			return '[]';
 		}
 
 		// Re-encode to ensure clean JSON without malicious injections
-		return wp_json_encode($decoded);
+		return wp_json_encode( $decoded );
 	}
 
 	/**
@@ -161,8 +165,7 @@ class AddonGroup extends Base
 	 * @since 1.0.0
 	 * @return array
 	 */
-	public static function get_default_schema()
-	{
+	public static function get_default_schema() {
 		return array();
 	}
 
@@ -172,8 +175,7 @@ class AddonGroup extends Base
 	 * @since 1.0.0
 	 * @return array
 	 */
-	public static function get_default_settings()
-	{
+	public static function get_default_settings() {
 		return array(
 			'layout'   => 'flat',    // flat | accordion
 			'priority' => 10,

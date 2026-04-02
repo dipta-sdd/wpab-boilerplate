@@ -3,7 +3,7 @@
 namespace OptionBay\Helper;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -14,8 +14,8 @@ if (!defined('ABSPATH')) {
  * @subpackage WPAB_Boilerplate/Helper
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
-class Loader
-{
+class Loader {
+
 	/**
 	 * The single instance of the class.
 	 *
@@ -50,10 +50,9 @@ class Loader
 	 * @access public
 	 * @return Loader
 	 */
-	public static function get_instance()
-	{
+	public static function get_instance() {
 		static $instance = null;
-		if (null === self::$instance) {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -65,8 +64,7 @@ class Loader
 	 * @since    1.0.0
 	 * @access   public
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		$this->actions = array();
 		$this->filters = array();
 	}
@@ -77,9 +75,8 @@ class Loader
 	 * @since    1.0.0
 	 * @access   public
 	 */
-	public function add_action($hook, $component, $callback, $priority = 10, $accepted_args = 1)
-	{
-		$this->actions = $this->add($this->actions, $hook, $component, $callback, $priority, $accepted_args);
+	public function add_action( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
+		$this->actions = $this->add( $this->actions, $hook, $component, $callback, $priority, $accepted_args );
 	}
 
 	/**
@@ -88,9 +85,8 @@ class Loader
 	 * @since    1.0.0
 	 * @access   public
 	 */
-	public function add_filter($hook, $component, $callback, $priority = 10, $accepted_args = 1)
-	{
-		$this->filters = $this->add($this->filters, $hook, $component, $callback, $priority, $accepted_args);
+	public function add_filter( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
+		$this->filters = $this->add( $this->filters, $hook, $component, $callback, $priority, $accepted_args );
 	}
 
 	/**
@@ -99,13 +95,12 @@ class Loader
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function add($hooks, $hook, $component, $callback, $priority, $accepted_args)
-	{
+	private function add( $hooks, $hook, $component, $callback, $priority, $accepted_args ) {
 		$hooks[] = array(
-			'hook' => $hook,
-			'component' => $component,
-			'callback' => $callback,
-			'priority' => $priority,
+			'hook'          => $hook,
+			'component'     => $component,
+			'callback'      => $callback,
+			'priority'      => $priority,
 			'accepted_args' => $accepted_args,
 		);
 
@@ -119,14 +114,13 @@ class Loader
 	 * @access public
 	 * @return void
 	 */
-	public function run()
-	{
-		foreach ($this->filters as $hook) {
-			add_filter($hook['hook'], array($hook['component'], $hook['callback']), $hook['priority'], $hook['accepted_args']);
+	public function run() {
+		foreach ( $this->filters as $hook ) {
+			add_filter( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
 		}
 
-		foreach ($this->actions as $hook) {
-			add_action($hook['hook'], array($hook['component'], $hook['callback']), $hook['priority'], $hook['accepted_args']);
+		foreach ( $this->actions as $hook ) {
+			add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
 		}
 	}
 }

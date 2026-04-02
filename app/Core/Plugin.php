@@ -3,7 +3,7 @@
 namespace OptionBay\Core;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,8 +20,8 @@ use OptionBay\Helper\Loader;
  * @subpackage WPAB_Boilerplate/Core
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
-class Plugin
-{
+class Plugin {
+
 	/**
 	 * The single instance of the class.
 	 *
@@ -48,10 +48,9 @@ class Plugin
 	 * @access public
 	 * @return Plugin
 	 */
-	public static function get_instance()
-	{
+	public static function get_instance() {
 		static $instance = null;
-		if (null === self::$instance) {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -64,8 +63,7 @@ class Plugin
 	 * @access public
 	 * @return void
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		$this->loader = Loader::get_instance();
 		$this->define_core_hooks();
 		$this->define_admin_hooks();
@@ -80,18 +78,20 @@ class Plugin
 	 * @access   private
 	 * @return void
 	 */
-	private function define_core_hooks()
-	{
+	private function define_core_hooks() {
 		// Initialize API controllers from config
 		$api_controllers = include OPTIONBAY_PATH . 'config/api.php';
-		optionbay_log('API Controllers: ' . print_r($api_controllers, true), 'DEBUG');
-		if (is_array($api_controllers)) {
-			foreach ($api_controllers as $controller) {
-				if (class_exists($controller) && method_exists($controller, 'get_instance')) {
-					optionbay_log('Registering controller: ' . $controller, 'INFO');
-					add_action('rest_api_init', function () use ($controller) {
-						$controller::get_instance()->register_routes();
-					});
+		optionbay_log( 'API Controllers: ' . print_r( $api_controllers, true ), 'DEBUG' );
+		if ( is_array( $api_controllers ) ) {
+			foreach ( $api_controllers as $controller ) {
+				if ( class_exists( $controller ) && method_exists( $controller, 'get_instance' ) ) {
+					optionbay_log( 'Registering controller: ' . $controller, 'INFO' );
+					add_action(
+						'rest_api_init',
+						function () use ( $controller ) {
+							$controller::get_instance()->register_routes();
+						}
+					);
 				}
 			}
 		}
@@ -102,14 +102,14 @@ class Plugin
 		// $components_with_hooks = array($my_component);
 		//
 		// foreach ($components_with_hooks as $component) {
-		//     $hooks = $component->get_hooks();
-		//     foreach ($hooks as $hook) {
-		//         if ('action' === $hook['type']) {
-		//             $this->loader->add_action($hook['hook'], $component, $hook['callback'], $hook['priority'], $hook['accepted_args']);
-		//         } elseif ('filter' === $hook['type']) {
-		//             $this->loader->add_filter($hook['hook'], $component, $hook['callback'], $hook['priority'], $hook['accepted_args']);
-		//         }
-		//     }
+		// $hooks = $component->get_hooks();
+		// foreach ($hooks as $hook) {
+		// if ('action' === $hook['type']) {
+		// $this->loader->add_action($hook['hook'], $component, $hook['callback'], $hook['priority'], $hook['accepted_args']);
+		// } elseif ('filter' === $hook['type']) {
+		// $this->loader->add_filter($hook['hook'], $component, $hook['callback'], $hook['priority'], $hook['accepted_args']);
+		// }
+		// }
 		// }
 	}
 
@@ -121,9 +121,8 @@ class Plugin
 	 * @access   private
 	 * @return void
 	 */
-	private function define_public_hooks()
-	{
-		if (is_admin()) {
+	private function define_public_hooks() {
+		if ( is_admin() ) {
 			return;
 		}
 		// Enqueue the public CSS for the plugin.
@@ -141,9 +140,8 @@ class Plugin
 	 * @access   public
 	 * @return void
 	 */
-	public function enqueue_public_styles()
-	{
-		wp_enqueue_style(OPTIONBAY_OPTION_NAME . '_public', OPTIONBAY_URL . 'assets/css/public.css', array(), OPTIONBAY_VERSION);
+	public function enqueue_public_styles() {
+		wp_enqueue_style( OPTIONBAY_OPTION_NAME . '_public', OPTIONBAY_URL . 'assets/css/public.css', array(), OPTIONBAY_VERSION );
 	}
 
 	/**
@@ -162,16 +160,15 @@ class Plugin
 	 * @access   private
 	 * @return void
 	 */
-	private function define_admin_hooks()
-	{
+	private function define_admin_hooks() {
 		// Initialize Core classes from config
 		$core_classes = include OPTIONBAY_PATH . 'config/core.php';
-		if (is_array($core_classes)) {
-			foreach ($core_classes as $class) {
-				if (class_exists($class) && method_exists($class, 'get_instance')) {
+		if ( is_array( $core_classes ) ) {
+			foreach ( $core_classes as $class ) {
+				if ( class_exists( $class ) && method_exists( $class, 'get_instance' ) ) {
 					$instance = $class::get_instance();
-					if (method_exists($instance, 'run')) {
-						$instance->run($this);
+					if ( method_exists( $instance, 'run' ) ) {
+						$instance->run( $this );
 					}
 				}
 			}
@@ -185,12 +182,11 @@ class Plugin
 	 * @param array $plugins The array of all plugin data.
 	 * @return array The modified array of plugin data.
 	 */
-	public function change_plugin_display_name($plugins)
-	{
-		$plugin_basename = plugin_basename(OPTIONBAY_PATH . 'optionbay.php');
+	public function change_plugin_display_name( $plugins ) {
+		$plugin_basename = plugin_basename( OPTIONBAY_PATH . 'optionbay.php' );
 
-		if (isset($plugins[$plugin_basename])) {
-			$plugins[$plugin_basename]['Name'] = 'OptionBay';
+		if ( isset( $plugins[ $plugin_basename ] ) ) {
+			$plugins[ $plugin_basename ]['Name'] = 'OptionBay';
 		}
 
 		return $plugins;
@@ -203,8 +199,7 @@ class Plugin
 	 * @access public
 	 * @return void
 	 */
-	public function run()
-	{
+	public function run() {
 		$this->loader->run();
 	}
 
@@ -215,8 +210,7 @@ class Plugin
 	 * @access public
 	 * @return    Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader()
-	{
+	public function get_loader() {
 		return $this->loader;
 	}
 }

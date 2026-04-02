@@ -3,7 +3,7 @@
 namespace OptionBay\Pricing;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -14,11 +14,11 @@ if (!defined('ABSPATH')) {
  * @package    OptionBay
  * @subpackage OptionBay/Pricing
  */
-interface PricingStrategy
-{
+interface PricingStrategy {
+
 	/**
 	 * Calculate the price addition for a field.
-	 * 
+	 *
 	 * Defined by the Pricing Engine strategy pattern. Every strategy must
 	 * implement a generic method to return the price delta based on context.
 	 *
@@ -29,5 +29,5 @@ interface PricingStrategy
 	 * @param int   $quantity          The quantity of the item in the cart.
 	 * @return float The additional price amount to be added to the product base price.
 	 */
-	public function calculate(float $base_price, float $configured_amount, $field_value, int $quantity);
+	public function calculate( float $base_price, float $configured_amount, $field_value, int $quantity );
 }

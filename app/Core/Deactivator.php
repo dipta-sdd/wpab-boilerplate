@@ -3,7 +3,7 @@
 namespace OptionBay\Core;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -15,8 +15,8 @@ if (!defined('ABSPATH')) {
  * @subpackage WPAB_Boilerplate/Core
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
-class Deactivator
-{
+class Deactivator {
+
 	/**
 	 * Fired during plugin deactivation.
 	 *
@@ -24,8 +24,7 @@ class Deactivator
 	 * @access public
 	 * @return void
 	 */
-	public static function deactivate()
-	{
+	public static function deactivate() {
 		self::remove_custom_capabilities();
 
 		// Unschedule all plugin cron events.
@@ -39,15 +38,14 @@ class Deactivator
 	 * @access private
 	 * @return void
 	 */
-	private static function remove_custom_capabilities()
-	{
-		$roles = get_editable_roles();
+	private static function remove_custom_capabilities() {
+		$roles             = get_editable_roles();
 		$custom_capability = 'manage_optionbay';
 
-		foreach ($roles as $role_name => $role_info) {
-			$role = get_role($role_name);
-			if ($role && $role->has_cap($custom_capability)) {
-				$role->remove_cap($custom_capability);
+		foreach ( $roles as $role_name => $role_info ) {
+			$role = get_role( $role_name );
+			if ( $role && $role->has_cap( $custom_capability ) ) {
+				$role->remove_cap( $custom_capability );
 			}
 		}
 	}

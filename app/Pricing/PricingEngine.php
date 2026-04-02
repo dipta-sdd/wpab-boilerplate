@@ -3,7 +3,7 @@
 namespace OptionBay\Pricing;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -16,45 +16,44 @@ if (!defined('ABSPATH')) {
  * @package    OptionBay
  * @subpackage OptionBay/Pricing
  */
-class PricingEngine
-{
+class PricingEngine {
+
 	/**
 	 * Map of string types to Strategy classes.
 	 *
 	 * @var array
 	 */
 	private static $strategies = array(
-		'flat' => FlatFeeStrategy::class,
-		'percentage' => PercentageStrategy::class,
-		'character_count' => CharacterCountStrategy::class,
+		'flat'                => FlatFeeStrategy::class,
+		'percentage'          => PercentageStrategy::class,
+		'character_count'     => CharacterCountStrategy::class,
 		'quantity_multiplier' => QuantityMultiplierStrategy::class,
 	);
 
 	/**
 	 * Get the instantiated strategy object.
-	 * 
+	 *
 	 * Maps a string identifier to a concrete Strategy class using a static lookup table.
 	 *
 	 * @since 1.0.0
 	 * @param string $type The requested pricing type identifier.
 	 * @return PricingStrategy The instantiated strategy object.
 	 */
-	public static function get_strategy(string $type)
-	{
+	public static function get_strategy( string $type ) {
 		$type = $type ?: 'flat';
-		
-		if (!array_key_exists($type, self::$strategies)) {
-			optionbay_log("Pricing Engine: Unknown strategy '{$type}'. Falling back to 'flat'.", 'WARNING');
+
+		if ( ! array_key_exists( $type, self::$strategies ) ) {
+			optionbay_log( "Pricing Engine: Unknown strategy '{$type}'. Falling back to 'flat'.", 'WARNING' );
 			$type = 'flat';
 		}
 
-		$class = self::$strategies[$type];
+		$class = self::$strategies[ $type ];
 		return new $class();
 	}
 
 	/**
 	 * Calculate the price for a given field and value.
-	 * 
+	 *
 	 * Determines the appropriate pricing strategy based on user configuration
 	 * and executes the correct mathematical operation against the product base price.
 	 *
@@ -66,17 +65,16 @@ class PricingEngine
 	 * @param int    $quantity          Cart item quantity.
 	 * @return float The calculated delta to be added to the product price.
 	 */
-	public static function calculate(string $type, float $base_price, float $configured_amount, $field_value, int $quantity)
-	{
-		if ($type === 'none' || $configured_amount == 0) {
-			optionbay_log("Pricing Engine: Type 'none' or amount 0. Price delta is 0.", 'DEBUG');
+	public static function calculate( string $type, float $base_price, float $configured_amount, $field_value, int $quantity ) {
+		if ( $type === 'none' || $configured_amount == 0 ) {
+			optionbay_log( "Pricing Engine: Type 'none' or amount 0. Price delta is 0.", 'DEBUG' );
 			return 0.0;
 		}
 
-		$strategy = self::get_strategy($type);
-		$result = $strategy->calculate($base_price, $configured_amount, $field_value, $quantity);
-		
-		optionbay_log("Pricing Engine: Calculated {$result} via {$type} strategy.", 'DEBUG');
+		$strategy = self::get_strategy( $type );
+		$result   = $strategy->calculate( $base_price, $configured_amount, $field_value, $quantity );
+
+		optionbay_log( "Pricing Engine: Calculated {$result} via {$type} strategy.", 'DEBUG' );
 
 		return $result;
 	}

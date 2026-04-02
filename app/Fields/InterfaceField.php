@@ -3,7 +3,7 @@
 namespace OptionBay\Fields;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -17,8 +17,8 @@ if (!defined('ABSPATH')) {
  * @package    OptionBay
  * @subpackage OptionBay/Fields
  */
-interface InterfaceField
-{
+interface InterfaceField {
+
 	/**
 	 * Render the field HTML.
 	 *
@@ -34,7 +34,7 @@ interface InterfaceField
 	 * @param mixed $value The submitted value.
 	 * @return true|\WP_Error True if valid, WP_Error if not.
 	 */
-	public function validate($value);
+	public function validate( $value );
 
 	/**
 	 * Sanitize a submitted value for storage.
@@ -43,7 +43,7 @@ interface InterfaceField
 	 * @param mixed $value The raw value.
 	 * @return mixed Sanitized value.
 	 */
-	public function sanitize($value);
+	public function sanitize( $value );
 
 	/**
 	 * Get a human-readable display value for cart/order display.
@@ -52,7 +52,7 @@ interface InterfaceField
 	 * @param mixed $value The stored value.
 	 * @return string Display-ready string.
 	 */
-	public function get_display_value($value);
+	public function get_display_value( $value );
 
 	/**
 	 * Get the weight adjustment for this field's value.
@@ -61,5 +61,5 @@ interface InterfaceField
 	 * @param mixed $value The stored value.
 	 * @return float Weight in shop units.
 	 */
-	public function get_weight($value);
+	public function get_weight( $value );
 }

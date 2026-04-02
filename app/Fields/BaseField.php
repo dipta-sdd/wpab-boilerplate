@@ -3,7 +3,7 @@
 namespace OptionBay\Fields;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,8 +18,8 @@ if (!defined('ABSPATH')) {
  * @package    OptionBay
  * @subpackage OptionBay/Fields
  */
-abstract class BaseField implements InterfaceField
-{
+abstract class BaseField implements InterfaceField {
+
 	/**
 	 * The group ID this field belongs to.
 	 *
@@ -43,10 +43,9 @@ abstract class BaseField implements InterfaceField
 	 * @param int   $group_id The Option Group post ID.
 	 * @param array $schema   The field definition from the JSON schema.
 	 */
-	public function __construct(int $group_id, array $schema)
-	{
+	public function __construct( int $group_id, array $schema ) {
 		$this->group_id = $group_id;
-		$this->schema = $schema;
+		$this->schema   = $schema;
 	}
 
 	/**
@@ -57,9 +56,8 @@ abstract class BaseField implements InterfaceField
 	 * @param mixed  $default Default value.
 	 * @return mixed
 	 */
-	protected function get($key, $default = '')
-	{
-		return $this->schema[$key] ?? $default;
+	protected function get( $key, $default = '' ) {
+		return $this->schema[ $key ] ?? $default;
 	}
 
 	/**
@@ -70,12 +68,11 @@ abstract class BaseField implements InterfaceField
 	 * @since 1.0.0
 	 * @return string
 	 */
-	protected function get_name()
-	{
+	protected function get_name() {
 		return sprintf(
 			'optionbay_addons[%d][%s]',
 			$this->group_id,
-			esc_attr($this->get('id'))
+			esc_attr( $this->get( 'id' ) )
 		);
 	}
 
@@ -85,43 +82,41 @@ abstract class BaseField implements InterfaceField
 	 * @since 1.0.0
 	 * @return string
 	 */
-	protected function get_html_id()
-	{
-		return sprintf('ob-%d-%s', $this->group_id, esc_attr($this->get('id')));
+	protected function get_html_id() {
+		return sprintf( 'ob-%d-%s', $this->group_id, esc_attr( $this->get( 'id' ) ) );
 	}
 
 	/**
 	 * Render the full field HTML (wrapper + label + input + description).
-	 * 
-	 * Builds out the container standard across all OptionBay fields, configuring 
+	 *
+	 * Builds out the container standard across all OptionBay fields, configuring
 	 * HTML `data-*` attributes for JavaScript processing based on pricing and conditions.
 	 * Callers like AddonRenderer rely on this abstract layout instead of ad-hoc rendering.
 	 *
 	 * @since 1.0.0
 	 * @return string The escaped safe HTML ready for output buffering.
 	 */
-	public function render()
-	{
-		$field_id   = esc_attr($this->get('id'));
-		$field_type = esc_attr($this->get('type'));
-		$conditions = $this->get('conditions', array());
-		$class_name = esc_attr($this->get('class_name'));
+	public function render() {
+		$field_id   = esc_attr( $this->get( 'id' ) );
+		$field_type = esc_attr( $this->get( 'type' ) );
+		$conditions = $this->get( 'conditions', array() );
+		$class_name = esc_attr( $this->get( 'class_name' ) );
 
 		// Determine initial visibility from conditions to prevent sudden layout shifts
 		$is_hidden = false;
-		if (!empty($conditions['status']) && $conditions['status'] === 'active') {
+		if ( ! empty( $conditions['status'] ) && $conditions['status'] === 'active' ) {
 			// If action is 'show', field is hidden by default until condition is met
 			// If action is 'hide', field is visible by default until condition is met
-			$is_hidden = ($conditions['action'] === 'show');
+			$is_hidden = ( $conditions['action'] === 'show' );
 		}
 
 		// Initialize HTML container classes
-		$wrapper_classes = array('ob-field');
+		$wrapper_classes   = array( 'ob-field' );
 		$wrapper_classes[] = 'ob-field--' . $field_type;
-		if ($is_hidden) {
+		if ( $is_hidden ) {
 			$wrapper_classes[] = 'ob-hidden';
 		}
-		if (!empty($class_name)) {
+		if ( ! empty( $class_name ) ) {
 			$wrapper_classes[] = $class_name;
 		}
 
@@ -134,43 +129,43 @@ abstract class BaseField implements InterfaceField
 		);
 
 		// Expose pricing logic mapping strictly onto the DOM
-		$price_type = $this->get('price_type', 'none');
-		if ($price_type !== 'none') {
+		$price_type = $this->get( 'price_type', 'none' );
+		if ( $price_type !== 'none' ) {
 			$data_attrs .= sprintf(
 				' data-price-type="%s" data-price="%s"',
-				esc_attr($price_type),
-				esc_attr($this->get('price', 0))
+				esc_attr( $price_type ),
+				esc_attr( $this->get( 'price', 0 ) )
 			);
 		}
 
 		// Calculate standard weight offset configuration
-		$weight = floatval($this->get('weight', 0));
-		if ($weight > 0) {
-			$data_attrs .= sprintf(' data-weight="%s"', esc_attr($weight));
+		$weight = floatval( $this->get( 'weight', 0 ) );
+		if ( $weight > 0 ) {
+			$data_attrs .= sprintf( ' data-weight="%s"', esc_attr( $weight ) );
 		}
 
 		// Tag conditional logic rules for the frontend client SPA event loops
-		if (!empty($conditions['status']) && $conditions['status'] === 'active') {
+		if ( ! empty( $conditions['status'] ) && $conditions['status'] === 'active' ) {
 			$data_attrs .= sprintf(
 				' data-condition-status="active" data-condition-action="%s"',
-				esc_attr($conditions['action'] ?? 'show')
+				esc_attr( $conditions['action'] ?? 'show' )
 			);
 		}
 
 		$html = sprintf(
 			'<div class="%s" %s>',
-			esc_attr(implode(' ', $wrapper_classes)),
+			esc_attr( implode( ' ', $wrapper_classes ) ),
 			$data_attrs
 		);
 
 		// Dynamically render label HTML safely escaping user settings
-		$label = $this->get('label');
-		if (!empty($label)) {
-			$required_mark = $this->get('required') ? ' <abbr class="ob-required" title="' . esc_attr__('required', 'optionbay') . '">*</abbr>' : '';
-			$html .= sprintf(
+		$label = $this->get( 'label' );
+		if ( ! empty( $label ) ) {
+			$required_mark = $this->get( 'required' ) ? ' <abbr class="ob-required" title="' . esc_attr__( 'required', 'optionbay' ) . '">*</abbr>' : '';
+			$html         .= sprintf(
 				'<label class="ob-field__label" for="%s">%s%s</label>',
 				$this->get_html_id(),
-				esc_html($label),
+				esc_html( $label ),
 				$required_mark
 			);
 		}
@@ -181,11 +176,11 @@ abstract class BaseField implements InterfaceField
 		$html .= '</div>';
 
 		// Inject any custom user descriptions passed via settings
-		$description = $this->get('description');
-		if (!empty($description)) {
+		$description = $this->get( 'description' );
+		if ( ! empty( $description ) ) {
 			$html .= sprintf(
 				'<p class="ob-field__description">%s</p>',
-				esc_html($description)
+				esc_html( $description )
 			);
 		}
 
@@ -209,15 +204,14 @@ abstract class BaseField implements InterfaceField
 	 * @param mixed $value The submitted value.
 	 * @return true|\WP_Error
 	 */
-	public function validate($value)
-	{
-		if ($this->get('required') && $this->is_empty_value($value)) {
+	public function validate( $value ) {
+		if ( $this->get( 'required' ) && $this->is_empty_value( $value ) ) {
 			return new \WP_Error(
 				'required_field',
 				sprintf(
 					/* translators: %s: field label */
-					__('%s is required.', 'optionbay'),
-					$this->get('label', $this->get('id'))
+					__( '%s is required.', 'optionbay' ),
+					$this->get( 'label', $this->get( 'id' ) )
 				)
 			);
 		}
@@ -231,12 +225,11 @@ abstract class BaseField implements InterfaceField
 	 * @param mixed $value
 	 * @return mixed
 	 */
-	public function sanitize($value)
-	{
-		if (is_array($value)) {
-			return array_map('sanitize_text_field', $value);
+	public function sanitize( $value ) {
+		if ( is_array( $value ) ) {
+			return array_map( 'sanitize_text_field', $value );
 		}
-		return sanitize_text_field($value);
+		return sanitize_text_field( $value );
 	}
 
 	/**
@@ -246,12 +239,11 @@ abstract class BaseField implements InterfaceField
 	 * @param mixed $value
 	 * @return string
 	 */
-	public function get_display_value($value)
-	{
-		if (is_array($value)) {
-			return implode(', ', array_map('esc_html', $value));
+	public function get_display_value( $value ) {
+		if ( is_array( $value ) ) {
+			return implode( ', ', array_map( 'esc_html', $value ) );
 		}
-		return esc_html((string) $value);
+		return esc_html( (string) $value );
 	}
 
 	/**
@@ -261,12 +253,11 @@ abstract class BaseField implements InterfaceField
 	 * @param mixed $value
 	 * @return float
 	 */
-	public function get_weight($value)
-	{
-		if ($this->is_empty_value($value)) {
+	public function get_weight( $value ) {
+		if ( $this->is_empty_value( $value ) ) {
 			return 0.0;
 		}
-		return floatval($this->get('weight', 0));
+		return floatval( $this->get( 'weight', 0 ) );
 	}
 
 	/**
@@ -276,15 +267,14 @@ abstract class BaseField implements InterfaceField
 	 * @param mixed $value
 	 * @return bool
 	 */
-	protected function is_empty_value($value)
-	{
-		if (is_null($value)) {
+	protected function is_empty_value( $value ) {
+		if ( is_null( $value ) ) {
 			return true;
 		}
-		if (is_string($value) && trim($value) === '') {
+		if ( is_string( $value ) && trim( $value ) === '' ) {
 			return true;
 		}
-		if (is_array($value) && empty($value)) {
+		if ( is_array( $value ) && empty( $value ) ) {
 			return true;
 		}
 		return false;

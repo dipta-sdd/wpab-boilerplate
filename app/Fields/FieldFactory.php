@@ -3,7 +3,7 @@
 namespace OptionBay\Fields;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -16,8 +16,8 @@ if (!defined('ABSPATH')) {
  * @package    OptionBay
  * @subpackage OptionBay/Fields
  */
-class FieldFactory
-{
+class FieldFactory {
+
 	/**
 	 * Registry of field type => class name.
 	 *
@@ -32,9 +32,8 @@ class FieldFactory
 	 * @since 1.0.0
 	 * @return array
 	 */
-	private static function get_types()
-	{
-		if (self::$types === null) {
+	private static function get_types() {
+		if ( self::$types === null ) {
 			self::$types = array(
 				'text'     => TextField::class,
 				'textarea' => TextareaField::class,
@@ -53,15 +52,15 @@ class FieldFactory
 			 * @since 1.0.0
 			 * @param array $types Associative array of type => class name.
 			 */
-			self::$types = apply_filters('optionbay_register_field_types', self::$types);
+			self::$types = apply_filters( 'optionbay_register_field_types', self::$types );
 		}
 		return self::$types;
 	}
 
 	/**
 	 * Create a field instance from a schema definition.
-	 * 
-	 * Matches the string type identifier in the JSON schema map to a 
+	 *
+	 * Matches the string type identifier in the JSON schema map to a
 	 * backend class and returns a newly instantiated concrete object.
 	 *
 	 * @since 1.0.0
@@ -69,23 +68,22 @@ class FieldFactory
 	 * @param array $schema   The field definition from JSON.
 	 * @return InterfaceField|null Field instance, or null if type unknown.
 	 */
-	public static function create(int $group_id, array $schema)
-	{
-		$type = $schema['type'] ?? '';
+	public static function create( int $group_id, array $schema ) {
+		$type  = $schema['type'] ?? '';
 		$types = self::get_types();
 
-		if (!isset($types[$type])) {
-			optionbay_log("FieldFactory: Unregistered field type requested: '{$type}' in group {$group_id}", 'WARNING');
+		if ( ! isset( $types[ $type ] ) ) {
+			optionbay_log( "FieldFactory: Unregistered field type requested: '{$type}' in group {$group_id}", 'WARNING' );
 			return null;
 		}
 
-		$class = $types[$type];
-		if (!class_exists($class)) {
-			optionbay_log("FieldFactory: Class '{$class}' for type '{$type}' does not exist.", 'ERROR');
+		$class = $types[ $type ];
+		if ( ! class_exists( $class ) ) {
+			optionbay_log( "FieldFactory: Class '{$class}' for type '{$type}' does not exist.", 'ERROR' );
 			return null;
 		}
 
-		return new $class($group_id, $schema);
+		return new $class( $group_id, $schema );
 	}
 
 	/**
@@ -95,9 +93,8 @@ class FieldFactory
 	 * @param string $type The field type slug.
 	 * @return bool
 	 */
-	public static function is_registered(string $type)
-	{
+	public static function is_registered( string $type ) {
 		$types = self::get_types();
-		return isset($types[$type]);
+		return isset( $types[ $type ] );
 	}
 }

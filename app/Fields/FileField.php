@@ -2,7 +2,7 @@
 
 namespace OptionBay\Fields;
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -14,8 +14,8 @@ if (!defined('ABSPATH')) {
  *
  * @since 1.0.0
  */
-class FileField extends BaseField
-{
+class FileField extends BaseField {
+
 	/**
 	 * Render standard HTML `<input type="file">`.
 	 *
@@ -25,24 +25,23 @@ class FileField extends BaseField
 	 * @since 1.0.0
 	 * @return string File input DOM tree.
 	 */
-	protected function render_input()
-	{
-		$allowed_types = $this->get('allowed_types', '.jpg,.png,.pdf');
-		$max_file_size = absint($this->get('max_file_size', 5)); // MB
-		$required = $this->get('required') ? ' required="required"' : '';
+	protected function render_input() {
+		$allowed_types = $this->get( 'allowed_types', '.jpg,.png,.pdf' );
+		$max_file_size = absint( $this->get( 'max_file_size', 5 ) ); // MB
+		$required      = $this->get( 'required' ) ? ' required="required"' : '';
 
 		return sprintf(
 			'<input type="file" id="%s" name="%s" class="ob-input ob-input--file" accept="%s" data-max-size="%d"%s />
 			<p class="ob-field__file-info">%s</p>',
 			$this->get_html_id(),
 			$this->get_name(),
-			esc_attr($allowed_types),
+			esc_attr( $allowed_types ),
 			$max_file_size,
 			$required,
 			sprintf(
 				/* translators: %1$s: allowed types, %2$d: max size in MB */
-				esc_html__('Allowed: %1$s. Max size: %2$d MB.', 'optionbay'),
-				esc_html($allowed_types),
+				esc_html__( 'Allowed: %1$s. Max size: %2$d MB.', 'optionbay' ),
+				esc_html( $allowed_types ),
 				$max_file_size
 			)
 		);
@@ -50,51 +49,50 @@ class FileField extends BaseField
 
 	/**
 	 * Verify incoming $_FILES data buffer block size and extensions.
-	 * 
+	 *
 	 * @since 1.0.0
 	 * @param mixed $value PHP superglobal upload hash.
 	 * @return true|\WP_Error Results object mapping.
 	 */
-	public function validate($value)
-	{
+	public function validate( $value ) {
 		// For file fields, $value is the $_FILES entry
-		if ($this->get('required') && (empty($value) || empty($value['name']))) {
-			optionbay_log("FileField Validation: Required file payload missing.", 'WARNING');
+		if ( $this->get( 'required' ) && ( empty( $value ) || empty( $value['name'] ) ) ) {
+			optionbay_log( 'FileField Validation: Required file payload missing.', 'WARNING' );
 			return new \WP_Error(
 				'required_field',
 				sprintf(
-					__('%s is required.', 'optionbay'),
-					$this->get('label', $this->get('id'))
+					__( '%s is required.', 'optionbay' ),
+					$this->get( 'label', $this->get( 'id' ) )
 				)
 			);
 		}
 
-		if (!empty($value) && !empty($value['name'])) {
+		if ( ! empty( $value ) && ! empty( $value['name'] ) ) {
 			// Check file size
-			$max_bytes = absint($this->get('max_file_size', 5)) * 1024 * 1024;
-			if ($value['size'] > $max_bytes) {
-				optionbay_log("FileField Validation: Uploaded file size {$value['size']} exceeds max bytes {$max_bytes}.", 'WARNING');
+			$max_bytes = absint( $this->get( 'max_file_size', 5 ) ) * 1024 * 1024;
+			if ( $value['size'] > $max_bytes ) {
+				optionbay_log( "FileField Validation: Uploaded file size {$value['size']} exceeds max bytes {$max_bytes}.", 'WARNING' );
 				return new \WP_Error(
 					'file_too_large',
 					sprintf(
-						__('%s exceeds the maximum file size of %d MB.', 'optionbay'),
-						$this->get('label', $this->get('id')),
-						$this->get('max_file_size', 5)
+						__( '%1$s exceeds the maximum file size of %2$d MB.', 'optionbay' ),
+						$this->get( 'label', $this->get( 'id' ) ),
+						$this->get( 'max_file_size', 5 )
 					)
 				);
 			}
 
 			// Check MIME type
-			$allowed = $this->get('allowed_types', '.jpg,.png,.pdf');
-			$allowed_exts = array_map('trim', explode(',', $allowed));
-			$ext = '.' . strtolower(pathinfo($value['name'], PATHINFO_EXTENSION));
-			if (!in_array($ext, $allowed_exts, true)) {
-				optionbay_log("FileField Validation: Uploaded extension {$ext} not in allowed parameters ({$allowed}).", 'WARNING');
+			$allowed      = $this->get( 'allowed_types', '.jpg,.png,.pdf' );
+			$allowed_exts = array_map( 'trim', explode( ',', $allowed ) );
+			$ext          = '.' . strtolower( pathinfo( $value['name'], PATHINFO_EXTENSION ) );
+			if ( ! in_array( $ext, $allowed_exts, true ) ) {
+				optionbay_log( "FileField Validation: Uploaded extension {$ext} not in allowed parameters ({$allowed}).", 'WARNING' );
 				return new \WP_Error(
 					'invalid_file_type',
 					sprintf(
-						__('%s: File type not allowed. Allowed: %s', 'optionbay'),
-						$this->get('label', $this->get('id')),
+						__( '%1$s: File type not allowed. Allowed: %2$s', 'optionbay' ),
+						$this->get( 'label', $this->get( 'id' ) ),
 						$allowed
 					)
 				);
@@ -104,26 +102,24 @@ class FileField extends BaseField
 		return true;
 	}
 
-	public function sanitize($value)
-	{
+	public function sanitize( $value ) {
 		// File sanitization happens in the cart pipeline
 		return $value;
 	}
 
 	/**
-	 * Provide basic proxying functionality back to the base. 
+	 * Provide basic proxying functionality back to the base.
 	 * Files are processed asynchronously.
 	 *
 	 * @param mixed $value Output location URL string or associative array metadata.
 	 * @return string Simple frontend label URL element content.
 	 */
-	public function get_display_value($value)
-	{
-		if (is_string($value)) {
-			return esc_html(basename($value));
+	public function get_display_value( $value ) {
+		if ( is_string( $value ) ) {
+			return esc_html( basename( $value ) );
 		}
-		if (is_array($value) && !empty($value['name'])) {
-			return esc_html($value['name']);
+		if ( is_array( $value ) && ! empty( $value['name'] ) ) {
+			return esc_html( $value['name'] );
 		}
 		return '';
 	}

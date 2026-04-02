@@ -3,7 +3,7 @@
 namespace OptionBay\Pricing;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,14 +18,14 @@ if (!defined('ABSPATH')) {
  * @package    OptionBay
  * @subpackage OptionBay/Pricing
  */
-class FlatFeeStrategy implements PricingStrategy
-{
+class FlatFeeStrategy implements PricingStrategy {
+
 	/**
 	 * Calculate the flat fee addition.
-	 * 
+	 *
 	 * Returns the configured fixed amount directly regardless of the
 	 * product price.
-	 * 
+	 *
 	 * @since 1.0.0
 	 * @param float $base_price        Product base price.
 	 * @param float $configured_amount Amount configured in option settings.
@@ -33,9 +33,8 @@ class FlatFeeStrategy implements PricingStrategy
 	 * @param int   $quantity          Cart quantity.
 	 * @return float The fixed price delta.
 	 */
-	public function calculate(float $base_price, float $configured_amount, $field_value, int $quantity)
-	{
-		optionbay_log("FlatFeeStrategy: Applied flat fee of {$configured_amount}", 'DEBUG');
+	public function calculate( float $base_price, float $configured_amount, $field_value, int $quantity ) {
+		optionbay_log( "FlatFeeStrategy: Applied flat fee of {$configured_amount}", 'DEBUG' );
 		return $configured_amount;
 	}
 }

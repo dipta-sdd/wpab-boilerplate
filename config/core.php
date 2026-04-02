@@ -9,10 +9,10 @@
  */
 
 return array(
-    \OptionBay\Admin\Admin::class,
-    \OptionBay\Core\Settings::class,
-    \OptionBay\Core\Cron::class,
-    \OptionBay\Core\AddonGroup::class,
-    \OptionBay\Core\AddonRenderer::class,
-    \OptionBay\Core\CartManager::class,
+	\OptionBay\Admin\Admin::class,
+	\OptionBay\Core\Settings::class,
+	\OptionBay\Core\Cron::class,
+	\OptionBay\Core\AddonGroup::class,
+	\OptionBay\Core\AddonRenderer::class,
+	\OptionBay\Core\CartManager::class,
 );

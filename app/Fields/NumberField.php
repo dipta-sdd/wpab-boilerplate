@@ -2,7 +2,7 @@
 
 namespace OptionBay\Fields;
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -11,18 +11,17 @@ if (!defined('ABSPATH')) {
  *
  * @since 1.0.0
  */
-class NumberField extends BaseField
-{
+class NumberField extends BaseField {
+
 	/**
 	 * Render the browser native `<input type="number">`.
-	 * 
+	 *
 	 * Reconstructs min, max, and step boundaries into HTML5 constraints.
 	 *
 	 * @since 1.0.0
 	 * @return string HTML <input> string representation.
 	 */
-	protected function render_input()
-	{
+	protected function render_input() {
 		$attrs = array(
 			'type'  => 'number',
 			'id'    => $this->get_html_id(),
@@ -30,31 +29,31 @@ class NumberField extends BaseField
 			'class' => 'ob-input ob-input--number',
 		);
 
-		$placeholder = $this->get('placeholder');
-		if (!empty($placeholder)) {
-			$attrs['placeholder'] = esc_attr($placeholder);
+		$placeholder = $this->get( 'placeholder' );
+		if ( ! empty( $placeholder ) ) {
+			$attrs['placeholder'] = esc_attr( $placeholder );
 		}
 
-		if ($this->get('required')) {
+		if ( $this->get( 'required' ) ) {
 			$attrs['required'] = 'required';
 		}
 
-		$min = $this->get('min_value');
-		if ($min !== '' && $min !== null) {
-			$attrs['min'] = floatval($min);
+		$min = $this->get( 'min_value' );
+		if ( $min !== '' && $min !== null ) {
+			$attrs['min'] = floatval( $min );
 		}
 
-		$max = $this->get('max_value');
-		if ($max !== '' && $max !== null) {
-			$attrs['max'] = floatval($max);
+		$max = $this->get( 'max_value' );
+		if ( $max !== '' && $max !== null ) {
+			$attrs['max'] = floatval( $max );
 		}
 
-		$step = $this->get('step', 1);
-		$attrs['step'] = floatval($step);
+		$step          = $this->get( 'step', 1 );
+		$attrs['step'] = floatval( $step );
 
 		$attr_string = '';
-		foreach ($attrs as $key => $val) {
-			$attr_string .= sprintf(' %s="%s"', esc_attr($key), esc_attr($val));
+		foreach ( $attrs as $key => $val ) {
+			$attr_string .= sprintf( ' %s="%s"', esc_attr( $key ), esc_attr( $val ) );
 		}
 
 		return '<input' . $attr_string . ' />';
@@ -67,36 +66,35 @@ class NumberField extends BaseField
 	 * @param mixed $value Submitted value.
 	 * @return true|\WP_Error Validation resolution metric.
 	 */
-	public function validate($value)
-	{
-		$result = parent::validate($value);
-		if (is_wp_error($result)) {
+	public function validate( $value ) {
+		$result = parent::validate( $value );
+		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
 
-		if (!$this->is_empty_value($value)) {
-			$num = floatval($value);
-			$min = $this->get('min_value');
-			$max = $this->get('max_value');
+		if ( ! $this->is_empty_value( $value ) ) {
+			$num = floatval( $value );
+			$min = $this->get( 'min_value' );
+			$max = $this->get( 'max_value' );
 
-			if ($min !== '' && $min !== null && $num < floatval($min)) {
-				optionbay_log("NumberField Validation: Value {$num} is less than minimum {$min}.", 'WARNING');
+			if ( $min !== '' && $min !== null && $num < floatval( $min ) ) {
+				optionbay_log( "NumberField Validation: Value {$num} is less than minimum {$min}.", 'WARNING' );
 				return new \WP_Error(
 					'min_value',
 					sprintf(
-						__('%s must be at least %s.', 'optionbay'),
-						$this->get('label', $this->get('id')),
+						__( '%1$s must be at least %2$s.', 'optionbay' ),
+						$this->get( 'label', $this->get( 'id' ) ),
 						$min
 					)
 				);
 			}
-			if ($max !== '' && $max !== null && $num > floatval($max)) {
-				optionbay_log("NumberField Validation: Value {$num} exceeds maximum {$max}.", 'WARNING');
+			if ( $max !== '' && $max !== null && $num > floatval( $max ) ) {
+				optionbay_log( "NumberField Validation: Value {$num} exceeds maximum {$max}.", 'WARNING' );
 				return new \WP_Error(
 					'max_value',
 					sprintf(
-						__('%s must be at most %s.', 'optionbay'),
-						$this->get('label', $this->get('id')),
+						__( '%1$s must be at most %2$s.', 'optionbay' ),
+						$this->get( 'label', $this->get( 'id' ) ),
 						$max
 					)
 				);
@@ -113,11 +111,10 @@ class NumberField extends BaseField
 	 * @param mixed $value User POST injection.
 	 * @return float|string Sanitized float, or empty string if empty.
 	 */
-	public function sanitize($value)
-	{
-		if ($this->is_empty_value($value)) {
+	public function sanitize( $value ) {
+		if ( $this->is_empty_value( $value ) ) {
 			return '';
 		}
-		return floatval($value);
+		return floatval( $value );
 	}
 }

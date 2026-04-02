@@ -5,7 +5,7 @@ namespace OptionBay\Admin;
 use OptionBay\Core\Settings;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -16,8 +16,8 @@ if (!defined('ABSPATH')) {
  * @subpackage WPAB_Boilerplate/Admin
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
-class Admin
-{
+class Admin {
+
 	/**
 	 * The single instance of the class.
 	 *
@@ -43,9 +43,8 @@ class Admin
 	 * @return Admin
 	 * @since 1.0.0
 	 */
-	public static function get_instance()
-	{
-		if (null === self::$instance) {
+	public static function get_instance() {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -58,19 +57,18 @@ class Admin
 	 * @access private
 	 * @return array
 	 */
-	private function get_plugin_data()
-	{
+	private function get_plugin_data() {
 		return array(
-			'plugin_name' => esc_html__('OptionBay', 'optionbay'),
-			'short_name' => esc_html__('OptionBay', 'optionbay'),
-			'menu_label' => esc_html__('OptionBay', 'optionbay'),
+			'plugin_name' => esc_html__( 'OptionBay', 'optionbay' ),
+			'short_name'  => esc_html__( 'OptionBay', 'optionbay' ),
+			'menu_label'  => esc_html__( 'OptionBay', 'optionbay' ),
 			'custom_icon' => OPTIONBAY_URL . 'assets/img/icon.svg',
-			'menu_icon' => 'dashicons-admin-plugins',
+			'menu_icon'   => 'dashicons-admin-plugins',
 			'author_name' => 'WP Anchor Bay',
-			'author_uri' => 'https://wpanchorbay.com',
+			'author_uri'  => 'https://wpanchorbay.com',
 			'support_uri' => 'https://wpanchorbay.com/support',
-			'docs_uri' => 'https://docs.wpanchorbay.com',
-			'position' => 57,
+			'docs_uri'    => 'https://docs.wpanchorbay.com',
+			'position'    => 57,
 		);
 	}
 
@@ -81,9 +79,8 @@ class Admin
 	 * @access public
 	 * @return void
 	 */
-	public function add_admin_menu()
-	{
-		optionbay_log('Admin: Registering WPAB admin menu', 'INFO');
+	public function add_admin_menu() {
+		optionbay_log( 'Admin: Registering WPAB admin menu', 'INFO' );
 		$plugin_data = $this->get_plugin_data();
 
 		// Define menu items
@@ -91,32 +88,32 @@ class Admin
 			array(
 				'page_title' => $plugin_data['plugin_name'],
 				'menu_title' => $plugin_data['menu_label'],
-				'menu_slug' => OPTIONBAY_PLUGIN_NAME,
-				'icon_url' => $plugin_data['custom_icon'],
-				'position' => $plugin_data['position'],
-				'callback' => array($this, 'add_setting_root_div'),
-				'submenu' => array(
+				'menu_slug'  => OPTIONBAY_PLUGIN_NAME,
+				'icon_url'   => $plugin_data['custom_icon'],
+				'position'   => $plugin_data['position'],
+				'callback'   => array( $this, 'add_setting_root_div' ),
+				'submenu'    => array(
 					array(
-						'menu_title' => esc_html__('Dashboard', 'optionbay'),
-						'menu_slug' => OPTIONBAY_PLUGIN_NAME,
-						'callback' => array($this, 'add_setting_root_div')
+						'menu_title' => esc_html__( 'Dashboard', 'optionbay' ),
+						'menu_slug'  => OPTIONBAY_PLUGIN_NAME,
+						'callback'   => array( $this, 'add_setting_root_div' ),
 					),
 					array(
-						'menu_title' => esc_html__('Settings', 'optionbay'),
-						'menu_slug' => OPTIONBAY_PLUGIN_NAME . '#/settings',
-						'callback' => array($this, 'add_setting_root_div')
+						'menu_title' => esc_html__( 'Settings', 'optionbay' ),
+						'menu_slug'  => OPTIONBAY_PLUGIN_NAME . '#/settings',
+						'callback'   => array( $this, 'add_setting_root_div' ),
 					),
 					array(
-						'menu_title' => esc_html__('Components', 'optionbay'),
-						'menu_slug' => OPTIONBAY_PLUGIN_NAME . '#/components-classic',
-						'callback' => array($this, 'add_setting_root_div')
-					)
-				)
-			)
+						'menu_title' => esc_html__( 'Components', 'optionbay' ),
+						'menu_slug'  => OPTIONBAY_PLUGIN_NAME . '#/components-classic',
+						'callback'   => array( $this, 'add_setting_root_div' ),
+					),
+				),
+			),
 		);
 
-		foreach ($menu_items as $item) {
-			optionbay_log('Admin: Adding menu page: ' . $item['menu_title'], 'DEBUG');
+		foreach ( $menu_items as $item ) {
+			optionbay_log( 'Admin: Adding menu page: ' . $item['menu_title'], 'DEBUG' );
 			add_menu_page(
 				$item['page_title'],
 				$item['menu_title'],
@@ -127,8 +124,8 @@ class Admin
 				$item['position']
 			);
 
-			if (!empty($item['submenu'])) {
-				foreach ($item['submenu'] as $sub) {
+			if ( ! empty( $item['submenu'] ) ) {
+				foreach ( $item['submenu'] as $sub ) {
 					// The first submenu item should use the same slug as add_menu_page to override the default parent name
 					add_submenu_page(
 						$item['menu_slug'], // Parent slug
@@ -144,17 +141,17 @@ class Admin
 
 		// Store menu info for other methods
 		$this->menu_info = array(
-			'menu_slug' => OPTIONBAY_PLUGIN_NAME
+			'menu_slug' => OPTIONBAY_PLUGIN_NAME,
 		);
 
 		// Add custom submenu under Products (simulating TubeBay)
 		add_submenu_page(
 			'edit.php?post_type=product',
-			esc_html__('OptionBay', 'optionbay'),
-			esc_html__('OptionBay', 'optionbay'),
+			esc_html__( 'OptionBay', 'optionbay' ),
+			esc_html__( 'OptionBay', 'optionbay' ),
 			'manage_optionbay',
 			'optionbay-redirect',
-			array($this, 'redirect_to_dashboard')
+			array( $this, 'redirect_to_dashboard' )
 		);
 	}
 
@@ -163,10 +160,9 @@ class Admin
 	 *
 	 * @return void
 	 */
-	public function redirect_to_dashboard()
-	{
-		$redirect_url = admin_url('admin.php?page=' . OPTIONBAY_PLUGIN_NAME);
-		wp_safe_redirect($redirect_url);
+	public function redirect_to_dashboard() {
+		$redirect_url = admin_url( 'admin.php?page=' . OPTIONBAY_PLUGIN_NAME );
+		wp_safe_redirect( $redirect_url );
 		exit;
 	}
 
@@ -177,14 +173,13 @@ class Admin
 	 * @since 1.0.0
 	 * @return bool
 	 */
-	public function is_menu_page()
-	{
-		$screen = get_current_screen();
+	public function is_menu_page() {
+		$screen              = get_current_screen();
 		$admin_scripts_bases = array(
 			'toplevel_page_' . OPTIONBAY_PLUGIN_NAME,
 			'product_page_' . OPTIONBAY_PLUGIN_NAME, // Match TubeBay
 		);
-		if (!(isset($screen->base) && in_array($screen->base, $admin_scripts_bases, true))) {
+		if ( ! ( isset( $screen->base ) && in_array( $screen->base, $admin_scripts_bases, true ) ) ) {
 			return false;
 		}
 		return true;
@@ -198,9 +193,8 @@ class Admin
 	 * @param string $classes The classes.
 	 * @return string
 	 */
-	public function add_has_sticky_header($classes)
-	{
-		if ($this->is_menu_page()) {
+	public function add_has_sticky_header( $classes ) {
+		if ( $this->is_menu_page() ) {
 			$classes .= ' at-has-hdr-stky ';
 		}
 		return $classes;
@@ -213,11 +207,10 @@ class Admin
 	 * @access public
 	 * @return void
 	 */
-	public function add_setting_root_div()
-	{
-		echo '<div id="' . esc_attr(OPTIONBAY_PLUGIN_NAME) . '">
+	public function add_setting_root_div() {
+		echo '<div id="' . esc_attr( OPTIONBAY_PLUGIN_NAME ) . '">
 			<div class="optionbay-loader-container">
-				<p>' . esc_html__('Loading...', 'optionbay') . '</p>
+				<p>' . esc_html__( 'Loading...', 'optionbay' ) . '</p>
 			</div>
 		</div>';
 	}
@@ -229,24 +222,23 @@ class Admin
 	 * @access public
 	 * @return void
 	 */
-	public function enqueue_resources()
-	{
-		if (!$this->is_menu_page()) {
+	public function enqueue_resources() {
+		if ( ! $this->is_menu_page() ) {
 			return;
 		}
 
-		optionbay_log('Admin: Enqueueing admin resources for WPAB menu page', 'DEBUG');
+		optionbay_log( 'Admin: Enqueueing admin resources for WPAB menu page', 'DEBUG' );
 
-		$deps_file = OPTIONBAY_PATH . 'build/admin.asset.php';
-		$dependency = array('wp-i18n');
-		$version = OPTIONBAY_VERSION;
-		if (file_exists($deps_file)) {
-			$deps_file = require $deps_file;
+		$deps_file  = OPTIONBAY_PATH . 'build/admin.asset.php';
+		$dependency = array( 'wp-i18n' );
+		$version    = OPTIONBAY_VERSION;
+		if ( file_exists( $deps_file ) ) {
+			$deps_file  = require $deps_file;
 			$dependency = $deps_file['dependencies'];
-			$version = $deps_file['version'];
-			optionbay_log('Admin: Loaded exact build dependencies: ' . wp_json_encode($dependency), 'DEBUG');
+			$version    = $deps_file['version'];
+			optionbay_log( 'Admin: Loaded exact build dependencies: ' . wp_json_encode( $dependency ), 'DEBUG' );
 		} else {
-			optionbay_log('Admin: Build asset file not found; falling back to default dependencies', 'DEBUG');
+			optionbay_log( 'Admin: Build asset file not found; falling back to default dependencies', 'DEBUG' );
 		}
 
 		/**
@@ -256,8 +248,8 @@ class Admin
 		 * @hook optionbay_admin_script
 		 * @param string $script_url The URL to the admin.js file.
 		 */
-		$admin_script = apply_filters('optionbay_admin_script', OPTIONBAY_URL . 'build/admin.js');
-		wp_enqueue_script(OPTIONBAY_PLUGIN_NAME, $admin_script, $dependency, $version, true);
+		$admin_script = apply_filters( 'optionbay_admin_script', OPTIONBAY_URL . 'build/admin.js' );
+		wp_enqueue_script( OPTIONBAY_PLUGIN_NAME, $admin_script, $dependency, $version, true );
 
 		/**
 		 * Filters the URL of the main admin CSS file.
@@ -266,9 +258,9 @@ class Admin
 		 * @hook optionbay_admin_css
 		 * @param string $style_url The URL to the admin.css file.
 		 */
-		$admin_css = apply_filters('optionbay_admin_css', OPTIONBAY_URL . 'build/admin.css');
-		wp_enqueue_style(OPTIONBAY_PLUGIN_NAME, $admin_css, array(), $version);
-		wp_style_add_data(OPTIONBAY_PLUGIN_NAME, 'rtl', 'replace');
+		$admin_css = apply_filters( 'optionbay_admin_css', OPTIONBAY_URL . 'build/admin.css' );
+		wp_enqueue_style( OPTIONBAY_PLUGIN_NAME, $admin_css, array(), $version );
+		wp_style_add_data( OPTIONBAY_PLUGIN_NAME, 'rtl', 'replace' );
 
 		/**
 		 * Filters the data passed from PHP to the main admin JavaScript application.
@@ -281,22 +273,22 @@ class Admin
 		$localize = apply_filters(
 			'optionbay_admin_localize',
 			array(
-				'version' => $version,
-				'root_id' => OPTIONBAY_PLUGIN_NAME,
-				'nonce' => wp_create_nonce('wp_rest'),
-				'store' => OPTIONBAY_PLUGIN_NAME,
-				'rest_url' => get_rest_url(),
-				'pluginData' => $this->get_plugin_data(),
-				'wpSettings' => array(
-					'dateFormat' => get_option('date_format'),
-					'timeFormat' => get_option('time_format'),
+				'version'         => $version,
+				'root_id'         => OPTIONBAY_PLUGIN_NAME,
+				'nonce'           => wp_create_nonce( 'wp_rest' ),
+				'store'           => OPTIONBAY_PLUGIN_NAME,
+				'rest_url'        => get_rest_url(),
+				'pluginData'      => $this->get_plugin_data(),
+				'wpSettings'      => array(
+					'dateFormat' => get_option( 'date_format' ),
+					'timeFormat' => get_option( 'time_format' ),
 				),
 				'plugin_settings' => \OptionBay\Core\Settings::get_instance()->get_settings(),
-				'products_url' => admin_url('edit.php?post_type=product'),
+				'products_url'    => admin_url( 'edit.php?post_type=product' ),
 			)
 		);
 
-		wp_localize_script(OPTIONBAY_PLUGIN_NAME, 'wpabBoilerplate_Localize', $localize);
+		wp_localize_script( OPTIONBAY_PLUGIN_NAME, 'wpabBoilerplate_Localize', $localize );
 
 		$path_to_check = OPTIONBAY_PATH . 'languages';
 		wp_set_script_translations(
@@ -317,9 +309,8 @@ class Admin
 	 * @param string   $context     The plugin context.
 	 * @return array
 	 */
-	public function add_plugin_action_links($actions, $plugin_file, $plugin_data, $context)
-	{
-		$actions[] = '<a href="' . esc_url(menu_page_url($this->menu_info['menu_slug'], false)) . '">' . esc_html__('Settings', 'optionbay') . '</a>';
+	public function add_plugin_action_links( $actions, $plugin_file, $plugin_data, $context ) {
+		$actions[] = '<a href="' . esc_url( menu_page_url( $this->menu_info['menu_slug'], false ) ) . '">' . esc_html__( 'Settings', 'optionbay' ) . '</a>';
 		return $actions;
 	}
 
@@ -330,15 +321,14 @@ class Admin
 	 * @param    \OptionBay\Core\Plugin $plugin The Plugin instance.
 	 * @return   void
 	 */
-	public function run($plugin)
-	{
+	public function run( $plugin ) {
 		$loader = $plugin->get_loader();
-		$loader->add_filter('all_plugins', $plugin, 'change_plugin_display_name');
-		$loader->add_action('admin_menu', $this, 'add_admin_menu');
-		$loader->add_filter('admin_body_class', $this, 'add_has_sticky_header');
-		$loader->add_action('admin_enqueue_scripts', $this, 'enqueue_resources');
+		$loader->add_filter( 'all_plugins', $plugin, 'change_plugin_display_name' );
+		$loader->add_action( 'admin_menu', $this, 'add_admin_menu' );
+		$loader->add_filter( 'admin_body_class', $this, 'add_has_sticky_header' );
+		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_resources' );
 
-		$plugin_basename = plugin_basename(OPTIONBAY_PATH . 'optionbay.php');
-		$loader->add_filter('plugin_action_links_' . $plugin_basename, $this, 'add_plugin_action_links', 10, 4);
+		$plugin_basename = plugin_basename( OPTIONBAY_PATH . 'optionbay.php' );
+		$loader->add_filter( 'plugin_action_links_' . $plugin_basename, $this, 'add_plugin_action_links', 10, 4 );
 	}
 }
