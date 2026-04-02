@@ -1,4 +1,11 @@
 <?php
+/**
+ * Textarea Field — Field type for multi-line text input.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
 
 namespace OptionBay\Fields;
 
@@ -64,14 +71,15 @@ class TextareaField extends BaseField {
 			$max = $this->get( 'max_length', 0 );
 			if ( $max > 0 && mb_strlen( $value ) > $max ) {
 				optionbay_log( "TextareaField Validation: Value length exceeds maximum {$max}.", 'WARNING' );
-				return new \WP_Error(
-					'max_length',
-					sprintf(
-						__( '%1$s must be at most %2$d characters.', 'optionbay' ),
-						$this->get( 'label', $this->get( 'id' ) ),
-						$max
-					)
-				);
+					return new \WP_Error(
+						'max_length',
+						sprintf(
+							/* translators: 1: field label, 2: max length */
+							__( '%1$s must be at most %2$d characters.', 'optionbay' ),
+							$this->get( 'label', $this->get( 'id' ) ),
+							$max
+						)
+					);
 			}
 		}
 

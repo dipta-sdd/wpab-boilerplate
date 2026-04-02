@@ -1,4 +1,11 @@
 <?php
+/**
+ * File Field — Field type for file uploads.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
 
 namespace OptionBay\Fields;
 
@@ -61,6 +68,7 @@ class FileField extends BaseField {
 			return new \WP_Error(
 				'required_field',
 				sprintf(
+					/* translators: %s: field label */
 					__( '%s is required.', 'optionbay' ),
 					$this->get( 'label', $this->get( 'id' ) )
 				)
@@ -75,6 +83,7 @@ class FileField extends BaseField {
 				return new \WP_Error(
 					'file_too_large',
 					sprintf(
+						/* translators: 1: file label, 2: max size in MB */
 						__( '%1$s exceeds the maximum file size of %2$d MB.', 'optionbay' ),
 						$this->get( 'label', $this->get( 'id' ) ),
 						$this->get( 'max_file_size', 5 )
@@ -91,6 +100,7 @@ class FileField extends BaseField {
 				return new \WP_Error(
 					'invalid_file_type',
 					sprintf(
+						/* translators: 1: file label, 2: allowed extensions */
 						__( '%1$s: File type not allowed. Allowed: %2$s', 'optionbay' ),
 						$this->get( 'label', $this->get( 'id' ) ),
 						$allowed
@@ -102,6 +112,13 @@ class FileField extends BaseField {
 		return true;
 	}
 
+	/**
+	 * Sanitize file-based values.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value The value to sanitize.
+	 * @return mixed Sanitized value.
+	 */
 	public function sanitize( $value ) {
 		// File sanitization happens in the cart pipeline
 		return $value;

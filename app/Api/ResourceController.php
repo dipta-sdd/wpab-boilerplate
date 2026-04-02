@@ -1,4 +1,11 @@
 <?php
+/**
+ * Resource Controller — REST API handling for WooCommerce resources.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Api
+ */
 
 namespace OptionBay\Api;
 
@@ -197,8 +204,8 @@ class ResourceController extends ApiController {
 		$formatted = array(
 			'value'    => $product->get_id(),
 			'label'    => $product->get_name(),
-			'sku'      => $product->get_sku() ?: '',
-			'image'    => $image_url ?: '',
+			'sku'      => $product->get_sku() ? $product->get_sku() : '',
+			'image'    => $image_url ? $image_url : '',
 			'variants' => array(),
 		);
 

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Pricing Engine — Orchestrates the calculation of add-on prices using various strategies.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Pricing
+ */
 
 namespace OptionBay\Pricing;
 
@@ -40,7 +47,7 @@ class PricingEngine {
 	 * @return PricingStrategy The instantiated strategy object.
 	 */
 	public static function get_strategy( string $type ) {
-		$type = $type ?: 'flat';
+		$type = $type ? $type : 'flat';
 
 		if ( ! array_key_exists( $type, self::$strategies ) ) {
 			optionbay_log( "Pricing Engine: Unknown strategy '{$type}'. Falling back to 'flat'.", 'WARNING' );
@@ -66,7 +73,7 @@ class PricingEngine {
 	 * @return float The calculated delta to be added to the product price.
 	 */
 	public static function calculate( string $type, float $base_price, float $configured_amount, $field_value, int $quantity ) {
-		if ( $type === 'none' || $configured_amount == 0 ) {
+		if ( 'none' === $type || 0.0 === $configured_amount ) {
 			optionbay_log( "Pricing Engine: Type 'none' or amount 0. Price delta is 0.", 'DEBUG' );
 			return 0.0;
 		}

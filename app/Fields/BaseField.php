@@ -1,4 +1,11 @@
 <?php
+/**
+ * Abstract base class for all field types.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
 
 namespace OptionBay\Fields;
 
@@ -8,11 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Abstract base class for all field types.
- *
- * Provides the common HTML wrapper, data attribute generation,
- * label rendering, and shared utilities. Concrete field types
- * only need to implement render_input().
+ * Base field class.
  *
  * @since      1.0.0
  * @package    OptionBay
@@ -52,12 +55,12 @@ abstract class BaseField implements InterfaceField {
 	 * Get a schema property with a default fallback.
 	 *
 	 * @since 1.0.0
-	 * @param string $key     The property key.
-	 * @param mixed  $default Default value.
+	 * @param string $key           The property key.
+	 * @param mixed  $default_value Default value.
 	 * @return mixed
 	 */
-	protected function get( $key, $default = '' ) {
-		return $this->schema[ $key ] ?? $default;
+	protected function get( $key, $default_value = '' ) {
+		return $this->schema[ $key ] ?? $default_value;
 	}
 
 	/**
@@ -104,10 +107,10 @@ abstract class BaseField implements InterfaceField {
 
 		// Determine initial visibility from conditions to prevent sudden layout shifts
 		$is_hidden = false;
-		if ( ! empty( $conditions['status'] ) && $conditions['status'] === 'active' ) {
+		if ( ! empty( $conditions['status'] ) && 'active' === $conditions['status'] ) {
 			// If action is 'show', field is hidden by default until condition is met
 			// If action is 'hide', field is visible by default until condition is met
-			$is_hidden = ( $conditions['action'] === 'show' );
+			$is_hidden = ( 'show' === $conditions['action'] );
 		}
 
 		// Initialize HTML container classes
@@ -130,7 +133,7 @@ abstract class BaseField implements InterfaceField {
 
 		// Expose pricing logic mapping strictly onto the DOM
 		$price_type = $this->get( 'price_type', 'none' );
-		if ( $price_type !== 'none' ) {
+		if ( 'none' !== $price_type ) {
 			$data_attrs .= sprintf(
 				' data-price-type="%s" data-price="%s"',
 				esc_attr( $price_type ),
@@ -145,7 +148,7 @@ abstract class BaseField implements InterfaceField {
 		}
 
 		// Tag conditional logic rules for the frontend client SPA event loops
-		if ( ! empty( $conditions['status'] ) && $conditions['status'] === 'active' ) {
+		if ( ! empty( $conditions['status'] ) && 'active' === $conditions['status'] ) {
 			$data_attrs .= sprintf(
 				' data-condition-status="active" data-condition-action="%s"',
 				esc_attr( $conditions['action'] ?? 'show' )
@@ -222,7 +225,7 @@ abstract class BaseField implements InterfaceField {
 	 * Default sanitization.
 	 *
 	 * @since 1.0.0
-	 * @param mixed $value
+	 * @param mixed $value The value to sanitize.
 	 * @return mixed
 	 */
 	public function sanitize( $value ) {
@@ -236,7 +239,7 @@ abstract class BaseField implements InterfaceField {
 	 * Default display value.
 	 *
 	 * @since 1.0.0
-	 * @param mixed $value
+	 * @param mixed $value The value to format for display.
 	 * @return string
 	 */
 	public function get_display_value( $value ) {
@@ -250,7 +253,7 @@ abstract class BaseField implements InterfaceField {
 	 * Default weight calculation.
 	 *
 	 * @since 1.0.0
-	 * @param mixed $value
+	 * @param mixed $value The value to calculate weight for.
 	 * @return float
 	 */
 	public function get_weight( $value ) {
@@ -264,7 +267,7 @@ abstract class BaseField implements InterfaceField {
 	 * Check if a value is considered empty.
 	 *
 	 * @since 1.0.0
-	 * @param mixed $value
+	 * @param mixed $value The value to check for emptiness.
 	 * @return bool
 	 */
 	protected function is_empty_value( $value ) {

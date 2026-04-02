@@ -1,4 +1,11 @@
 <?php
+/**
+ * Text Field — Field type for single-line text input.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
 
 namespace OptionBay\Fields;
 
@@ -76,25 +83,27 @@ class TextField extends BaseField {
 
 			if ( $max > 0 && $len > $max ) {
 				optionbay_log( "TextField Validation: Value length {$len} exceeds maximum {$max}.", 'WARNING' );
-				return new \WP_Error(
-					'max_length',
-					sprintf(
-						__( '%1$s must be at most %2$d characters.', 'optionbay' ),
-						$this->get( 'label', $this->get( 'id' ) ),
-						$max
-					)
-				);
+					return new \WP_Error(
+						'max_length',
+						sprintf(
+							/* translators: 1: field label, 2: max length */
+							__( '%1$s must be at most %2$d characters.', 'optionbay' ),
+							$this->get( 'label', $this->get( 'id' ) ),
+							$max
+						)
+					);
 			}
 			if ( $min > 0 && $len < $min ) {
 				optionbay_log( "TextField Validation: Value length {$len} is less than minimum {$min}.", 'WARNING' );
-				return new \WP_Error(
-					'min_length',
-					sprintf(
-						__( '%1$s must be at least %2$d characters.', 'optionbay' ),
-						$this->get( 'label', $this->get( 'id' ) ),
-						$min
-					)
-				);
+					return new \WP_Error(
+						'min_length',
+						sprintf(
+							/* translators: 1: field label, 2: min length */
+							__( '%1$s must be at least %2$d characters.', 'optionbay' ),
+							$this->get( 'label', $this->get( 'id' ) ),
+							$min
+						)
+					);
 			}
 		}
 

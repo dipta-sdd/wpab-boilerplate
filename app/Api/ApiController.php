@@ -1,4 +1,11 @@
 <?php
+/**
+ * Api Controller — Base class for all REST API endpoints.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Api
+ */
 
 namespace OptionBay\Api;
 
@@ -17,9 +24,8 @@ use Rakit\Validation\Validator;
  * The parent class of all API controllers for this plugin.
  *
  * @since      1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Api
- * @author     WPAnchorBay <wpanchorbay@gmail.com>
+ * @package    OptionBay
+ * @subpackage OptionBay/Api
  */
 class ApiController extends WP_REST_Controller {
 

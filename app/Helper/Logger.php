@@ -1,4 +1,11 @@
 <?php
+/**
+ * Logger — Handles all logging for the plugin.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Helper
+ */
 
 namespace OptionBay\Helper;
 
@@ -16,9 +23,8 @@ use OptionBay\Core\Cron;
  * Works with the Cron class for cache management and purging.
  *
  * @since      1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Helper
- * @author     WPAnchorBay <wpanchorbay@gmail.com>
+ * @package    OptionBay
+ * @subpackage OptionBay/Helper
  */
 class Logger {
 

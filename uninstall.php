@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Fired when the user clicks "Delete" for the plugin.
  *
  * @since      1.0.0
- * @package    WPAB_Boilerplate
+ * @package    OptionBay
  */
 
 // If uninstall not called from WordPress, then exit.

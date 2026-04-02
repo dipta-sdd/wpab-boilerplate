@@ -1,4 +1,11 @@
 <?php
+/**
+ * Interface Field — Definition of the field contract.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
 
 namespace OptionBay\Fields;
 

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Condition Evaluator — processes conditional logic rules for fields.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Helper
+ */
 
 namespace OptionBay\Helper;
 
@@ -36,14 +43,14 @@ class ConditionEvaluator {
 		$conditions = $field_schema['conditions'] ?? array();
 
 		// If conditions are not active, it's always visible by default
-		if ( empty( $conditions['status'] ) || $conditions['status'] !== 'active' ) {
+		if ( empty( $conditions['status'] ) || 'active' !== $conditions['status'] ) {
 			return true;
 		}
 
 		$rules = $conditions['rules'] ?? array();
 		if ( empty( $rules ) ) {
 			// If active but no rules, default to visible if action is hide, hidden if action is show
-			return ( $conditions['action'] ?? 'show' ) === 'hide';
+			return 'hide' === ( $conditions['action'] ?? 'show' );
 		}
 
 		optionbay_log( 'Evaluating conditions for field: ' . ( $field_schema['id'] ?? 'unknown' ), 'DEBUG' );
@@ -59,7 +66,7 @@ class ConditionEvaluator {
 		$condition_met = false;
 
 		// Combine results based on Match Type
-		if ( $match === 'ALL' ) {
+		if ( 'ALL' === $match ) {
 			$condition_met = ! in_array( false, $results, true );
 		} else { // ANY
 			$condition_met = in_array( true, $results, true );
@@ -68,7 +75,7 @@ class ConditionEvaluator {
 		$action = $conditions['action'] ?? 'show';
 
 		// Determine final visibility based on action
-		if ( $action === 'show' ) {
+		if ( 'show' === $action ) {
 			$is_visible = $condition_met;
 		} else { // hide
 			$is_visible = ! $condition_met;
@@ -142,9 +149,9 @@ class ConditionEvaluator {
 			case 'not_contains':
 				return strpos( $target_value, $rule_value ) === false;
 			case 'empty':
-				return $target_value === '';
+				return '' === $target_value;
 			case 'not_empty':
-				return $target_value !== '';
+				return '' !== $target_value;
 			default:
 				return false;
 		}

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Settings Controller — REST API handling for plugin settings.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Api
+ */
 
 namespace OptionBay\Api;
 
@@ -16,9 +23,8 @@ use WP_REST_Server;
  * REST API controller for managing settings.
  *
  * @since      1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Api
- * @author     WPAnchorBay <wpanchorbay@gmail.com>
+ * @package    OptionBay
+ * @subpackage OptionBay/Api
  */
 class SettingsController extends ApiController {
 

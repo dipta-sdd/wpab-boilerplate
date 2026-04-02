@@ -1,4 +1,11 @@
 <?php
+/**
+ * Addon Group Controller — REST API handling for options.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Api
+ */
 
 namespace OptionBay\Api;
 
@@ -193,8 +200,8 @@ class AddonGroupController extends ApiController {
 	 * List all option groups with pagination.
 	 *
 	 * @since 1.0.0
-	 * @param WP_REST_Request $request
-	 * @return WP_REST_Response|WP_Error
+	 * @param \WP_REST_Request $request The REST request object.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function get_items( $request ) {
 		optionbay_log( 'AddonGroupController: Fetching multiple items (GET /groups).', 'DEBUG' );
@@ -213,7 +220,7 @@ class AddonGroupController extends ApiController {
 		);
 
 		// Status filter
-		if ( $status !== 'any' ) {
+		if ( 'any' !== $status ) {
 			$args['post_status'] = $status;
 		} else {
 			$args['post_status'] = array( 'publish', 'draft' );
@@ -262,8 +269,8 @@ class AddonGroupController extends ApiController {
 	 * Get a single option group by ID.
 	 *
 	 * @since 1.0.0
-	 * @param WP_REST_Request $request
-	 * @return WP_REST_Response|WP_Error
+	 * @param \WP_REST_Request $request The REST request object.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function get_item( $request ) {
 		$id = absint( $request->get_param( 'id' ) );
@@ -271,7 +278,7 @@ class AddonGroupController extends ApiController {
 
 		$post = get_post( $id );
 
-		if ( ! $post || $post->post_type !== AddonGroup::POST_TYPE ) {
+		if ( ! $post || AddonGroup::POST_TYPE !== $post->post_type ) {
 			return new WP_Error(
 				'not_found',
 				__( 'Option group not found.', 'optionbay' ),
@@ -302,8 +309,8 @@ class AddonGroupController extends ApiController {
 	 * Create a new option group.
 	 *
 	 * @since 1.0.0
-	 * @param WP_REST_Request $request
-	 * @return WP_REST_Response|WP_Error
+	 * @param \WP_REST_Request $request The REST request object.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function create_item( $request ) {
 		optionbay_log( 'AddonGroupController: Creating new item (POST /groups).', 'INFO' );
@@ -422,8 +429,8 @@ class AddonGroupController extends ApiController {
 	 * Update an existing option group.
 	 *
 	 * @since 1.0.0
-	 * @param WP_REST_Request $request
-	 * @return WP_REST_Response|WP_Error
+	 * @param \WP_REST_Request $request The REST request object.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function update_item( $request ) {
 		$id = absint( $request->get_param( 'id' ) );
@@ -431,7 +438,7 @@ class AddonGroupController extends ApiController {
 
 		$post = get_post( $id );
 
-		if ( ! $post || $post->post_type !== AddonGroup::POST_TYPE ) {
+		if ( ! $post || AddonGroup::POST_TYPE !== $post->post_type ) {
 			return new WP_Error(
 				'not_found',
 				__( 'Option group not found.', 'optionbay' ),
@@ -551,8 +558,8 @@ class AddonGroupController extends ApiController {
 	 * Delete an option group and its assignments.
 	 *
 	 * @since 1.0.0
-	 * @param WP_REST_Request $request
-	 * @return WP_REST_Response|WP_Error
+	 * @param \WP_REST_Request $request The REST request object.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function delete_item( $request ) {
 		$id = absint( $request->get_param( 'id' ) );
@@ -583,8 +590,8 @@ class AddonGroupController extends ApiController {
 	 * Copies the post, its meta (schema, settings), and its assignments.
 	 *
 	 * @since 1.0.0
-	 * @param WP_REST_Request $request
-	 * @return WP_REST_Response|WP_Error
+	 * @param \WP_REST_Request $request The REST request object.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function duplicate_item( $request ) {
 		$id = absint( $request->get_param( 'id' ) );
@@ -592,7 +599,7 @@ class AddonGroupController extends ApiController {
 
 		$post = get_post( $id );
 
-		if ( ! $post || $post->post_type !== AddonGroup::POST_TYPE ) {
+		if ( ! $post || AddonGroup::POST_TYPE !== $post->post_type ) {
 			return new WP_Error(
 				'not_found',
 				__( 'Option group not found.', 'optionbay' ),
@@ -653,8 +660,8 @@ class AddonGroupController extends ApiController {
 	 * Supports 'delete', 'activate', and 'draft' actions.
 	 *
 	 * @since 1.0.0
-	 * @param WP_REST_Request $request
-	 * @return WP_REST_Response|WP_Error
+	 * @param \WP_REST_Request $request The REST request object.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function bulk_action( $request ) {
 		$action = $request->get_param( 'action' );
@@ -680,7 +687,7 @@ class AddonGroupController extends ApiController {
 			}
 
 			$post = get_post( $id );
-			if ( ! $post || $post->post_type !== AddonGroup::POST_TYPE ) {
+			if ( ! $post || AddonGroup::POST_TYPE !== $post->post_type ) {
 				++$failed;
 				continue;
 			}
@@ -700,7 +707,7 @@ class AddonGroupController extends ApiController {
 
 				case 'activate':
 				case 'draft':
-					$status = ( $action === 'activate' ) ? 'publish' : 'draft';
+					$status = ( 'activate' === $action ) ? 'publish' : 'draft';
 					$result = wp_update_post(
 						array(
 							'ID'          => $id,
@@ -725,6 +732,7 @@ class AddonGroupController extends ApiController {
 				'processed' => $processed,
 				'failed'    => $failed,
 				'message'   => sprintf(
+					/* translators: 1: action name, 2: processed count, 3: failed count */
 					__( 'Bulk action "%1$s" completed. Success: %2$d, Failed: %3$d.', 'optionbay' ),
 					sanitize_text_field( $action ),
 					$processed,

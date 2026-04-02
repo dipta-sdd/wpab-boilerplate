@@ -1,7 +1,4 @@
 <?php
-
-namespace OptionBay\Core;
-
 /**
  * The Base Hook Manager class.
  *
@@ -9,16 +6,25 @@ namespace OptionBay\Core;
  * for child classes to register their actions and filters.
  *
  * @since      1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Core
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
  * @author     WPAnchorBay <wpanchorbay@gmail.com>
  */
+
+namespace OptionBay\Core;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Abstract base class for the plugin's core components.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 abstract class Base {
 
 	/**
@@ -65,8 +71,12 @@ abstract class Base {
 	/**
 	 * Adds a new action to the hooks array.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 * @access protected
+	 * @param  string $hook          The name of the WordPress action that is being registered.
+	 * @param  string $callback      The name of the function definition on the $component.
+	 * @param  int    $priority      Optional. The priority at which the function should be fired. Default is 10.
+	 * @param  int    $accepted_args Optional. The number of arguments that should be passed to the $callback. Default is 1.
 	 */
 	protected function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
 		$this->add_hook( 'action', $hook, $callback, $priority, $accepted_args );
@@ -75,8 +85,12 @@ abstract class Base {
 	/**
 	 * Adds a new filter to the hooks array.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 * @access protected
+	 * @param  string $hook          The name of the WordPress filter that is being registered.
+	 * @param  string $callback      The name of the function definition on the $component.
+	 * @param  int    $priority      Optional. The priority at which the function should be fired. Default is 10.
+	 * @param  int    $accepted_args Optional. The number of arguments that should be passed to the $callback. Default is 2.
 	 */
 	protected function add_filter( $hook, $callback, $priority = 10, $accepted_args = 2 ) {
 		$this->add_hook( 'filter', $hook, $callback, $priority, $accepted_args );
@@ -85,8 +99,13 @@ abstract class Base {
 	/**
 	 * A private helper method to add hooks to the hooks array.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 * @access protected
+	 * @param  string $type          The type of hook (action or filter).
+	 * @param  string $hook          The name of the WordPress hook that is being registered.
+	 * @param  string $callback      The name of the function definition on the $this reference.
+	 * @param  int    $priority      The priority at which the function should be fired.
+	 * @param  int    $accepted_args The number of arguments that should be passed to the $callback.
 	 */
 	protected function add_hook( $type, $hook, $callback, $priority, $accepted_args ) {
 		$this->hooks[] = array(

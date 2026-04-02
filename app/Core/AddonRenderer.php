@@ -1,4 +1,11 @@
 <?php
+/**
+ * Addon Renderer — handles displaying option fields on the product page.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 
 namespace OptionBay\Core;
 
@@ -212,14 +219,14 @@ class AddonRenderer extends Base {
 	 * checking categories, tags, and product-specific assignments.
 	 *
 	 * @since 1.0.0
-	 * @param int $product_id
+	 * @param int $product_id The product ID to query for.
 	 * @return array Group IDs.
 	 */
 	private function get_groups_for_product( int $product_id ) {
 		$cache_key = 'ob_assignments_product_' . $product_id;
 		$cached    = wp_cache_get( $cache_key, 'optionbay' );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return $cached;
 		}
 
@@ -238,7 +245,7 @@ class AddonRenderer extends Base {
 		$group_ids = array_filter(
 			$group_ids,
 			function ( $gid ) {
-				return get_post_status( $gid ) === 'publish';
+				return 'publish' === get_post_status( $gid );
 			}
 		);
 
@@ -251,14 +258,14 @@ class AddonRenderer extends Base {
 	 * Get a group's schema from post meta (with caching).
 	 *
 	 * @since 1.0.0
-	 * @param int $group_id
+	 * @param int $group_id The group ID.
 	 * @return array
 	 */
 	private function get_group_schema( int $group_id ) {
 		$cache_key = 'ob_schema_group_' . $group_id;
 		$cached    = wp_cache_get( $cache_key, 'optionbay' );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return $cached;
 		}
 
@@ -278,7 +285,7 @@ class AddonRenderer extends Base {
 	 * Get a group's settings from post meta.
 	 *
 	 * @since 1.0.0
-	 * @param int $group_id
+	 * @param int $group_id The group ID.
 	 * @return array
 	 */
 	private function get_group_settings( int $group_id ) {

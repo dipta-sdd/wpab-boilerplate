@@ -1,4 +1,11 @@
 <?php
+/**
+ * Checkbox Field — Field type for toggles and multi-checkboxes.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
 
 namespace OptionBay\Fields;
 
@@ -44,7 +51,7 @@ class CheckboxField extends BaseField {
 
 		// Multi-checkbox (with options)
 		$html = '<div class="ob-checkbox-group">';
-		$name = $this->get_name() . '[]'; // Array name for multi-select
+		$name = $this->get_name() . 'array()'; // Array name for multi-select
 
 		foreach ( $options as $i => $option ) {
 			$option_id  = $this->get_html_id() . '-' . $i;
@@ -103,6 +110,7 @@ class CheckboxField extends BaseField {
 					return new \WP_Error(
 						'invalid_option',
 						sprintf(
+							/* translators: %s: field label */
 							__( 'Invalid selection for %s.', 'optionbay' ),
 							$this->get( 'label', $this->get( 'id' ) )
 						)
@@ -128,6 +136,13 @@ class CheckboxField extends BaseField {
 		return sanitize_text_field( $value );
 	}
 
+	/**
+	 * Get the human-readable labels for the selected checkbox values.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value The selected value(s).
+	 * @return string Comma-separated labels.
+	 */
 	public function get_display_value( $value ) {
 		$options = $this->get( 'options', array() );
 

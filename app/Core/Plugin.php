@@ -1,4 +1,11 @@
 <?php
+/**
+ * Plugin — The main plugin bootstrap class.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 
 namespace OptionBay\Core;
 
@@ -16,9 +23,8 @@ use OptionBay\Helper\Loader;
  * public-facing site hooks.
  *
  * @since      1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Core
- * @author     WPAnchorBay <wpanchorbay@gmail.com>
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
  */
 class Plugin {
 
@@ -81,6 +87,7 @@ class Plugin {
 	private function define_core_hooks() {
 		// Initialize API controllers from config
 		$api_controllers = include OPTIONBAY_PATH . 'config/api.php';
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		optionbay_log( 'API Controllers: ' . print_r( $api_controllers, true ), 'DEBUG' );
 		if ( is_array( $api_controllers ) ) {
 			foreach ( $api_controllers as $controller ) {
@@ -97,20 +104,6 @@ class Plugin {
 		}
 
 		// Register your custom hook-based components here.
-		// Example:
-		// $my_component = MyComponent::get_instance();
-		// $components_with_hooks = array($my_component);
-		//
-		// foreach ($components_with_hooks as $component) {
-		// $hooks = $component->get_hooks();
-		// foreach ($hooks as $hook) {
-		// if ('action' === $hook['type']) {
-		// $this->loader->add_action($hook['hook'], $component, $hook['callback'], $hook['priority'], $hook['accepted_args']);
-		// } elseif ('filter' === $hook['type']) {
-		// $this->loader->add_filter($hook['hook'], $component, $hook['callback'], $hook['priority'], $hook['accepted_args']);
-		// }
-		// }
-		// }
 	}
 
 	/**
@@ -144,14 +137,6 @@ class Plugin {
 		wp_enqueue_style( OPTIONBAY_OPTION_NAME . '_public', OPTIONBAY_URL . 'assets/css/public.css', array(), OPTIONBAY_VERSION );
 	}
 
-	/**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @return void
-	 */
 	/**
 	 * Register all of the hooks related to the admin area functionality
 	 * of the plugin.

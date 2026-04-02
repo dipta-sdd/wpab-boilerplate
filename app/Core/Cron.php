@@ -1,4 +1,11 @@
 <?php
+/**
+ * Cron Job management — Handling scheduled tasks and self-healing fallbacks.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 
 namespace OptionBay\Core;
 
@@ -16,9 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * and the built-in WP-Cron system.
  *
  * @since      1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Core
- * @author     WPAnchorBay <wpanchorbay@gmail.com>
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
  */
 class Cron {
 
@@ -191,6 +197,7 @@ class Cron {
 
 				foreach ( $events as $sig => $details ) {
 					// We've found an overdue plugin job. Run it now!
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound -- Hook is verified to have prefix at line 188.
 					do_action_ref_array( $hook, $details['args'] );
 
 					// Re-schedule for next interval if it's recurring.

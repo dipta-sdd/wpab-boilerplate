@@ -1,4 +1,11 @@
 <?php
+/**
+ * Deactivator — Logic to be executed during plugin deactivation.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 
 namespace OptionBay\Core;
 
@@ -10,10 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Fired during plugin deactivation.
  *
+ * This class defines all code necessary to run during the plugin's deactivation.
+ *
  * @since      1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Core
- * @author     WPAnchorBay <wpanchorbay@gmail.com>
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
  */
 class Deactivator {
 

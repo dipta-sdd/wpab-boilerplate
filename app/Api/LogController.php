@@ -1,4 +1,11 @@
 <?php
+/**
+ * Log Controller — REST API handling for system logs.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Api
+ */
 
 namespace OptionBay\Api;
 
@@ -13,14 +20,13 @@ use WP_Error;
 use OptionBay\Helper\Logger;
 
 /**
- * LogController class.
+ * Log Controller
  *
  * Serves the merged last-30-days log content via the REST API.
  *
- * @since 1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Api
- * @author     WPAnchorBay <wpanchorbay@gmail.com>
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Api
  */
 class LogController extends ApiController {
 

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Radio Field — Field type for single choice radio buttons.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
 
 namespace OptionBay\Fields;
 
@@ -76,19 +83,27 @@ class RadioField extends BaseField {
 			$allowed = array_column( $this->get( 'options', array() ), 'value' );
 			if ( ! in_array( $value, $allowed, true ) ) {
 				optionbay_log( "RadioField Validation: Submited value '{$value}' not in allowed set.", 'WARNING' );
-				return new \WP_Error(
-					'invalid_option',
-					sprintf(
-						__( 'Invalid selection for %s.', 'optionbay' ),
-						$this->get( 'label', $this->get( 'id' ) )
-					)
-				);
+					return new \WP_Error(
+						'invalid_option',
+						sprintf(
+							/* translators: %s: field label */
+							__( 'Invalid selection for %s.', 'optionbay' ),
+							$this->get( 'label', $this->get( 'id' ) )
+						)
+					);
 			}
 		}
 
 		return true;
 	}
 
+	/**
+	 * Get the human-readable label for the selected radio value.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value The selected value.
+	 * @return string The selected label.
+	 */
 	public function get_display_value( $value ) {
 		$options = $this->get( 'options', array() );
 		foreach ( $options as $option ) {

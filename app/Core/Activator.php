@@ -1,23 +1,30 @@
 <?php
+/**
+ * Activator — Logic to be executed during plugin activation.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 
 namespace OptionBay\Core;
 
 use OptionBay\Data\DbManager;
-
-/**
- * Fired during plugin activation.
- *
- * @since      1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Core
- * @author     WPAnchorBay <wpanchorbay@gmail.com>
- */
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Fired during plugin activation.
+ *
+ * This class defines all code necessary to run during the plugin's activation.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 class Activator {
 
 	/**

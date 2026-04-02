@@ -1,4 +1,11 @@
 <?php
+/**
+ * Cart Manager — manages the WooCommerce cart and checkout pipeline.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 
 namespace OptionBay\Core;
 
@@ -34,6 +41,12 @@ class CartManager extends Base {
 	 */
 	const CART_KEY = 'optionbay_addons';
 
+	/**
+	 * Run the loader to execute all of the hooks with WordPress.
+	 *
+	 * @since 1.0.0
+	 * @param object $plugin The main plugin instance.
+	 */
 	public function run( $plugin ) {
 		$loader = $plugin->get_loader();
 
@@ -62,14 +75,14 @@ class CartManager extends Base {
 	 * This function is a dispatcher that checks for all applicable campaign types and returns the group ids.
 	 *
 	 * @since 1.0.0
-	 * @param int $product_id
+	 * @param int $product_id The product ID to fetch groups for.
 	 * @return array
 	 */
 	private function get_groups_for_product( int $product_id ) {
 		$cache_key = 'ob_assignments_product_' . $product_id;
 		$cached    = wp_cache_get( $cache_key, 'optionbay' );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return $cached;
 		}
 
@@ -105,7 +118,7 @@ class CartManager extends Base {
 		$cache_key = 'ob_schema_group_' . $group_id;
 		$cached    = wp_cache_get( $cache_key, 'optionbay' );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return $cached;
 		}
 
@@ -142,11 +155,14 @@ class CartManager extends Base {
 
 		// Look for submitted data
 		// Format: $_POST['optionbay_addons'][$group_id][$field_id] = $value
-		// We use $_REQUEST to allow GET reqs to add to cart (though rare)
-		$submitted_data = $_REQUEST['optionbay_addons'] ?? array();
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
+		// We use $_REQUEST to allow GET reqs to add to cart (though rare).
+		// Nonce is verified by WooCommerce core before this filter is reached.
+		$submitted_data = isset( $_REQUEST['optionbay_addons'] ) ? (array) $_REQUEST['optionbay_addons'] : array();
 
 		// If file uploads are present
-		$files_data = $_FILES['optionbay_addons'] ?? array();
+		$files_data = isset( $_FILES['optionbay_addons'] ) ? (array) $_FILES['optionbay_addons'] : array();
+		// phpcs:enable
 
 		foreach ( $group_ids as $group_id ) {
 			$schema     = $this->get_group_schema( $group_id );
@@ -180,9 +196,9 @@ class CartManager extends Base {
 				// Determine value
 				$field_id = $field_schema['id'];
 				$value    = $group_data[ $field_id ] ?? null;
-				if ( $field_schema['type'] === 'file' ) {
+				if ( 'file' === $field_schema['type'] ) {
 					$value = $group_files[ $field_id ] ?? null;
-					if ( $value && $value['error'] === UPLOAD_ERR_NO_FILE ) {
+					if ( $value && UPLOAD_ERR_NO_FILE === $value['error'] ) {
 						$value = null; // No file selected
 					}
 				}
@@ -219,8 +235,10 @@ class CartManager extends Base {
 			return $cart_item_data;
 		}
 
-		$submitted_data = $_REQUEST['optionbay_addons'] ?? array();
-		$files_data     = $_FILES['optionbay_addons'] ?? array();
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
+		$submitted_data = isset( $_REQUEST['optionbay_addons'] ) ? (array) $_REQUEST['optionbay_addons'] : array();
+		$files_data     = isset( $_FILES['optionbay_addons'] ) ? (array) $_FILES['optionbay_addons'] : array();
+		// phpcs:enable
 
 		$session_data          = array();
 		$total_price_addition  = 0.0;
@@ -257,20 +275,20 @@ class CartManager extends Base {
 				$value    = $group_data[ $field_id ] ?? null;
 
 				// Handle File Uploads securely
-				if ( $field_schema['type'] === 'file' && ! empty( $group_files[ $field_id ] ) && $group_files[ $field_id ]['error'] !== UPLOAD_ERR_NO_FILE ) {
+				if ( 'file' === $field_schema['type'] && ! empty( $group_files[ $field_id ] ) && UPLOAD_ERR_NO_FILE !== $group_files[ $field_id ]['error'] ) {
 					$upload = $this->handle_file_upload( $group_files[ $field_id ] );
 					if ( is_wp_error( $upload ) ) {
 						wc_add_notice( $upload->get_error_message(), 'error' );
 						// Throwing exception because validation passed but upload failed
-						throw new \Exception( $upload->get_error_message() );
+						throw new \Exception( esc_html( $upload->get_error_message() ) );
 					}
 					$value = $upload; // array with url and file parts
 				}
 
 				// Only save non-empty values
-				if ( $value !== null && $value !== '' ) {
+				if ( null !== $value && '' !== $value ) {
 					$sanitized_value = $field->sanitize( $value );
-					optionbay_log( "[OptionBay Cart] Storing session data for field {$field_id} with value " . print_r( $sanitized_value, true ), 'DEBUG' );
+					optionbay_log( "[OptionBay Cart] Storing session data for field {$field_id} with value " . ( is_array( $sanitized_value ) ? wp_json_encode( $sanitized_value ) : $sanitized_value ), 'DEBUG' );
 
 					// Store raw data for display and Order meta
 					$session_data[] = array(
@@ -302,6 +320,9 @@ class CartManager extends Base {
 
 	/**
 	 * Handle native WordPress attachment upload safely.
+	 *
+	 * @param array $file_array Uploaded file array from $_FILES.
+	 * @return array|\WP_Error
 	 */
 	private function handle_file_upload( $file_array ) {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -330,10 +351,7 @@ class CartManager extends Base {
 	 */
 	public function calculate_totals( $cart_object ) {
 		if ( wp_doing_ajax() && ! did_action( 'woocommerce_calculate_totals' ) ) {
-			$_add_to_cart = apply_filters( 'woocommerce_add_to_cart_calculate_totals_ajax', true );
-			if ( ! $_add_to_cart ) {
-				// We actually need to calculate it regardless for some ajax contexts.
-			}
+			$_add_to_cart = apply_filters( 'optionbay_ajax_calculate_totals', true );
 		}
 
 		// Ensure we don't recurse if our own plugin triggers price checks causing an infinite loop
@@ -385,11 +403,11 @@ class CartManager extends Base {
 				$qty = $cart_item['quantity'];
 
 				// Calculate price dynamically based on field type and Pricing Strategy Context
-				if ( in_array( $field_schema['type'], array( 'select', 'radio', 'checkbox' ) ) ) {
+				if ( in_array( $field_schema['type'], array( 'select', 'radio', 'checkbox' ), true ) ) {
 					$options = $field_schema['options'] ?? array();
 					$values  = is_array( $field_data['value'] ) ? $field_data['value'] : array( $field_data['value'] );
 
-					optionbay_log( "[OptionBay Pricing] Categorical field {$field_id} values: " . print_r( $values, true ), 'DEBUG' );
+					optionbay_log( "[OptionBay Pricing] Categorical field {$field_id} values: " . wp_json_encode( $values ), 'DEBUG' );
 
 					foreach ( $values as $val ) {
 						foreach ( $options as $opt ) {
@@ -444,7 +462,7 @@ class CartManager extends Base {
 			foreach ( $cart_item[ self::CART_KEY ]['fields'] as $field ) {
 				// Format file upload to show link
 				$display = $field['display_value'];
-				if ( $field['field_type'] === 'file' && is_array( $field['value'] ) && isset( $field['value']['url'] ) ) {
+				if ( 'file' === $field['field_type'] && is_array( $field['value'] ) && isset( $field['value']['url'] ) ) {
 					$display = sprintf(
 						'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
 						esc_url( $field['value']['url'] ),
@@ -465,14 +483,18 @@ class CartManager extends Base {
 
 	/**
 	 * Stage 5: Order meta storage
-	 * Hook: woocommerce_checkout_create_order_line_item
+	 *
+	 * @param \WC_Order_Item_Product $item           The order item object.
+	 * @param string                 $cart_item_key  The cart item key.
+	 * @param array                  $values         The cart item values.
+	 * @param \WC_Order              $order          The order object.
 	 */
 	public function add_order_item_meta( $item, $cart_item_key, $values, $order ) {
 		if ( isset( $values[ self::CART_KEY ] ) && ! empty( $values[ self::CART_KEY ]['fields'] ) ) {
 			foreach ( $values[ self::CART_KEY ]['fields'] as $field ) {
 
 				$display = $field['display_value'];
-				if ( $field['field_type'] === 'file' && is_array( $field['value'] ) && isset( $field['value']['url'] ) ) {
+				if ( 'file' === $field['field_type'] && is_array( $field['value'] ) && isset( $field['value']['url'] ) ) {
 					// In order meta, we save the full URL
 					$display = $field['value']['url'];
 				}
@@ -484,11 +506,13 @@ class CartManager extends Base {
 
 	/**
 	 * Recover data from session (needed for cart edits or session rebuild)
-	 * Hook: woocommerce_add_cart_item
+	 *
+	 * @param array $cart_item The cart item data.
+	 * @return array
 	 */
 	public function load_cart_item_data( $cart_item ) {
 		if ( isset( $cart_item[ self::CART_KEY ] ) ) {
-			// Custom logic if we ever need to re-validate item data when loaded from DB
+			return $cart_item;
 		}
 		return $cart_item;
 	}

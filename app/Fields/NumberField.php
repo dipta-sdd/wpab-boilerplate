@@ -1,4 +1,11 @@
 <?php
+/**
+ * Number Field — Field type for numeric inputs.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
 
 namespace OptionBay\Fields;
 
@@ -39,12 +46,12 @@ class NumberField extends BaseField {
 		}
 
 		$min = $this->get( 'min_value' );
-		if ( $min !== '' && $min !== null ) {
+		if ( '' !== $min && null !== $min ) {
 			$attrs['min'] = floatval( $min );
 		}
 
 		$max = $this->get( 'max_value' );
-		if ( $max !== '' && $max !== null ) {
+		if ( '' !== $max && null !== $max ) {
 			$attrs['max'] = floatval( $max );
 		}
 
@@ -77,22 +84,24 @@ class NumberField extends BaseField {
 			$min = $this->get( 'min_value' );
 			$max = $this->get( 'max_value' );
 
-			if ( $min !== '' && $min !== null && $num < floatval( $min ) ) {
+			if ( '' !== $min && null !== $min && $num < floatval( $min ) ) {
 				optionbay_log( "NumberField Validation: Value {$num} is less than minimum {$min}.", 'WARNING' );
 				return new \WP_Error(
 					'min_value',
 					sprintf(
+						/* translators: 1: field label, 2: minimum value */
 						__( '%1$s must be at least %2$s.', 'optionbay' ),
 						$this->get( 'label', $this->get( 'id' ) ),
 						$min
 					)
 				);
 			}
-			if ( $max !== '' && $max !== null && $num > floatval( $max ) ) {
+			if ( '' !== $max && null !== $max && $num > floatval( $max ) ) {
 				optionbay_log( "NumberField Validation: Value {$num} exceeds maximum {$max}.", 'WARNING' );
 				return new \WP_Error(
 					'max_value',
 					sprintf(
+						/* translators: 1: field label, 2: maximum value */
 						__( '%1$s must be at most %2$s.', 'optionbay' ),
 						$this->get( 'label', $this->get( 'id' ) ),
 						$max

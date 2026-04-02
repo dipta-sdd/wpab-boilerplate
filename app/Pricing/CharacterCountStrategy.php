@@ -1,47 +1,39 @@
 <?php
-
-namespace OptionBay\Pricing;
-
-// Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
- * Character Count Strategy
- *
- * Multiplies the configured amount by the number of characters in the field value.
+ * Character Count Pricing Strategy — Multiplies cost by the length of the submitted text.
  *
  * @since      1.0.0
  * @package    OptionBay
  * @subpackage OptionBay/Pricing
  */
+
+namespace OptionBay\Pricing;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Character Count Pricing Strategy
+ *
+ * Multiplies the configured amount by the number of characters in the user input.
+ *
+ * @since 1.0.0
+ */
 class CharacterCountStrategy implements PricingStrategy {
 
 	/**
-	 * Calculate the character count pricing addition.
-	 *
-	 * Returns a price directly proportional to the length of the string
-	 * submitted by the customer.
+	 * Calculate the price delta.
 	 *
 	 * @since 1.0.0
-	 * @param float $base_price        Product base price.
-	 * @param float $configured_amount Amount per character.
-	 * @param mixed $field_value       The string value submitted.
-	 * @param int   $quantity          Cart quantity.
-	 * @return float Total cost for the characters entered.
+	 * @param float $base_price Product base price.
+	 * @param float $amount     Configured price per character.
+	 * @param mixed $value      The submitted text.
+	 * @param int   $quantity   Cart item quantity.
+	 * @return float Total calculated cost.
 	 */
-	public function calculate( float $base_price, float $configured_amount, $field_value, int $quantity ) {
-		if ( empty( $field_value ) || ! is_string( $field_value ) ) {
-			optionbay_log( 'CharacterCountStrategy: Empty or non-string value. Adding 0.', 'DEBUG' );
-			return 0.0;
-		}
-
-		$length     = mb_strlen( (string) $field_value );
-		$calculated = $length * $configured_amount;
-
-		optionbay_log( "CharacterCountStrategy: length {$length} * {$configured_amount} = {$calculated}", 'DEBUG' );
-
-		return $calculated;
+	public function calculate( float $base_price, float $amount, $value, int $quantity ) {
+		$len = mb_strlen( (string) $value );
+		return $len * $amount;
 	}
 }

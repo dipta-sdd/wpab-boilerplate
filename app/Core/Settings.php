@@ -1,4 +1,11 @@
 <?php
+/**
+ * Settings — Plugin settings management.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 
 namespace OptionBay\Core;
 
@@ -11,9 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * The settings functionality of the plugin.
  *
  * @since      1.0.0
- * @package    WPAB_Boilerplate
- * @subpackage WPAB_Boilerplate/Core
- * @author     WPAnchorBay <wpanchorbay@gmail.com>
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
  */
 class Settings {
 
@@ -36,17 +42,21 @@ class Settings {
 	 * @var   array
 	 */
 	private $default_settings = array(
+
 		/*
-		==================================================
-		* Global Settings
-		==================================================*/
+		 * ==================================================
+		 * Global Settings
+		 * ==================================================
+		 */
 		'global_enableFeature'          => true,
 		'global_exampleText'            => 'Hello from OptionBay!',
 
+
 		/*
-		==================================================
-		* Advanced Settings
-		==================================================*/
+		 * ==================================================
+		 * Advanced Settings
+		 * ==================================================
+		 */
 		'advanced_deleteAllOnUninstall' => false,
 		'debug_enableMode'              => false,
 	);

@@ -1,4 +1,11 @@
 <?php
+/**
+ * AddonGroup — Registers the ob_option_group Custom Post Type and its meta.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Core
+ */
 
 namespace OptionBay\Core;
 
@@ -140,7 +147,7 @@ class AddonGroup extends Base {
 	 */
 	public function sanitize_json_meta( $value ) {
 		if ( empty( $value ) ) {
-			return '[]';
+			return 'array()';
 		}
 
 		// If it's already an array/object (from internal WP functions), encode it
@@ -152,7 +159,7 @@ class AddonGroup extends Base {
 		$decoded = json_decode( $value, true );
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
 			optionbay_log( 'JSON validation failed in sanitize_json_meta', 'ERROR' );
-			return '[]';
+			return 'array()';
 		}
 
 		// Re-encode to ensure clean JSON without malicious injections

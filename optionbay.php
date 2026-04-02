@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name:       OptionBay
  * Plugin URI:        https://wpanchorbay.com
@@ -17,52 +16,74 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       optionbay
  * Domain Path:       /languages
+ *
+ * @package OptionBay
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if (!defined('WPINC')) {
 	die;
 }
 
-define( 'OPTIONBAY_PATH', plugin_dir_path( __FILE__ ) );
-define( 'OPTIONBAY_DIR', plugin_dir_path( __FILE__ ) );
-define( 'OPTIONBAY_URL', plugin_dir_url( __FILE__ ) );
-define( 'OPTIONBAY_VERSION', '1.0.0' );
-define( 'OPTIONBAY_PLUGIN_NAME', 'optionbay' );
-define( 'OPTIONBAY_TEXT_DOMAIN', 'optionbay' );
-define( 'OPTIONBAY_OPTION_NAME', 'optionbay' );
-define( 'OPTIONBAY_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'OPTIONBAY_DEV_MODE', true );
+define('OPTIONBAY_PATH', plugin_dir_path(__FILE__));
+define('OPTIONBAY_DIR', plugin_dir_path(__FILE__));
+define('OPTIONBAY_URL', plugin_dir_url(__FILE__));
+define('OPTIONBAY_VERSION', '1.0.0');
+define('OPTIONBAY_PLUGIN_NAME', 'optionbay');
+define('OPTIONBAY_TEXT_DOMAIN', 'optionbay');
+define('OPTIONBAY_OPTION_NAME', 'optionbay');
+define('OPTIONBAY_PLUGIN_BASENAME', plugin_basename(__FILE__));
+define('OPTIONBAY_DEV_MODE', true);
 
 /**
  * Initialize Composer Autoloader.
  */
-if ( file_exists( OPTIONBAY_PATH . 'vendor/autoload.php' ) ) {
+if (file_exists(OPTIONBAY_PATH . 'vendor/autoload.php')) {
+
+	error_log('_______________________________________________1');
 	require_once OPTIONBAY_PATH . 'vendor/autoload.php';
 }
 
+error_log('_______________________________________________2');
 require_once OPTIONBAY_PATH . 'app/functions.php';
 
-register_activation_hook( __FILE__, 'optionbay_activate' );
-register_deactivation_hook( __FILE__, 'optionbay_deactivate' );
-/**
- * Begins execution of the plugin.
- *
- * @since    1.0.0
- */
-if ( ! function_exists( 'optionbay_run' ) ) {
-	function optionbay_run() {
+error_log('_______________________________________________3');
+register_activation_hook(__FILE__, 'optionbay_activate');
+register_deactivation_hook(__FILE__, 'optionbay_deactivate');
+if (!function_exists('optionbay_run')) {
+	/**
+	 * Begins execution of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @return void
+	 */
+	function optionbay_run()
+	{
 		$plugin = \OptionBay\Core\Plugin::get_instance();
-		add_action( 'plugins_loaded', array( $plugin, 'run' ) );
+		add_action('plugins_loaded', array($plugin, 'run'));
 	}
 }
 optionbay_run();
 
-function optionbay_activate() {
+/**
+ * Fired during plugin activation.
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function optionbay_activate()
+{
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	\OptionBay\Core\Activator::activate();
 }
 
-function optionbay_deactivate() {
+/**
+ * Fired during plugin deactivation.
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function optionbay_deactivate()
+{
 	\OptionBay\Core\Deactivator::deactivate();
 }

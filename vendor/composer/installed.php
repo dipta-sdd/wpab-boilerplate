@@ -3,7 +3,7 @@
         'name' => 'wpanchorbay/optionbay',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '26120fe7c84287287639a3460f3604e7435dc551',
+        'reference' => '394e674e9fec0eaf916a137a96b0f92a474c7b95',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'wpanchorbay/optionbay' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '26120fe7c84287287639a3460f3604e7435dc551',
+            'reference' => '394e674e9fec0eaf916a137a96b0f92a474c7b95',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

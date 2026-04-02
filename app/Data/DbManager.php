@@ -1,9 +1,6 @@
 <?php
-
 /**
- * The Database Manager class.
- *
- * Handles the creation and management of the plugin's custom database tables.
+ * Database Manager — Handles the creation and management of custom database tables.
  *
  * @since      1.0.0
  * @package    OptionBay
@@ -17,6 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Handles custom database logic.
+ *
+ * Manages the custom assignments lookup table and provides methods for
+ * group-level data persistence and retrieval.
+ *
+ * @since 1.0.0
+ */
 class DbManager {
 
 	/**
@@ -128,11 +133,11 @@ class DbManager {
 	 *
 	 * @since 1.0.0
 	 * @param int   $group_id    The Option Group post ID.
-	 * @param array $assignments Array of assignment arrays, each with:
+	 * @param array $assignments Array of assignment arrays. Each with target_type, target_id, etc.
 	 *                           - target_type: 'global', 'product', 'category', 'tag'
 	 *                           - target_id: int (0 for global)
 	 *                           - is_exclusion: bool
-	 *                           - priority: int (optional, defaults to 10)
+	 *                           - priority: int (optional, defaults to 10).
 	 * @return int Number of rows safely inserted.
 	 */
 	public function insert_assignments( $group_id, $assignments ) {
@@ -265,7 +270,7 @@ class DbManager {
 
 		foreach ( $results as $row ) {
 			$gid = (int) $row['group_id'];
-			if ( (int) $row['is_exclusion'] === 1 ) {
+			if ( 1 === (int) $row['is_exclusion'] ) {
 				$excluded[ $gid ] = true;
 			} else {
 				$included[ $gid ] = (int) $row['priority'];

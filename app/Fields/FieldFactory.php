@@ -1,4 +1,11 @@
 <?php
+/**
+ * Field Factory — Orchestrates the instantiation of concrete field type classes.
+ *
+ * @since      1.0.0
+ * @package    OptionBay
+ * @subpackage OptionBay/Fields
+ */
 
 namespace OptionBay\Fields;
 
@@ -33,7 +40,7 @@ class FieldFactory {
 	 * @return array
 	 */
 	private static function get_types() {
-		if ( self::$types === null ) {
+		if ( null === self::$types ) {
 			self::$types = array(
 				'text'     => TextField::class,
 				'textarea' => TextareaField::class,
