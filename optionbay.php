@@ -7,6 +7,8 @@
  * Description:       A modern WordPress plugin boilerplate with React/TypeScript admin UI, REST API, and modular PHP architecture.
  * Requires at least: 5.6
  * Requires PHP:      7.0
+ * Requires Plugins:  woocommerce
+ * WC requires at least: 6.1
  * Version:           1.0.0
  * Stable tag:        1.0.0
  * Author:            WPAnchorBay
